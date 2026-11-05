@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8">
+    <title>Tenir</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="favicon.ico"><link href="css/app.css" rel="stylesheet"></head>
+  <body>
+    <div class="preload"></div>
+    <header class="header">
+      <div class="header-container py-4">
+        <nav class="navbar container">
+          <div class="row align-items-center">
+            <div class="navbar-logo col col-xl-3">
+              <a href="/">
+                <img src="images/content/logo.svg" alt="Tenir">
+                <img src="images/content/logo-dark.svg" class="dark" alt="Tenir">
+              </a>
+            </div>
+            <div class="navbar-menu d-none d-lg-block col col-xl-6">
+              <ul class="d-flex">
+                <li class="mr-4">
+                  <a href="./about.html">
+                    Отель
+                  </a>
+                </li>
+                <li class="mr-4">
+                  <a href="./activities.html">
+                    Активности
+                  </a>
+                </li>
+                <li class="mr-4">
+                  <a href="./phil.html">
+                    Наша философия
+                  </a>
+                </li>
+                <li class="mr-4 active">
+                  <a href="./news.html">
+                    Новости
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div class="navbar-support d-none d-lg-flex col col-xl-3 align-items-center">
+              <button class="btn btn-primary" data-toggle="modal" data-target="#callback-modal">
+                Зарезервировать
+              </button>
+
+              <div class="navbar-lang ml-auto">
+                <span class="active">Рус</span>
+                <a href="#">Eng</a>
+                <a href="#">Қаз</a>
+              </div>
+            </div>
+            <div class="navbar-toggle d-flex d-lg-none col col-2 align-items-center justify-content-end">
+              <button  data-toggle="modal" data-target="#mobile-nav">
+                <span></span>
+                <span></span>
+                <span></span>
+              </button>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <div class="modal fade" id="mobile-nav" tabindex="-1" role="dialog" aria-labelledby="mobileNav" aria-hidden="true">
+      <div class="modal-dialog fade-right modal-callback" role="document">
+        <div class="modal-content mobile-menu">
+          <div class="modal-header mobile-nav-header">
+            <div class="mobile-nav-logo mx-auto">
+              <a href="/">
+                <img src="images/content/footer-logo.svg" alt="Tenir">
+              </a>
+            </div>
+            <button type="button" class="ml-auto close modal-close" data-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body mobile-nav-body">
+            <ul class="mobile-nav-menu">
+              <li>
+                <a href="./about.html">
+                  Отель
+                </a>
+              </li>
+              <li>
+                <a href="./activities.html">
+                  Активности
+                </a>
+              </li>
+              <li>
+                <a href="./phil.html">
+                  Наша философия
+                </a>
+              </li>
+              <li class="active">
+                <a href="./news.html">
+                  Новости
+                </a>
+              </li>
+            </ul>
+
+            <a class="footer-link" href="#">Положения и условия</a>
+
+            <div class="navbar-lang my-4">
+              <a href="#">Рус</a>
+              <a href="#">Eng</a>
+              <a href="#">Қаз</a>
+            </div>
+            
+            <div class="footer-soc my-3">
+              <a href="#" class="mx-3 soc soc-grey soc-inst soc-rounded"></a>
+              <a href="#" class="mx-3 soc soc-grey soc-fa soc-rounded"></a>
+            </div>
+
+            <button class="btn btn-fill" data-toggle="modal" data-target="#callback-modal">
+              Зарезервировать
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="callback-modal" tabindex="-1" role="dialog" aria-labelledby="callbackForm" aria-hidden="true">
+      <div class="modal-dialog fade-right modal-callback" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="exampleModalLabel">Зарезервируйте свое проживание</h5>
+            <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form id="callback-form" class="form-callback">
+              <div class="form-callback-inputs">
+                <div class="row">
+                  <div class="col-12">
+                    <div class="input-wrap">
+                      <input type="text" id="name" name="name" required>
+                      <label for="name" class="input-label">
+                        Ф.И.О.
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="input-wrap">
+                      <input type="datetime-local" id="date-in" name="date-in" required>
+                      <label for="date-in" class="input-label">
+                        Дата заезда
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="input-wrap">
+                      <input type="datetime-local" id="date-out" name="date-out" required>
+                      <label for="date-out" class="input-label">
+                        Дата отъезда
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="input-wrap">
+                      <input type="tel" id="phone" name="phone" required>
+                      <label for="phone" class="input-label">
+                        Phone
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="input-wrap">
+                      <input type="email" id="email" name="email" required>
+                      <label for="email" class="input-label">
+                        e-mail
+                      </label>
+                    </div>
+                  </div>
+  
+                  <div class="col-12 mt-2 mt-md-5 d-flex justify-content-center">
+                    <div class="input-checkbox">
+                      <input type="checkbox" name="conditions" id="conditions" required>
+                      <label class="input-checkbox-custom" for="conditions"></label>
+                      <span class="input-checkbox-label">
+                        <a href="#">Положения и условия</a>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 mt-5 callback-form-footer text-center">
+                <button class="btn btn-fill">
+                  Зарезервировать
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <main class="page">
+      <div class="page-header" data-aos="fade-down" data-aos-duration="700" data-aos-once="true">
+        <img src="images/content/news-header-img.png" alt="">
+        <div class="page-header-title">
+          <div class="container">
+            <div class="row">
+              <div class="col-12 offset-lg-1 col-lg-11">
+                <h1  data-aos-duration="700" data-aos-delay="700" data-aos-once="true">
+                  Новости
+                </h1>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <section class="page-section">
+        <div class="container">
+          <div class="row">
+            <div class="col-12 col-sm-6 col-lg-5 offset-lg-1 news-divider"  data-aos="fade-up" data-aos-duration="700" data-aos-once="true">
+              <div class="news-item">
+                <a href="./single-news.html" class="news-item-link"></a>
+                <div class="news-item-img">
+                  <img src="images/content/news-thumb-1.png">
+                </div>
+                <div class="news-item-info">
+                  <time class="news-item-date">
+                    1 декабря 
+                  </time>
+                  <h3 class="news-item-title">
+                    Открытие отеля
+                  </h3>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6 col-lg-5 news-divider"  data-aos="fade-up" data-aos-duration="700" data-aos-once="true">
+              <div class="news-item">
+                <a href="./single-news.html" class="news-item-link"></a>
+                <div class="news-item-img">
+                  <img src="images/content/news-thumb-1.png">
+                </div>
+                <div class="news-item-info">
+                  <time class="news-item-date">
+                    1 декабря 
+                  </time>
+                  <h3 class="news-item-title">
+                    Открытие отеля
+                  </h3>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6 col-lg-5 offset-lg-1 news-divider"  data-aos="fade-up" data-aos-duration="700" data-aos-once="true">
+              <div class="news-item">
+                <a href="./single-news.html" class="news-item-link"></a>
+                <div class="news-item-img">
+                  <img src="images/content/news-thumb-1.png">
+                </div>
+                <div class="news-item-info">
+                  <time class="news-item-date">
+                    1 декабря 
+                  </time>
+                  <h3 class="news-item-title">
+                    Открытие отеля
+                  </h3>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6 col-lg-5 news-divider"  data-aos="fade-up" data-aos-duration="700" data-aos-once="true">
+              <div class="news-item">
+                <a href="./single-news.html" class="news-item-link"></a>
+                <div class="news-item-img">
+                  <img src="images/content/news-thumb-1.png">
+                </div>
+                <div class="news-item-info">
+                  <time class="news-item-date">
+                    1 декабря 
+                  </time>
+                  <h3 class="news-item-title">
+                    Открытие отеля
+                  </h3>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-auto col mx-auto">
+              <nav class="d-flex">
+                <span class="color-black fz-3 mx-2">1</span>
+                <a class="color-dark color-hover-orange fz-3 mx-2" href="#">2</a>
+                <a class="color-dark color-hover-orange fz-3 mx-2" href="#">3</a>
+                <a class="color-dark color-hover-orange fz-3 mx-2" href="#">4</a>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="row">
+          <div class="col col-12 col-xl-6 col-md-4 col-sm-6 mb-4 mb-md-0 order-3 order-sm-1 text-sm-left text-center">
+            <a class="footer-logo" href="/">
+              <img src="images/content/footer-logo.svg" alt="">
+            </a>
+            
+            <div class="footer-copy">
+              © 2020 Tenir Eco Hotel
+            </div>
+          </div>
+
+          <div class="col col-12 col-xl-3 col-md-4 col-sm-6 mb-4 mb-md-0 order-2 order-sm-1 text-sm-left text-center">
+            <nav class="footer-nav">
+              <ul>
+                <li><a href="./about.html">Отель</a></li>
+                <li><a href="./activities.html">Активности</a></li>
+                <li><a href="./phil.html">Наша философия</a></li>
+                <li><a href="./news.html">Новости</a></li>
+              </ul>
+            </nav>
+
+            <a class="footer-link" href="#">Положения и условия</a>
+          </div>
+
+          <div class="col col-12 col-xl-3 col-md-4 col-sm-6 mb-4 mb-md-0 order-1 order-sm-1 text-sm-left text-center">
+            <address class="footer-contact">
+              <p>Контакты</p>
+              <p><a href="tel:+77172545444">+7 7172 545 444</a></p>
+              <p>Shymbulak 3200m, Almaty<br>050000</p>
+            </address>
+
+            <div class="footer-soc">
+              <a href="#" class="soc soc-grey soc-inst soc-rounded"></a>
+              <a href="#" class="soc soc-grey soc-fa soc-rounded"></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  <script src="js/app.js"></script></body>
+</html>
