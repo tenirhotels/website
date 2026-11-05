@@ -37,7 +37,7 @@
                 @if ($hotel->phone)<a href="tel:{{ preg_replace('/[^\d+]/', '', $hotel->phone) }}" class="hover:text-ember">{{ $hotel->phone }}</a>@endif
                 @if ($hotel->email)<a href="mailto:{{ $hotel->email }}" class="hover:text-ember">{{ $hotel->email }}</a>@endif
                 @if ($hotel->check_in_time)<p>{{ __('site.hotel.check_in_time') }} {{ $hotel->check_in_time }} · {{ __('site.hotel.check_out_time') }} {{ $hotel->check_out_time }}</p>@endif
-                <a href="{{ route('destinations.getting-here', ['hotel' => $hotel->slug]) }}" class="link-line mt-3 self-start">{{ __('site.hotel.getting_here') }}</a>
+                <a href="{{ $hotel->sectionUrl('getting-here') }}" class="link-line mt-3 self-start">{{ __('site.hotel.getting_here') }}</a>
             </div>
         </aside>
     </section>
@@ -45,7 +45,7 @@
     @if ($rooms->isNotEmpty())
         <section class="bg-white">
             <div class="container-site flex flex-col gap-12 py-24">
-                <x-site.section-head :eyebrow="__('site.hotel.rooms')" :title="__('site.home.rooms_title')" :link="route('destinations.rooms', ['hotel' => $hotel->slug])" :link-label="__('site.hotel.all_rooms')" />
+                <x-site.section-head :eyebrow="__('site.hotel.rooms')" :title="__('site.home.rooms_title')" :link="$hotel->sectionUrl('rooms')" :link-label="__('site.hotel.all_rooms')" />
                 <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
                     @foreach ($rooms as $room)
                         @include('site.destinations.partials.room-card', ['room' => $room])
@@ -63,7 +63,7 @@
                 <h2 class="h-section">{{ $venue->t('name') }}</h2>
                 <p class="lead">{{ $venue->t('summary') }}</p>
                 @if ($venue->t('hours'))<p class="text-sm text-stone">{{ $venue->t('hours') }}</p>@endif
-                <a href="{{ route('destinations.dining', ['hotel' => $hotel->slug]) }}" class="link-line self-start">{{ __('site.common.learn_more') }}</a>
+                <a href="{{ $hotel->sectionUrl('dining') }}" class="link-line self-start">{{ __('site.common.learn_more') }}</a>
             </div>
             <div class="aspect-[4/3] w-full flex-1"><x-site.media :src="$venue->image" :alt="$venue->t('name')" /></div>
         </section>
@@ -72,7 +72,7 @@
     @if ($experiences->isNotEmpty())
         <section class="bg-sand">
             <div class="container-site flex flex-col gap-12 py-24">
-                <x-site.section-head :eyebrow="__('site.hotel.experiences')" :title="__('site.home.experiences_title')" :link="route('destinations.experiences', ['hotel' => $hotel->slug])" />
+                <x-site.section-head :eyebrow="__('site.hotel.experiences')" :title="__('site.home.experiences_title')" :link="$hotel->sectionUrl('experiences')" />
                 <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
                     @foreach ($experiences->take(3) as $e)
                         <x-site.card :href="$e->url()" :image="$e->image" :title="$e->t('title')" :meta="$e->seasonLabels() ?: $e->categoryLabel()" :text="$e->t('summary')" />
@@ -84,7 +84,7 @@
 
     @if ($offers->isNotEmpty())
         <section class="container-site flex flex-col gap-12 py-24">
-            <x-site.section-head :eyebrow="__('site.hotel.offers')" :title="__('site.home.offers_title')" :link="route('destinations.offers', ['hotel' => $hotel->slug])" />
+            <x-site.section-head :eyebrow="__('site.hotel.offers')" :title="__('site.home.offers_title')" :link="$hotel->sectionUrl('offers')" />
             <div class="grid gap-8 md:grid-cols-3">
                 @foreach ($offers as $o)
                     <x-site.card :href="$o->url()" :image="$o->image" :title="$o->t('title')" :text="$o->t('summary')" ratio="aspect-[3/2]" :cta="__('site.common.book_now')" :cta-href="$o->bookingUrl()" />

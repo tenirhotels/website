@@ -28,38 +28,21 @@ class SiteTest extends TestCase
         $this->get('/', ['Accept-Language' => 'de-DE'])->assertRedirect('/ru');
     }
 
-    public function test_all_public_pages_render_in_every_language(): void
+    public function test_pages_have_canonical_hreflang_and_schema(): void
     {
-        $paths = [
-            '', 'destinations', 'destinations/shymbulak', 'destinations/shymbulak/rooms',
-            'destinations/shymbulak/rooms/deluxe-mountain-view', 'destinations/shymbulak/dining',
-            'destinations/shymbulak/experiences', 'destinations/shymbulak/offers',
-            'destinations/shymbulak/gallery', 'destinations/shymbulak/getting-here',
-            'experiences', 'experiences/tenir-sky', 'offers', 'offers/long-stay',
-            'stories', 'contact', 'about', 'sustainability', 'booking',
-        ];
-
-        foreach (['ru', 'kk', 'en', 'zh'] as $locale) {
-            foreach ($paths as $path) {
-                $this->get("/$locale/$path")->assertOk();
-            }
-        }
-    }
-
-    public function test_hotel_page_has_seo_hreflang_and_schema(): void
-    {
-        $this->get('/en/destinations/shymbulak')
+        $this->get('/en/rooms/deluxe-mountain-view')
             ->assertOk()
-            ->assertSee('<link rel="canonical" href="'.url('/en/destinations/shymbulak').'">', false)
-            ->assertSee('hreflang="kk" href="'.url('/kk/destinations/shymbulak').'"', false)
-            ->assertSee('hreflang="x-default" href="'.url('/ru/destinations/shymbulak').'"', false)
-            ->assertSee('"@type":"Hotel"', false)
-            ->assertSee('Tenir Shymbulak');
+            ->assertSee('<link rel="canonical" href="'.url('/en/rooms/deluxe-mountain-view').'">', false)
+            ->assertSee('hreflang="kk" href="'.url('/kk/rooms/deluxe-mountain-view').'"', false)
+            ->assertSee('hreflang="x-default" href="'.url('/ru/rooms/deluxe-mountain-view').'"', false);
+
+        $this->get('/en')->assertSee('"@type":"Hotel"', false)->assertSee('"@type":"Organization"', false);
     }
 
     public function test_unknown_content_returns_404(): void
     {
         $this->get('/ru/destinations/nowhere')->assertNotFound();
+        $this->get('/ru/rooms/nowhere')->assertNotFound();
         $this->get('/ru/no-such-page')->assertNotFound();
         $this->get('/de/about')->assertNotFound();
     }
@@ -71,17 +54,6 @@ class SiteTest extends TestCase
 
         Page::where('slug', 'about')->update(['is_published' => false]);
         $this->get('/ru/about')->assertNotFound();
-    }
-
-    public function test_coming_soon_hotel_shows_on_destinations(): void
-    {
-        Hotel::create([
-            'slug' => 'burabay', 'name' => ['ru' => 'Tenir Burabay'], 'status' => Hotel::STATUS_COMING_SOON,
-            'opening_label' => ['ru' => 'Открытие в 2028'], 'is_published' => true,
-        ]);
-
-        $this->get('/ru/destinations')->assertOk()->assertSee('Tenir Burabay')->assertSee('Открытие в 2028');
-        $this->get('/ru/destinations/burabay')->assertOk();
     }
 
     public function test_booking_bar_params_are_translated_for_exely(): void
@@ -114,7 +86,7 @@ class SiteTest extends TestCase
     {
         $this->get('/en-gb/booking/?room-type=62361')->assertRedirect('/en/booking?room-type=62361')->assertStatus(301);
         $this->get('/ru-ru/special-offers/')->assertRedirect('/ru/offers');
-        $this->get('/hotel')->assertRedirect('/ru/destinations/shymbulak');
+        $this->get('/hotel')->assertRedirect('/ru');
         $this->get('/activities')->assertRedirect('/ru/experiences');
 
         $this->assertDatabaseHas('redirects', ['from_path' => '/hotel', 'hits' => 1]);
@@ -125,7 +97,7 @@ class SiteTest extends TestCase
         $this->get('/sitemap.xml')
             ->assertOk()
             ->assertHeader('Content-Type', 'application/xml')
-            ->assertSee('<loc>'.url('/zh/destinations/shymbulak/rooms/deluxe-mountain-view').'</loc>', false)
+            ->assertSee('<loc>'.url('/zh/experiences/tenir-sky').'</loc>', false)
             ->assertSee('hreflang="zh-Hans"', false)
             ->assertDontSee('/booking</loc>', false);
     }

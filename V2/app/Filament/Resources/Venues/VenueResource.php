@@ -7,6 +7,7 @@ use App\Filament\Resources\Venues\Pages\EditVenue;
 use App\Filament\Resources\Venues\Pages\ListVenues;
 use App\Filament\Support\Fields;
 use App\Models\Venue;
+use App\Support\Property;
 use BackedEnum;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
@@ -42,9 +43,7 @@ class VenueResource extends Resource
     {
         return $schema->components([
             Fields::twoColumns([
-                Select::make('hotel_id')->label('Отель')->required()
-                    ->relationship('hotel', 'slug')
-                    ->getOptionLabelFromRecordUsing(fn ($record) => $record->t('name')),
+                Fields::hotel(required: true),
                 Fields::slug(),
                 Select::make('type')->label('Тип')->required()->default('restaurant')->options([
                     'restaurant' => 'Ресторан', 'bar' => 'Бар', 'terrace' => 'Терраса',
@@ -71,7 +70,7 @@ class VenueResource extends Resource
     {
         return Fields::table($table, [
             Fields::column('name', 'Название'),
-            TextColumn::make('hotel.slug')->label('Отель'),
+            TextColumn::make('hotel.slug')->label('Отель')->visible(fn () => Property::isMulti()),
             TextColumn::make('type')->label('Тип'),
             Fields::publishedColumn(),
         ]);

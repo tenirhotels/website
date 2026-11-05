@@ -7,6 +7,7 @@ use App\Filament\Resources\RoomTypes\Pages\EditRoomType;
 use App\Filament\Resources\RoomTypes\Pages\ListRoomTypes;
 use App\Filament\Support\Fields;
 use App\Models\RoomType;
+use App\Support\Property;
 use BackedEnum;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
@@ -43,9 +44,7 @@ class RoomTypeResource extends Resource
     {
         return $schema->components([
             Fields::twoColumns([
-                Select::make('hotel_id')->label('Отель')->required()
-                    ->relationship('hotel', 'slug')
-                    ->getOptionLabelFromRecordUsing(fn ($record) => $record->t('name')),
+                Fields::hotel(required: true),
                 Fields::slug(),
             ]),
             Fields::translatable(fn (string $l, bool $d) => [
@@ -77,12 +76,12 @@ class RoomTypeResource extends Resource
     {
         return Fields::table($table, [
             Fields::column('name', 'Номер'),
-            TextColumn::make('hotel.slug')->label('Отель'),
+            TextColumn::make('hotel.slug')->label('Отель')->visible(fn () => Property::isMulti()),
             TextColumn::make('exely_room_type_id')->label('Exely ID'),
             TextColumn::make('price_from')->label('От, ₸')->numeric(thousandsSeparator: ' '),
             Fields::publishedColumn(),
         ], [
-            SelectFilter::make('hotel_id')->label('Отель')->relationship('hotel', 'slug'),
+            SelectFilter::make('hotel_id')->label('Отель')->relationship('hotel', 'slug')->visible(fn () => Property::isMulti()),
         ]);
     }
 

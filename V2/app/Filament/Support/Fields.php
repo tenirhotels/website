@@ -3,6 +3,9 @@
 namespace App\Filament\Support;
 
 use App\Support\Locales;
+use App\Support\Property;
+use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\Select;
 use Closure;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
@@ -65,6 +68,25 @@ class Fields
         }
 
         return $input;
+    }
+
+    /**
+     * Привязка к отелю. В режиме одного отеля поле скрыто и заполняется этим отелем;
+     * в режиме сети — выбор отеля (для необязательных — «Вся сеть»).
+     */
+    public static function hotel(bool $required = false): Select|Hidden
+    {
+        if (Property::isSingle()) {
+            return Hidden::make('hotel_id')->default(fn () => Property::primary()?->id);
+        }
+
+        $select = Select::make('hotel_id')->label('Отель')
+            ->relationship('hotel', 'slug')
+            ->getOptionLabelFromRecordUsing(fn ($record) => $record->t('name'))
+            ->default(fn () => Property::primary()?->id)
+            ->required($required);
+
+        return $required ? $select : $select->placeholder('Вся сеть');
     }
 
     public static function slug(array $reserved = []): TextInput

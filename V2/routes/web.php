@@ -6,6 +6,7 @@ use App\Http\Controllers\ExperienceController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OfferController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\SingleHotelController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\StoryController;
 use App\Support\Locales;
@@ -16,7 +17,16 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 | Карта сайта Tenir Hotels
 |--------------------------------------------------------------------------
-| /{locale}                                     главная (пока один отель — о нём)
+| Два режима (App\Support\Property), переключаются автоматически:
+|
+| ОДИН ОТЕЛЬ (опубликован один отель) — сайт этого отеля:
+| /{locale}                                     обзор отеля
+| /{locale}/rooms[/{room}]                      номера
+| /{locale}/dining · /gallery · /getting-here   ресторан, галерея, как добраться
+| /{locale}/experiences · /offers               впечатления и предложения отеля
+|
+| СЕТЬ (опубликовано 2+ отеля) — сайт бренда:
+| /{locale}                                     витрина бренда
 | /{locale}/destinations                        все отели и «скоро открытие»
 | /{locale}/destinations/{hotel}                обзор отеля
 | /{locale}/destinations/{hotel}/rooms[/{room}] номера
@@ -59,6 +69,15 @@ Route::prefix('{locale}')
             Route::get('{hotel}/offers', 'offers')->name('offers');
             Route::get('{hotel}/gallery', 'gallery')->name('gallery');
             Route::get('{hotel}/getting-here', 'gettingHere')->name('getting-here');
+        });
+
+        // Короткие адреса режима «один отель». В режиме сети — 301 на /destinations/{отель}/...
+        Route::controller(SingleHotelController::class)->name('hotel.')->group(function () {
+            Route::get('rooms', 'rooms')->name('rooms');
+            Route::get('rooms/{room}', 'room')->name('rooms.show');
+            Route::get('dining', 'dining')->name('dining');
+            Route::get('gallery', 'gallery')->name('gallery');
+            Route::get('getting-here', 'gettingHere')->name('getting-here');
         });
 
         Route::get('experiences', [ExperienceController::class, 'index'])->name('experiences.index');

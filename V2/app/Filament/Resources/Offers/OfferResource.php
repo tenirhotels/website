@@ -7,6 +7,7 @@ use App\Filament\Resources\Offers\Pages\EditOffer;
 use App\Filament\Resources\Offers\Pages\ListOffers;
 use App\Filament\Support\Fields;
 use App\Models\Offer;
+use App\Support\Property;
 use BackedEnum;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\RichEditor;
@@ -42,10 +43,7 @@ class OfferResource extends Resource
     {
         return $schema->components([
             Fields::twoColumns([
-                Select::make('hotel_id')->label('Отель')
-                    ->relationship('hotel', 'slug')
-                    ->getOptionLabelFromRecordUsing(fn ($record) => $record->t('name'))
-                    ->placeholder('Вся сеть'),
+                Fields::hotel(),
                 Fields::slug()->prefix('/offers/'),
             ]),
             Fields::translatable(fn (string $l, bool $d) => [
@@ -72,7 +70,7 @@ class OfferResource extends Resource
     {
         return Fields::table($table, [
             Fields::column('title', 'Предложение'),
-            TextColumn::make('hotel.slug')->label('Отель')->placeholder('Вся сеть'),
+            TextColumn::make('hotel.slug')->label('Отель')->placeholder('Вся сеть')->visible(fn () => Property::isMulti()),
             TextColumn::make('exely_special_offer_id')->label('Exely ID'),
             TextColumn::make('valid_to')->label('До')->date('d.m.Y')->placeholder('бессрочно'),
             Fields::publishedColumn(),

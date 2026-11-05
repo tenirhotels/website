@@ -30,6 +30,8 @@ return [
     'reserved_slugs' => [
         'destinations', 'experiences', 'offers', 'stories', 'booking',
         'contact', 'search', 'admin', 'api', 'sitemap', 'storage', 'livewire',
+        // короткие адреса режима «один отель»
+        'rooms', 'dining', 'gallery', 'getting-here',
     ],
 
     /*

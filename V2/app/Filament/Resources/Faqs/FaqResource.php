@@ -7,6 +7,7 @@ use App\Filament\Resources\Faqs\Pages\EditFaq;
 use App\Filament\Resources\Faqs\Pages\ListFaqs;
 use App\Filament\Support\Fields;
 use App\Models\Faq;
+use App\Support\Property;
 use BackedEnum;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
@@ -37,10 +38,7 @@ class FaqResource extends Resource
     {
         return $schema->components([
             Fields::twoColumns([
-                Select::make('hotel_id')->label('Отель')
-                    ->relationship('hotel', 'slug')
-                    ->getOptionLabelFromRecordUsing(fn ($record) => $record->t('name'))
-                    ->placeholder('Вся сеть'),
+                Fields::hotel(),
                 TextInput::make('sort')->label('Порядок')->numeric()->default(0),
                 Toggle::make('is_published')->label('Опубликовано')->default(true),
             ]),
@@ -55,7 +53,7 @@ class FaqResource extends Resource
     {
         return Fields::table($table, [
             Fields::column('question', 'Вопрос'),
-            TextColumn::make('hotel.slug')->label('Отель')->placeholder('Вся сеть'),
+            TextColumn::make('hotel.slug')->label('Отель')->placeholder('Вся сеть')->visible(fn () => Property::isMulti()),
             Fields::publishedColumn(),
         ]);
     }

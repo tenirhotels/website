@@ -16,7 +16,7 @@
                 @if ($h->t('address'))<p class="text-slate">{{ $h->t('address') }}</p>@endif
                 @if ($h->phone)<a href="tel:{{ preg_replace('/[^\d+]/', '', $h->phone) }}" class="hover:text-ember">{{ $h->phone }}</a>@endif
                 @if ($h->email)<a href="mailto:{{ $h->email }}" class="hover:text-ember">{{ $h->email }}</a>@endif
-                <a href="{{ route('destinations.getting-here', ['hotel' => $h->slug]) }}" class="link-line mt-2 self-start">{{ __('site.hotel.getting_here') }}</a>
+                <a href="{{ $h->sectionUrl('getting-here') }}" class="link-line mt-2 self-start">{{ __('site.hotel.getting_here') }}</a>
             </div>
         @endforeach
     </section>

@@ -8,6 +8,7 @@ use App\Models\Offer;
 use App\Models\Page;
 use App\Models\Story;
 use App\Support\Locales;
+use App\Support\Property;
 
 /**
  * sitemap.xml: все языки, у каждого адреса — альтернативы hreflang.
@@ -19,20 +20,29 @@ class SitemapController extends Controller
         $entries = []; // [[route, params, lastmod]]
 
         $entries[] = ['home', [], null];
-        $entries[] = ['destinations.index', [], null];
+        if (Property::isMulti()) {
+            $entries[] = ['destinations.index', [], null];
+        }
         $entries[] = ['experiences.index', [], null];
         $entries[] = ['offers.index', [], null];
         $entries[] = ['stories.index', [], null];
         $entries[] = ['contact', [], null];
 
+        // Разделы отелей — адреса текущего режима (один отель: /rooms; сеть: /destinations/{отель}/rooms).
         foreach (Hotel::published()->with(['rooms' => fn ($q) => $q->published()])->get() as $hotel) {
-            $entries[] = ['destinations.show', ['hotel' => $hotel->slug], $hotel->updated_at];
-            if ($hotel->isOpen()) {
-                foreach (['rooms', 'dining', 'experiences', 'offers', 'gallery', 'getting-here'] as $sub) {
-                    $entries[] = ["destinations.$sub", ['hotel' => $hotel->slug], $hotel->updated_at];
+            $mode = Property::isSingleHotel($hotel) ? Property::SINGLE : Property::MULTI;
+            $base = $mode === Property::MULTI ? ['hotel' => $hotel->slug] : [];
+            $sections = $hotel->isOpen() ? ['overview', 'rooms', 'dining', 'experiences', 'offers', 'gallery', 'getting-here'] : ['overview'];
+
+            foreach ($sections as $section) {
+                $name = Property::routeName($section, $mode);
+                if (! in_array($name, ['home', 'experiences.index', 'offers.index'], true)) {
+                    $entries[] = [$name, $base, $hotel->updated_at];
                 }
+            }
+            if ($hotel->isOpen()) {
                 foreach ($hotel->rooms as $room) {
-                    $entries[] = ['destinations.rooms.show', ['hotel' => $hotel->slug, 'room' => $room->slug], $room->updated_at];
+                    $entries[] = [Property::routeName('room', $mode), [...$base, 'room' => $room->slug], $room->updated_at];
                 }
             }
         }

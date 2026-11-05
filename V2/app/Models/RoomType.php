@@ -42,11 +42,7 @@ class RoomType extends Model
 
     public function url(?string $locale = null): string
     {
-        return route('destinations.rooms.show', [
-            'locale' => $locale ?? app()->getLocale(),
-            'hotel' => $this->hotel->slug,
-            'room' => $this->slug,
-        ]);
+        return $this->hotel->sectionUrl('room', ['room' => $this->slug], $locale);
     }
 
     public function bookingUrl(): string

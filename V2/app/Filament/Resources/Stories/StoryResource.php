@@ -41,10 +41,7 @@ class StoryResource extends Resource
         return $schema->components([
             Fields::twoColumns([
                 Fields::slug()->prefix('/stories/'),
-                Select::make('hotel_id')->label('Отель')
-                    ->relationship('hotel', 'slug')
-                    ->getOptionLabelFromRecordUsing(fn ($record) => $record->t('name'))
-                    ->placeholder('Вся сеть'),
+                Fields::hotel(),
                 DateTimePicker::make('published_at')->label('Дата публикации')->default(now()),
             ]),
             Fields::image('image', 'Обложка', 'stories')->columnSpanFull(),

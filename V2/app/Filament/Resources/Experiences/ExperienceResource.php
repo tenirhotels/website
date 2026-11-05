@@ -8,6 +8,7 @@ use App\Filament\Resources\Experiences\Pages\ListExperiences;
 use App\Filament\Support\Fields;
 use App\Models\Experience;
 use App\Support\Locales;
+use App\Support\Property;
 use BackedEnum;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\RichEditor;
@@ -49,10 +50,7 @@ class ExperienceResource extends Resource
     {
         return $schema->components([
             Fields::twoColumns([
-                Select::make('hotel_id')->label('Отель')
-                    ->relationship('hotel', 'slug')
-                    ->getOptionLabelFromRecordUsing(fn ($record) => $record->t('name'))
-                    ->placeholder('Вся сеть'),
+                Fields::hotel(),
                 Fields::slug()->prefix('/experiences/'),
                 Select::make('category')->label('Категория')->required()->options(self::categoryOptions()),
                 CheckboxList::make('seasons')->label('Сезоны')->columns(4)
@@ -84,7 +82,7 @@ class ExperienceResource extends Resource
             Fields::column('title', 'Впечатление'),
             TextColumn::make('category')->label('Категория')->badge()
                 ->formatStateUsing(fn (string $state) => self::categoryOptions()[$state] ?? $state),
-            TextColumn::make('hotel.slug')->label('Отель')->placeholder('Вся сеть'),
+            TextColumn::make('hotel.slug')->label('Отель')->placeholder('Вся сеть')->visible(fn () => Property::isMulti()),
             Fields::publishedColumn(),
         ], [
             SelectFilter::make('category')->label('Категория')->options(self::categoryOptions()),

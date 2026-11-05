@@ -7,30 +7,49 @@ use App\Models\Hotel;
 use App\Models\Offer;
 use App\Models\Page;
 use App\Models\Story;
+use App\Support\Property;
 use App\Support\Seo;
 
 /**
- * Главная. Пока открыт один отель — главная рассказывает о нём (как у бутик-брендов);
- * когда отелей станет больше, блок «Отели и курорты» показывает витрину всех направлений
- * (как «In the spotlight» у Six Senses).
+ * Главная.
+ *  Режим одного отеля — главная и есть страница отеля (как у бутик-отелей).
+ *  Режим сети — витрина бренда: отели, впечатления сети, предложения (как у Six Senses / Aman).
  */
 class HomeController extends Controller
 {
     public function __invoke()
     {
-        $hotels = Hotel::published()->open()->ordered()->get();
-        $featured = $hotels->firstWhere('is_featured', true) ?? $hotels->first();
-
-        return view('site.home', [
-            'hotels' => $hotels,
-            'featured' => $featured,
-            'rooms' => $featured?->rooms()->published()->ordered()->get() ?? collect(),
-            'comingSoon' => Hotel::published()->where('status', Hotel::STATUS_COMING_SOON)->ordered()->get(),
-            'experiences' => Experience::published()->where('is_featured', true)->ordered()->limit(6)->get(),
-            'offers' => Offer::active()->where('is_featured', true)->ordered()->limit(3)->get(),
+        $shared = [
             'brandPage' => Page::published()->where('slug', 'about')->first(),
             'sustainabilityPage' => Page::published()->where('slug', 'sustainability')->first(),
             'stories' => Story::live()->latest('published_at')->limit(3)->get(),
+        ];
+
+        if (Property::isSingle()) {
+            $hotel = Property::primary();
+            $seo = Seo::make()->withSchema(Seo::organizationSchema());
+            if ($hotel) {
+                $seo->withSchema(Seo::hotelSchema($hotel));
+                $seo->image = $hotel->hero_image;
+            }
+
+            return view('site.home.single', [
+                ...$shared,
+                'hotel' => $hotel,
+                'rooms' => $hotel?->rooms()->published()->ordered()->get() ?? collect(),
+                'venues' => $hotel?->venues()->published()->ordered()->get() ?? collect(),
+                'experiences' => Experience::published()->where('is_featured', true)->ordered()->limit(3)->get(),
+                'offers' => Offer::active()->where('is_featured', true)->ordered()->limit(3)->get(),
+                'seo' => $seo,
+            ]);
+        }
+
+        return view('site.home.multi', [
+            ...$shared,
+            'hotels' => Hotel::published()->open()->ordered()->get(),
+            'comingSoon' => Hotel::published()->where('status', Hotel::STATUS_COMING_SOON)->ordered()->get(),
+            'experiences' => Experience::published()->with('hotel')->where('is_featured', true)->ordered()->limit(3)->get(),
+            'offers' => Offer::active()->with('hotel')->where('is_featured', true)->ordered()->limit(3)->get(),
             'seo' => Seo::make()->withSchema(Seo::organizationSchema()),
         ]);
     }

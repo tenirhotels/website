@@ -7,6 +7,7 @@ use App\Filament\Resources\Hotels\Pages\EditHotel;
 use App\Filament\Resources\Hotels\Pages\ListHotels;
 use App\Filament\Support\Fields;
 use App\Models\Hotel;
+use App\Support\Property;
 use BackedEnum;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\RichEditor;
@@ -38,6 +39,11 @@ class HotelResource extends Resource
     protected static ?string $modelLabel = 'отель';
 
     protected static ?string $pluralModelLabel = 'Отели';
+
+    public static function getPluralModelLabel(): string
+    {
+        return Property::isSingle() ? 'Отель' : 'Отели';
+    }
 
     protected static ?int $navigationSort = 1;
 
@@ -113,7 +119,9 @@ class HotelResource extends Resource
 
                 Tab::make('SEO и публикация')->schema([
                     Fields::seo(),
-                    Fields::publishing(featured: true),
+                    Fields::publishing(featured: true)->description(fn () => Property::isSingle()
+                        ? 'Сейчас сайт в режиме одного отеля. Опубликуйте второй отель — сайт перейдёт в режим сети (/destinations/…), старые адреса получат 301.'
+                        : 'Сайт в режиме сети. «Показывать на главной» — главный отель: на него ведут короткие старые адреса.'),
                 ]),
             ]),
         ]);

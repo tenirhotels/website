@@ -4,6 +4,31 @@
     $current = app()->getLocale();
     $brandPages = $navPages->where('placement', 'main');
     $openHotels = $navHotels->where('status', \App\Models\Hotel::STATUS_OPEN);
+    $single = \App\Support\Property::isSingle();
+    $hotel = \App\Support\Property::primary();
+
+    // Главное меню. Один отель — разделы отеля; сеть — разделы бренда.
+    $menu = $single && $hotel
+        ? [
+            [__('site.hotel.rooms'), $hotel->sectionUrl('rooms')],
+            [__('site.hotel.dining'), $hotel->sectionUrl('dining')],
+            [__('site.nav.experiences'), route('experiences.index')],
+            [__('site.nav.offers'), route('offers.index')],
+        ]
+        : [
+            [__('site.nav.destinations'), route('destinations.index')],
+            [__('site.nav.experiences'), route('experiences.index')],
+            [__('site.nav.offers'), route('offers.index')],
+        ];
+    foreach ($brandPages as $page) {
+        $menu[] = [$page->t('title'), $page->url()];
+    }
+    $mobileExtra = array_filter([
+        $single && $hotel ? [__('site.hotel.gallery'), $hotel->sectionUrl('gallery')] : null,
+        $single && $hotel ? [__('site.hotel.getting_here'), $hotel->sectionUrl('getting-here')] : null,
+        [__('site.nav.stories'), route('stories.index')],
+        [__('site.nav.contact'), route('contact')],
+    ]);
 @endphp
 <header data-header class="sticky top-0 z-40 bg-forest text-snow">
     <div class="container-site flex h-[72px] items-center justify-between gap-6 lg:h-[84px]">
@@ -11,21 +36,13 @@
             <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 7h18M3 12h18M3 17h18"/></svg>
         </button>
 
-        <a href="{{ route('home') }}" class="shrink-0" aria-label="Tenir Hotels">
+        <a href="{{ route('home') }}" class="shrink-0" aria-label="{{ $single && $hotel ? $hotel->t('name') : 'Tenir Hotels' }}">
             <img src="/images/logo-light.svg" alt="Tenir" width="150" height="36" class="h-8 w-auto lg:h-9">
         </a>
 
         <nav aria-label="{{ __('site.nav.menu') }}" class="hidden items-center gap-8 text-[13px] uppercase tracking-[0.16em] lg:flex">
-            {{-- Пока отель один — ссылка ведёт сразу на него, потом на витрину направлений --}}
-            @if ($openHotels->count() === 1)
-                <a href="{{ $openHotels->first()->url() }}" class="hover:text-ember-light">{{ $openHotels->first()->t('name') }}</a>
-            @else
-                <a href="{{ route('destinations.index') }}" class="hover:text-ember-light">{{ __('site.nav.destinations') }}</a>
-            @endif
-            <a href="{{ route('experiences.index') }}" class="hover:text-ember-light">{{ __('site.nav.experiences') }}</a>
-            <a href="{{ route('offers.index') }}" class="hover:text-ember-light">{{ __('site.nav.offers') }}</a>
-            @foreach ($brandPages as $page)
-                <a href="{{ $page->url() }}" class="hover:text-ember-light">{{ $page->t('title') }}</a>
+            @foreach ($menu as [$label, $href])
+                <a href="{{ $href }}" class="hover:text-ember-light">{{ $label }}</a>
             @endforeach
         </nav>
 
@@ -52,17 +69,14 @@
     {{-- Мобильное меню --}}
     <div id="mobile-menu" hidden class="fixed inset-x-0 bottom-0 top-[72px] z-40 overflow-y-auto bg-forest px-6 pb-32 pt-6 lg:hidden">
         <nav aria-label="{{ __('site.nav.menu') }}" class="flex flex-col gap-1 font-display text-3xl">
-            @foreach ($openHotels as $h)
-                <a href="{{ $h->url() }}" class="py-2">{{ $h->t('name') }}</a>
+            @unless ($single)
+                @foreach ($openHotels as $h)
+                    <a href="{{ $h->url() }}" class="py-2">{{ $h->t('name') }}</a>
+                @endforeach
+            @endunless
+            @foreach ([...$menu, ...$mobileExtra] as [$label, $href])
+                <a href="{{ $href }}" class="py-2">{{ $label }}</a>
             @endforeach
-            <a href="{{ route('destinations.index') }}" class="py-2">{{ __('site.nav.destinations') }}</a>
-            <a href="{{ route('experiences.index') }}" class="py-2">{{ __('site.nav.experiences') }}</a>
-            <a href="{{ route('offers.index') }}" class="py-2">{{ __('site.nav.offers') }}</a>
-            @foreach ($brandPages as $page)
-                <a href="{{ $page->url() }}" class="py-2">{{ $page->t('title') }}</a>
-            @endforeach
-            <a href="{{ route('stories.index') }}" class="py-2">{{ __('site.nav.stories') }}</a>
-            <a href="{{ route('contact') }}" class="py-2">{{ __('site.nav.contact') }}</a>
         </nav>
         <div class="mt-8 flex flex-wrap gap-3 border-t border-white/20 pt-6">
             @foreach (Locales::all() as $code => $meta)

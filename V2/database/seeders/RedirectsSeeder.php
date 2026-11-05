@@ -15,11 +15,11 @@ class RedirectsSeeder extends Seeder
 {
     public function run(): void
     {
-        $hotel = 'destinations/shymbulak';
-
+        // Сайт запускается в режиме одного отеля — цели в коротких адресах.
+        // Когда включится режим сети, короткие адреса сами отдадут 301 на /destinations/{отель}/...
         $map = [
             // V1
-            '/hotel' => "/ru/$hotel",
+            '/hotel' => '/ru',
             '/about' => '/ru/about',
             '/activities' => '/ru/experiences',
             '/news' => '/ru/stories',
@@ -30,16 +30,16 @@ class RedirectsSeeder extends Seeder
         $exely = [
             '' => '',
             'about' => 'about',
-            'information' => "$hotel/getting-here",
+            'information' => 'getting-here',
             'news' => 'stories',
-            'photos' => "$hotel/gallery",
-            'reviews' => $hotel,
+            'photos' => 'gallery',
+            'reviews' => '',
             'events' => 'experiences?category=celebrations',
-            'restaurants' => "$hotel/dining",
-            'rooms' => "$hotel/rooms",
+            'restaurants' => 'dining',
+            'rooms' => 'rooms',
             'special-offers' => 'offers',
-            'services' => "$hotel/experiences",
-            'conference-halls' => "$hotel/experiences",
+            'services' => 'experiences',
+            'conference-halls' => 'experiences',
             'excursions' => 'experiences',
             'contacts' => 'contact',
             'booking' => 'booking',

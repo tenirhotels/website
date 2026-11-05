@@ -20,8 +20,14 @@ class Setting extends Model
 
     protected static function booted(): void
     {
-        static::saved(fn () => Cache::forget(self::CACHE_KEY));
-        static::deleted(fn () => Cache::forget(self::CACHE_KEY));
+        static::saved(function () {
+            Cache::forget(self::CACHE_KEY);
+            \App\Support\Property::flush();
+        });
+        static::deleted(function () {
+            Cache::forget(self::CACHE_KEY);
+            \App\Support\Property::flush();
+        });
     }
 
     public static function values(): array

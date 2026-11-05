@@ -6,6 +6,8 @@ use App\Filament\Support\Fields;
 use App\Models\Setting;
 use BackedEnum;
 use Filament\Actions\Action;
+use App\Support\Property;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
@@ -34,7 +36,7 @@ class SiteSettings extends Page
 
     protected static ?int $navigationSort = 0;
 
-    private const GROUPS = ['brand', 'contacts', 'social', 'analytics', 'seo'];
+    private const GROUPS = ['site', 'brand', 'contacts', 'social', 'analytics', 'seo'];
 
     public ?array $data = [];
 
@@ -50,6 +52,19 @@ class SiteSettings extends Page
     public function form(Schema $schema): Schema
     {
         return $schema->statePath('data')->components([
+            Section::make('Режим сайта')
+                ->description(fn () => sprintf(
+                    'Сейчас: %s (опубликовано отелей: %d).',
+                    Property::isSingle() ? 'один отель — короткие адреса /rooms, /dining' : 'сеть — /destinations/{отель}/…',
+                    Property::publishedCount(),
+                ))
+                ->schema([
+                    Select::make('site.mode')->label('Режим')->default('auto')->selectablePlaceholder(false)->options([
+                        'auto' => 'Автоматически: один опубликованный отель — сайт отеля, два и больше — сеть',
+                        'single' => 'Всегда один отель (главный отель — «Показывать на главной»)',
+                        'multi' => 'Всегда сеть',
+                    ])->helperText('При смене режима адреса другого режима отдают 301 на актуальные.'),
+                ]),
             Section::make('Бренд')->schema([
                 Fields::translatable(fn (string $l) => [
                     TextInput::make("brand.name.$l")->label('Название бренда')->placeholder('Tenir Hotels'),

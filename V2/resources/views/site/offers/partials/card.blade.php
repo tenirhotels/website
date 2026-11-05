@@ -5,7 +5,7 @@
     <div class="flex flex-1 flex-col gap-3 p-8">
         <p class="text-xs uppercase tracking-[0.2em] text-stone">
             {{ collect([
-                $offer->hotel?->t('name') ?? __('site.common.whole_network'),
+                \App\Support\Property::isMulti() ? ($offer->hotel?->t('name') ?? __('site.common.whole_network')) : null,
                 $offer->min_nights ? __('site.offers.min_nights', ['count' => $offer->min_nights]) : null,
                 $offer->valid_to ? __('site.common.valid_until', ['date' => $offer->valid_to->translatedFormat('j F Y')]) : null,
             ])->filter()->implode(' · ') }}
