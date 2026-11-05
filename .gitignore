@@ -32,3 +32,6 @@ Thumbs.db
 **/.htpasswd
 **/*.swp
 **/*_bak
+
+# Generated IDE helper
+**/_ide_helper.php
