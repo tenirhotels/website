@@ -1,0 +1,84 @@
+<?php
+
+return [
+
+    /*
+    |--------------------------------------------------------------------------
+    | Языки сайта
+    |--------------------------------------------------------------------------
+    | Первый язык — основной (обязательные поля в админке).
+    | fallback — откуда брать текст, если перевод не заполнен.
+    | exely — код языка для модуля бронирования TravelLine/Exely.
+    | hreflang — значение для <link rel="alternate" hreflang>.
+    */
+    'locales' => [
+        'ru' => ['label' => 'РУС', 'name' => 'Русский', 'hreflang' => 'ru', 'exely' => 'ru', 'fallback' => null],
+        'kk' => ['label' => 'ҚАЗ', 'name' => 'Қазақша', 'hreflang' => 'kk', 'exely' => 'kk', 'fallback' => 'ru'],
+        'en' => ['label' => 'ENG', 'name' => 'English', 'hreflang' => 'en', 'exely' => 'en', 'fallback' => 'ru'],
+        'zh' => ['label' => '中文', 'name' => '中文', 'hreflang' => 'zh-Hans', 'exely' => 'zh', 'fallback' => 'en'],
+    ],
+
+    'default_locale' => 'ru',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Зарезервированные слаги
+    |--------------------------------------------------------------------------
+    | Нельзя использовать как адрес страницы (/{locale}/{page}) — заняты
+    | маршрутами сайта.
+    */
+    'reserved_slugs' => [
+        'destinations', 'experiences', 'offers', 'stories', 'booking',
+        'contact', 'search', 'admin', 'api', 'sitemap', 'storage', 'livewire',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Бронирование — Exely (TravelLine)
+    |--------------------------------------------------------------------------
+    | Интеграция через JS-модуль TravelLine, как в V1:
+    | на странице /{locale}/booking встраивается booking-form.
+    | Плашка бронирования на всех страницах — наш компонент, который
+    | передаёт параметры в модуль через адрес страницы.
+    |
+    | ВНИМАНИЕ: названия параметров (params) нужно подтвердить у поддержки
+    | Exely. room-type и special-offer подтверждены текущим сайтом Exely.
+    */
+    'exely' => [
+        'context' => env('EXELY_CONTEXT', 'TL-INT-tenirhotels'),
+        'loader' => 'https://ibe.tlintegration.com/integration/loader.js',
+        'params' => [
+            'check_in' => 'date',          // YYYY-MM-DD
+            'nights' => 'nights',
+            'adults' => 'adults',
+            'children' => 'children',      // возраст детей через запятую
+            'room_type' => 'room-type',
+            'special_offer' => 'special-offer',
+            'promo_code' => 'promo-code',
+        ],
+        'max_adults' => 6,
+        'max_children' => 4,
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Категории впечатлений (по образцу Aman / Six Senses)
+    |--------------------------------------------------------------------------
+    */
+    'experience_categories' => [
+        'sky' => ['ru' => 'Небо и звёзды', 'en' => 'Sky & stars', 'kk' => 'Аспан мен жұлдыздар'],
+        'active' => ['ru' => 'Активный отдых', 'en' => 'Active adventure', 'kk' => 'Белсенді демалыс'],
+        'wellness' => ['ru' => 'Велнес', 'en' => 'Wellness', 'kk' => 'Велнес'],
+        'culture' => ['ru' => 'Культура', 'en' => 'Culture', 'kk' => 'Мәдениет'],
+        'dining' => ['ru' => 'Гастрономия', 'en' => 'Dining', 'kk' => 'Гастрономия'],
+        'celebrations' => ['ru' => 'Праздники и события', 'en' => 'Celebrations & events', 'kk' => 'Мерекелер мен іс-шаралар'],
+        'family' => ['ru' => 'Для семьи', 'en' => 'Family', 'kk' => 'Отбасыға'],
+    ],
+
+    'seasons' => [
+        'winter' => ['ru' => 'Зима', 'en' => 'Winter', 'kk' => 'Қыс'],
+        'spring' => ['ru' => 'Весна', 'en' => 'Spring', 'kk' => 'Көктем'],
+        'summer' => ['ru' => 'Лето', 'en' => 'Summer', 'kk' => 'Жаз'],
+        'autumn' => ['ru' => 'Осень', 'en' => 'Autumn', 'kk' => 'Күз'],
+    ],
+];

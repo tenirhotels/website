@@ -1,0 +1,75 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+/* Gill Sans Pro Cyrillic — фирменный шрифт (из V1). Проверьте веб-лицензию. */
+@font-face {
+    font-family: 'Gill Sans Pro';
+    src: url('/fonts/GillSansProCyrillic-Medium.woff2') format('woff2');
+    font-weight: 400 500;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Gill Sans Pro';
+    src: url('/fonts/GillSansProCyrillic-Bold.woff2') format('woff2');
+    font-weight: 600 700;
+    font-display: swap;
+}
+
+/*
+ * Палитра бренда — меняется только здесь.
+ * Сейчас: тёмно-зелёный + оранжевый. Палитра V1: #4D6267 / #FB8942 / #131313 / #ACC5C4.
+ */
+@theme {
+    --font-sans: 'Gill Sans Pro', 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    --font-display: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+
+    --color-forest: #1F3A2E;     /* основной тёмный */
+    --color-forest-deep: #16211B;
+    --color-ember: #B5561F;      /* акцент, кнопки */
+    --color-ember-light: #F2B48C;/* акцент на тёмном фоне */
+    --color-snow: #F6F5F1;       /* фон */
+    --color-sand: #EDEBE4;       /* фон секций */
+    --color-ink: #16211B;        /* текст */
+    --color-stone: #5B6560;      /* второстепенный текст */
+    --color-slate: #3A4540;      /* основной текст абзацев */
+    --color-mist: #DCD9D0;       /* линии */
+    --color-placeholder: #C9CFC9;
+}
+
+@layer base {
+    html { scroll-behavior: smooth; }
+    body { @apply bg-snow text-ink font-sans antialiased; }
+    :focus-visible { outline: 2px solid var(--color-ember); outline-offset: 3px; }
+    [x-cloak] { display: none !important; }
+}
+
+/* Базовая кнопка — utility, чтобы её можно было @apply в вариантах */
+@utility btn {
+    @apply inline-flex min-h-11 items-center justify-center px-6 py-3 text-[13px] uppercase tracking-[0.18em] transition-colors;
+}
+
+@layer components {
+    .container-site { @apply mx-auto w-full max-w-[1360px] px-4 sm:px-6 lg:px-10; }
+    .eyebrow { @apply text-xs uppercase tracking-[0.3em] text-ember; }
+    .eyebrow-light { @apply text-xs uppercase tracking-[0.34em] text-ember-light; }
+    .h-display { @apply font-display font-normal leading-[1.05]; }
+    .h-section { @apply font-display font-normal text-4xl leading-tight md:text-5xl; }
+    .lead { @apply text-lg leading-relaxed text-slate; }
+    .btn-primary { @apply btn bg-ember text-white hover:bg-[#9c4818]; }
+    .btn-dark { @apply btn bg-forest text-white hover:bg-forest-deep; }
+    .btn-ghost { @apply btn border border-white/50 text-white hover:bg-white/10; }
+    .link-line { @apply inline-block border-b border-current pb-1.5 text-[13px] uppercase tracking-[0.2em] hover:text-ember; }
+    .field-label { @apply block text-[11px] uppercase tracking-[0.2em] text-stone; }
+    .field { @apply w-full border-0 bg-transparent p-0 text-lg text-ink focus:ring-0 focus:outline-none; }
+    .prose-tenir { @apply text-[17px] leading-[1.75] text-slate; }
+    .prose-tenir p { @apply mb-5; }
+    .prose-tenir h2, .prose-tenir h3 { @apply font-display text-3xl text-ink mt-10 mb-4; }
+    .prose-tenir ul { @apply list-disc pl-5 mb-5 space-y-1; }
+    .prose-tenir ol { @apply list-decimal pl-5 mb-5 space-y-1; }
+    .prose-tenir a { @apply text-forest underline underline-offset-4 hover:text-ember; }
+    .prose-tenir strong { @apply text-ink; }
+}
