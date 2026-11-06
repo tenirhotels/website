@@ -28,9 +28,10 @@ class SettingsSeeder extends Seeder
         ]);
 
         Setting::put('social', [
-            'instagram' => 'https://www.instagram.com/tenir.ecohotels',
-            'facebook' => 'https://facebook.com/tenirhotels',
+            'instagram' => 'https://instagram.com/tenir.ecohotels',
             'youtube' => 'https://youtube.com/@tenirhotels',
+            'tiktok' => 'https://www.tiktok.com/@tenirhotels',
+            'soundcloud' => 'https://soundcloud.com/tenirhotels',
         ]);
 
         // Счётчики из V1 — проверьте, актуальны ли.

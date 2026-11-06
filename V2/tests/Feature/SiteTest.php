@@ -299,4 +299,15 @@ class SiteTest extends TestCase
         $this->get('/ru/gifts')->assertNotFound();
         $this->get('/ru')->assertDontSee('Подарочные сертификаты');
     }
+
+    public function test_footer_has_social_strip_brand_and_legal_links(): void
+    {
+        $html = $this->get('/ru')->assertOk()->getContent();
+        foreach (['instagram.com/tenir.ecohotels', 'youtube.com/@tenirhotels', 'tiktok.com/@tenirhotels', 'soundcloud.com/tenirhotels'] as $url) {
+            $this->assertStringContainsString($url, $html);
+        }
+        $this->assertStringNotContainsString('facebook.com/tenirhotels', $html);
+        $this->get('/ru')->assertSee('Наша философия')->assertSee('Политика конфиденциальности')->assertSee('Карта курорта');
+        $this->get('/en')->assertSee('Our philosophy');
+    }
 }
