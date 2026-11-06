@@ -8,7 +8,7 @@
         :text="__('site.destinations.intro')" />
 
     {{-- Плашка бронирования с выбором отеля --}}
-    <div class="container-site relative z-10 -mt-14">
+    <div class="container-site relative z-10 lg:-mt-14">
         <x-site.booking-bar id="home" />
     </div>
 
