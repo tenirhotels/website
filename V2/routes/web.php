@@ -60,6 +60,15 @@ Route::get('/', function (Request $request) {
     return redirect('/'.$locale)->header('Vary', 'Accept-Language, Cookie')->header('Cache-Control', 'private, no-store');
 })->withoutMiddleware($publicWithoutSession);
 
+// Адрес вида /lang/en/booking?date=… — так модуль Exely (форма поиска) открывает страницу бронирования
+// по настройке в кабинете. Переводим на /en/booking с теми же параметрами.
+Route::get('lang/{locale}/{path?}', function (Request $request, string $locale, ?string $path = null) {
+    abort_unless(Locales::isSupported($locale), 404);
+    $url = '/'.$locale.($path ? '/'.ltrim($path, '/') : '');
+
+    return redirect($url.($request->getQueryString() ? '?'.$request->getQueryString() : ''));
+})->where('path', '.*')->withoutMiddleware($publicWithoutSession);
+
 Route::get('sitemap.xml', SitemapController::class)->name('sitemap');
 Route::get('robots.txt', fn () => response(implode("\n", [
     'User-agent: *',

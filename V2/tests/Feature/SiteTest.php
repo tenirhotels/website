@@ -32,6 +32,13 @@ class SiteTest extends TestCase
         $this->withUnencryptedCookie('tenir_lang', 'en')->get('/', ['Accept-Language' => 'ru-RU'])->assertRedirect('/en');
     }
 
+    public function test_exely_lang_prefixed_urls_redirect_with_query(): void
+    {
+        $this->get('/lang/en/booking?date=2026-11-10&nights=1&adults=2&children=&children-age=')
+            ->assertRedirect('/en/booking?date=2026-11-10&nights=1&adults=2&children=&children-age=');
+        $this->get('/lang/xx/booking')->assertNotFound();
+    }
+
     public function test_kazakh_is_the_first_language(): void
     {
         $this->assertSame('kk', array_key_first(\App\Support\Locales::all()));
