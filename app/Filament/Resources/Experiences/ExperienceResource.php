@@ -82,10 +82,11 @@ class ExperienceResource extends Resource
             Fields::column('title', 'Впечатление'),
             TextColumn::make('category')->label('Категория')->badge()
                 ->formatStateUsing(fn (string $state) => self::categoryOptions()[$state] ?? $state),
-            TextColumn::make('hotel.slug')->label('Отель')->placeholder('Вся сеть')->visible(fn () => Property::isMulti()),
+            Fields::hotelColumn(),
             Fields::publishedColumn(),
         ], [
             SelectFilter::make('category')->label('Категория')->options(self::categoryOptions()),
+            Fields::hotelFilter(),
         ]);
     }
 
