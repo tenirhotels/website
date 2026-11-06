@@ -54,7 +54,7 @@
     <meta name="twitter:title" content="{{ $seo->fullTitle() }}">
     @if ($description)<meta name="twitter:description" content="{{ $description }}">@endif
 
-    <link rel="icon" href="/favicon.ico">
+    <link rel="icon" href="/favicon.ico" sizes="any">
     <meta name="theme-color" content="#1F3A2E">
     {{-- Шрифты грузим заранее и показываем текст сразу нужным шрифтом (без «прыжка» с запасного) --}}
     <link rel="preload" href="/fonts/GillSansProCyrillic-Medium.woff2" as="font" type="font/woff2" crossorigin>
