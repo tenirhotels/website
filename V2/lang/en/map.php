@@ -11,7 +11,7 @@ return [
     'season_label' => 'Season',
     'cable_title' => 'Cable car',
     'one_way' => 'One way ≈60 min',
-    'one_way_note' => 'Including transfers. Times are approximate and depend on the schedule and weather.',
+    'one_way_note' => 'Including transfers. Times are approximate and depend on the schedule and weather. Queues are possible at peak times, so allow extra time.',
     'up' => 'Up',
     'down' => 'Down',
     'min' => 'min',
