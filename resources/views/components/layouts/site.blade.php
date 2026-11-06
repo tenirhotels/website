@@ -41,7 +41,20 @@
 
     <link rel="icon" href="/favicon.ico">
     <meta name="theme-color" content="#1F3A2E">
+    {{-- Шрифты грузим заранее и показываем текст сразу нужным шрифтом (без «прыжка» с запасного) --}}
     <link rel="preload" href="/fonts/GillSansProCyrillic-Medium.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/fonts/GillSansProCyrillic-Bold.woff2" as="font" type="font/woff2" crossorigin>
+    @php
+        $fontUrl = function (string $name) {
+            try { return parse_url(Vite::asset('node_modules/@fontsource/cormorant-garamond/files/cormorant-garamond-'.$name.'.woff2'), PHP_URL_PATH); } catch (\Throwable) { return null; }
+        };
+    @endphp
+    @foreach (in_array($locale, ['ru', 'kk'], true) ? ['cyrillic-400-normal', 'latin-400-normal'] : ['latin-400-normal'] as $cormorant)
+        @if ($u = $fontUrl($cormorant))<link rel="preload" href="{{ $u }}" as="font" type="font/woff2" crossorigin>@endif
+    @endforeach
+    @if ($locale === 'kk')
+        @if ($u = $fontUrl('cyrillic-ext-400-normal'))<link rel="preload" href="{{ $u }}" as="font" type="font/woff2" crossorigin>@endif
+    @endif
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     @foreach ($seo->schema as $schema)

@@ -1,15 +1,6 @@
 @import 'tailwindcss';
 
-/* Cormorant Garamond — свой хостинг (без запроса к Google Fonts) */
-@import '@fontsource/cormorant-garamond/cyrillic-400.css';
-@import '@fontsource/cormorant-garamond/cyrillic-500.css';
-@import '@fontsource/cormorant-garamond/cyrillic-ext-400.css';
-@import '@fontsource/cormorant-garamond/cyrillic-ext-500.css';
-@import '@fontsource/cormorant-garamond/latin-400.css';
-@import '@fontsource/cormorant-garamond/latin-500.css';
-@import '@fontsource/cormorant-garamond/latin-400-italic.css';
-@import '@fontsource/cormorant-garamond/cyrillic-400-italic.css';
-@import '@fontsource/cormorant-garamond/cyrillic-ext-400-italic.css';
+@import './fonts.css';
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
@@ -21,13 +12,13 @@
     font-family: 'Gill Sans Pro';
     src: url('/fonts/GillSansProCyrillic-Medium.woff2') format('woff2');
     font-weight: 400 500;
-    font-display: swap;
+    font-display: block;
 }
 @font-face {
     font-family: 'Gill Sans Pro';
     src: url('/fonts/GillSansProCyrillic-Bold.woff2') format('woff2');
     font-weight: 600 700;
-    font-display: swap;
+    font-display: block;
 }
 
 /*
