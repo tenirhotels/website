@@ -14,7 +14,6 @@ return [
     'one_way_note' => '含换乘。时间仅供参考，视运营时间和天气而定。',
     'up' => '上行',
     'down' => '下行',
-    'both_ways' => '双向相同',
     'min' => '分钟',
     'next' => '到下一站',
     'g_restaurants' => '餐厅与酒吧',

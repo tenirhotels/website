@@ -14,7 +14,6 @@ return [
     'one_way_note' => 'Including transfers. Times are approximate and depend on the schedule and weather.',
     'up' => 'Up',
     'down' => 'Down',
-    'both_ways' => 'the same in both directions',
     'min' => 'min',
     'next' => 'to the next station',
     'g_restaurants' => 'Restaurants and bars',
