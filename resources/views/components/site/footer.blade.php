@@ -16,7 +16,7 @@
     ];
     $social = collect(Setting::get('social', []) ?: [])->filter();
     $social = $social->sortBy(fn ($url, $key) => array_search($key, array_keys($networks), true) === false ? 99 : array_search($key, array_keys($networks), true));
-    $brandPages = $navPages->where('placement', 'main');
+    $brandPages = $navPages->whereIn('placement', ['main', 'brand'])->sortBy('sort');
     $legalPages = $navPages->where('placement', 'footer');
 @endphp
 <footer class="relative isolate overflow-hidden bg-forest-deep text-[#D8DCD8]">

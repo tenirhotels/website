@@ -37,4 +37,20 @@ class Page extends Model
     {
         return route('page', ['locale' => $locale ?? app()->getLocale(), 'page' => $this->slug]);
     }
+
+    /** Ссылка кнопки блока: booking, page:{slug} (другая страница сайта) или готовый адрес. */
+    public static function resolveLink(?string $url): ?string
+    {
+        if (! $url) {
+            return null;
+        }
+        if ($url === 'booking') {
+            return route('booking');
+        }
+        if (str_starts_with($url, 'page:')) {
+            return static::published()->where('slug', substr($url, 5))->first()?->url();
+        }
+
+        return $url;
+    }
 }

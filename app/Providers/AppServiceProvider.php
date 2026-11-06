@@ -33,7 +33,7 @@ class AppServiceProvider extends ServiceProvider
             if (! $attrs->has('tenir.nav')) {
                 $attrs->set('tenir.nav', [
                     'navHotels' => Hotel::published()->ordered()->get(),
-                    'navPages' => Page::published()->whereIn('placement', ['main', 'footer'])->ordered()->get(),
+                    'navPages' => Page::published()->whereIn('placement', ['main', 'brand', 'footer'])->ordered()->get(),
                 ]);
             }
             $view->with($attrs->get('tenir.nav'));

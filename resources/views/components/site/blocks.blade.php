@@ -91,7 +91,7 @@
             @break
 
         @case('cta')
-            @php($href = ($d['button_url'] ?? '') === 'booking' ? route('booking') : ($d['button_url'] ?? null))
+            @php($href = \App\Models\Page::resolveLink($d['button_url'] ?? null))
             <section class="bg-sand">
                 <div class="container-site flex flex-col items-center gap-5 py-12 md:py-16 lg:py-20 text-center">
                     <h2 class="h-section">{{ $d['heading'] ?? '' }}</h2>
