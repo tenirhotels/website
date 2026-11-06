@@ -126,6 +126,7 @@ class Fields
                 self::translatable(fn (string $l) => [
                     TextInput::make("seo_title.$l")->label('Title')->maxLength(70),
                     Textarea::make("seo_description.$l")->label('Description')->rows(2)->maxLength(170),
+                    TextInput::make("seo_keywords.$l")->label('Ключевые слова (через запятую)')->helperText('3–8 фраз, которые ищут гости. Не нужно повторять одно и то же.')->maxLength(250),
                 ], 'seo'),
                 self::image('og_image', 'Картинка для соцсетей (1200×630)', 'og'),
             ]);

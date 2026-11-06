@@ -127,6 +127,7 @@ class SiteSettings extends Page
                 Fields::translatable(fn (string $l) => [
                     TextInput::make("seo.default_title.$l")->label('Title главной')->maxLength(70),
                     Textarea::make("seo.default_description.$l")->label('Description главной')->rows(2)->maxLength(170),
+                    TextInput::make("seo.default_keywords.$l")->label('Ключевые слова по умолчанию')->maxLength(250),
                 ], 'seo-default'),
                 Fields::image('seo.og_image', 'Картинка для соцсетей по умолчанию', 'og'),
             ]),

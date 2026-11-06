@@ -7,6 +7,7 @@
     $seo ??= Seo::make();
     $alternates = Seo::alternates();
     $locale = app()->getLocale();
+    $ogLocale = fn (string $c) => ['ru' => 'ru_RU', 'kk' => 'kk_KZ', 'en' => 'en_US', 'zh' => 'zh_CN'][$c] ?? str_replace('-', '_', Locales::all()[$c]['hreflang']);
 @endphp
 <!DOCTYPE html>
 <html lang="{{ $locale }}">
@@ -16,6 +17,9 @@
     <title>{{ $seo->fullTitle() }}</title>
     @if ($description = $seo->metaDescription())
         <meta name="description" content="{{ $description }}">
+    @endif
+    @if ($keywords = $seo->metaKeywords())
+        <meta name="keywords" content="{{ $keywords }}">
     @endif
     @if ($seo->noindex)
         <meta name="robots" content="noindex, follow">
@@ -29,15 +33,26 @@
         @endisset
     @endif
 
-    <meta property="og:type" content="website">
+    <meta property="og:type" content="{{ $seo->type }}">
+    <meta property="og:site_name" content="{{ \App\Models\Setting::text('brand.name', 'Tenir Hotels') }}">
     <meta property="og:title" content="{{ $seo->fullTitle() }}">
     @if ($description)<meta property="og:description" content="{{ $description }}">@endif
     <meta property="og:url" content="{{ url()->current() }}">
-    <meta property="og:locale" content="{{ str_replace('-', '_', Locales::all()[$locale]['hreflang']) }}">
+    <meta property="og:locale" content="{{ $ogLocale($locale) }}">
+    @foreach (Locales::codes() as $alt)
+        @continue($alt === $locale)
+        <meta property="og:locale:alternate" content="{{ $ogLocale($alt) }}">
+    @endforeach
     @if ($image = $seo->imageUrl())
         <meta property="og:image" content="{{ $image }}">
+        <meta property="og:image:alt" content="{{ $seo->imageAlt ?: $seo->fullTitle() }}">
         <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:image" content="{{ $image }}">
+    @else
+        <meta name="twitter:card" content="summary">
     @endif
+    <meta name="twitter:title" content="{{ $seo->fullTitle() }}">
+    @if ($description)<meta name="twitter:description" content="{{ $description }}">@endif
 
     <link rel="icon" href="/favicon.ico">
     <meta name="theme-color" content="#1F3A2E">
@@ -57,7 +72,18 @@
     @endif
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    @foreach ($seo->schema as $schema)
+    @php
+        $crumbs = null;
+        if (! request()->routeIs('home') && ! $seo->noindex) {
+            $trail = [[Setting::text('brand.name', 'Tenir Hotels'), route('home', ['locale' => $locale])]];
+            if ($hotel && \App\Support\Property::isMulti()) {
+                $trail[] = [$hotel->t('name'), $hotel->url()];
+            }
+            $trail[] = [$seo->title ?: $seo->fullTitle(), url()->current()];
+            $crumbs = $seo->breadcrumbs($trail);
+        }
+    @endphp
+    @foreach (array_filter([...$seo->schema, $crumbs]) as $schema)
         <script type="application/ld+json">{!! json_encode($schema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG) !!}</script>
     @endforeach
 
