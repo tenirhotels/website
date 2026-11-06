@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Page;
 use Database\Seeders\Concerns\CopiesMedia;
+use Database\Seeders\Concerns\PhilosophyContent;
 use Database\Seeders\Concerns\SustainabilityContent;
 use Illuminate\Database\Seeder;
 
@@ -86,6 +87,7 @@ class BrandPagesSeeder extends Seeder
                         'button_url' => 'booking',
                     ]],
                 ],
+                'kk' => PhilosophyContent::kk($this->media('about.webp')),
             ],
             'is_published' => true,
         ]);
