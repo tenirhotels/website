@@ -23,15 +23,16 @@ if (! function_exists('media_srcset')) {
     /** srcset для фото, у которых есть уменьшенные копии (-800, -1400); иначе null. */
     function media_srcset(?string $path): ?string
     {
-        if (blank($path) || str_starts_with($path, 'http') || ! str_ends_with($path, '.webp')) {
+        if (blank($path) || str_starts_with($path, 'http') || ! preg_match('/^(.*)\.(webp|jpe?g|png)$/i', $path, $m) || preg_match('/-(800|1400)$/', $m[1])) {
             return null;
         }
 
         static $cache = [];
+        $base0 = $m[1];
 
-        return $cache[$path] ??= (function () use ($path) {
+        return $cache[$path] ??= (function () use ($path, $base0) {
             $disk = Storage::disk('public');
-            $base = substr($path, 0, -5);
+            $base = $base0;
             $parts = [];
             foreach ([800, 1400] as $w) {
                 if ($disk->exists("$base-$w.webp")) {

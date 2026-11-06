@@ -149,7 +149,8 @@ class Fields
             ->imageEditor()
             ->disk('public')
             ->directory($directory)
-            ->maxSize(8192);
+            ->maxSize(8192)
+            ->saveUploadedFileUsing(fn ($file) => \App\Support\ImageVariants::store($file, $directory));
     }
 
     public static function gallery(string $name, string $directory): FileUpload
