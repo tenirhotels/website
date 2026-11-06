@@ -40,9 +40,16 @@
 
             <nav aria-label="{{ __('site.footer.guests') }}" class="flex flex-col gap-3 text-[15px]">
                 <p class="text-xs uppercase tracking-[0.2em] text-[#9AA59F]">{{ __('site.footer.guests') }}</p>
-                @foreach ($navHotels as $h)
-                    <a href="{{ $h->url() }}" class="hover:text-white">{{ $h->t('name') }}</a>
-                @endforeach
+                @if (\App\Support\Property::isSingle() && ($single = \App\Support\Property::primary()))
+                    {{-- Один отель: ссылка на главную бессмысленна — ведём в разделы отеля. --}}
+                    <a href="{{ $single->sectionUrl('rooms') }}" class="hover:text-white">{{ __('site.hotel.rooms') }}</a>
+                    <a href="{{ $single->sectionUrl('dining') }}" class="hover:text-white">{{ __('site.hotel.dining') }}</a>
+                    <a href="{{ route('experiences.index') }}" class="hover:text-white">{{ __('site.nav.experiences') }}</a>
+                @else
+                    @foreach ($navHotels as $h)
+                        <a href="{{ $h->url() }}" class="hover:text-white">{{ $h->t('name') }}</a>
+                    @endforeach
+                @endif
                 <a href="{{ route('offers.index') }}" class="hover:text-white">{{ __('site.nav.offers') }}</a>
                 <a href="{{ route('events.index') }}" class="hover:text-white">{{ __('site.nav.events') }}</a>
                 @if (Gifts::offers())<a href="{{ route('gifts') }}" class="hover:text-white">{{ __('gifts.open') }}</a>@endif
