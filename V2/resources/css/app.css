@@ -109,8 +109,35 @@
     .rail > * { flex: none; }
 }
 
-@keyframes menu-in { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
-#mobile-menu:not([hidden]) { animation: menu-in .2s ease-out; }
+/* Мобильное меню: плавный выезд, пункты по очереди, бургер превращается в крестик */
+#mobile-menu { opacity: 0; transform: translateY(-14px); visibility: hidden; pointer-events: none;
+    transition: opacity .3s ease, transform .4s cubic-bezier(.2, .7, .2, 1), visibility 0s linear .4s; }
+#mobile-menu.is-open { opacity: 1; transform: none; visibility: visible; pointer-events: auto;
+    transition: opacity .3s ease, transform .4s cubic-bezier(.2, .7, .2, 1), visibility 0s; }
+#mobile-menu nav a, #mobile-menu nav + div, #mobile-menu > div > a { opacity: 0; transform: translateY(12px);
+    transition: opacity .3s ease, transform .4s cubic-bezier(.2, .7, .2, 1); }
+#mobile-menu.is-open nav a, #mobile-menu.is-open nav + div, #mobile-menu.is-open > div > a { opacity: 1; transform: none;
+    transition-delay: calc(60ms + var(--i, 0) * 35ms); }
+.burger path { transform-box: fill-box; transform-origin: center; transition: transform .35s cubic-bezier(.2, .7, .2, 1), opacity .2s ease; }
+[aria-expanded='true'] .burger .b1 { transform: translateY(5px) rotate(45deg); }
+[aria-expanded='true'] .burger .b2 { opacity: 0; }
+[aria-expanded='true'] .burger .b3 { transform: translateY(-5px) rotate(-45deg); }
+
+/* Появление блоков при прокрутке */
+.reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s ease, transform .7s cubic-bezier(.2, .7, .2, 1); }
+.reveal.is-in { opacity: 1; transform: none; }
+
+/* Переходы между страницами: мягкое затухание, шапка остаётся на месте */
+@view-transition { navigation: auto; }
+[data-header] { view-transition-name: site-header; }
+::view-transition-old(root), ::view-transition-new(root) { animation-duration: .25s; }
+
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .reveal, #mobile-menu, #mobile-menu * , .burger path { transition: none !important; animation: none !important; transform: none !important; }
+    .reveal { opacity: 1; }
+    ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
+}
 
 /* Открытое мобильное меню — выше всего: прячем плавающую панель и форму Exely (они поверх меню с очень большим z-index) */
 body.overflow-hidden #tl-search-form,
