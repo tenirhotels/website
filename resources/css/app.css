@@ -111,3 +111,9 @@
 
 @keyframes menu-in { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
 #mobile-menu:not([hidden]) { animation: menu-in .2s ease-out; }
+
+/* Открытое мобильное меню — выше всего: прячем плавающую панель и форму Exely (они поверх меню с очень большим z-index) */
+body.overflow-hidden #tl-search-form,
+body.overflow-hidden [id^='tl-'],
+body.overflow-hidden [class^='tl-'],
+body.overflow-hidden [class*=' tl-'] { visibility: hidden !important; }
