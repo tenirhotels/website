@@ -1,5 +1,16 @@
 @import 'tailwindcss';
 
+/* Cormorant Garamond — свой хостинг (без запроса к Google Fonts) */
+@import '@fontsource/cormorant-garamond/cyrillic-400.css';
+@import '@fontsource/cormorant-garamond/cyrillic-500.css';
+@import '@fontsource/cormorant-garamond/cyrillic-ext-400.css';
+@import '@fontsource/cormorant-garamond/cyrillic-ext-500.css';
+@import '@fontsource/cormorant-garamond/latin-400.css';
+@import '@fontsource/cormorant-garamond/latin-500.css';
+@import '@fontsource/cormorant-garamond/latin-400-italic.css';
+@import '@fontsource/cormorant-garamond/cyrillic-400-italic.css';
+@import '@fontsource/cormorant-garamond/cyrillic-ext-400-italic.css';
+
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 @source '../**/*.blade.php';

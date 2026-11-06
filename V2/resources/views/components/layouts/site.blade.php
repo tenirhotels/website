@@ -7,9 +7,6 @@
     $seo ??= Seo::make();
     $alternates = Seo::alternates();
     $locale = app()->getLocale();
-    $ga4 = Setting::get('analytics.ga4');
-    $metrika = Setting::get('analytics.yandex_metrika');
-    $gtm = Setting::get('analytics.gtm');
 @endphp
 <!DOCTYPE html>
 <html lang="{{ $locale }}">
@@ -43,9 +40,7 @@
     @endif
 
     <link rel="icon" href="/favicon.ico">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+    <meta name="theme-color" content="#1F3A2E">
     <link rel="preload" href="/fonts/GillSansProCyrillic-Medium.woff2" as="font" type="font/woff2" crossorigin>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -55,16 +50,13 @@
 
     {{ $head ?? '' }}
 
-    @if ($gtm)
-        <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','{{ $gtm }}');</script>
-    @endif
-    @if ($ga4)
-        <script async src="https://www.googletagmanager.com/gtag/js?id={{ $ga4 }}"></script>
-        <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','{{ $ga4 }}');</script>
-    @endif
-    @if ($metrika)
-        <script>(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,"script","https://mc.yandex.ru/metrika/tag.js","ym");ym({{ (int) $metrika }},"init",{clickmap:true,trackLinks:true,accurateTrackBounce:true,webvisor:true});</script>
-    @endif
+    @foreach (['google' => 'google-site-verification', 'yandex' => 'yandex-verification', 'meta' => 'facebook-domain-verification'] as $key => $metaName)
+        @if ($v = trim((string) Setting::get('analytics.verify_'.$key)))
+            <meta name="{{ $metaName }}" content="{{ $v }}">
+        @endif
+    @endforeach
+    <x-site.analytics />
+    @if ($custom = Setting::get('analytics.custom_head')){!! $custom !!}@endif
 </head>
 <body @class(['min-h-screen', 'pb-[88px] lg:pb-0' => ! request()->attributes->get('tenir.exely_widget')])>
     <a href="#content" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:bg-white focus:px-4 focus:py-2">{{ __('site.nav.skip') }}</a>
@@ -84,5 +76,6 @@
             <a href="{{ route('booking') }}" class="btn-primary w-full min-h-[52px]">{{ __('site.nav.book') }}</a>
         </div>
     @endif
+    @if ($customBody = Setting::get('analytics.custom_body')){!! $customBody !!}@endif
 </body>
 </html>

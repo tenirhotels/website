@@ -39,10 +39,10 @@ class Fields
     {
         $tabs = [];
         foreach (Locales::all() as $code => $meta) {
-            $isDefault = $code === Locales::default();
+            $isDefault = $code === Locales::source();
             $tabs[] = Tab::make($meta['name'])
                 ->id("$id-$code")
-                ->badge($isDefault ? 'основной' : null)
+                ->badge($isDefault ? 'исходный' : null)
                 ->schema($fields($code, $isDefault));
         }
 

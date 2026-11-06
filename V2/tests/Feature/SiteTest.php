@@ -25,7 +25,49 @@ class SiteTest extends TestCase
     public function test_root_redirects_by_browser_language(): void
     {
         $this->get('/', ['Accept-Language' => 'kk-KZ,kk;q=0.9'])->assertRedirect('/kk');
-        $this->get('/', ['Accept-Language' => 'de-DE'])->assertRedirect('/ru');
+        $this->get('/', ['Accept-Language' => 'de-DE'])->assertRedirect('/kk');
+        $this->get('/', ['Accept-Language' => 'ru-RU,ru;q=0.9,en;q=0.8'])->assertRedirect('/ru');
+        $this->get('/', ['Accept-Language' => 'en;q=0.5,zh-CN;q=0.9'])->assertRedirect('/zh');
+        $this->get('/', ['Accept-Language' => 'uk-UA,uk;q=0.9'])->assertRedirect('/ru');
+        $this->withUnencryptedCookie('tenir_lang', 'en')->get('/', ['Accept-Language' => 'ru-RU'])->assertRedirect('/en');
+    }
+
+    public function test_kazakh_is_the_first_language(): void
+    {
+        $this->assertSame('kk', array_key_first(\App\Support\Locales::all()));
+        $this->assertSame('kk', \App\Support\Locales::default());
+    }
+
+    public function test_public_pages_are_cached_without_cookies_and_flushed_on_save(): void
+    {
+        $first = $this->get('/ru');
+        $first->assertOk()->assertHeader('X-Page-Cache', 'MISS');
+        $this->assertEmpty($first->headers->getCookies());
+        $this->assertStringContainsString('s-maxage', $first->headers->get('Cache-Control'));
+
+        $this->get('/ru')->assertHeader('X-Page-Cache', 'HIT');
+
+        Page::query()->first()?->touch();
+        Setting::put('seo', ['x' => 1]);
+        $this->get('/ru')->assertHeader('X-Page-Cache', 'MISS');
+
+        Setting::put('perf', ['page_cache' => false]);
+        $this->get('/ru')->assertHeaderMissing('X-Page-Cache');
+    }
+
+    public function test_analytics_ids_from_settings_are_rendered_and_validated(): void
+    {
+        Setting::put('analytics', [
+            'ga4' => 'G-ABCDE12345', 'gtm' => 'GTM-ABC1234', 'yandex_metrika' => '12345678',
+            'meta_pixel' => '1234567890123456', 'verify_google' => 'tok123', 'custom_head' => '<meta name="x-custom" content="1">',
+        ]);
+        $this->get('/ru')->assertOk()
+            ->assertSee('G-ABCDE12345', false)->assertSee('GTM-ABC1234', false)
+            ->assertSee('ym(12345678', false)->assertSee('1234567890123456', false)
+            ->assertSee('google-site-verification', false)->assertSee('x-custom', false);
+
+        Setting::put('analytics', ['ga4' => '"><script>alert(1)</script>', 'meta_pixel' => 'abc']);
+        $this->get('/ru')->assertOk()->assertDontSee('alert(1)', false)->assertDontSee('fbevents.js', false);
     }
 
     public function test_pages_have_canonical_hreflang_and_schema(): void
@@ -34,7 +76,7 @@ class SiteTest extends TestCase
             ->assertOk()
             ->assertSee('<link rel="canonical" href="'.url('/en/rooms/deluxe-mountain-view').'">', false)
             ->assertSee('hreflang="kk" href="'.url('/kk/rooms/deluxe-mountain-view').'"', false)
-            ->assertSee('hreflang="x-default" href="'.url('/ru/rooms/deluxe-mountain-view').'"', false);
+            ->assertSee('hreflang="x-default" href="'.url('/kk/rooms/deluxe-mountain-view').'"', false);
 
         $this->get('/en')->assertSee('"@type":"Hotel"', false)->assertSee('"@type":"Organization"', false);
     }

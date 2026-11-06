@@ -27,3 +27,11 @@ if (header?.dataset.transparent === 'true') {
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
 }
+
+// Запоминаем выбранный язык: корень сайта «/» дальше ведёт на него, а не на язык браузера.
+document.addEventListener('click', (e) => {
+    const link = e.target.closest('a[hreflang][lang]');
+    if (link) {
+        document.cookie = 'tenir_lang=' + link.getAttribute('lang') + '; path=/; max-age=31536000; samesite=lax';
+    }
+});

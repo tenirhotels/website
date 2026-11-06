@@ -13,6 +13,15 @@ use App\Support\Locales;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+// Публичному сайту не нужны сессии, CSRF и cookie — страницы можно кэшировать (и на CDN тоже).
+$publicWithoutSession = [
+    \Illuminate\Cookie\Middleware\EncryptCookies::class,
+    \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+    \Illuminate\Session\Middleware\StartSession::class,
+    \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+    \Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class,
+];
+
 /*
 |--------------------------------------------------------------------------
 | Карта сайта Tenir Hotels
@@ -43,7 +52,13 @@ use Illuminate\Support\Facades\Route;
 | /{locale}/{page}                              страницы бренда: about, sustainability, ...
 */
 
-Route::get('/', fn (Request $request) => redirect('/'.Locales::fromBrowser($request->header('Accept-Language'))));
+// Корень: язык из cookie (если посетитель уже выбирал), иначе по языку браузера, иначе казахский.
+Route::get('/', function (Request $request) {
+    $saved = $request->cookies->get('tenir_lang');
+    $locale = Locales::isSupported($saved) ? $saved : Locales::fromBrowser($request->header('Accept-Language'));
+
+    return redirect('/'.$locale)->header('Vary', 'Accept-Language, Cookie')->header('Cache-Control', 'private, no-store');
+})->withoutMiddleware($publicWithoutSession);
 
 Route::get('sitemap.xml', SitemapController::class)->name('sitemap');
 Route::get('robots.txt', fn () => response(implode("\n", [
@@ -55,7 +70,8 @@ Route::get('robots.txt', fn () => response(implode("\n", [
 
 Route::prefix('{locale}')
     ->where(['locale' => implode('|', Locales::codes())])
-    ->middleware('locale')
+    ->middleware(['locale', 'page-cache'])
+    ->withoutMiddleware($publicWithoutSession)
     ->group(function () {
         Route::get('/', HomeController::class)->name('home');
 

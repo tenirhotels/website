@@ -34,21 +34,45 @@ class Locales
             $chain[] = $code;
             $code = self::all()[$code]['fallback'] ?? null;
         }
-        if (! in_array(self::default(), $chain, true)) {
-            $chain[] = self::default();
+        foreach ([self::source(), self::default()] as $code) {
+            if (! in_array($code, $chain, true)) {
+                $chain[] = $code;
+            }
         }
 
         return $chain;
     }
 
-    /** Лучший язык по заголовку Accept-Language браузера. */
+    public static function source(): string
+    {
+        return config('tenir.source_locale', self::default());
+    }
+
+    /**
+     * Язык по заголовку Accept-Language с учётом q-весов: ru-RU,ru;q=0.9,en;q=0.8.
+     * Не поддерживаемый язык → основной (казахский).
+     */
     public static function fromBrowser(?string $header): string
     {
-        foreach (explode(',', (string) $header) as $part) {
-            $code = strtolower(substr(trim(explode(';', $part)[0]), 0, 2));
-            if (self::isSupported($code)) {
-                return $code;
+        $found = [];
+        foreach (explode(',', (string) $header) as $i => $part) {
+            $bits = explode(';', trim($part));
+            $code = strtolower(substr(trim($bits[0]), 0, 2));
+            $q = 1.0;
+            foreach (array_slice($bits, 1) as $param) {
+                if (preg_match('/^\s*q=([0-9.]+)/i', $param, $m)) {
+                    $q = (float) $m[1];
+                }
             }
+            $code = config('tenir.locale_aliases.'.$code, $code);
+            if ($q > 0 && self::isSupported($code)) {
+                $found[] = [$q, -$i, $code];
+            }
+        }
+        if ($found) {
+            rsort($found);
+
+            return $found[0][2];
         }
 
         return self::default();
