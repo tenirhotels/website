@@ -71,6 +71,7 @@ jobs:
           IGN
           sed -i 's/^ *//' ../deploy/.gitignore
           cp V2/deploy/README.md ../deploy/DEPLOY.md
+          cp V2/deploy/env.stage.example ../deploy/env.stage.example
 
       - name: Закоммитить и отправить
         run: |
