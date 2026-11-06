@@ -68,8 +68,8 @@
     </div>
 
     {{-- Мобильное меню: основные разделы, дополнительные, язык, связь и кнопка бронирования --}}
-    <div id="mobile-menu" hidden class="fixed inset-x-0 bottom-0 top-[72px] z-40 flex flex-col overflow-y-auto isolate bg-forest px-6 pb-8 pt-4 lg:hidden">
-        <div class="pattern-scene -z-10 bottom-4 right-[-60px] h-[420px] w-[320px] bg-ember-light opacity-[0.10]" aria-hidden="true"></div>
+    <div id="mobile-menu" hidden class="fixed inset-x-0 bottom-0 top-[72px] z-40 flex flex-col overflow-y-auto overflow-x-hidden overscroll-contain isolate bg-forest px-6 pb-8 pt-4 lg:hidden">
+        <div class="pattern-scene -z-10 bottom-4 right-0 h-[420px] w-[320px] bg-ember-light opacity-[0.10]" aria-hidden="true"></div>
         <nav aria-label="{{ __('site.nav.menu') }}" class="flex flex-col font-display text-[28px] leading-tight">
             @unless ($single)
                 @foreach ($openHotels as $h)
