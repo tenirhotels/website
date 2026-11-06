@@ -72,7 +72,7 @@
     "src": "node_modules/@fontsource/cormorant-garamond/files/cormorant-garamond-latin-500-normal.woff2"
   },
   "resources/css/app.css": {
-    "file": "assets/app-COxRKKS5.css",
+    "file": "assets/app-CmWhPiPX.css",
     "src": "resources/css/app.css",
     "isEntry": true,
     "name": "app",
@@ -81,7 +81,7 @@
     ]
   },
   "resources/js/app.js": {
-    "file": "assets/app-BiwdvKAz.js",
+    "file": "assets/app-C4MlO0Bp.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true

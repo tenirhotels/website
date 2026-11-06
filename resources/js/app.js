@@ -4,21 +4,35 @@
  * - компактная шапка при прокрутке.
  */
 
-// Мобильное меню
+// Мобильное меню: плавное открытие/закрытие, пункты появляются по очереди
 const menu = document.getElementById('mobile-menu');
-document.querySelectorAll('[data-menu-toggle]').forEach((btn) =>
-    btn.addEventListener('click', () => {
-        const open = menu?.hasAttribute('hidden');
-        if (!menu) return;
-        menu.toggleAttribute('hidden', !open);
-        document.body.classList.toggle('overflow-hidden', open);
-        document.querySelectorAll('[data-menu-toggle]').forEach((b) => {
-            b.setAttribute('aria-expanded', String(open));
-            b.querySelector('[data-icon-open]')?.toggleAttribute('hidden', open);
-            b.querySelector('[data-icon-close]')?.toggleAttribute('hidden', !open);
-        });
-    }),
-);
+const toggles = document.querySelectorAll('[data-menu-toggle]');
+menu?.querySelectorAll('nav a, nav + div, div > a').forEach((el, i) => el.style.setProperty('--i', String(Math.min(i, 12))));
+const setMenu = (open) => {
+    if (!menu) return;
+    menu.classList.toggle('is-open', open);
+    menu.toggleAttribute('inert', !open);
+    menu.setAttribute('aria-hidden', String(!open));
+    document.body.classList.toggle('overflow-hidden', open);
+    toggles.forEach((b) => b.setAttribute('aria-expanded', String(open)));
+};
+toggles.forEach((btn) => btn.addEventListener('click', () => setMenu(!menu?.classList.contains('is-open'))));
+menu?.addEventListener('click', (e) => { if (e.target.closest('a')) setMenu(false); });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setMenu(false); });
+window.matchMedia('(min-width: 1280px)').addEventListener('change', (e) => { if (e.matches) setMenu(false); });
+
+// Плавное появление блоков при прокрутке (только если JS работает и анимации не отключены)
+if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const items = [...document.querySelectorAll('main > section:not(:first-child), main > div > section:not(:first-child), [data-reveal]')];
+    const io = new IntersectionObserver((entries) => entries.forEach((en) => {
+        if (en.isIntersecting) { en.target.classList.add('is-in'); io.unobserve(en.target); }
+    }), { rootMargin: '0px 0px -8% 0px', threshold: 0.04 });
+    items.forEach((el) => {
+        if (el.getBoundingClientRect().top < window.innerHeight) return; // уже на экране — без анимации
+        el.classList.add('reveal');
+        io.observe(el);
+    });
+}
 
 // Шапка: прозрачная над героем, плотная при прокрутке
 const header = document.querySelector('[data-header]');
