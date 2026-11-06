@@ -1,5 +1,5 @@
 <article class="group flex flex-col gap-4">
-    <a href="{{ $room->url() }}" class="block aspect-[4/3] overflow-hidden" tabindex="-1" aria-hidden="true">
+    <a href="{{ $room->url() }}" class="block aspect-[4/3] overflow-hidden rounded-2xl" tabindex="-1" aria-hidden="true">
         <x-site.media :src="$room->image" :alt="$room->t('name')" class="transition-transform duration-700 group-hover:scale-[1.03]" />
     </a>
     <h3 class="font-display text-[28px] leading-tight"><a href="{{ $room->url() }}" class="hover:text-ember">{{ $room->t('name') }}</a></h3>

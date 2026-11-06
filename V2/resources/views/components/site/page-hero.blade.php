@@ -1,7 +1,7 @@
 @props(['image' => null, 'eyebrow' => null, 'title', 'text' => null, 'tall' => false])
 <section @class(['relative overflow-hidden bg-[#24332B] text-snow', 'h-[78vh] min-h-[560px] max-h-[820px]' => $tall, 'h-[52vh] min-h-[380px] max-h-[560px]' => ! $tall])>
     @if ($image)
-        <x-site.media :src="$image" :alt="$title" eager class="absolute inset-0" />
+        <x-site.media :src="$image" :alt="$title" eager round="" class="absolute inset-0" />
         <div class="absolute inset-0 bg-forest-deep/45" aria-hidden="true"></div>
     @else
         <svg aria-hidden="true" viewBox="0 0 1440 760" preserveAspectRatio="none" class="absolute inset-0 h-full w-full">

@@ -24,6 +24,8 @@ use UnitEnum;
 
 class OfferResource extends Resource
 {
+    use \App\Filament\Support\UsesIdInUrls;
+
     // В админке адреса записей по id, на сайте — по слагу.
     protected static ?string $recordRouteKeyName = 'id';
 
@@ -70,10 +72,12 @@ class OfferResource extends Resource
     {
         return Fields::table($table, [
             Fields::column('title', 'Предложение'),
-            TextColumn::make('hotel.slug')->label('Отель')->placeholder('Вся сеть')->visible(fn () => Property::isMulti()),
+            Fields::hotelColumn(),
             TextColumn::make('exely_special_offer_id')->label('Exely ID'),
             TextColumn::make('valid_to')->label('До')->date('d.m.Y')->placeholder('бессрочно'),
             Fields::publishedColumn(),
+        ], [
+            Fields::hotelFilter(),
         ]);
     }
 

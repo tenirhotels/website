@@ -2,8 +2,11 @@
 
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\DestinationController;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\ExperienceController;
+use App\Http\Controllers\GiftController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MapController;
 use App\Http\Controllers\OfferController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\SingleHotelController;
@@ -12,6 +15,15 @@ use App\Http\Controllers\StoryController;
 use App\Support\Locales;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
+// Публичному сайту не нужны сессии, CSRF и cookie — страницы можно кэшировать (и на CDN тоже).
+$publicWithoutSession = [
+    \Illuminate\Cookie\Middleware\EncryptCookies::class,
+    \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+    \Illuminate\Session\Middleware\StartSession::class,
+    \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+    \Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class,
+];
 
 /*
 |--------------------------------------------------------------------------
@@ -36,14 +48,32 @@ use Illuminate\Support\Facades\Route;
 | /{locale}/destinations/{hotel}/gallery        галерея
 | /{locale}/destinations/{hotel}/getting-here   как добраться, FAQ
 | /{locale}/experiences[/{slug}]                впечатления всей сети
+| /{locale}/events[/{slug}]                     события курорта и отелей (календарь)
 | /{locale}/offers[/{slug}]                     спецпредложения
 | /{locale}/stories[/{slug}]                    истории и новости
 | /{locale}/booking                             модуль бронирования Exely
+| /{locale}/gifts                               подарочные сертификаты (список из gifter)
+| /{locale}/map                                 интерактивная карта курорта (зима/лето)
 | /{locale}/contact                             контакты
 | /{locale}/{page}                              страницы бренда: about, sustainability, ...
 */
 
-Route::get('/', fn (Request $request) => redirect('/'.Locales::fromBrowser($request->header('Accept-Language'))));
+// Корень: язык из cookie (если посетитель уже выбирал), иначе по языку браузера, иначе казахский.
+Route::get('/', function (Request $request) {
+    $saved = $request->cookies->get('tenir_lang');
+    $locale = Locales::isSupported($saved) ? $saved : Locales::fromBrowser($request->header('Accept-Language'));
+
+    return redirect('/'.$locale)->header('Vary', 'Accept-Language, Cookie')->header('Cache-Control', 'private, no-store');
+})->withoutMiddleware($publicWithoutSession);
+
+// Адрес вида /lang/en/booking?date=… — так модуль Exely (форма поиска) открывает страницу бронирования
+// по настройке в кабинете. Переводим на /en/booking с теми же параметрами.
+Route::get('lang/{locale}/{path?}', function (Request $request, string $locale, ?string $path = null) {
+    abort_unless(Locales::isSupported($locale), 404);
+    $url = '/'.$locale.($path ? '/'.ltrim($path, '/') : '');
+
+    return redirect($url.($request->getQueryString() ? '?'.$request->getQueryString() : ''));
+})->where('path', '.*')->withoutMiddleware($publicWithoutSession);
 
 Route::get('sitemap.xml', SitemapController::class)->name('sitemap');
 Route::get('robots.txt', fn () => response(implode("\n", [
@@ -55,7 +85,8 @@ Route::get('robots.txt', fn () => response(implode("\n", [
 
 Route::prefix('{locale}')
     ->where(['locale' => implode('|', Locales::codes())])
-    ->middleware('locale')
+    ->middleware(['locale', 'page-cache'])
+    ->withoutMiddleware($publicWithoutSession)
     ->group(function () {
         Route::get('/', HomeController::class)->name('home');
 
@@ -83,6 +114,9 @@ Route::prefix('{locale}')
         Route::get('experiences', [ExperienceController::class, 'index'])->name('experiences.index');
         Route::get('experiences/{experience}', [ExperienceController::class, 'show'])->name('experiences.show');
 
+        Route::get('events', [EventController::class, 'index'])->name('events.index');
+        Route::get('events/{event}', [EventController::class, 'show'])->name('events.show');
+
         Route::get('offers', [OfferController::class, 'index'])->name('offers.index');
         Route::get('offers/{offer}', [OfferController::class, 'show'])->name('offers.show');
 
@@ -90,6 +124,8 @@ Route::prefix('{locale}')
         Route::get('stories/{story}', [StoryController::class, 'show'])->name('stories.show');
 
         Route::get('booking', BookingController::class)->name('booking');
+        Route::get('map', MapController::class)->name('map');
+        Route::get('gifts', GiftController::class)->name('gifts');
         Route::get('contact', [PageController::class, 'contact'])->name('contact');
 
         // Последним: страницы бренда по слагу.

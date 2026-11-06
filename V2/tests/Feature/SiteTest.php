@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Experience;
+use App\Models\Faq;
 use App\Models\Hotel;
 use App\Models\Offer;
 use App\Models\Page;
@@ -12,6 +13,7 @@ use App\Filament\Resources\Hotels\Pages\EditHotel;
 use App\Filament\Resources\Pages\Pages\CreatePage;
 use App\Models\Setting;
 use App\Models\User;
+use Illuminate\Support\Facades\Http;
 use Livewire\Livewire;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -25,7 +27,91 @@ class SiteTest extends TestCase
     public function test_root_redirects_by_browser_language(): void
     {
         $this->get('/', ['Accept-Language' => 'kk-KZ,kk;q=0.9'])->assertRedirect('/kk');
-        $this->get('/', ['Accept-Language' => 'de-DE'])->assertRedirect('/ru');
+        $this->get('/', ['Accept-Language' => 'de-DE'])->assertRedirect('/kk');
+        $this->get('/', ['Accept-Language' => 'ru-RU,ru;q=0.9,en;q=0.8'])->assertRedirect('/ru');
+        $this->get('/', ['Accept-Language' => 'en;q=0.5,zh-CN;q=0.9'])->assertRedirect('/zh');
+        $this->get('/', ['Accept-Language' => 'uk-UA,uk;q=0.9'])->assertRedirect('/ru');
+        $this->withUnencryptedCookie('tenir_lang', 'en')->get('/', ['Accept-Language' => 'ru-RU'])->assertRedirect('/en');
+    }
+
+    public function test_exely_lang_prefixed_urls_redirect_with_query(): void
+    {
+        $this->get('/lang/en/booking?date=2026-11-10&nights=1&adults=2&children=&children-age=')
+            ->assertRedirect('/en/booking?adults=2&children=&children-age=&date=2026-11-10&nights=1');
+        $this->get('/lang/xx/booking')->assertNotFound();
+    }
+
+    public function test_recognition_block_shows_published_awards_with_sources(): void
+    {
+        $this->get('/en')->assertOk()
+            ->assertSee('One MICHELIN Key')
+            ->assertSee('guide.michelin.com', false)
+            ->assertSee('"award":', false);
+
+        \App\Models\Recognition::query()->get()->each->update(['is_published' => false]);
+        $this->get('/en')->assertOk()->assertDontSee('One MICHELIN Key');
+    }
+
+    public function test_legacy_site_content_import_fills_placeholders_and_keeps_edits(): void
+    {
+        $hotel = Hotel::where('slug', 'shymbulak')->first();
+        $offer = Offer::where('slug', 'long-stay')->first();
+        $this->assertSame(3, (int) $offer->min_nights);
+
+        $migration = require database_path('migrations/2026_11_06_000300_import_legacy_site_content.php');
+        $migration->up();
+        $migration->up(); // идемпотентно
+
+        $this->get('/ru/getting-here')->assertOk()->assertSee('Комби-1')->assertSee('Multipass')->assertSee('50 000');
+        $this->get('/kk/getting-here')->assertOk()->assertSee('Комби-2');
+        $this->get('/ru/experiences/welcome-tour')->assertOk()->assertSee('сертифицированными гидами')->assertDontSee('Дополните');
+        $this->get('/ru/dining')->assertOk()->assertDontSee('Опишите')->assertSee('Самый высокогорный ресторан');
+        $this->get('/ru/contact')->assertOk()->assertSee('sales@tenirhotels.com');
+        $this->assertSame(4, (int) $offer->fresh()->min_nights);
+        $this->assertSame(1, Faq::where('hotel_id', $hotel->id)->get()->filter(fn ($f) => ($f->question['ru'] ?? '') === 'Что такое Multipass?')->count());
+
+        // Правка редактора не перезаписывается.
+        $hotel->update(['getting_here' => ['ru' => str_repeat('Свой длинный текст редактора. ', 30)]]);
+        $migration->up();
+        $this->assertStringContainsString('Свой длинный текст', $hotel->fresh()->getting_here['ru']);
+    }
+
+    public function test_kazakh_is_the_first_language(): void
+    {
+        $this->assertSame('kk', array_key_first(\App\Support\Locales::all()));
+        $this->assertSame('kk', \App\Support\Locales::default());
+    }
+
+    public function test_public_pages_are_cached_without_cookies_and_flushed_on_save(): void
+    {
+        $first = $this->get('/ru');
+        $first->assertOk()->assertHeader('X-Page-Cache', 'MISS');
+        $this->assertEmpty($first->headers->getCookies());
+        $this->assertStringContainsString('s-maxage', $first->headers->get('Cache-Control'));
+
+        $this->get('/ru')->assertHeader('X-Page-Cache', 'HIT');
+
+        Page::query()->first()?->touch();
+        Setting::put('seo', ['x' => 1]);
+        $this->get('/ru')->assertHeader('X-Page-Cache', 'MISS');
+
+        Setting::put('perf', ['page_cache' => false]);
+        $this->get('/ru')->assertHeaderMissing('X-Page-Cache');
+    }
+
+    public function test_analytics_ids_from_settings_are_rendered_and_validated(): void
+    {
+        Setting::put('analytics', [
+            'ga4' => 'G-ABCDE12345', 'gtm' => 'GTM-ABC1234', 'yandex_metrika' => '12345678',
+            'meta_pixel' => '1234567890123456', 'verify_google' => 'tok123', 'custom_head' => '<meta name="x-custom" content="1">',
+        ]);
+        $this->get('/ru')->assertOk()
+            ->assertSee('G-ABCDE12345', false)->assertSee('GTM-ABC1234', false)
+            ->assertSee('ym(12345678', false)->assertSee('1234567890123456', false)
+            ->assertSee('google-site-verification', false)->assertSee('x-custom', false);
+
+        Setting::put('analytics', ['ga4' => '"><script>alert(1)</script>', 'meta_pixel' => 'abc']);
+        $this->get('/ru')->assertOk()->assertDontSee('alert(1)', false)->assertDontSee('fbevents.js', false);
     }
 
     public function test_pages_have_canonical_hreflang_and_schema(): void
@@ -34,7 +120,7 @@ class SiteTest extends TestCase
             ->assertOk()
             ->assertSee('<link rel="canonical" href="'.url('/en/rooms/deluxe-mountain-view').'">', false)
             ->assertSee('hreflang="kk" href="'.url('/kk/rooms/deluxe-mountain-view').'"', false)
-            ->assertSee('hreflang="x-default" href="'.url('/ru/rooms/deluxe-mountain-view').'"', false);
+            ->assertSee('hreflang="x-default" href="'.url('/kk/rooms/deluxe-mountain-view').'"', false);
 
         $this->get('/en')->assertSee('"@type":"Hotel"', false)->assertSee('"@type":"Organization"', false);
     }
@@ -63,6 +149,11 @@ class SiteTest extends TestCase
 
         $this->get("/ru/booking?hotel=shymbulak&check_in=$in&check_out=$out&adults=2&children=1&promo_code=SKY")
             ->assertRedirect("/ru/booking?hotel=shymbulak&date=$in&nights=3&adults=2&children=1&promo-code=SKY");
+
+        // Адрес после перенаправления открывается без нового редиректа (раньше был бесконечный цикл).
+        $this->get("/ru/booking?hotel=shymbulak&date=$in&nights=3&adults=2&children=1&promo-code=SKY")->assertOk();
+        $this->get('/ru/booking?adults=2&children=0')->assertOk();
+        $this->get('/ru/booking?hotel=shymbulak')->assertOk();
     }
 
     public function test_booking_page_embeds_travelline_with_context_and_language(): void
@@ -160,5 +251,76 @@ class SiteTest extends TestCase
             ->assertHasNoFormErrors();
         $this->assertSame('+7 700 000 00 00', Setting::get('contacts.phone'));
         $this->assertSame('reservations@tenirhotels.com', Setting::get('contacts.email'));
+    }
+    public function test_resort_map_page_in_all_languages(): void
+    {
+        foreach (['kk' => 'Курорт картасы', 'ru' => 'Карта курорта', 'en' => 'Resort map', 'zh' => '度假区地图'] as $locale => $title) {
+            $this->get("/$locale/map")->assertOk()->assertSee($title)->assertSee('data-pin="r1"', false)->assertSee('data-pin="st-combi1"', false);
+        }
+        $this->get('/ru/map')->assertSee('≈22 мин', false)->assertSee('↑ Вверх: Combi-1', false)->assertSee('↓ Вниз: Медеу', false)->assertSee('Верёвочный парк Медеу')->assertSee('Лестница здоровья');
+        $this->get('/en/map')->assertSee('Rope park Medeu')->assertSee('Cable cars');
+        $this->get('/ru/map')->assertDontSee('z-30 bg-white px-4 pb-5', false);
+        $this->get('/ru/contact')->assertSee('z-30 bg-white px-4 pb-5', false);
+        $this->get('/sitemap.xml')->assertSee('/ru/map', false);
+        $this->assertFileExists(public_path('images/map/winter.webp'));
+        $this->assertFileExists(public_path('images/map/summer.webp'));
+
+        $this->assertCount(3, \App\Support\ResortMap::geoPoints());
+        $this->assertSame('winter', \App\Support\ResortMap::defaultSeason(new \DateTimeImmutable('2026-12-15')));
+        $this->assertSame('summer', \App\Support\ResortMap::defaultSeason(new \DateTimeImmutable('2026-07-15')));
+    }
+
+    public function test_gift_certificates_from_gifter(): void
+    {
+        config(['tenir.gifts.url' => 'https://gifts.example.test']);
+        $offer = fn (int $id, string $ru, bool $open = true) => [
+            'id' => $id, 'name' => ['ru' => $ru, 'en' => $ru.' EN', 'kk' => $ru.' KK'], 'description' => ['ru' => 'Описание'],
+            'validity' => ['ru' => '3 месяца с даты продажи', 'en' => '3 months', 'kk' => '3 ай'], 'price' => 50000, 'currency' => 'KZT',
+            'image' => null, 'sale' => $open ? 'open' : 'ended', 'open' => $open, 'url' => 'https://gifts.example.test/order/'.$id,
+        ];
+        Http::fake(['gifts.example.test/api/offers' => Http::sequence()
+            ->push(['offers' => [$offer(7, 'Романтический вечер'), $offer(8, 'Закрытый', false)]])
+            ->whenEmpty(Http::response('', 500))]);
+        \Illuminate\Support\Facades\Cache::forget('gifts.offers');
+
+        $this->get('/ru/gifts')->assertOk()->assertSee('Романтический вечер')->assertSee('50 000 ₸')
+            ->assertSee('https://gifts.example.test/order/7?lang=ru', false)->assertDontSee('Закрытый');
+        $this->get('/kk/gifts')->assertSee('Романтический вечер KK')->assertSee('lang=kk', false);
+        $this->get('/zh/gifts')->assertSee('Романтический вечер EN')->assertSee('lang=en', false);
+        $this->get('/ru')->assertSee('Подарочные сертификаты');
+        $this->get('/sitemap.xml')->assertSee('/ru/gifts', false);
+
+        // gifter недоступен — остаётся последняя копия
+        $this->assertNull(\App\Support\Gifts::sync());
+        $this->assertCount(1, \App\Support\Gifts::offers('ru'));
+
+        // выключено в админке — раздела нет
+        Setting::put('gifts', ['enabled' => false]);
+        $this->get('/ru/gifts')->assertNotFound();
+        $this->get('/ru')->assertDontSee('Подарочные сертификаты');
+    }
+
+    public function test_footer_has_social_strip_brand_and_legal_links(): void
+    {
+        $html = $this->get('/ru')->assertOk()->getContent();
+        foreach (['instagram.com/tenir.ecohotels', 'youtube.com/@tenirhotels', 'tiktok.com/@tenirhotels', 'soundcloud.com/tenirhotels'] as $url) {
+            $this->assertStringContainsString($url, $html);
+        }
+        $this->assertStringNotContainsString('facebook.com/tenirhotels', $html);
+        $this->get('/ru')->assertSee('Наша философия')->assertSee('Политика конфиденциальности')->assertSee('Карта курорта');
+        $this->get('/en')->assertSee('Our philosophy');
+    }
+
+    public function test_events_calendar_shows_upcoming_and_hides_past(): void
+    {
+        $base = ['cta' => 'sales', 'is_published' => true, 'summary' => ['ru' => 'Описание']];
+        \App\Models\Event::create($base + ['slug' => 'new-year', 'title' => ['ru' => 'Новогодний ужин'], 'starts_on' => now()->addDays(10), 'ends_on' => now()->addDays(12), 'time_text' => '20:00']);
+        \App\Models\Event::create($base + ['slug' => 'old-party', 'title' => ['ru' => 'Прошлая вечеринка'], 'starts_on' => now()->subDays(20), 'cta' => 'booking']);
+
+        $this->get('/ru/events')->assertOk()->assertSee('Новогодний ужин')->assertDontSee('Прошлая вечеринка');
+        $this->get('/ru/events/new-year')->assertOk()->assertSee('Запрос на мероприятие', false)->assertSee('sales@tenirhotels.com', false);
+        $this->get('/ru/events/old-party')->assertOk()->assertSee('уже прошло', false);
+        $this->get('/ru')->assertOk()->assertSee('Новогодний ужин');
+        $this->get('/sitemap.xml')->assertSee('/ru/events/new-year', false);
     }
 }

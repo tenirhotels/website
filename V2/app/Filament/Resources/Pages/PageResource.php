@@ -28,6 +28,8 @@ use UnitEnum;
  */
 class PageResource extends Resource
 {
+    use \App\Filament\Support\UsesIdInUrls;
+
     // В админке адреса записей по id, на сайте — по слагу.
     protected static ?string $recordRouteKeyName = 'id';
 
@@ -61,6 +63,8 @@ class PageResource extends Resource
                 RichEditor::make('body')->label('Текст'),
                 Fields::image('image', 'Фото', 'pages'),
                 Select::make('image_side')->label('Фото')->options(['left' => 'Слева', 'right' => 'Справа'])->default('right'),
+                TextInput::make('link_label')->label('Ссылка: текст'),
+                TextInput::make('link_url')->label('Ссылка: адрес')->helperText('page:адрес-страницы — другая страница сайта (напр. page:sustainability), или адрес /ru/...'),
             ]),
             Block::make('quote')->label('Цитата')->icon(Heroicon::OutlinedChatBubbleBottomCenterText)->schema([
                 Textarea::make('quote')->label('Цитата')->required()->rows(3),
@@ -92,7 +96,7 @@ class PageResource extends Resource
                 TextInput::make('heading')->label('Заголовок')->required(),
                 Textarea::make('text')->label('Текст')->rows(2),
                 TextInput::make('button_label')->label('Кнопка'),
-                TextInput::make('button_url')->label('Ссылка')->helperText('booking — модуль бронирования, или адрес /ru/...'),
+                TextInput::make('button_url')->label('Ссылка')->helperText('booking — модуль бронирования; page:адрес-страницы — другая страница сайта (напр. page:sustainability); или адрес /ru/...'),
             ]),
         ];
     }
@@ -104,7 +108,8 @@ class PageResource extends Resource
                 Fields::slug(config('tenir.reserved_slugs')),
                 Select::make('placement')->label('Где показывать ссылку')->default('main')->options([
                     'main' => 'Главное меню и футер',
-                    'footer' => 'Только футер',
+                    'brand' => 'Футер, колонка «Бренд» (не в главном меню)',
+                    'footer' => 'Только футер (юридические ссылки)',
                     'hidden' => 'Нигде (по прямой ссылке)',
                 ]),
             ]),

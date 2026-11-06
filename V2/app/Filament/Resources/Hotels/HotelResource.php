@@ -27,6 +27,8 @@ use UnitEnum;
 
 class HotelResource extends Resource
 {
+    use \App\Filament\Support\UsesIdInUrls;
+
     // В админке адреса записей по id, на сайте — по слагу.
     protected static ?string $recordRouteKeyName = 'id';
 
@@ -131,13 +133,23 @@ class HotelResource extends Resource
     {
         return Fields::table($table, [
             Fields::column('name', 'Отель'),
-            TextColumn::make('slug')->label('Адрес')->prefix('/destinations/'),
+            TextColumn::make('slug')->label('Адрес')->getStateUsing(fn ($record) => parse_url($record->url('ru'), PHP_URL_PATH) ?: '/'),
             TextColumn::make('status')->label('Статус')->badge()
                 ->formatStateUsing(fn (string $state) => $state === Hotel::STATUS_OPEN ? 'Открыт' : 'Скоро')
                 ->color(fn (string $state) => $state === Hotel::STATUS_OPEN ? 'success' : 'warning'),
             TextColumn::make('rooms_count')->label('Номера')->counts('rooms'),
             Fields::publishedColumn(),
         ]);
+    }
+
+    public static function getRelations(): array
+    {
+        return [
+            RelationManagers\RoomsRelationManager::class,
+            RelationManagers\VenuesRelationManager::class,
+            RelationManagers\OffersRelationManager::class,
+            RelationManagers\ExperiencesRelationManager::class,
+        ];
     }
 
     public static function getPages(): array

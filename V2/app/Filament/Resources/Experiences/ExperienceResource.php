@@ -26,6 +26,8 @@ use UnitEnum;
 
 class ExperienceResource extends Resource
 {
+    use \App\Filament\Support\UsesIdInUrls;
+
     // В админке адреса записей по id, на сайте — по слагу.
     protected static ?string $recordRouteKeyName = 'id';
 
@@ -64,6 +66,8 @@ class ExperienceResource extends Resource
             ]),
             Section::make('Цена и продажа')->columns(2)->columnSpanFull()->schema([
                 TextInput::make('price_from')->label('Цена от, ₸')->numeric(),
+                Select::make('cta')->label('Кнопка в карточке')->options(\App\Models\Experience::CTA)->default('booking')->required()->native(false)
+                    ->helperText('Мероприятия и конференции — «запрос в отдел продаж»: контакты берутся из Настроек сайта'),
                 TextInput::make('exely_service_id')->label('ID доп. услуги в Exely')
                     ->helperText('Если услугу можно добавить при бронировании'),
             ]),
@@ -82,10 +86,11 @@ class ExperienceResource extends Resource
             Fields::column('title', 'Впечатление'),
             TextColumn::make('category')->label('Категория')->badge()
                 ->formatStateUsing(fn (string $state) => self::categoryOptions()[$state] ?? $state),
-            TextColumn::make('hotel.slug')->label('Отель')->placeholder('Вся сеть')->visible(fn () => Property::isMulti()),
+            Fields::hotelColumn(),
             Fields::publishedColumn(),
         ], [
             SelectFilter::make('category')->label('Категория')->options(self::categoryOptions()),
+            Fields::hotelFilter(),
         ]);
     }
 

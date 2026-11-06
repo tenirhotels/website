@@ -2,7 +2,7 @@
 <x-layouts.site :seo="$seo">
     <x-site.page-hero :title="__('site.nav.contact')" :text="__('site.booking.help')" />
 
-    <section class="container-site grid gap-12 py-20 md:grid-cols-2 lg:grid-cols-3">
+    <section class="container-site grid gap-12 py-12 md:py-16 lg:py-20 md:grid-cols-2 lg:grid-cols-3">
         <div class="flex flex-col gap-3 text-[17px]">
             <h2 class="mb-3 font-display text-3xl">{{ __('site.footer.reservations') }}</h2>
             @if ($phone = Setting::get('contacts.phone'))<a href="tel:{{ preg_replace('/[^\d+]/', '', $phone) }}" class="hover:text-ember">{{ $phone }}</a>@endif
@@ -10,6 +10,13 @@
             @if ($email = Setting::get('contacts.email'))<a href="mailto:{{ $email }}" class="hover:text-ember">{{ $email }}</a>@endif
             @if ($hours = Setting::get('contacts.hours'))<p class="text-stone">{{ $hours }}</p>@endif
         </div>
+        @if (Setting::get('contacts.sales_phone') || Setting::get('contacts.sales_email'))
+            <div class="flex flex-col gap-3 text-[17px]">
+                <h2 class="mb-3 font-display text-3xl">{{ __('site.footer.sales') }}</h2>
+                @if ($sp = Setting::get('contacts.sales_phone'))<a href="tel:{{ preg_replace('/[^\d+]/', '', $sp) }}" class="hover:text-ember">{{ $sp }}</a>@endif
+                @if ($se = Setting::get('contacts.sales_email'))<a href="mailto:{{ $se }}" class="hover:text-ember">{{ $se }}</a>@endif
+            </div>
+        @endif
         @foreach ($hotels as $h)
             <div class="flex flex-col gap-3 text-[17px]">
                 <h2 class="mb-3 font-display text-3xl"><a href="{{ $h->url() }}" class="hover:text-ember">{{ $h->t('name') }}</a></h2>

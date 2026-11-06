@@ -29,7 +29,7 @@
                 @endforeach
             </ul>
             @if ($hotel->isOpen())
-                <a href="{{ route('booking', ['hotel' => $hotel->slug]) }}" data-open-booking class="btn-primary hidden shrink-0 lg:inline-flex">{{ __('site.nav.book') }}</a>
+                <a href="{{ route('booking', ['hotel' => $hotel->slug]) }}" class="btn-primary hidden shrink-0 lg:inline-flex">{{ __('site.nav.book') }}</a>
             @endif
         </div>
     </nav>

@@ -8,13 +8,12 @@
         :text="__('site.destinations.intro')" />
 
     {{-- Плашка бронирования с выбором отеля --}}
-    <div class="container-site relative z-10 -mt-16 hidden max-w-[1280px] lg:block">
+    <div class="container-site relative z-10 lg:-mt-14">
         <x-site.booking-bar id="home" />
-        <p class="mt-3 text-[13px] text-stone">{{ __('site.booking.best_rate') }}</p>
     </div>
 
     {{-- Отели и курорты --}}
-    <section class="container-site flex flex-col gap-12 py-24 md:py-32">
+    <section class="container-site flex flex-col gap-8 md:gap-12 py-14 md:py-20 lg:py-28">
         <x-site.section-head :eyebrow="__('site.nav.destinations')" :title="__('site.home.hotels_title')" :link="route('destinations.index')" />
         <div @class(['grid gap-x-8 gap-y-16', 'md:grid-cols-2' => $hotels->count() <= 2, 'md:grid-cols-2 lg:grid-cols-3' => $hotels->count() > 2])>
             @foreach ($hotels as $h)
@@ -25,8 +24,12 @@
         </div>
     </section>
 
+    <x-site.recognition />
+
     @include('site.home.partials.experiences')
     @include('site.home.partials.offers')
+    @include('site.home.partials.events')
+    <x-site.gifts />
     @include('site.home.partials.brand')
     @include('site.home.partials.stories-horizon')
 </x-layouts.site>

@@ -11,7 +11,7 @@ class SettingsSeeder extends Seeder
     {
         Setting::put('brand', [
             'name' => ['ru' => 'Tenir Hotels', 'en' => 'Tenir Hotels', 'kk' => 'Tenir Hotels', 'zh' => 'Tenir Hotels'],
-            'tagline' => ['ru' => 'Ближе к небу', 'en' => 'Closer to the sky', 'kk' => 'Аспанға жақын', 'zh' => '离天空更近'],
+            'tagline' => ['ru' => 'Назад к природе', 'en' => 'Back to Nature', 'kk' => 'Табиғатқа оралу', 'zh' => '回归自然'],
             'footer_text' => [
                 'ru' => 'Эко-отели в горах Казахстана. Тишина, звёзды и снег — у вас за окном.',
                 'en' => 'Eco hotels in the mountains of Kazakhstan. Silence, stars and snow outside your window.',
@@ -24,13 +24,16 @@ class SettingsSeeder extends Seeder
             'phone' => '+7 727 313 14 15',
             'whatsapp' => '+7 727 313 14 15',
             'email' => 'reservations@tenirhotels.com',
+            'sales_phone' => '+7 700 427 18 48',
+            'sales_email' => 'sales@tenirhotels.com',
             'hours' => '09:00–21:00',
         ]);
 
         Setting::put('social', [
-            'instagram' => 'https://www.instagram.com/tenir.ecohotels',
-            'facebook' => 'https://facebook.com/tenirhotels',
+            'instagram' => 'https://instagram.com/tenir.ecohotels',
             'youtube' => 'https://youtube.com/@tenirhotels',
+            'tiktok' => 'https://www.tiktok.com/@tenirhotels',
+            'soundcloud' => 'https://soundcloud.com/tenirhotels',
         ]);
 
         // Счётчики из V1 — проверьте, актуальны ли.

@@ -8,15 +8,14 @@
         :text="$hotel?->t('summary')" />
 
     @if ($hotel?->isOpen())
-        <div class="container-site relative z-10 -mt-16 hidden max-w-[1280px] lg:block">
+        <div class="container-site relative z-10 lg:-mt-14">
             <x-site.booking-bar :hotel="$hotel" id="home" />
-            <p class="mt-3 text-[13px] text-stone">{{ __('site.booking.best_rate') }}</p>
         </div>
     @endif
 
     @if ($hotel)
         {{-- Об отеле --}}
-        <section class="container-site flex flex-col gap-16 py-24 md:py-32 lg:flex-row lg:items-center lg:gap-20">
+        <section class="container-site flex flex-col gap-10 md:gap-16 py-14 md:py-20 lg:py-28 lg:flex-row lg:items-center lg:gap-20">
             <div class="flex flex-1 flex-col gap-7">
                 <p class="eyebrow">{{ $hotel->t('name') }}</p>
                 <h2 class="h-section">{{ $hotel->t('tagline') }}</h2>
@@ -41,10 +40,12 @@
 
     @include('site.home.partials.rooms')
 
+    <x-site.recognition />
+
     {{-- Ресторан --}}
     @if ($venues->isNotEmpty())
         @php($venue = $venues->first())
-        <section class="container-site flex flex-col gap-12 py-24 lg:flex-row-reverse lg:items-center lg:gap-20">
+        <section class="container-site flex flex-col gap-8 md:gap-12 py-14 md:py-20 lg:py-24 lg:flex-row-reverse lg:items-center lg:gap-20">
             <div class="flex flex-1 flex-col gap-6">
                 <p class="eyebrow">{{ __('site.hotel.dining') }}</p>
                 <h2 class="h-section">{{ $venue->t('name') }}</h2>
@@ -58,10 +59,12 @@
 
     @include('site.home.partials.experiences')
     @include('site.home.partials.offers')
+    @include('site.home.partials.events')
+    <x-site.gifts />
     @include('site.home.partials.brand')
 
     @if ($widget = Locales::pick($hotel?->reviews_widget ?? []))
-        <section id="reviews" class="bg-white"><div class="container-site py-24">{!! $widget !!}</div></section>
+        <section id="reviews" class="bg-white"><div class="container-site py-14 md:py-20 lg:py-24">{!! $widget !!}</div></section>
     @endif
 
     @include('site.home.partials.stories-horizon')

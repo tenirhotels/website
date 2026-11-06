@@ -1,5 +1,7 @@
 @import 'tailwindcss';
 
+@import './fonts.css';
+
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 @source '../**/*.blade.php';
@@ -10,13 +12,13 @@
     font-family: 'Gill Sans Pro';
     src: url('/fonts/GillSansProCyrillic-Medium.woff2') format('woff2');
     font-weight: 400 500;
-    font-display: swap;
+    font-display: block;
 }
 @font-face {
     font-family: 'Gill Sans Pro';
     src: url('/fonts/GillSansProCyrillic-Bold.woff2') format('woff2');
     font-weight: 600 700;
-    font-display: swap;
+    font-display: block;
 }
 
 /*
@@ -38,6 +40,9 @@
     --color-slate: #3A4540;      /* основной текст абзацев */
     --color-mist: #DCD9D0;       /* линии */
     --color-placeholder: #C9CFC9;
+    --color-exely: #F2F2F2;      /* фон страницы бронирования = фон модуля Exely */
+    --color-exely-line: #DCE0E1; /* линии и плашки модуля */
+    --color-exely-ink: #516468;  /* основной цвет модуля (прогресс, ссылки) */
 }
 
 @layer base {
@@ -49,7 +54,7 @@
 
 /* Базовая кнопка — utility, чтобы её можно было @apply в вариантах */
 @utility btn {
-    @apply inline-flex min-h-11 items-center justify-center px-6 py-3 text-[13px] uppercase tracking-[0.18em] transition-colors;
+    @apply inline-flex min-h-11 items-center justify-center rounded-full px-7 py-3 text-[13px] uppercase tracking-[0.18em] transition-colors;
 }
 
 @layer components {
@@ -73,3 +78,60 @@
     .prose-tenir a { @apply text-forest underline underline-offset-4 hover:text-ember; }
     .prose-tenir strong { @apply text-ink; }
 }
+
+/* Паттерны из брендбука (петроглифы) — маски, цвет задаётся фоном; использовать как лёгкий акцент */
+.pattern-tile, .pattern-scene { position: absolute; pointer-events: none; }
+.pattern-tile {
+    inset: 0;
+    -webkit-mask: url('/images/pattern/petroglyph-tile.svg') 0 0 / 520px auto repeat;
+    mask: url('/images/pattern/petroglyph-tile.svg') 0 0 / 520px auto repeat;
+}
+.pattern-scene {
+    -webkit-mask: url('/images/pattern/petroglyph-scene.svg') center / contain no-repeat;
+    mask: url('/images/pattern/petroglyph-scene.svg') center / contain no-repeat;
+}
+
+/* Лента карточек: на телефоне — горизонтальная прокрутка (страница короче), с sm — сетка */
+.rail { display: flex; gap: 1rem; margin-inline: -1rem; padding-inline: 1rem; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: 1rem; scrollbar-width: none; overscroll-behavior-x: contain; }
+.rail::-webkit-scrollbar { display: none; }
+.rail > * { flex: 0 0 82%; scroll-snap-align: start; }
+@media (min-width: 640px) {
+    .rail { display: grid; gap: 2rem; margin-inline: 0; padding-inline: 0; overflow: visible; }
+    .rail > * { flex: none; }
+}
+
+/* Мобильное меню: плавный выезд, пункты по очереди, бургер превращается в крестик */
+#mobile-menu { opacity: 0; transform: translateY(-14px); visibility: hidden; pointer-events: none;
+    transition: opacity .3s ease, transform .4s cubic-bezier(.2, .7, .2, 1), visibility 0s linear .4s; }
+#mobile-menu.is-open { opacity: 1; transform: none; visibility: visible; pointer-events: auto;
+    transition: opacity .3s ease, transform .4s cubic-bezier(.2, .7, .2, 1), visibility 0s; }
+#mobile-menu nav a, #mobile-menu nav + div, #mobile-menu > div > a { opacity: 0; transform: translateY(12px);
+    transition: opacity .3s ease, transform .4s cubic-bezier(.2, .7, .2, 1); }
+#mobile-menu.is-open nav a, #mobile-menu.is-open nav + div, #mobile-menu.is-open > div > a { opacity: 1; transform: none;
+    transition-delay: calc(60ms + var(--i, 0) * 35ms); }
+.burger path { transform-box: fill-box; transform-origin: center; transition: transform .35s cubic-bezier(.2, .7, .2, 1), opacity .2s ease; }
+[aria-expanded='true'] .burger .b1 { transform: translateY(5px) rotate(45deg); }
+[aria-expanded='true'] .burger .b2 { opacity: 0; }
+[aria-expanded='true'] .burger .b3 { transform: translateY(-5px) rotate(-45deg); }
+
+/* Появление блоков при прокрутке */
+.reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s ease, transform .7s cubic-bezier(.2, .7, .2, 1); }
+.reveal.is-in { opacity: 1; transform: none; }
+
+/* Переходы между страницами: мягкое затухание, шапка остаётся на месте */
+@view-transition { navigation: auto; }
+[data-header] { view-transition-name: site-header; }
+::view-transition-old(root), ::view-transition-new(root) { animation-duration: .25s; }
+
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .reveal, #mobile-menu, #mobile-menu * , .burger path { transition: none !important; animation: none !important; transform: none !important; }
+    .reveal { opacity: 1; }
+    ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
+}
+
+/* Открытое мобильное меню — выше всего: прячем плавающую панель и форму Exely (они поверх меню с очень большим z-index) */
+body.overflow-hidden #tl-search-form,
+body.overflow-hidden [id^='tl-'],
+body.overflow-hidden [class^='tl-'],
+body.overflow-hidden [class*=' tl-'] { visibility: hidden !important; }

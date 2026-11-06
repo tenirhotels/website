@@ -2,14 +2,14 @@
     <x-site.page-hero :image="$room->image" :eyebrow="$hotel->t('name')" :title="$room->t('name')" :text="$room->t('summary')" />
     <x-site.hotel-nav :hotel="$hotel" />
 
-    <section class="container-site flex flex-col gap-14 py-20 lg:flex-row lg:gap-20">
+    <section class="container-site flex flex-col gap-8 md:gap-14 py-12 md:py-16 lg:py-20 lg:flex-row lg:gap-20">
         <div class="flex flex-[1.5] flex-col gap-10">
             <div class="prose-tenir">{!! $room->t('description') !!}</div>
 
             @if ($room->gallery)
                 <div class="grid grid-cols-2 gap-3">
                     @foreach ($room->gallery as $img)
-                        <div class="aspect-[4/3] overflow-hidden"><x-site.media :src="$img" :alt="$room->t('name')" /></div>
+                        <div class="aspect-[4/3] overflow-hidden rounded-2xl"><x-site.media :src="$img" :alt="$room->t('name')" /></div>
                     @endforeach
                 </div>
             @endif
@@ -28,7 +28,7 @@
 
         {{-- Карточка бронирования: закреплена при прокрутке на десктопе --}}
         <aside class="flex-1">
-            <div class="sticky top-40 flex flex-col gap-6 bg-white p-8">
+            <div class="sticky top-40 flex flex-col gap-6 bg-white p-8 rounded-3xl">
                 <dl class="grid grid-cols-2 gap-5 text-[15px]">
                     @foreach ([
                         __('site.hotel.size') => $room->size_m2 ? $room->size_m2.' м²' : null,
@@ -52,7 +52,7 @@
 
     @if ($others->isNotEmpty())
         <section class="bg-white">
-            <div class="container-site flex flex-col gap-12 py-20">
+            <div class="container-site flex flex-col gap-8 md:gap-12 py-12 md:py-16 lg:py-20">
                 <x-site.section-head :title="__('site.hotel.other_rooms')" level="h2" />
                 <div class="grid gap-8 md:grid-cols-3">
                     @foreach ($others as $r)

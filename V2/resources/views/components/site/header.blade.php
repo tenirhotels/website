@@ -14,11 +14,13 @@
             [__('site.hotel.dining'), $hotel->sectionUrl('dining')],
             [__('site.nav.experiences'), route('experiences.index')],
             [__('site.nav.offers'), route('offers.index')],
+            [__('site.nav.events'), route('events.index')],
         ]
         : [
             [__('site.nav.destinations'), route('destinations.index')],
             [__('site.nav.experiences'), route('experiences.index')],
             [__('site.nav.offers'), route('offers.index')],
+            [__('site.nav.events'), route('events.index')],
         ];
     foreach ($brandPages as $page) {
         $menu[] = [$page->t('title'), $page->url()];
@@ -26,23 +28,25 @@
     $mobileExtra = array_filter([
         $single && $hotel ? [__('site.hotel.gallery'), $hotel->sectionUrl('gallery')] : null,
         $single && $hotel ? [__('site.hotel.getting_here'), $hotel->sectionUrl('getting-here')] : null,
+        $single && $hotel ? [__('map.open_map'), route('map')] : null,
+        \App\Support\Gifts::offers() ? [__('gifts.open'), route('gifts')] : null,
         [__('site.nav.stories'), route('stories.index')],
         [__('site.nav.contact'), route('contact')],
     ]);
 @endphp
 <header data-header class="sticky top-0 z-40 bg-forest text-snow">
     <div class="container-site flex h-[72px] items-center justify-between gap-6 lg:h-[84px]">
-        <button type="button" class="-ml-2 flex size-11 items-center justify-center lg:hidden" data-menu-toggle aria-controls="mobile-menu" aria-expanded="false" aria-label="{{ __('site.nav.menu') }}">
-            <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 7h18M3 12h18M3 17h18"/></svg>
+        <button type="button" class="-ml-2 flex size-11 items-center justify-center xl:hidden" data-menu-toggle aria-controls="mobile-menu" aria-expanded="false" aria-label="{{ __('site.nav.menu') }}">
+            <svg class="burger" aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path class="b1" d="M3 7h18"/><path class="b2" d="M3 12h18"/><path class="b3" d="M3 17h18"/></svg>
         </button>
 
         <a href="{{ route('home') }}" class="shrink-0" aria-label="{{ $single && $hotel ? $hotel->t('name') : 'Tenir Hotels' }}">
             <img src="/images/logo-light.svg" alt="Tenir" width="150" height="36" class="h-8 w-auto lg:h-9">
         </a>
 
-        <nav aria-label="{{ __('site.nav.menu') }}" class="hidden items-center gap-8 text-[13px] uppercase tracking-[0.16em] lg:flex">
+        <nav aria-label="{{ __('site.nav.menu') }}" class="hidden items-center gap-5 text-[13px] xl:gap-8 uppercase tracking-[0.16em] xl:flex">
             @foreach ($menu as [$label, $href])
-                <a href="{{ $href }}" class="hover:text-ember-light">{{ $label }}</a>
+                <a href="{{ $href }}" class="whitespace-nowrap hover:text-ember-light">{{ $label }}</a>
             @endforeach
         </nav>
 
@@ -62,27 +66,39 @@
                     @endforeach
                 </ul>
             </details>
-            <a href="{{ route('booking') }}" data-open-booking class="btn-primary hidden sm:inline-flex">{{ __('site.nav.book') }}</a>
+            <a href="{{ route('booking') }}" class="btn-primary hidden sm:inline-flex">{{ __('site.nav.book') }}</a>
         </div>
     </div>
 
-    {{-- Мобильное меню --}}
-    <div id="mobile-menu" hidden class="fixed inset-x-0 bottom-0 top-[72px] z-40 overflow-y-auto bg-forest px-6 pb-32 pt-6 lg:hidden">
-        <nav aria-label="{{ __('site.nav.menu') }}" class="flex flex-col gap-1 font-display text-3xl">
+    {{-- Мобильное меню: основные разделы, дополнительные, язык, связь и кнопка бронирования --}}
+    <div id="mobile-menu" aria-hidden="true" inert class="fixed inset-x-0 bottom-0 top-[72px] z-40 flex flex-col overflow-y-auto overflow-x-hidden overscroll-contain isolate bg-forest px-6 pb-8 pt-4 xl:hidden">
+        <div class="pattern-scene -z-10 bottom-4 right-0 h-[420px] w-[320px] bg-ember-light opacity-[0.10]" aria-hidden="true"></div>
+        <nav aria-label="{{ __('site.nav.menu') }}" class="flex flex-col font-display text-[28px] leading-tight">
             @unless ($single)
                 @foreach ($openHotels as $h)
-                    <a href="{{ $h->url() }}" class="py-2">{{ $h->t('name') }}</a>
+                    <a href="{{ $h->url() }}" class="border-b border-white/10 py-3.5">{{ $h->t('name') }}</a>
                 @endforeach
             @endunless
-            @foreach ([...$menu, ...$mobileExtra] as [$label, $href])
-                <a href="{{ $href }}" class="py-2">{{ $label }}</a>
+            @foreach ($menu as [$label, $href])
+                <a href="{{ $href }}" class="border-b border-white/10 py-3.5">{{ $label }}</a>
             @endforeach
         </nav>
-        <div class="mt-8 flex flex-wrap gap-3 border-t border-white/20 pt-6">
+
+        @if ($mobileExtra)
+            <nav aria-label="{{ __('site.nav.more') }}" class="mt-6 flex flex-col gap-1 text-[13px] uppercase tracking-[0.16em] text-snow/80">
+                @foreach ($mobileExtra as [$label, $href])
+                    <a href="{{ $href }}" class="py-2.5">{{ $label }}</a>
+                @endforeach
+            </nav>
+        @endif
+
+        <div class="mt-6 flex flex-wrap gap-2 border-t border-white/20 pt-5">
             @foreach (Locales::all() as $code => $meta)
                 <a href="{{ $alternates[$code] ?? route('home', ['locale' => $code]) }}" lang="{{ $code }}"
-                   @class(['min-h-11 border px-4 py-2.5 text-sm', 'border-ember-light text-ember-light' => $code === $current, 'border-white/30' => $code !== $current])>{{ $meta['label'] }}</a>
+                   @class(['min-h-11 rounded-full border px-5 py-2.5 text-sm', 'border-ember-light text-ember-light' => $code === $current, 'border-white/30' => $code !== $current])>{{ $meta['label'] }}</a>
             @endforeach
         </div>
+
+        <a href="{{ route('booking') }}" class="btn-primary mt-auto w-full min-h-[52px]" style="margin-top: 2rem">{{ __('site.nav.book') }}</a>
     </div>
 </header>

@@ -25,6 +25,8 @@ use UnitEnum;
 
 class RoomTypeResource extends Resource
 {
+    use \App\Filament\Support\UsesIdInUrls;
+
     // В админке адреса записей по id, на сайте — по слагу.
     protected static ?string $recordRouteKeyName = 'id';
 
@@ -76,12 +78,12 @@ class RoomTypeResource extends Resource
     {
         return Fields::table($table, [
             Fields::column('name', 'Номер'),
-            TextColumn::make('hotel.slug')->label('Отель')->visible(fn () => Property::isMulti()),
+            Fields::hotelColumn(),
             TextColumn::make('exely_room_type_id')->label('Exely ID'),
             TextColumn::make('price_from')->label('От, ₸')->numeric(thousandsSeparator: ' '),
             Fields::publishedColumn(),
         ], [
-            SelectFilter::make('hotel_id')->label('Отель')->relationship('hotel', 'slug')->visible(fn () => Property::isMulti()),
+            Fields::hotelFilter(),
         ]);
     }
 
