@@ -53,7 +53,7 @@ class FaqResource extends Resource
     {
         return Fields::table($table, [
             Fields::column('question', 'Вопрос'),
-            TextColumn::make('hotel.slug')->label('Отель')->placeholder('Вся сеть')->visible(fn () => Property::isMulti()),
+            Fields::hotelColumn(),
             Fields::publishedColumn(),
         ]);
     }

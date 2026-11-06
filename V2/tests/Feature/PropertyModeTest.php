@@ -104,11 +104,12 @@ class PropertyModeTest extends TestCase
         $this->get('/hotel')->assertRedirect('/ru');
     }
 
-    public function test_admin_hides_hotel_choice_and_assigns_the_hotel(): void
+    public function test_admin_shows_location_and_defaults_to_the_primary_hotel(): void
     {
         $this->actingAs(User::factory()->create());
 
-        $this->get('/admin/offers/create')->assertOk()->assertDontSee('Вся сеть');
+        $this->get('/admin/offers/create')->assertOk()->assertSee('Локация (отель)');
+        $this->get('/admin/room-types/create')->assertOk()->assertSee('Локация (отель)');
 
         Livewire::test(CreateOffer::class)
             ->fillForm(['slug' => 'ski-week', 'title.ru' => 'Лыжная неделя'])
@@ -116,6 +117,19 @@ class PropertyModeTest extends TestCase
             ->assertHasNoFormErrors();
 
         $this->assertSame(Hotel::first()->id, Offer::where('slug', 'ski-week')->first()->hotel_id);
+    }
+
+    public function test_hotel_card_has_tabs_for_its_rooms_venues_offers_and_experiences(): void
+    {
+        $this->actingAs(User::factory()->create());
+        $hotel = Hotel::first();
+
+        Livewire::test(\App\Filament\Resources\Hotels\RelationManagers\RoomsRelationManager::class, [
+            'ownerRecord' => $hotel, 'pageClass' => \App\Filament\Resources\Hotels\Pages\EditHotel::class,
+        ])->assertSuccessful()->assertCanSeeTableRecords($hotel->rooms);
+
+        $this->get('/admin/hotels/'.$hotel->id.'/edit')->assertOk()
+            ->assertSee('Номера')->assertSee('Рестораны и бары')->assertSee('Спецпредложения')->assertSee('Впечатления');
     }
 
     // ---------------------------------------------------------------- сеть

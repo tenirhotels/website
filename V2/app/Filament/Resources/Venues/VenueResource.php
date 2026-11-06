@@ -70,9 +70,11 @@ class VenueResource extends Resource
     {
         return Fields::table($table, [
             Fields::column('name', 'Название'),
-            TextColumn::make('hotel.slug')->label('Отель')->visible(fn () => Property::isMulti()),
+            Fields::hotelColumn(),
             TextColumn::make('type')->label('Тип'),
             Fields::publishedColumn(),
+        ], [
+            Fields::hotelFilter(),
         ]);
     }
 

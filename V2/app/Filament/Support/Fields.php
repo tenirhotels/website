@@ -4,7 +4,6 @@ namespace App\Filament\Support;
 
 use App\Support\Locales;
 use App\Support\Property;
-use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Closure;
 use Filament\Actions\BulkActionGroup;
@@ -71,22 +70,39 @@ class Fields
     }
 
     /**
-     * Привязка к отелю. В режиме одного отеля поле скрыто и заполняется этим отелем;
-     * в режиме сети — выбор отеля (для необязательных — «Вся сеть»).
+     * Привязка к локации (отелю). Поле видно всегда, в том числе при одном отеле:
+     * номера и рестораны обязаны принадлежать конкретной локации, предложения и впечатления
+     * можно оставить общими для всех локаций. По умолчанию подставляется главный отель.
      */
-    public static function hotel(bool $required = false): Select|Hidden
+    public static function hotel(bool $required = false): Select
     {
-        if (Property::isSingle()) {
-            return Hidden::make('hotel_id')->default(fn () => Property::primary()?->id);
-        }
-
-        $select = Select::make('hotel_id')->label('Отель')
+        $select = Select::make('hotel_id')->label('Локация (отель)')
             ->relationship('hotel', 'slug')
             ->getOptionLabelFromRecordUsing(fn ($record) => $record->t('name'))
             ->default(fn () => Property::primary()?->id)
+            ->native(false)
             ->required($required);
 
-        return $required ? $select : $select->placeholder('Вся сеть');
+        return $required
+            ? $select->helperText('К какой локации относится запись.')
+            : $select->placeholder('Все локации')->helperText('Оставьте пустым, если запись относится ко всем локациям сети.');
+    }
+
+    /** Колонка «Локация» в таблицах. */
+    public static function hotelColumn(): TextColumn
+    {
+        return TextColumn::make('hotel_id')->label('Локация')
+            ->getStateUsing(fn ($record) => $record->hotel?->t('name'))
+            ->placeholder('Все локации')
+            ->badge()->color('gray');
+    }
+
+    /** Фильтр таблицы по локации. */
+    public static function hotelFilter(): \Filament\Tables\Filters\SelectFilter
+    {
+        return \Filament\Tables\Filters\SelectFilter::make('hotel_id')->label('Локация')
+            ->relationship('hotel', 'slug')
+            ->getOptionLabelFromRecordUsing(fn ($record) => $record->t('name'));
     }
 
     public static function slug(array $reserved = []): TextInput
