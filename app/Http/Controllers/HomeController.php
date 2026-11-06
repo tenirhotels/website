@@ -22,6 +22,7 @@ class HomeController extends Controller
         $shared = [
             'brandPage' => Page::published()->where('slug', 'about')->first(),
             'sustainabilityPage' => Page::published()->where('slug', 'sustainability')->first(),
+            'events' => \App\Models\Event::upcoming()->with('hotel')->limit(3)->get(),
             'stories' => Story::live()->latest('published_at')->limit(3)->get(),
         ];
 

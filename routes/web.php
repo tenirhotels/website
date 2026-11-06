@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\DestinationController;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\ExperienceController;
 use App\Http\Controllers\GiftController;
 use App\Http\Controllers\HomeController;
@@ -47,6 +48,7 @@ $publicWithoutSession = [
 | /{locale}/destinations/{hotel}/gallery        галерея
 | /{locale}/destinations/{hotel}/getting-here   как добраться, FAQ
 | /{locale}/experiences[/{slug}]                впечатления всей сети
+| /{locale}/events[/{slug}]                     события курорта и отелей (календарь)
 | /{locale}/offers[/{slug}]                     спецпредложения
 | /{locale}/stories[/{slug}]                    истории и новости
 | /{locale}/booking                             модуль бронирования Exely
@@ -111,6 +113,9 @@ Route::prefix('{locale}')
 
         Route::get('experiences', [ExperienceController::class, 'index'])->name('experiences.index');
         Route::get('experiences/{experience}', [ExperienceController::class, 'show'])->name('experiences.show');
+
+        Route::get('events', [EventController::class, 'index'])->name('events.index');
+        Route::get('events/{event}', [EventController::class, 'show'])->name('events.show');
 
         Route::get('offers', [OfferController::class, 'index'])->name('offers.index');
         Route::get('offers/{offer}', [OfferController::class, 'show'])->name('offers.show');
