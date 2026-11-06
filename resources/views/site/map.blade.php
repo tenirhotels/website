@@ -110,7 +110,7 @@
                             <span class="relative mt-1.5 size-[15px] shrink-0 rounded-full border-2 border-forest bg-snow"></span>
                             <div>
                                 <button type="button" data-focus="st-{{ $c['key'] }}" class="text-left text-lg text-ink hover:text-ember">{{ $stationName($c['key']) }}</button>
-                                @if ($c['next'])<p class="text-sm text-stone">≈{{ $c['next'] }} {{ __('map.min') }} {{ __('map.next') }} · {{ __('map.both_ways') }}</p>@endif
+                                @if ($c['next'])<p class="text-sm text-stone">≈{{ $c['next'] }} {{ __('map.min') }} {{ __('map.next') }}</p>@endif
                             </div>
                         </li>
                     @endforeach
