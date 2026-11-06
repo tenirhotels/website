@@ -274,6 +274,7 @@ return array(
     'Database\\Factories\\UserFactory' => $baseDir . '/database/factories/UserFactory.php',
     'Database\\Seeders\\BrandPagesSeeder' => $baseDir . '/database/seeders/BrandPagesSeeder.php',
     'Database\\Seeders\\Concerns\\CopiesMedia' => $baseDir . '/database/seeders/Concerns/CopiesMedia.php',
+    'Database\\Seeders\\Concerns\\PhilosophyContent' => $baseDir . '/database/seeders/Concerns/PhilosophyContent.php',
     'Database\\Seeders\\Concerns\\SustainabilityContent' => $baseDir . '/database/seeders/Concerns/SustainabilityContent.php',
     'Database\\Seeders\\DatabaseSeeder' => $baseDir . '/database/seeders/DatabaseSeeder.php',
     'Database\\Seeders\\RedirectsSeeder' => $baseDir . '/database/seeders/RedirectsSeeder.php',

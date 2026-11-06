@@ -961,6 +961,7 @@ class ComposerStaticInitbed664a3137a0af20c24a0f2c8436f70
         'Database\\Factories\\UserFactory' => __DIR__ . '/../..' . '/database/factories/UserFactory.php',
         'Database\\Seeders\\BrandPagesSeeder' => __DIR__ . '/../..' . '/database/seeders/BrandPagesSeeder.php',
         'Database\\Seeders\\Concerns\\CopiesMedia' => __DIR__ . '/../..' . '/database/seeders/Concerns/CopiesMedia.php',
+        'Database\\Seeders\\Concerns\\PhilosophyContent' => __DIR__ . '/../..' . '/database/seeders/Concerns/PhilosophyContent.php',
         'Database\\Seeders\\Concerns\\SustainabilityContent' => __DIR__ . '/../..' . '/database/seeders/Concerns/SustainabilityContent.php',
         'Database\\Seeders\\DatabaseSeeder' => __DIR__ . '/../..' . '/database/seeders/DatabaseSeeder.php',
         'Database\\Seeders\\RedirectsSeeder' => __DIR__ . '/../..' . '/database/seeders/RedirectsSeeder.php',
