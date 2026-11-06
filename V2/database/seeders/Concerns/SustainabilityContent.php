@@ -36,21 +36,17 @@ class SustainabilityContent
                         ['title' => 'Энергосбережение', 'text' => 'Долговечное LED-освещение с низким потреблением во всех модулях.'],
                     ],
                 ]],
-                ['type' => 'pillars', 'data' => [
-                    'eyebrow' => 'Каждый день',
-                    'heading' => 'Меньше отходов, бережнее к ресурсам',
-                    'items' => [
-                        ['title' => 'Диспенсеры вместо мини-флаконов', 'text' => 'В ванных комнатах шампунь, гель и кондиционер — из диспенсеров с рефиллами, без одноразовых пластиковых флаконов.'],
-                        ['title' => 'Мыло в бумажной обёртке', 'text' => 'Никакой лишней пластиковой упаковки в номере.'],
-                        ['title' => 'Полотенца — по вашему желанию', 'text' => 'Меняем их по просьбе гостя: это экономит воду и средства для стирки.'],
-                        ['title' => 'Дождевая и талая вода', 'text' => 'Собираем её и используем для хозяйственных нужд.'],
-                        ['title' => 'Сезонная кухня', 'text' => 'Меню строится по сезону, продукты — от местных поставщиков: короткий путь до стола, меньше транспорта.'],
-                        ['title' => 'Питание без шведского стола', 'text' => 'Вместо шведского стола — горное сбалансированное питание, рассчитанное на каждого гостя. Мы не готовим лишнего и меньше выбрасываем еды.'],
-                    ],
+                ['type' => 'text', 'data' => [
+                    'heading' => 'Меньше отходов — с первого утра',
+                    'body' => '<p>Мы начинаем с мелочей, из которых складывается след отеля. В ванных комнатах шампунь, гель и кондиционер ждут вас в диспенсерах с рефиллами — без одноразовых пластиковых флаконов, которые обычно уезжают в мусор после одной ночи. Мыло приходит в бумажной обёртке, а полотенца мы меняем по вашей просьбе: так мы бережём воду и меньше нагружаем стирку.</p>',
                 ]],
                 ['type' => 'text', 'data' => [
-                    'heading' => 'Гости и горы',
-                    'body' => '<p>Мы хотим, чтобы бережное отношение к природе стало привычкой каждого, кто приезжает к нам: рассказываем, как вести себя в горах, и подаём пример сами.</p><p>Горы — наш общий дом. Приглашаем вас быть в нём аккуратным гостем.</p>',
+                    'heading' => 'Вода и вкус гор',
+                    'body' => '<p>Дождевую и талую воду мы собираем и используем для хозяйственных нужд — горы щедро делятся ею сами. На кухне мы живём в ритме сезонов: меню меняется вместе с природой, а продукты приезжают от местных поставщиков, пройдя короткий путь до вашего стола.</p><p>Поэтому у нас нет шведского стола. Мы готовим горное сбалансированное питание на каждого гостя — ровно столько, сколько нужно, чтобы вкусно и сытно начать день и не выбросить лишнего.</p>',
+                ]],
+                ['type' => 'quote', 'data' => [
+                    'quote' => 'Горы — наш общий дом. Мы рассказываем гостям, как вести себя в нём, и подаём пример сами: бережное отношение к природе становится привычкой.',
+                    'caption' => 'Tenir Hotels',
                 ]],
             ],
             'en' => [
@@ -69,21 +65,17 @@ class SustainabilityContent
                         ['title' => 'Energy saving', 'text' => 'Long-lasting, low-consumption LED lighting throughout the modules.'],
                     ],
                 ]],
-                ['type' => 'pillars', 'data' => [
-                    'eyebrow' => 'Every day',
-                    'heading' => 'Less waste, more care for resources',
-                    'items' => [
-                        ['title' => 'Dispensers, not miniature bottles', 'text' => 'Shampoo, shower gel and conditioner come from refillable dispensers in the bathrooms — no single-use plastic bottles.'],
-                        ['title' => 'Soap in paper wrapping', 'text' => 'No unnecessary plastic packaging in your room.'],
-                        ['title' => 'Towels on request', 'text' => 'We change them when you ask, saving water and laundry detergent.'],
-                        ['title' => 'Rain and meltwater', 'text' => 'We collect it and use it for household needs.'],
-                        ['title' => 'Seasonal cuisine', 'text' => 'The menu follows the seasons and relies on local suppliers: a short path to the table and less transport.'],
-                        ['title' => 'No breakfast buffet', 'text' => 'Instead of a buffet, we serve balanced mountain meals portioned for each guest. We cook no more than needed and throw away less food.'],
-                    ],
+                ['type' => 'text', 'data' => [
+                    'heading' => 'Less waste, from the first morning',
+                    'body' => '<p>We begin with the small things that add up to a hotel’s footprint. In the bathrooms, shampoo, shower gel and conditioner wait for you in refillable dispensers — no single-use plastic bottles that usually end up in the bin after one night. Soap arrives in paper wrapping, and towels are changed at your request, so we save water and ease the load on the laundry.</p>',
                 ]],
                 ['type' => 'text', 'data' => [
-                    'heading' => 'Guests and the mountains',
-                    'body' => '<p>We want respect for nature to become a habit for everyone who stays with us: we explain how to behave in the mountains and lead by example.</p><p>The mountains are our shared home. We invite you to be a considerate guest in it.</p>',
+                    'heading' => 'Water and the taste of the mountains',
+                    'body' => '<p>We collect rain and meltwater and use it for household needs — the mountains share it generously. In the kitchen we live by the rhythm of the seasons: the menu changes with nature, and ingredients come from local suppliers, travelling only a short way to your table.</p><p>That is why there is no breakfast buffet. We prepare balanced mountain meals for each guest — just enough to start the day well, with nothing wasted.</p>',
+                ]],
+                ['type' => 'quote', 'data' => [
+                    'quote' => 'The mountains are our shared home. We show our guests how to treat it with care, and lead by example, until respect for nature becomes a habit.',
+                    'caption' => 'Tenir Hotels',
                 ]],
             ],
             'kk' => [
@@ -102,21 +94,17 @@ class SustainabilityContent
                         ['title' => 'Энергия үнемдеу', 'text' => 'Барлық модульде ұзақ қызмет ететін, аз қуат тұтынатын LED жарық.'],
                     ],
                 ]],
-                ['type' => 'pillars', 'data' => [
-                    'eyebrow' => 'Күн сайын',
-                    'heading' => 'Қалдық аз, ресурсқа қамқор',
-                    'items' => [
-                        ['title' => 'Шағын құтының орнына диспенсер', 'text' => 'Жуынатын бөлмелерде шампунь, гель және кондиционер бір реттік пластик құтысыз, қайта толтырылатын диспенсерлерде тұрады.'],
-                        ['title' => 'Қағазға оралған сабын', 'text' => 'Бөлмеде артық пластик қаптама жоқ.'],
-                        ['title' => 'Орамалдар — қалауыңыз бойынша', 'text' => 'Оларды қонақтың өтініші бойынша ауыстырамыз: бұл су мен жуу құралын үнемдейді.'],
-                        ['title' => 'Жаңбыр және еріген қар суы', 'text' => 'Оны жинап, шаруашылық қажеттіліктеріне пайдаланамыз.'],
-                        ['title' => 'Маусымдық асхана', 'text' => 'Мәзір маусымға қарай жасалады, өнімдер жергілікті жеткізушілерден: үстелге жол қысқа, тасымал аз.'],
-                        ['title' => 'Швед үстелінсіз тамақтану', 'text' => 'Швед үстелінің орнына әр қонаққа есептелген тау жағдайына лайық теңгерімді тамақ. Артық дайындамаймыз, тағам аз тасталады.'],
-                    ],
+                ['type' => 'text', 'data' => [
+                    'heading' => 'Алғашқы таңнан бастап қалдық аз',
+                    'body' => '<p>Біз қонақүйдің ізін құрайтын ұсақ нәрселерден бастаймыз. Жуынатын бөлмелерде шампунь, гель және кондиционер қайта толтырылатын диспенсерлерде тұрады — бір түннен кейін қоқысқа кететін бір реттік пластик құтылар жоқ. Сабын қағазға оралып беріледі, ал орамалдарды сіздің өтінішіңіз бойынша ауыстырамыз: осылайша суды үнемдеп, кірді аз жуамыз.</p>',
                 ]],
                 ['type' => 'text', 'data' => [
-                    'heading' => 'Қонақтар және таулар',
-                    'body' => '<p>Бізге келген әр адам үшін табиғатқа ұқыпты қарау әдетке айналғанын қалаймыз: тауда өзін қалай ұстау керегін айтамыз және өзіміз үлгі көрсетеміз.</p><p>Таулар — біздің ортақ үйіміз. Сізді онда ұқыпты қонақ болуға шақырамыз.</p>',
+                    'heading' => 'Су және таудың дәмі',
+                    'body' => '<p>Жаңбыр мен еріген қар суын жинап, шаруашылық қажеттіліктеріне пайдаланамыз — таулар оны жомарттықпен бөліседі. Асханада біз маусым ырғағымен өмір сүреміз: мәзір табиғатпен бірге өзгереді, ал өнімдер жергілікті жеткізушілерден үстеліңізге қысқа жолмен келеді.</p><p>Сондықтан бізде швед үстелі жоқ. Біз әр қонаққа таулық теңгерімді тамақ дайындаймыз — күнді дәмді бастауға жеткілікті мөлшерде, артық тастамай.</p>',
+                ]],
+                ['type' => 'quote', 'data' => [
+                    'quote' => 'Таулар — біздің ортақ үйіміз. Қонақтарға онда өзін қалай ұстау керегін айтып, өзіміз үлгі боламыз: табиғатқа ұқыпты қарау әдетке айналады.',
+                    'caption' => 'Tenir Hotels',
                 ]],
             ],
         ];
