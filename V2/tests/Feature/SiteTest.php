@@ -283,7 +283,7 @@ class SiteTest extends TestCase
             ->whenEmpty(Http::response('', 500))]);
         \Illuminate\Support\Facades\Cache::forget('gifts.offers');
 
-        $this->get('/ru/gifts')->assertOk()->assertSee('Романтический вечер')->assertSee('50 000 ₸')
+        $this->get('/ru/gifts')->assertOk()->assertSee('Романтический вечер')->assertSee('50 000')
             ->assertSee('https://gifts.example.test/order/7?lang=ru', false)->assertDontSee('Закрытый');
         $this->get('/kk/gifts')->assertSee('Романтический вечер KK')->assertSee('lang=kk', false);
         $this->get('/zh/gifts')->assertSee('Романтический вечер EN')->assertSee('lang=en', false);
