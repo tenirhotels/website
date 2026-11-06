@@ -7,13 +7,13 @@
             @if ($experience->gallery)
                 <div class="grid grid-cols-2 gap-3">
                     @foreach ($experience->gallery as $img)
-                        <div class="aspect-[4/3] overflow-hidden"><x-site.media :src="$img" :alt="$experience->t('title')" /></div>
+                        <div class="aspect-[4/3] overflow-hidden rounded-2xl"><x-site.media :src="$img" :alt="$experience->t('title')" /></div>
                     @endforeach
                 </div>
             @endif
         </div>
         <aside class="flex-1">
-            <dl class="flex flex-col gap-5 bg-white p-8 text-[15px]">
+            <dl class="flex flex-col gap-5 bg-white p-8 rounded-3xl text-[15px]">
                 @if ($experience->seasonLabels())
                     <div><dt class="field-label mb-1">{{ __('site.common.seasons') }}</dt><dd>{{ $experience->seasonLabels() }}</dd></div>
                 @endif

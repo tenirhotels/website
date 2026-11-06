@@ -4,7 +4,7 @@
     <section class="container-site flex flex-col gap-14 py-20 lg:flex-row lg:gap-20">
         <div class="flex flex-[1.5] flex-col gap-10">
             @if ($expired)
-                <p class="border-l-0 bg-sand p-5 text-slate">{{ __('site.offers.expired') }}</p>
+                <p class="border-l-0 rounded-2xl bg-sand p-5 text-slate">{{ __('site.offers.expired') }}</p>
             @endif
             @if ($offer->t('description'))
                 <div>
@@ -20,7 +20,7 @@
             @endif
         </div>
         <aside class="flex-1">
-            <div class="sticky top-32 flex flex-col gap-4 bg-white p-8">
+            <div class="sticky top-32 flex flex-col gap-4 bg-white p-8 rounded-3xl">
                 @if ($offer->min_nights)<p>{{ __('site.offers.min_nights', ['count' => $offer->min_nights]) }}</p>@endif
                 @if ($offer->valid_to)<p class="text-slate">{{ __('site.common.valid_until', ['date' => $offer->valid_to->translatedFormat('j F Y')]) }}</p>@endif
                 @if ($offer->promo_code)<p class="text-slate">{{ __('site.offers.promo', ['code' => $offer->promo_code]) }}</p>@endif

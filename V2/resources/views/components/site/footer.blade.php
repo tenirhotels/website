@@ -5,7 +5,8 @@
     $email = Setting::get('contacts.email');
     $whatsapp = Setting::get('contacts.whatsapp');
 @endphp
-<footer class="bg-forest-deep text-[#D8DCD8]">
+<footer class="relative isolate overflow-hidden bg-forest-deep text-[#D8DCD8]">
+    <div class="pattern-tile -z-10 bg-white opacity-[0.035]" aria-hidden="true"></div>
     <div class="container-site flex flex-col gap-14 pb-10 pt-20">
         <div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
             <div class="flex flex-col gap-5">
