@@ -5,7 +5,27 @@ namespace Database\Seeders\Concerns;
 /** Казахская версия страницы «Наша философия». */
 class PhilosophyContent
 {
-    public static function kk(?string $image): array
+    /** Блок-ссылка на страницу Sustainability: фото, короткий текст и кнопка. */
+    public static function sustainability(string $locale, ?string $image): array
+    {
+        $t = [
+            'ru' => ['Устойчивое развитие', 'Горы — наш общий дом', '<p>Забота о природе встроена в сам отель: модули стоят на скале без фундаментов, фасады из лиственницы, а в ванных комнатах — диспенсеры с рефиллами вместо пластиковых флаконов. Мы бережно живём в горах и приглашаем в этом гостей.</p>', 'Как мы это делаем'],
+            'en' => ['Sustainability', 'The mountains are our shared home', '<p>Care for nature is built into the hotel itself: the modules stand on the rock without foundations, the facades are larch, and the bathrooms have refill dispensers instead of plastic bottles. We live in the mountains with care — and invite our guests to do the same.</p>', 'How we do it'],
+            'kk' => ['Тұрақты даму', 'Таулар — біздің ортақ үйіміз', '<p>Табиғатқа қамқорлық қонақүйдің өзіне енгізілген: модульдер іргетассыз жартаста тұр, қасбеттер балқарағайдан, ал жуынатын бөлмелерде пластик құтылардың орнына қайта толтырылатын диспенсерлер бар. Біз тауда ұқыпты өмір сүреміз және қонақтарды да осыған шақырамыз.</p>', 'Біз мұны қалай істейміз'],
+        ][$locale];
+
+        return ['type' => 'image_text', 'data' => [
+            'eyebrow' => $t[0],
+            'heading' => $t[1],
+            'body' => $t[2],
+            'image' => $image,
+            'image_side' => 'left',
+            'link_label' => $t[3],
+            'link_url' => 'page:sustainability',
+        ]];
+    }
+
+    public static function kk(?string $image, ?string $image2 = null): array
     {
         return [
             ['type' => 'word', 'data' => [
@@ -24,12 +44,7 @@ class PhilosophyContent
                 'heading' => 'Атаудың шығу тегі',
                 'body' => '<p>Tenir атауы тәңіршілік дәстүріндегі көне аспан құдайы Тәңірден шыққан. Қазақ тілінде «Тәңір» — «аспан» дегенді білдіреді. Тәңіршілік түркі көшпелі тайпаларының дүниетанымынан өсіп шығып, табиғатты тірі, қасиетті болмыс ретінде қабылдаумен тығыз байланысты болды.</p><p>Ежелден бұл сенім адамдарды табиғатқа жақындатты: көшпенділер өздерін оның бір бөлшегі санап, қоршаған әлеммен үйлесімде өмір сүрді. Сенімге атын берген жоғарғы құдай — мәңгілік аспанның бейнесі Тәңір болды.</p>',
             ]],
-            ['type' => 'cta', 'data' => [
-                'heading' => 'Тауға қамқор',
-                'text' => 'Табиғатқа қалай қамқорлық жасаймыз: ғимарат материалдарынан бастап жуынатын бөлмелердегі қайта толтырылатын диспенсерлерге дейін.',
-                'button_label' => 'Тұрақты даму',
-                'button_url' => 'page:sustainability',
-            ]],
+            self::sustainability('kk', $image2),
             ['type' => 'cta', 'data' => [
                 'heading' => 'Аспанға жақынырақ',
                 'text' => '3 200 м биіктіктегі он модуль сізді күтіп тұр.',

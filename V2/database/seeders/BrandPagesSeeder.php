@@ -44,12 +44,7 @@ class BrandPagesSeeder extends Seeder
                         'heading' => 'Происхождение имени',
                         'body' => '<p>Имя Tenir восходит к Тенгри — древнему божеству неба в тенгрианской традиции. По-казахски «Тәңір» означает «небо». Тенгрианство выросло из мировоззрения тюркских кочевых племён и было тесно связано с восприятием природы как живого, священного присутствия.</p><p>С древних времён эта вера сближала людей с природой: кочевники считали себя её частью и жили в гармонии с окружающим миром. Верховным божеством, давшим вере имя, был Тенгри — воплощение вечного неба.</p>',
                     ]],
-                    ['type' => 'cta', 'data' => [
-                        'heading' => 'Бережно к горам',
-                        'text' => 'Как мы заботимся о природе: от материалов здания до рефиллов в ванных комнатах.',
-                        'button_label' => 'Устойчивое развитие',
-                        'button_url' => 'page:sustainability',
-                    ]],
+                    PhilosophyContent::sustainability('ru', $this->media('exp-4.webp')),
                     ['type' => 'cta', 'data' => [
                         'heading' => 'Ближе к небу',
                         'text' => 'Десять модулей на высоте 3 200 м ждут вас.',
@@ -74,12 +69,7 @@ class BrandPagesSeeder extends Seeder
                         'heading' => 'Origin of the name',
                         'body' => '<p>The name Tenir comes from Tengri, the ancient sky deity of the Tengrian tradition. In Kazakh, “Тәңір” means “sky”. Tengrism grew out of the worldview of Turkic nomadic tribes and was closely tied to seeing nature as a living, sacred presence.</p><p>Since ancient times this belief brought people closer to nature: nomads saw themselves as part of it and lived in harmony with the world around them. The supreme deity who gave the belief its name was Tengri — the embodiment of the eternal sky.</p>',
                     ]],
-                    ['type' => 'cta', 'data' => [
-                        'heading' => 'Caring for the mountains',
-                        'text' => 'How we look after nature — from the building materials to refillable dispensers in the bathrooms.',
-                        'button_label' => 'Sustainability',
-                        'button_url' => 'page:sustainability',
-                    ]],
+                    PhilosophyContent::sustainability('en', $this->media('exp-4.webp')),
                     ['type' => 'cta', 'data' => [
                         'heading' => 'Closer to the sky',
                         'text' => 'Ten modules at 3,200 m are waiting for you.',
@@ -87,7 +77,7 @@ class BrandPagesSeeder extends Seeder
                         'button_url' => 'booking',
                     ]],
                 ],
-                'kk' => PhilosophyContent::kk($this->media('about.webp')),
+                'kk' => PhilosophyContent::kk($this->media('about.webp'), $this->media('exp-4.webp')),
             ],
             'is_published' => true,
         ]);

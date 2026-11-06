@@ -25,6 +25,8 @@
                         @if (! empty($d['eyebrow']))<p class="eyebrow">{{ $d['eyebrow'] }}</p>@endif
                         @if (! empty($d['heading']))<h2 class="h-section">{{ $d['heading'] }}</h2>@endif
                         <div class="prose-tenir">{!! $d['body'] ?? '' !!}</div>
+                        @php($linkHref = \App\Models\Page::resolveLink($d['link_url'] ?? null))
+                        @if ($linkHref && ! empty($d['link_label']))<a href="{{ $linkHref }}" class="link-line self-start">{{ $d['link_label'] }}</a>@endif
                     </div>
                     <div class="aspect-[4/5] w-full flex-1 lg:max-w-[560px]">
                         <x-site.media :src="$d['image'] ?? null" :alt="$d['heading'] ?? ''" />
