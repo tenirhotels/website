@@ -33,7 +33,7 @@
             </div>
 
             <div id="tl-booking-form" class="min-h-[420px]">
-                <p class="py-16 text-center text-exely-ink">{{ __('site.booking.loading') }}</p>
+                <p class="py-10 md:py-14 text-center text-exely-ink">{{ __('site.booking.loading') }}</p>
             </div>
             <noscript><p class="py-10 text-center">{{ __('site.booking.noscript') }}</p></noscript>
 

@@ -100,5 +100,14 @@
     mask: url('/images/pattern/petroglyph-scene.svg') center / contain no-repeat;
 }
 
+/* Лента карточек: на телефоне — горизонтальная прокрутка (страница короче), с sm — сетка */
+.rail { display: flex; gap: 1rem; margin-inline: -1rem; padding-inline: 1rem; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; overscroll-behavior-x: contain; }
+.rail::-webkit-scrollbar { display: none; }
+.rail > * { flex: 0 0 82%; scroll-snap-align: start; }
+@media (min-width: 640px) {
+    .rail { display: grid; gap: 2rem; margin-inline: 0; padding-inline: 0; overflow: visible; }
+    .rail > * { flex: none; }
+}
+
 @keyframes menu-in { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
 #mobile-menu:not([hidden]) { animation: menu-in .2s ease-out; }

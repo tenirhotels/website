@@ -2,7 +2,7 @@
     <x-site.page-hero :image="$hotel->gallery[0] ?? $hotel->hero_image" :eyebrow="$hotel->t('name')" :title="__('site.hotel.getting_here')" :text="$hotel->t('address')" />
     <x-site.hotel-nav :hotel="$hotel" />
 
-    <section class="container-site flex flex-col gap-14 py-20 lg:flex-row lg:gap-20">
+    <section class="container-site flex flex-col gap-8 md:gap-14 py-12 md:py-16 lg:py-20 lg:flex-row lg:gap-20">
         <div class="prose-tenir flex-[1.5]">{!! $hotel->t('getting_here') !!}</div>
         <aside class="flex flex-1 flex-col gap-3 text-[15px] text-slate">
             @if ($hotel->latitude)
@@ -16,7 +16,7 @@
 
     @if ($faqs->isNotEmpty())
         <section class="bg-white">
-            <div class="container-site max-w-4xl py-20">
+            <div class="container-site max-w-4xl py-12 md:py-16 lg:py-20">
                 <h2 class="h-section mb-10">{{ __('site.hotel.faq') }}</h2>
                 <div class="divide-y divide-mist border-y border-mist">
                     @foreach ($faqs as $faq)

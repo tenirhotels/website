@@ -1,7 +1,7 @@
 <x-layouts.site :seo="$seo">
     <x-site.page-hero :image="$experiences->first()?->image" :title="__('site.nav.experiences')" :text="__('site.experiences.intro')" />
 
-    <section class="container-site flex flex-col gap-12 py-16">
+    <section class="container-site flex flex-col gap-8 md:gap-12 py-10 md:py-14">
         @include('site.partials.hotel-filter', ['route' => 'experiences.index'])
         @if ($categories->count() > 1)
             <nav aria-label="{{ __('site.nav.experiences') }}" class="flex flex-wrap gap-3">

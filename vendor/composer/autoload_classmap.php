@@ -12,6 +12,7 @@ return array(
     'AnourValar\\EloquentSerialize\\Grammars\\QueryBuilderGrammar' => $vendorDir . '/anourvalar/eloquent-serialize/src/Grammars/QueryBuilderGrammar.php',
     'AnourValar\\EloquentSerialize\\Package' => $vendorDir . '/anourvalar/eloquent-serialize/src/Package.php',
     'AnourValar\\EloquentSerialize\\Service' => $vendorDir . '/anourvalar/eloquent-serialize/src/Service.php',
+    'App\\Console\\Commands\\FlushPageCache' => $baseDir . '/app/Console/Commands/FlushPageCache.php',
     'App\\Console\\Commands\\SetAdminPassword' => $baseDir . '/app/Console/Commands/SetAdminPassword.php',
     'App\\Filament\\Pages\\SiteSettings' => $baseDir . '/app/Filament/Pages/SiteSettings.php',
     'App\\Filament\\Resources\\Experiences\\ExperienceResource' => $baseDir . '/app/Filament/Resources/Experiences/ExperienceResource.php',

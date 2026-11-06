@@ -20,7 +20,15 @@ class PageCache
 
     public static function version(): string
     {
-        return (string) Cache::rememberForever(self::VERSION_KEY, fn () => (string) microtime(true));
+        return self::build().'.'.Cache::rememberForever(self::VERSION_KEY, fn () => (string) microtime(true));
+    }
+
+    /** «Отпечаток» развёртывания: после выкладки новой сборки старые страницы из кэша не отдаются. */
+    private static function build(): string
+    {
+        static $build;
+
+        return $build ??= (string) (@filemtime(public_path('build/manifest.json')) ?: 0);
     }
 
     public static function flush(): void

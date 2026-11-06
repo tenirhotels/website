@@ -15,7 +15,7 @@
 
     <x-site.hotel-nav :hotel="$hotel" />
 
-    <section class="container-site flex flex-col gap-12 py-20 md:py-28 lg:flex-row lg:gap-20">
+    <section class="container-site flex flex-col gap-8 md:gap-12 py-12 md:py-16 lg:py-24 lg:flex-row lg:gap-20">
         <div class="flex flex-[1.3] flex-col gap-6">
             <h2 class="h-section">{{ $hotel->t('summary') }}</h2>
             <div class="prose-tenir">{!! $hotel->t('description') !!}</div>
@@ -44,7 +44,7 @@
 
     @if ($rooms->isNotEmpty())
         <section class="bg-white">
-            <div class="container-site flex flex-col gap-12 py-24">
+            <div class="container-site flex flex-col gap-8 md:gap-12 py-14 md:py-20 lg:py-24">
                 <x-site.section-head :eyebrow="__('site.hotel.rooms')" :title="__('site.home.rooms_title')" :link="$hotel->sectionUrl('rooms')" :link-label="__('site.hotel.all_rooms')" />
                 <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
                     @foreach ($rooms as $room)
@@ -57,7 +57,7 @@
 
     @if ($venues->isNotEmpty())
         @php($venue = $venues->first())
-        <section class="container-site flex flex-col gap-12 py-24 lg:flex-row-reverse lg:items-center lg:gap-20">
+        <section class="container-site flex flex-col gap-8 md:gap-12 py-14 md:py-20 lg:py-24 lg:flex-row-reverse lg:items-center lg:gap-20">
             <div class="flex flex-1 flex-col gap-6">
                 <p class="eyebrow">{{ __('site.hotel.dining') }}</p>
                 <h2 class="h-section">{{ $venue->t('name') }}</h2>
@@ -71,7 +71,7 @@
 
     @if ($experiences->isNotEmpty())
         <section class="bg-sand">
-            <div class="container-site flex flex-col gap-12 py-24">
+            <div class="container-site flex flex-col gap-8 md:gap-12 py-14 md:py-20 lg:py-24">
                 <x-site.section-head :eyebrow="__('site.hotel.experiences')" :title="__('site.home.experiences_title')" :link="$hotel->sectionUrl('experiences')" />
                 <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
                     @foreach ($experiences->take(3) as $e)
@@ -83,7 +83,7 @@
     @endif
 
     @if ($offers->isNotEmpty())
-        <section class="container-site flex flex-col gap-12 py-24">
+        <section class="container-site flex flex-col gap-8 md:gap-12 py-14 md:py-20 lg:py-24">
             <x-site.section-head :eyebrow="__('site.hotel.offers')" :title="__('site.home.offers_title')" :link="$hotel->sectionUrl('offers')" />
             <div class="grid gap-8 md:grid-cols-3">
                 @foreach ($offers as $o)
@@ -95,6 +95,6 @@
 
     @if ($widget = \App\Support\Locales::pick($hotel->reviews_widget ?? []))
         {{-- Виджет отзывов Exely (код вставляется в админке) --}}
-        <section id="reviews" class="bg-white"><div class="container-site py-24">{!! $widget !!}</div></section>
+        <section id="reviews" class="bg-white"><div class="container-site py-14 md:py-20 lg:py-24">{!! $widget !!}</div></section>
     @endif
 </x-layouts.site>

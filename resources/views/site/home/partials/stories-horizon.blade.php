@@ -1,7 +1,7 @@
 {{-- Истории + «Скоро» (как On the horizon у Six Senses) + подписка --}}
 @php($comingSoon ??= collect())
 <section class="bg-white">
-    <div class="container-site flex flex-col gap-12 py-24 lg:flex-row lg:gap-16">
+    <div class="container-site flex flex-col gap-8 md:gap-12 py-14 md:py-20 lg:py-24 lg:flex-row lg:gap-16">
         @if ($stories->isNotEmpty())
             <div class="flex flex-[1.4] flex-col gap-10">
                 <x-site.section-head :title="__('site.home.stories_title')" :link="route('stories.index')" />
