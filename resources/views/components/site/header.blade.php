@@ -68,7 +68,8 @@
     </div>
 
     {{-- Мобильное меню: основные разделы, дополнительные, язык, связь и кнопка бронирования --}}
-    <div id="mobile-menu" hidden class="fixed inset-x-0 bottom-0 top-[72px] z-40 flex flex-col overflow-y-auto bg-forest px-6 pb-8 pt-4 lg:hidden">
+    <div id="mobile-menu" hidden class="fixed inset-x-0 bottom-0 top-[72px] z-40 flex flex-col overflow-y-auto isolate bg-forest px-6 pb-8 pt-4 lg:hidden">
+        <div class="pattern-scene -z-10 bottom-4 right-[-60px] h-[420px] w-[320px] bg-ember-light opacity-[0.10]" aria-hidden="true"></div>
         <nav aria-label="{{ __('site.nav.menu') }}" class="flex flex-col font-display text-[28px] leading-tight">
             @unless ($single)
                 @foreach ($openHotels as $h)
@@ -91,7 +92,7 @@
         <div class="mt-6 flex flex-wrap gap-2 border-t border-white/20 pt-5">
             @foreach (Locales::all() as $code => $meta)
                 <a href="{{ $alternates[$code] ?? route('home', ['locale' => $code]) }}" lang="{{ $code }}"
-                   @class(['min-h-11 border px-4 py-2.5 text-sm', 'border-ember-light text-ember-light' => $code === $current, 'border-white/30' => $code !== $current])>{{ $meta['label'] }}</a>
+                   @class(['min-h-11 rounded-full border px-5 py-2.5 text-sm', 'border-ember-light text-ember-light' => $code === $current, 'border-white/30' => $code !== $current])>{{ $meta['label'] }}</a>
             @endforeach
         </div>
 
