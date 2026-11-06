@@ -66,6 +66,8 @@ class ExperienceResource extends Resource
             ]),
             Section::make('Цена и продажа')->columns(2)->columnSpanFull()->schema([
                 TextInput::make('price_from')->label('Цена от, ₸')->numeric(),
+                Select::make('cta')->label('Кнопка в карточке')->options(\App\Models\Experience::CTA)->default('booking')->required()->native(false)
+                    ->helperText('Мероприятия и конференции — «запрос в отдел продаж»: контакты берутся из Настроек сайта'),
                 TextInput::make('exely_service_id')->label('ID доп. услуги в Exely')
                     ->helperText('Если услугу можно добавить при бронировании'),
             ]),

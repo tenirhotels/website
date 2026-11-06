@@ -77,6 +77,15 @@ return [
         'title' => '奖项与媒体报道',
         'source' => '来源',
     ],
+    'cta' => [
+        'request_label' => '活动咨询',
+        'request_text' => '请告知活动形式、日期和人数，我们将为您准备方案。',
+        'send_request' => '发送咨询',
+        'call' => '致电',
+        'ask_label' => '咨询与预订',
+        'ask_text' => '请致电或留言，我们将协助您下单。',
+        'write' => '留言',
+    ],
     'common' => [
         'learn_more' => '了解更多',
         'view_all' => '查看全部',

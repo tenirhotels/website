@@ -12,6 +12,13 @@ class Experience extends Model
 {
     use HasSeo, HasTranslations;
 
+    /** Как гость оформляет впечатление: бронирование номера, запрос в отдел продаж или звонок/сообщение. */
+    public const CTA = [
+        'booking' => 'Бронирование номера',
+        'sales' => 'Запрос в отдел продаж (корп. телефон и e-mail)',
+        'contact' => 'Позвонить или написать (телефон, WhatsApp, e-mail бронирования)',
+    ];
+
     protected $guarded = ['id'];
 
     protected array $translatable = ['title', 'summary', 'description', 'duration'];

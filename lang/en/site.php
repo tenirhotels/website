@@ -76,6 +76,15 @@ return [
         'title' => 'Awards and press',
         'source' => 'Source',
     ],
+    'cta' => [
+        'request_label' => 'Event enquiry',
+        'request_text' => 'Tell us the format, date and number of guests — we will prepare a proposal.',
+        'send_request' => 'Send an enquiry',
+        'call' => 'Call',
+        'ask_label' => 'Ask and order',
+        'ask_text' => 'Call or write to us — we will help and arrange your order.',
+        'write' => 'Write',
+    ],
     'common' => [
         'learn_more' => 'Learn more',
         'view_all' => 'View all',
