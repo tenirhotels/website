@@ -123,6 +123,9 @@ class Seo
             ] : null,
             'numberOfRooms' => $hotel->rooms()->count() ?: null,
             'brand' => ['@type' => 'Brand', 'name' => Setting::text('brand.name', 'Tenir Hotels')],
+            'award' => $hotel->slug === config('tenir.recognition_hotel')
+                ? (\App\Models\Recognition::forHome()->where('kind', 'award')->map(fn ($r) => trim($r->t('title').' — '.$r->source.' '.$r->year))->values()->all() ?: null)
+                : null,
         ]);
     }
 

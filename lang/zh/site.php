@@ -72,6 +72,11 @@ return [
         'coming_title' => 'Tenir 新目的地',
         'coming_text' => '我们寻找离天空更近的地方。抢先获知新酒店开业消息。',
     ],
+    'recognition' => [
+        'eyebrow' => '荣誉',
+        'title' => '奖项与媒体报道',
+        'source' => '来源',
+    ],
     'common' => [
         'learn_more' => '了解更多',
         'view_all' => '查看全部',

@@ -40,6 +40,8 @@
 
     @include('site.home.partials.rooms')
 
+    <x-site.recognition />
+
     {{-- Ресторан --}}
     @if ($venues->isNotEmpty())
         @php($venue = $venues->first())
