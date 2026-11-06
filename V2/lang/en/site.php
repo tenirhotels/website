@@ -71,6 +71,11 @@ return [
         'coming_title' => 'New Tenir places',
         'coming_text' => 'We look for places where the sky is closer. Be the first to hear about new openings.',
     ],
+    'recognition' => [
+        'eyebrow' => 'Recognition',
+        'title' => 'Awards and press',
+        'source' => 'Source',
+    ],
     'common' => [
         'learn_more' => 'Learn more',
         'view_all' => 'View all',

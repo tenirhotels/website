@@ -39,6 +39,17 @@ class SiteTest extends TestCase
         $this->get('/lang/xx/booking')->assertNotFound();
     }
 
+    public function test_recognition_block_shows_published_awards_with_sources(): void
+    {
+        $this->get('/en')->assertOk()
+            ->assertSee('One MICHELIN Key')
+            ->assertSee('guide.michelin.com', false)
+            ->assertSee('"award":', false);
+
+        \App\Models\Recognition::query()->get()->each->update(['is_published' => false]);
+        $this->get('/en')->assertOk()->assertDontSee('One MICHELIN Key');
+    }
+
     public function test_kazakh_is_the_first_language(): void
     {
         $this->assertSame('kk', array_key_first(\App\Support\Locales::all()));
