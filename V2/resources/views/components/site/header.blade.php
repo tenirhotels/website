@@ -40,13 +40,16 @@
             <img src="/images/logo-light.svg" alt="Tenir" width="150" height="36" class="h-8 w-auto lg:h-9">
         </a>
 
-        <nav aria-label="{{ __('site.nav.menu') }}" class="hidden items-center gap-8 text-[13px] uppercase tracking-[0.16em] lg:flex">
+        {{-- Сюда при прокрутке переезжает форма бронирования с первого экрана --}}
+        <div data-search-slot="header"></div>
+
+        <nav data-nav-main aria-label="{{ __('site.nav.menu') }}" class="hidden items-center gap-8 text-[13px] uppercase tracking-[0.16em] lg:flex">
             @foreach ($menu as [$label, $href])
                 <a href="{{ $href }}" class="hover:text-ember-light">{{ $label }}</a>
             @endforeach
         </nav>
 
-        <div class="flex items-center gap-4">
+        <div data-header-actions class="flex items-center gap-4">
             <details class="relative hidden sm:block">
                 <summary class="flex min-h-11 cursor-pointer list-none items-center gap-1 text-[13px] tracking-[0.1em]" aria-label="{{ __('site.nav.language') }}">
                     {{ Locales::all()[$current]['label'] }}
@@ -67,7 +70,7 @@
     </div>
 
     {{-- Мобильное меню --}}
-    <div id="mobile-menu" hidden class="fixed inset-x-0 bottom-0 top-[72px] z-40 overflow-y-auto bg-forest px-6 pb-32 pt-6 lg:hidden">
+    <div id="mobile-menu" hidden class="fixed inset-x-0 bottom-0 top-[72px] z-40 overflow-y-auto bg-forest px-6 pb-32 pt-6 lg:top-[84px] lg:px-[max(2.5rem,calc((100vw_-_1360px)/2_+_2.5rem))]">
         <nav aria-label="{{ __('site.nav.menu') }}" class="flex flex-col gap-1 font-display text-3xl">
             @unless ($single)
                 @foreach ($openHotels as $h)

@@ -1,4 +1,4 @@
-@props(['seo' => null, 'hotel' => null])
+@props(['seo' => null, 'hotel' => null, 'heroSearch' => false])
 @php
     use App\Models\Setting;
     use App\Support\Locales;
@@ -10,6 +10,9 @@
     $ga4 = Setting::get('analytics.ga4');
     $metrika = Setting::get('analytics.yandex_metrika');
     $gtm = Setting::get('analytics.gtm');
+    // Виджет поиска Exely есть на всех страницах, кроме самой страницы бронирования.
+    $search = ! request()->routeIs('booking');
+    $strip = $search && ! $heroSearch;
 @endphp
 <!DOCTYPE html>
 <html lang="{{ $locale }}">
@@ -66,21 +69,24 @@
         <script>(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,"script","https://mc.yandex.ru/metrika/tag.js","ym");ym({{ (int) $metrika }},"init",{clickmap:true,trackLinks:true,accurateTrackBounce:true,webvisor:true});</script>
     @endif
 </head>
-<body class="min-h-screen pb-[88px] lg:pb-0">
+<body class="min-h-screen pb-[88px] lg:pb-0" style="--bar-h: {{ $strip ? '69px' : '0px' }}">
     <a href="#content" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:bg-white focus:px-4 focus:py-2">{{ __('site.nav.skip') }}</a>
 
     <x-site.header :alternates="$alternates" />
 
-    {{-- Плашка Exely под шапкой на всех страницах, кроме самой страницы бронирования --}}
-    @unless (request()->routeIs('booking'))
-        <x-site.booking-bar :hotel="$hotel" />
-    @endunless
+    @if ($strip)
+        <x-site.booking-bar />
+    @endif
 
     <main id="content">
         {{ $slot }}
     </main>
 
     <x-site.footer />
+
+    @if ($search)
+        <x-site.exely-search :hotel="$hotel" />
+    @endif
 
     {{-- Бронирование: нижняя панель на телефоне ведёт на страницу с модулем Exely --}}
     @unless (request()->routeIs('booking'))
