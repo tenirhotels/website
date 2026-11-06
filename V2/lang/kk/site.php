@@ -83,6 +83,7 @@ return [
         'book_now' => 'Брондау',
         'back' => 'Артқа',
         'seasons' => 'Маусым',
+        'all_year' => 'Жыл бойы',
         'duration' => 'Ұзақтығы',
         'price_from' => ':price ₸ бастап',
         'valid_until' => ':date дейін',
