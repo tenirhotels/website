@@ -1,6 +1,8 @@
 @props(['limit' => 3, 'link' => true])
 @php
-    $gifts = collect(\App\Support\Gifts::offers())->take($limit);
+    $all = collect(\App\Support\Gifts::offers());
+    $gifts = $all->take($limit);
+    $link = $link && $all->count() > $gifts->count();
 @endphp
 @if ($gifts->isNotEmpty())
     <section class="bg-snow">
