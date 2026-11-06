@@ -1,20 +1,8 @@
 /*
  * Tenir Hotels — небольшой JS без фреймворков:
- * - промокод в плашке бронирования (даты и цены выбираются в календаре Exely);
  * - мобильное меню;
  * - компактная шапка при прокрутке.
  */
-
-// Промокод — раскрывается по ссылке
-document.querySelectorAll('[data-promo-toggle]').forEach((btn) =>
-    btn.addEventListener('click', () => {
-        const field = btn.closest('form')?.querySelector('[data-promo-field]');
-        if (!field) return;
-        field.hidden = false;
-        btn.hidden = true;
-        field.querySelector('input')?.focus();
-    }),
-);
 
 // Мобильное меню
 const menu = document.getElementById('mobile-menu');

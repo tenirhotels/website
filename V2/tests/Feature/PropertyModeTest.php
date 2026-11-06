@@ -178,7 +178,7 @@ class PropertyModeTest extends TestCase
             ->assertSee('Tenir Shymbulak')
             ->assertSee('Tenir Almaty')
             ->assertSee('href="'.url('/ru/destinations').'"', false)
-            ->assertSee('name="hotel"', false)       // выбор отеля в плашке бронирования
+            ->assertSee('tl-search-form', false)     // плашка бронирования — виджет Exely
             ->assertDontSee('"@type":"Hotel"', false);
 
         $this->get('/ru/destinations/shymbulak')

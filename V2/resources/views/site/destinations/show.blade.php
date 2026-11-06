@@ -10,7 +10,7 @@
     <x-site.hotel-nav :hotel="$hotel" />
 
     @if ($hotel->isOpen())
-        <div class="container-site relative z-10 mt-10 hidden max-w-[1280px] lg:block">
+        <div class="container-site relative z-10 mt-10 max-w-[1280px]">
             <x-site.booking-bar :hotel="$hotel" id="hotel" />
         </div>
     @endif
