@@ -1,0 +1,83 @@
+name: Build V2 for hosting
+
+# Собирает V2 (composer + vite) и выкладывает готовый результат в ветку v2-deploy.
+# Хостинг (Plesk → Git) тянет именно v2-deploy: ему не нужны ни Composer, ни Node.
+on:
+  push:
+    branches: [v2-skeleton]
+    paths: ['V2/**', '.github/workflows/deploy-v2.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: deploy-v2
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: intl, mbstring, pdo_mysql, gd, zip, fileinfo
+          tools: composer:v2
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: V2/package-lock.json
+
+      - name: Composer (без dev-пакетов)
+        working-directory: V2
+        run: composer install --no-dev --optimize-autoloader --no-interaction --no-progress
+
+      - name: Vite build
+        working-directory: V2
+        run: npm ci && npm run build
+
+      - name: Подготовить содержимое ветки v2-deploy
+        env:
+          REPO_URL: https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git
+        run: |
+          set -e
+          if git ls-remote --exit-code --heads "$REPO_URL" v2-deploy >/dev/null 2>&1; then
+            git clone --quiet --branch v2-deploy --single-branch "$REPO_URL" ../deploy
+          else
+            mkdir ../deploy && git -C ../deploy init --quiet -b v2-deploy
+            git -C ../deploy remote add origin "$REPO_URL"
+          fi
+
+          rsync -a --delete \
+            --exclude '.git' --exclude '/node_modules' --exclude '/tests' \
+            --exclude '/.env' --exclude '/.phpunit.result.cache' --exclude '/phpunit.xml' \
+            --exclude '/public/storage' --exclude '/public/hot' \
+            --exclude '/storage/logs/*.log' --exclude '/storage/app/public/*' \
+            --exclude '/database/*.sqlite' --exclude '/deploy' \
+            V2/ ../deploy/
+
+          cat > ../deploy/.gitignore <<'IGN'
+          .env
+          *.log
+          /public/storage
+          /public/hot
+          /storage/*.key
+          /database/*.sqlite
+          IGN
+          sed -i 's/^ *//' ../deploy/.gitignore
+          cp V2/deploy/README.md ../deploy/DEPLOY.md
+
+      - name: Закоммитить и отправить
+        run: |
+          cd ../deploy
+          git config user.name  "tenir-deploy-bot"
+          git config user.email "deploy-bot@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then echo "Без изменений"; exit 0; fi
+          git commit --quiet -m "Build ${GITHUB_SHA::7} из ${GITHUB_REF_NAME}"
+          git push origin v2-deploy
