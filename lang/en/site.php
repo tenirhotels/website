@@ -115,6 +115,7 @@ return [
         'brand' => 'Brand',
         'follow' => 'Follow us',
         'rights' => 'All rights reserved.',
+        'sales' => 'Corporate enquiries and tour operators',
         'reservations' => 'Reservations',
     ],
 ];
