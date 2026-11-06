@@ -35,7 +35,7 @@ class SiteTest extends TestCase
     public function test_exely_lang_prefixed_urls_redirect_with_query(): void
     {
         $this->get('/lang/en/booking?date=2026-11-10&nights=1&adults=2&children=&children-age=')
-            ->assertRedirect('/en/booking?date=2026-11-10&nights=1&adults=2&children=&children-age=');
+            ->assertRedirect('/en/booking?adults=2&children=&children-age=&date=2026-11-10&nights=1');
         $this->get('/lang/xx/booking')->assertNotFound();
     }
 
