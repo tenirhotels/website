@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Page;
 use Database\Seeders\Concerns\CopiesMedia;
+use Database\Seeders\Concerns\SustainabilityContent;
 use Illuminate\Database\Seeder;
 
 /**
@@ -77,62 +78,13 @@ class BrandPagesSeeder extends Seeder
             'is_published' => true,
         ]);
 
-        $pillarsRu = [
-            ['title' => 'Эко-материалы', 'text' => 'Фасады из лиственничной дранки сохраняют естественный облик ландшафта и защищают конструкцию от влаги, солнца и ветра.'],
-            ['title' => 'Без фундаментов', 'text' => 'Модули стоят на металлическом основании, закреплённом в скале, — без капитальных конструкций и с минимальным вмешательством в рельеф.'],
-            ['title' => 'Тепло без потерь', 'text' => 'Многослойные сэндвич-панели минимизируют теплопотери и заметно снижают расход электроэнергии на отопление.'],
-            ['title' => 'Энергосбережение', 'text' => 'Долговечное LED-освещение с низким потреблением во всех модулях.'],
-        ];
-        $pillarsEn = [
-            ['title' => 'Eco materials', 'text' => 'Larch-shingle facades keep the landscape authentic and protect the structure from moisture, sun and wind.'],
-            ['title' => 'No foundations', 'text' => 'Modules sit on a metal base anchored into the rock — no permanent structures and minimal disturbance to the terrain.'],
-            ['title' => 'Warmth without waste', 'text' => 'Multi-layer sandwich panels minimise heat loss and significantly cut electricity used for heating.'],
-            ['title' => 'Energy saving', 'text' => 'Long-lasting, low-consumption LED lighting throughout the modules.'],
-        ];
-
         Page::updateOrCreate(['slug' => 'sustainability'], [
             'title' => ['ru' => 'Sustainability', 'en' => 'Sustainability', 'kk' => 'Тұрақты даму', 'zh' => '可持续发展'],
-            'summary' => [
-                'ru' => 'Оставить горы такими, какими мы их нашли.',
-                'en' => 'To leave the mountains as we found them.',
-            ],
+            'summary' => SustainabilityContent::summary(),
             'hero_image' => $this->media('hero-back.webp'),
             'placement' => 'main',
             'sort' => 2,
-            'content' => [
-                'ru' => [
-                    ['type' => 'intro', 'data' => [
-                        'eyebrow' => 'Наш принцип',
-                        'heading' => 'Экологическая безопасность — высший приоритет Tenir',
-                        'text' => 'Устойчивое развитие — основа Tenir: удовлетворять потребности гостей, сохраняя окружающую среду и не нанося вреда природной экосистеме.',
-                    ]],
-                    ['type' => 'pillars', 'data' => [
-                        'eyebrow' => 'Как мы это делаем',
-                        'heading' => 'Оставить горы такими, какими мы их нашли',
-                        'items' => $pillarsRu,
-                    ]],
-                    ['type' => 'quote', 'data' => [
-                        'quote' => 'Команда Tenir стремится минимизировать воздействие на природу, внедрять экологичные инициативы и ресурсосберегающие технологии.',
-                        'caption' => 'Tenir Hotels',
-                    ]],
-                ],
-                'en' => [
-                    ['type' => 'intro', 'data' => [
-                        'eyebrow' => 'Our principle',
-                        'heading' => 'Ecological safety is Tenir’s highest priority',
-                        'text' => 'Sustainable development is a founding principle of Tenir: meeting our guests’ needs while preserving the environment and avoiding harm to the natural ecosystem.',
-                    ]],
-                    ['type' => 'pillars', 'data' => [
-                        'eyebrow' => 'How we do it',
-                        'heading' => 'Leave the mountains as we found them',
-                        'items' => $pillarsEn,
-                    ]],
-                    ['type' => 'quote', 'data' => [
-                        'quote' => 'The Tenir team strives to minimise environmental impact and to adopt eco-friendly initiatives and resource-saving technologies.',
-                        'caption' => 'Tenir Hotels',
-                    ]],
-                ],
-            ],
+            'content' => SustainabilityContent::content(),
             'is_published' => true,
         ]);
 
