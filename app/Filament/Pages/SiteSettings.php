@@ -10,6 +10,8 @@ use App\Support\Property;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
+use App\Support\PageCache;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Filament\Schemas\Components\Actions;
@@ -36,7 +38,7 @@ class SiteSettings extends Page
 
     protected static ?int $navigationSort = 0;
 
-    private const GROUPS = ['site', 'brand', 'contacts', 'social', 'analytics', 'seo'];
+    private const GROUPS = ['site', 'brand', 'contacts', 'social', 'analytics', 'perf', 'seo'];
 
     public ?array $data = [];
 
@@ -85,11 +87,34 @@ class SiteSettings extends Page
                 TextInput::make('social.facebook')->label('Facebook')->url(),
                 TextInput::make('social.youtube')->label('YouTube')->url(),
             ]),
-            Section::make('Аналитика')->columns(2)->schema([
-                TextInput::make('analytics.ga4')->label('Google Analytics 4 (G-…)'),
-                TextInput::make('analytics.yandex_metrika')->label('Яндекс Метрика (номер счётчика)'),
-                TextInput::make('analytics.gtm')->label('Google Tag Manager (GTM-…)'),
-            ]),
+            Section::make('Аналитика и пиксели')
+                ->description('Счётчики подключаются после первого действия посетителя (скролл, касание) или через 4 секунды — так они не замедляют загрузку страницы. Пустое поле — счётчик не выводится.')
+                ->columns(2)
+                ->schema([
+                    TextInput::make('analytics.ga4')->label('Google Analytics 4')->placeholder('G-XXXXXXXXXX')->helperText('Идентификатор потока данных GA4.'),
+                    TextInput::make('analytics.gtm')->label('Google Tag Manager')->placeholder('GTM-XXXXXXX'),
+                    TextInput::make('analytics.yandex_metrika')->label('Яндекс Метрика')->placeholder('12345678')->helperText('Только номер счётчика.'),
+                    Toggle::make('analytics.yandex_webvisor')->label('Вебвизор Яндекс Метрики')->helperText('Записи сессий. Заметно нагружает страницу — включайте только при необходимости.')->inline(false),
+                    TextInput::make('analytics.meta_pixel')->label('Meta Pixel (Facebook / Instagram)')->placeholder('1234567890123456')->helperText('ID пикселя из Meta Events Manager.'),
+                    Toggle::make('analytics.load_immediately')->label('Загружать счётчики сразу')->helperText('Точнее считает мгновенные отказы, но снижает оценку PageSpeed.')->inline(false),
+                    TextInput::make('analytics.verify_google')->label('Google Search Console — код подтверждения')->helperText('Значение content из мета-тега google-site-verification.'),
+                    TextInput::make('analytics.verify_yandex')->label('Яндекс Вебмастер — код подтверждения')->helperText('Значение content из мета-тега yandex-verification.'),
+                    TextInput::make('analytics.verify_meta')->label('Meta — подтверждение домена')->helperText('Значение content из facebook-domain-verification.'),
+                    Textarea::make('analytics.custom_head')->label('Свой код в <head>')->rows(4)->columnSpanFull()->helperText('Любой HTML/скрипт целиком (например, пиксель TikTok). Выводится как есть — вставляйте только проверенный код.'),
+                    Textarea::make('analytics.custom_body')->label('Свой код перед </body>')->rows(4)->columnSpanFull(),
+                ]),
+            Section::make('Скорость сайта')
+                ->description(fn () => 'Кэш готовых страниц: '.(PageCache::enabled() ? 'включён' : 'выключен').'. Кэш сбрасывается сам при любом сохранении в админке.')
+                ->schema([
+                    Toggle::make('perf.page_cache')->label('Кэшировать страницы для посетителей')->default(true)
+                        ->helperText('Страницы отдаются мгновенно, без обращения к базе данных. Отключайте только на время отладки.'),
+                ])
+                ->footerActions([
+                    Action::make('flushCache')->label('Очистить кэш страниц сейчас')->color('gray')->action(function () {
+                        PageCache::flush();
+                        Notification::make()->title('Кэш страниц очищен')->success()->send();
+                    }),
+                ]),
             Section::make('SEO по умолчанию')->schema([
                 Fields::translatable(fn (string $l) => [
                     TextInput::make("seo.default_title.$l")->label('Title главной')->maxLength(70),
