@@ -85,7 +85,7 @@
         @case('gallery')
             <section class="container-site grid grid-cols-2 gap-3 py-12 md:grid-cols-3 md:gap-4">
                 @foreach ($d['images'] ?? [] as $img)
-                    <div class="aspect-[4/3] overflow-hidden"><x-site.media :src="$img" alt="" /></div>
+                    <div class="aspect-[4/3] overflow-hidden rounded-2xl"><x-site.media :src="$img" alt="" /></div>
                 @endforeach
             </section>
             @break

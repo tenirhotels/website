@@ -12,7 +12,7 @@
                 </div>
             </div>
         @endif
-        <div class="flex flex-1 flex-col justify-center gap-5 bg-snow p-10 lg:p-12">
+        <div class="flex flex-1 flex-col justify-center gap-5 rounded-3xl bg-snow p-10 lg:p-12">
             <p class="eyebrow text-stone">{{ __('site.hotel.coming_soon') }}</p>
             <h2 class="font-display text-4xl leading-tight">{{ \App\Models\Setting::text('brand.newsletter_heading') ?? __('site.home.coming_title') }}</h2>
             @forelse ($comingSoon as $h)
@@ -24,9 +24,9 @@
                 <p class="leading-relaxed text-slate">{{ __('site.home.coming_text') }}</p>
             @endforelse
             {{-- Подписка: подключить к Bitrix24 / сервису рассылок --}}
-            <form class="mt-2 flex flex-wrap" action="#" method="post" onsubmit="return false">
+            <form class="mt-2 flex flex-wrap gap-2" action="#" method="post" onsubmit="return false">
                 <label for="newsletter-email" class="sr-only">{{ __('site.common.email') }}</label>
-                <input id="newsletter-email" type="email" required autocomplete="email" placeholder="{{ __('site.common.email') }}" class="min-h-12 flex-1 basis-56 border border-[#C9C6BD] bg-white px-4 text-[15px]">
+                <input id="newsletter-email" type="email" required autocomplete="email" placeholder="{{ __('site.common.email') }}" class="min-h-12 flex-1 basis-56 rounded-full border border-[#C9C6BD] bg-white px-5 text-[15px]">
                 <button type="submit" class="btn-dark">{{ __('site.common.subscribe') }}</button>
             </form>
         </div>

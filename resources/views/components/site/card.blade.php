@@ -1,7 +1,7 @@
 @props(['href', 'image' => null, 'title', 'meta' => null, 'text' => null, 'ratio' => 'aspect-[4/5]', 'cta' => null, 'ctaHref' => null])
 {{-- Карточка: впечатление, предложение, история, номер. --}}
 <article class="group flex flex-col gap-4">
-    <a href="{{ $href }}" class="block overflow-hidden {{ $ratio }}" tabindex="-1" aria-hidden="true">
+    <a href="{{ $href }}" class="block overflow-hidden rounded-2xl {{ $ratio }}" tabindex="-1" aria-hidden="true">
         <x-site.media :src="$image" :alt="$title" class="transition-transform duration-700 group-hover:scale-[1.03]" />
     </a>
     @if ($meta)<p class="text-xs uppercase tracking-[0.2em] text-stone">{{ $meta }}</p>@endif

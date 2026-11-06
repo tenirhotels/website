@@ -6,7 +6,7 @@
         @if ($hotel->gallery)
             <div class="columns-1 gap-4 sm:columns-2 lg:columns-3">
                 @foreach ($hotel->gallery as $img)
-                    <a href="{{ media($img) }}" class="mb-4 block break-inside-avoid overflow-hidden" target="_blank" rel="noopener">
+                    <a href="{{ media($img) }}" class="mb-4 block break-inside-avoid overflow-hidden rounded-2xl" target="_blank" rel="noopener">
                         <x-site.media :src="$img" :alt="$hotel->t('name')" class="h-auto w-full" />
                     </a>
                 @endforeach

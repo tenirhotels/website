@@ -9,7 +9,7 @@
             @if ($room->gallery)
                 <div class="grid grid-cols-2 gap-3">
                     @foreach ($room->gallery as $img)
-                        <div class="aspect-[4/3] overflow-hidden"><x-site.media :src="$img" :alt="$room->t('name')" /></div>
+                        <div class="aspect-[4/3] overflow-hidden rounded-2xl"><x-site.media :src="$img" :alt="$room->t('name')" /></div>
                     @endforeach
                 </div>
             @endif
@@ -28,7 +28,7 @@
 
         {{-- Карточка бронирования: закреплена при прокрутке на десктопе --}}
         <aside class="flex-1">
-            <div class="sticky top-40 flex flex-col gap-6 bg-white p-8">
+            <div class="sticky top-40 flex flex-col gap-6 bg-white p-8 rounded-3xl">
                 <dl class="grid grid-cols-2 gap-5 text-[15px]">
                     @foreach ([
                         __('site.hotel.size') => $room->size_m2 ? $room->size_m2.' м²' : null,

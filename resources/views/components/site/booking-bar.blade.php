@@ -9,7 +9,7 @@
     // Страница с виджетом: нижняя кнопка на телефоне не нужна (у Exely есть своя плавающая «Узнать цены»).
     request()->attributes->set('tenir.exely_widget', true);
 @endphp
-<div class="tenir-search lg:bg-sand lg:shadow-[0_20px_50px_rgba(22,33,27,0.22)]">
+<div class="tenir-search lg:rounded-3xl lg:bg-sand lg:shadow-[0_20px_50px_rgba(22,33,27,0.22)]">
     <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:gap-10 lg:px-8 lg:py-6">
         <div class="hidden shrink-0 lg:block lg:w-52">
             <p class="text-xs font-medium uppercase tracking-[0.3em] text-forest">{{ __('site.booking.title') }}</p>
