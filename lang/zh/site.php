@@ -12,6 +12,7 @@ return [
         'contact' => '联系我们',
         'book' => '预订',
         'menu' => '菜单',
+        'more' => '更多',
         'close' => '关闭',
         'language' => '语言',
         'skip' => '跳至内容',

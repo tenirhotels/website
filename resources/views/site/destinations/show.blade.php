@@ -8,7 +8,7 @@
     </x-site.page-hero>
 
     @if ($hotel->isOpen())
-        <div class="container-site relative z-10 -mt-14">
+        <div class="container-site relative z-10 lg:-mt-14">
             <x-site.booking-bar :hotel="$hotel" id="hotel" />
         </div>
     @endif

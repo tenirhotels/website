@@ -11,6 +11,7 @@ return [
         'contact' => 'Contact',
         'book' => 'Book',
         'menu' => 'Menu',
+        'more' => 'More',
         'close' => 'Close',
         'language' => 'Language',
         'skip' => 'Skip to content',

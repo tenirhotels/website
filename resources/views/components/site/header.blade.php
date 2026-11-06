@@ -33,7 +33,8 @@
 <header data-header class="sticky top-0 z-40 bg-forest text-snow">
     <div class="container-site flex h-[72px] items-center justify-between gap-6 lg:h-[84px]">
         <button type="button" class="-ml-2 flex size-11 items-center justify-center lg:hidden" data-menu-toggle aria-controls="mobile-menu" aria-expanded="false" aria-label="{{ __('site.nav.menu') }}">
-            <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 7h18M3 12h18M3 17h18"/></svg>
+            <svg data-icon-open aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 7h18M3 12h18M3 17h18"/></svg>
+            <svg data-icon-close hidden aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 5l14 14M19 5 5 19"/></svg>
         </button>
 
         <a href="{{ route('home') }}" class="shrink-0" aria-label="{{ $single && $hotel ? $hotel->t('name') : 'Tenir Hotels' }}">
@@ -66,23 +67,34 @@
         </div>
     </div>
 
-    {{-- Мобильное меню --}}
-    <div id="mobile-menu" hidden class="fixed inset-x-0 bottom-0 top-[72px] z-40 overflow-y-auto bg-forest px-6 pb-32 pt-6 lg:hidden">
-        <nav aria-label="{{ __('site.nav.menu') }}" class="flex flex-col gap-1 font-display text-3xl">
+    {{-- Мобильное меню: основные разделы, дополнительные, язык, связь и кнопка бронирования --}}
+    <div id="mobile-menu" hidden class="fixed inset-x-0 bottom-0 top-[72px] z-40 flex flex-col overflow-y-auto bg-forest px-6 pb-8 pt-4 lg:hidden">
+        <nav aria-label="{{ __('site.nav.menu') }}" class="flex flex-col font-display text-[28px] leading-tight">
             @unless ($single)
                 @foreach ($openHotels as $h)
-                    <a href="{{ $h->url() }}" class="py-2">{{ $h->t('name') }}</a>
+                    <a href="{{ $h->url() }}" class="border-b border-white/10 py-3.5">{{ $h->t('name') }}</a>
                 @endforeach
             @endunless
-            @foreach ([...$menu, ...$mobileExtra] as [$label, $href])
-                <a href="{{ $href }}" class="py-2">{{ $label }}</a>
+            @foreach ($menu as [$label, $href])
+                <a href="{{ $href }}" class="border-b border-white/10 py-3.5">{{ $label }}</a>
             @endforeach
         </nav>
-        <div class="mt-8 flex flex-wrap gap-3 border-t border-white/20 pt-6">
+
+        @if ($mobileExtra)
+            <nav aria-label="{{ __('site.nav.more') }}" class="mt-6 flex flex-col gap-1 text-[13px] uppercase tracking-[0.16em] text-snow/80">
+                @foreach ($mobileExtra as [$label, $href])
+                    <a href="{{ $href }}" class="py-2.5">{{ $label }}</a>
+                @endforeach
+            </nav>
+        @endif
+
+        <div class="mt-6 flex flex-wrap gap-2 border-t border-white/20 pt-5">
             @foreach (Locales::all() as $code => $meta)
                 <a href="{{ $alternates[$code] ?? route('home', ['locale' => $code]) }}" lang="{{ $code }}"
                    @class(['min-h-11 border px-4 py-2.5 text-sm', 'border-ember-light text-ember-light' => $code === $current, 'border-white/30' => $code !== $current])>{{ $meta['label'] }}</a>
             @endforeach
         </div>
+
+        <a href="{{ route('booking') }}" class="btn-primary mt-auto w-full min-h-[52px]" style="margin-top: 2rem">{{ __('site.nav.book') }}</a>
     </div>
 </header>

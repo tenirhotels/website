@@ -66,7 +66,7 @@
         <script>(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,"script","https://mc.yandex.ru/metrika/tag.js","ym");ym({{ (int) $metrika }},"init",{clickmap:true,trackLinks:true,accurateTrackBounce:true,webvisor:true});</script>
     @endif
 </head>
-<body class="min-h-screen pb-[88px] lg:pb-0">
+<body @class(['min-h-screen', 'pb-[88px] lg:pb-0' => ! request()->attributes->get('tenir.exely_widget')])>
     <a href="#content" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:bg-white focus:px-4 focus:py-2">{{ __('site.nav.skip') }}</a>
 
     <x-site.header :alternates="$alternates" />
@@ -77,15 +77,12 @@
 
     <x-site.footer />
 
-    {{-- Бронирование: нижняя панель на телефоне ведёт на страницу с модулем Exely --}}
-    @unless (request()->routeIs('booking'))
-    <div class="fixed inset-x-0 bottom-0 z-30 flex items-center gap-3 bg-white px-4 pb-6 pt-3 shadow-[0_-8px_24px_rgba(22,33,27,0.12)] lg:hidden">
-        <a href="{{ route('booking') }}" class="flex min-h-[52px] flex-1 flex-col justify-center border border-[#C9C6BD] px-4">
-            <span class="field-label">{{ __('site.booking.check_in') }} — {{ __('site.booking.check_out') }}</span>
-            <span class="text-[15px]">{{ $hotel?->t('name') ?? \App\Models\Setting::text('brand.name', 'Tenir Hotels') }}</span>
-        </a>
-        <a href="{{ route('booking') }}" class="btn-primary min-h-[52px] px-5">{{ __('site.nav.book') }}</a>
-    </div>
-    @endunless
+    {{-- Телефон: на страницах без виджета Exely — одна кнопка внизу, ведёт на страницу бронирования
+         (там календарь с ценами). На главной и странице отеля есть плавающая кнопка Exely «Узнать цены». --}}
+    @if (! request()->routeIs('booking') && ! request()->attributes->get('tenir.exely_widget'))
+        <div class="fixed inset-x-0 bottom-0 z-30 bg-white px-4 pb-5 pt-3 shadow-[0_-8px_24px_rgba(22,33,27,0.12)] lg:hidden">
+            <a href="{{ route('booking') }}" class="btn-primary w-full min-h-[52px]">{{ __('site.nav.book') }}</a>
+        </div>
+    @endif
 </body>
 </html>

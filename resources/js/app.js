@@ -12,7 +12,11 @@ document.querySelectorAll('[data-menu-toggle]').forEach((btn) =>
         if (!menu) return;
         menu.toggleAttribute('hidden', !open);
         document.body.classList.toggle('overflow-hidden', open);
-        document.querySelectorAll('[data-menu-toggle]').forEach((b) => b.setAttribute('aria-expanded', String(open)));
+        document.querySelectorAll('[data-menu-toggle]').forEach((b) => {
+            b.setAttribute('aria-expanded', String(open));
+            b.querySelector('[data-icon-open]')?.toggleAttribute('hidden', open);
+            b.querySelector('[data-icon-close]')?.toggleAttribute('hidden', !open);
+        });
     }),
 );
 
