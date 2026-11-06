@@ -26,8 +26,9 @@ if (root) {
     };
 
     const limits = () => {
-        minS = Math.min(vp.clientWidth / W, vp.clientHeight / H);
-        maxS = Math.max(2.4, minS * 3);
+        // минимум — «обложка»: карта всегда закрывает область просмотра, без пустых полос и с возможностью двигать
+        minS = Math.max(vp.clientWidth / W, vp.clientHeight / H);
+        maxS = Math.max(2.4, minS * 2.5);
     };
     const apply = () => {
         const vw = vp.clientWidth, vh = vp.clientHeight, sw = W * s, sh = H * s;
@@ -57,7 +58,7 @@ if (root) {
     };
     const fit = (initial = false) => {
         limits();
-        s = initial ? Math.max(vp.clientWidth / W, vp.clientHeight / H) : minS;
+        s = minS;
         centerOn(W * 0.47, H * 0.44, s);
     };
 
@@ -188,7 +189,7 @@ if (root) {
     root.querySelectorAll('[data-zoom]').forEach((b) => b.addEventListener('click', () => {
         const cx = vp.clientWidth / 2, cy = vp.clientHeight / 2;
         animate(() => {
-            if (b.dataset.zoom === 'fit') { limits(); s = minS; centerOn(W / 2, H / 2, s); }
+            if (b.dataset.zoom === 'fit') fit(true);
             else zoomAt(b.dataset.zoom === 'in' ? 1.6 : 1 / 1.6, cx, cy);
         });
     }));

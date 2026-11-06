@@ -258,6 +258,8 @@ class SiteTest extends TestCase
         }
         $this->get('/ru/map')->assertSee('≈22 мин', false)->assertSee('Верёвочный парк Медеу')->assertSee('Лестница здоровья');
         $this->get('/en/map')->assertSee('Rope park Medeu')->assertSee('Cable cars');
+        $this->get('/ru/map')->assertDontSee('z-30 bg-white px-4 pb-5', false);
+        $this->get('/ru/contact')->assertSee('z-30 bg-white px-4 pb-5', false);
         $this->get('/sitemap.xml')->assertSee('/ru/map', false);
         $this->assertFileExists(public_path('images/map/winter.webp'));
         $this->assertFileExists(public_path('images/map/summer.webp'));
