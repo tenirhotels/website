@@ -147,7 +147,7 @@ class PropertyModeTest extends TestCase
         $this->addSecondHotel(Hotel::STATUS_COMING_SOON);
 
         $this->assertTrue(Property::isMulti());
-        $this->get('/ru')->assertOk()->assertSee('Tenir Almaty')->assertSee('Открытие в 2028');
+        $this->get('/ru/destinations')->assertOk()->assertSee('Tenir Almaty')->assertSee('Открытие в 2028');
     }
 
     public function test_unpublished_second_hotel_keeps_single_mode(): void
