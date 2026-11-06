@@ -699,6 +699,7 @@ class ComposerStaticInitbed664a3137a0af20c24a0f2c8436f70
         'AnourValar\\EloquentSerialize\\Grammars\\QueryBuilderGrammar' => __DIR__ . '/..' . '/anourvalar/eloquent-serialize/src/Grammars/QueryBuilderGrammar.php',
         'AnourValar\\EloquentSerialize\\Package' => __DIR__ . '/..' . '/anourvalar/eloquent-serialize/src/Package.php',
         'AnourValar\\EloquentSerialize\\Service' => __DIR__ . '/..' . '/anourvalar/eloquent-serialize/src/Service.php',
+        'App\\Console\\Commands\\SetAdminPassword' => __DIR__ . '/../..' . '/app/Console/Commands/SetAdminPassword.php',
         'App\\Filament\\Pages\\SiteSettings' => __DIR__ . '/../..' . '/app/Filament/Pages/SiteSettings.php',
         'App\\Filament\\Resources\\Experiences\\ExperienceResource' => __DIR__ . '/../..' . '/app/Filament/Resources/Experiences/ExperienceResource.php',
         'App\\Filament\\Resources\\Experiences\\Pages\\CreateExperience' => __DIR__ . '/../..' . '/app/Filament/Resources/Experiences/Pages/CreateExperience.php',
