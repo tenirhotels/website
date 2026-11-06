@@ -2,7 +2,7 @@
 @if ($hotel && $rooms->isNotEmpty())
     <section class="bg-white">
         <div class="container-site flex flex-col gap-8 md:gap-12 py-14 md:py-20 lg:py-24">
-            <x-site.section-head :eyebrow="__('site.hotel.rooms')" :title="__('site.home.rooms_title')" :link="$hotel->sectionUrl('rooms')" :link-label="__('site.hotel.all_rooms')" />
+            <x-site.section-head :eyebrow="__('site.hotel.rooms')" :title="__('site.home.rooms_title')" :link="$rooms->count() > 1 ? $hotel->sectionUrl('rooms') : null" :link-label="__('site.hotel.all_rooms')" />
             @php($room = $rooms->first())
             <div class="flex flex-col overflow-hidden rounded-3xl bg-snow lg:flex-row">
                 <a href="{{ $room->url() }}" class="aspect-[4/3] lg:aspect-auto lg:min-h-[520px] lg:flex-[1.4]" tabindex="-1" aria-hidden="true">
@@ -18,7 +18,11 @@
                         @if ($room->price_from)
                             <span class="text-[15px] text-slate">{{ __('site.hotel.from') }} <strong class="text-2xl font-normal text-ink">{{ price($room->price_from) }} ₸</strong> / {{ __('site.hotel.per_night') }}</span>
                         @endif
-                        <a href="{{ $room->bookingUrl() }}" class="btn-dark">{{ __('site.hotel.check_prices') }}</a>
+                        @if ($rooms->count() === 1)
+                            <a href="{{ $room->url() }}" class="btn-dark">{{ __('site.common.learn_more') }}</a>
+                        @else
+                            <a href="{{ $room->bookingUrl() }}" class="btn-dark">{{ __('site.hotel.check_prices') }}</a>
+                        @endif
                     </div>
                 </div>
             </div>

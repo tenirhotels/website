@@ -4,7 +4,7 @@
     <div class="container-site flex flex-col gap-8 md:gap-12 py-14 md:py-20 lg:py-24 lg:flex-row lg:gap-16">
         @if ($stories->isNotEmpty())
             <div class="flex flex-[1.4] flex-col gap-10">
-                <x-site.section-head :title="__('site.home.stories_title')" :link="route('stories.index')" />
+                <x-site.section-head :title="__('site.home.stories_title')" :link="\App\Models\Story::live()->count() > $stories->count() ? route('stories.index') : null" />
                 <div class="grid gap-8 sm:grid-cols-2">
                     @foreach ($stories->take(2) as $s)
                         <x-site.card :href="$s->url()" :image="$s->image" :title="$s->t('title')" :meta="$s->published_at?->translatedFormat('j F Y')" ratio="aspect-[3/2]" />
