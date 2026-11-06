@@ -38,6 +38,9 @@
     --color-slate: #3A4540;      /* основной текст абзацев */
     --color-mist: #DCD9D0;       /* линии */
     --color-placeholder: #C9CFC9;
+    --color-exely: #F2F2F2;      /* фон страницы бронирования = фон модуля Exely */
+    --color-exely-line: #DCE0E1; /* линии и плашки модуля */
+    --color-exely-ink: #516468;  /* основной цвет модуля (прогресс, ссылки) */
 }
 
 @layer base {
