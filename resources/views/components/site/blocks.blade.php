@@ -97,7 +97,7 @@
                     <h2 class="h-section">{{ $d['heading'] ?? '' }}</h2>
                     @if (! empty($d['text']))<p class="lead max-w-xl">{{ $d['text'] }}</p>@endif
                     @if ($href && ! empty($d['button_label']))
-                        <a href="{{ $href }}" @if (($d['button_url'] ?? '') === 'booking') data-open-booking @endif class="btn-primary mt-2">{{ $d['button_label'] }}</a>
+                        <a href="{{ $href }}" class="btn-primary mt-2">{{ $d['button_label'] }}</a>
                     @endif
                 </div>
             </section>

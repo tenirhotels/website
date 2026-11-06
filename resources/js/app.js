@@ -1,48 +1,9 @@
 /*
  * Tenir Hotels — небольшой JS без фреймворков:
- * - окно бронирования (<dialog id="booking-dialog">) из шапки и нижней панели на телефоне;
- * - проверка дат (выезд позже заезда, не в прошлом);
+ * - промокод в плашке бронирования (даты и цены выбираются в календаре Exely);
  * - мобильное меню;
  * - компактная шапка при прокрутке.
  */
-
-const iso = (d) => d.toISOString().slice(0, 10);
-
-function initDates(form) {
-    const inField = form.querySelector('[name="check_in"]');
-    const outField = form.querySelector('[name="check_out"]');
-    if (!inField || !outField) return;
-
-    const today = new Date();
-    inField.min = iso(today);
-
-    const sync = () => {
-        if (!inField.value) return;
-        const next = new Date(inField.value);
-        next.setDate(next.getDate() + 1);
-        outField.min = iso(next);
-        if (!outField.value || outField.value <= inField.value) outField.value = iso(next);
-    };
-    inField.addEventListener('change', sync);
-    sync();
-}
-
-document.querySelectorAll('[data-booking-form]').forEach(initDates);
-
-// Окно бронирования
-const dialog = document.getElementById('booking-dialog');
-document.querySelectorAll('[data-open-booking]').forEach((btn) =>
-    btn.addEventListener('click', (e) => {
-        if (!dialog) return;
-        e.preventDefault();
-        dialog.showModal();
-        dialog.querySelector('input, select')?.focus();
-    }),
-);
-dialog?.addEventListener('click', (e) => {
-    if (e.target === dialog) dialog.close();
-});
-document.querySelectorAll('[data-close-booking]').forEach((btn) => btn.addEventListener('click', () => dialog?.close()));
 
 // Промокод — раскрывается по ссылке
 document.querySelectorAll('[data-promo-toggle]').forEach((btn) =>

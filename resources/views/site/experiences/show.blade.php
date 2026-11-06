@@ -23,7 +23,7 @@
                 @if ($experience->price_from)
                     <div><dt class="sr-only">{{ __('site.hotel.from') }}</dt><dd class="text-2xl">{{ __('site.common.price_from', ['price' => price($experience->price_from)]) }}</dd></div>
                 @endif
-                <a href="{{ route('booking', array_filter(['hotel' => $experience->hotel?->slug])) }}" data-open-booking class="btn-primary mt-2">{{ __('site.common.book_now') }}</a>
+                <a href="{{ route('booking', array_filter(['hotel' => $experience->hotel?->slug])) }}" class="btn-primary mt-2">{{ __('site.common.book_now') }}</a>
             </dl>
         </aside>
     </section>

@@ -77,15 +77,14 @@
 
     <x-site.footer />
 
-    {{-- Бронирование: окно (открывается из шапки) и нижняя панель на телефоне --}}
-    <x-site.booking-dialog :hotel="$hotel" />
+    {{-- Бронирование: нижняя панель на телефоне ведёт на страницу с модулем Exely --}}
     @unless (request()->routeIs('booking'))
     <div class="fixed inset-x-0 bottom-0 z-30 flex items-center gap-3 bg-white px-4 pb-6 pt-3 shadow-[0_-8px_24px_rgba(22,33,27,0.12)] lg:hidden">
-        <a href="{{ route('booking') }}" data-open-booking class="flex min-h-[52px] flex-1 flex-col justify-center border border-[#C9C6BD] px-4">
+        <a href="{{ route('booking') }}" class="flex min-h-[52px] flex-1 flex-col justify-center border border-[#C9C6BD] px-4">
             <span class="field-label">{{ __('site.booking.check_in') }} — {{ __('site.booking.check_out') }}</span>
             <span class="text-[15px]">{{ $hotel?->t('name') ?? \App\Models\Setting::text('brand.name', 'Tenir Hotels') }}</span>
         </a>
-        <a href="{{ route('booking') }}" data-open-booking class="btn-primary min-h-[52px] px-5">{{ __('site.nav.book') }}</a>
+        <a href="{{ route('booking') }}" class="btn-primary min-h-[52px] px-5">{{ __('site.nav.book') }}</a>
     </div>
     @endunless
 </body>

@@ -25,7 +25,7 @@ return [
         'children' => '儿童',
         'promo' => '优惠码',
         'promo_add' => '有优惠码？',
-        'search' => '查询房态',
+        'search' => '选择日期和房型',
         'best_rate' => '官网预订，享最优价格',
         'intro' => '选择日期和房型，即时确认。',
         'help' => '预订需要帮助？',

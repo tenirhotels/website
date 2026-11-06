@@ -62,7 +62,7 @@
                     @endforeach
                 </ul>
             </details>
-            <a href="{{ route('booking') }}" data-open-booking class="btn-primary hidden sm:inline-flex">{{ __('site.nav.book') }}</a>
+            <a href="{{ route('booking') }}" class="btn-primary hidden sm:inline-flex">{{ __('site.nav.book') }}</a>
         </div>
     </div>
 

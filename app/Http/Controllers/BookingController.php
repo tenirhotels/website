@@ -19,7 +19,12 @@ use Illuminate\Http\Request;
  */
 class BookingController extends Controller
 {
-    private const FRIENDLY = ['check_in', 'check_out', 'adults', 'children', 'promo_code', 'room_type', 'special_offer'];
+    /**
+     * Параметры плашки, которых нет в адресе модуля Exely. adults и children сюда не входят:
+     * у Exely они называются так же, и иначе адрес после перенаправления снова считался бы «плашкой»
+     * (бесконечный цикл редиректов).
+     */
+    private const FRIENDLY = ['check_in', 'check_out', 'promo_code', 'room_type', 'special_offer'];
 
     public function __invoke(Request $request)
     {
