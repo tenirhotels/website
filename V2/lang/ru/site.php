@@ -8,7 +8,7 @@ return [
         'stories' => 'Истории',
         'events' => 'События',
         'about' => 'О бренде',
-        'sustainability' => 'Sustainability',
+        'sustainability' => 'Устойчивое развитие',
         'contact' => 'Контакты',
         'book' => 'Забронировать',
         'menu' => 'Меню',

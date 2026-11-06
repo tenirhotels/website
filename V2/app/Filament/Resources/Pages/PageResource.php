@@ -94,7 +94,7 @@ class PageResource extends Resource
                 TextInput::make('heading')->label('Заголовок')->required(),
                 Textarea::make('text')->label('Текст')->rows(2),
                 TextInput::make('button_label')->label('Кнопка'),
-                TextInput::make('button_url')->label('Ссылка')->helperText('booking — модуль бронирования, или адрес /ru/...'),
+                TextInput::make('button_url')->label('Ссылка')->helperText('booking — модуль бронирования; page:адрес-страницы — другая страница сайта (напр. page:sustainability); или адрес /ru/...'),
             ]),
         ];
     }
@@ -106,7 +106,8 @@ class PageResource extends Resource
                 Fields::slug(config('tenir.reserved_slugs')),
                 Select::make('placement')->label('Где показывать ссылку')->default('main')->options([
                     'main' => 'Главное меню и футер',
-                    'footer' => 'Только футер',
+                    'brand' => 'Футер, колонка «Бренд» (не в главном меню)',
+                    'footer' => 'Только футер (юридические ссылки)',
                     'hidden' => 'Нигде (по прямой ссылке)',
                 ]),
             ]),

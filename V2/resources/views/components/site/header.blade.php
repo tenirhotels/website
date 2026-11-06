@@ -36,7 +36,7 @@
 @endphp
 <header data-header class="sticky top-0 z-40 bg-forest text-snow">
     <div class="container-site flex h-[72px] items-center justify-between gap-6 lg:h-[84px]">
-        <button type="button" class="-ml-2 flex size-11 items-center justify-center lg:hidden" data-menu-toggle aria-controls="mobile-menu" aria-expanded="false" aria-label="{{ __('site.nav.menu') }}">
+        <button type="button" class="-ml-2 flex size-11 items-center justify-center xl:hidden" data-menu-toggle aria-controls="mobile-menu" aria-expanded="false" aria-label="{{ __('site.nav.menu') }}">
             <svg data-icon-open aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 7h18M3 12h18M3 17h18"/></svg>
             <svg data-icon-close hidden aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 5l14 14M19 5 5 19"/></svg>
         </button>
@@ -45,9 +45,9 @@
             <img src="/images/logo-light.svg" alt="Tenir" width="150" height="36" class="h-8 w-auto lg:h-9">
         </a>
 
-        <nav aria-label="{{ __('site.nav.menu') }}" class="hidden items-center gap-8 text-[13px] uppercase tracking-[0.16em] lg:flex">
+        <nav aria-label="{{ __('site.nav.menu') }}" class="hidden items-center gap-5 text-[13px] xl:gap-8 uppercase tracking-[0.16em] xl:flex">
             @foreach ($menu as [$label, $href])
-                <a href="{{ $href }}" class="hover:text-ember-light">{{ $label }}</a>
+                <a href="{{ $href }}" class="whitespace-nowrap hover:text-ember-light">{{ $label }}</a>
             @endforeach
         </nav>
 
@@ -72,7 +72,7 @@
     </div>
 
     {{-- Мобильное меню: основные разделы, дополнительные, язык, связь и кнопка бронирования --}}
-    <div id="mobile-menu" hidden class="fixed inset-x-0 bottom-0 top-[72px] z-40 flex flex-col overflow-y-auto overflow-x-hidden overscroll-contain isolate bg-forest px-6 pb-8 pt-4 lg:hidden">
+    <div id="mobile-menu" hidden class="fixed inset-x-0 bottom-0 top-[72px] z-40 flex flex-col overflow-y-auto overflow-x-hidden overscroll-contain isolate bg-forest px-6 pb-8 pt-4 xl:hidden">
         <div class="pattern-scene -z-10 bottom-4 right-0 h-[420px] w-[320px] bg-ember-light opacity-[0.10]" aria-hidden="true"></div>
         <nav aria-label="{{ __('site.nav.menu') }}" class="flex flex-col font-display text-[28px] leading-tight">
             @unless ($single)
