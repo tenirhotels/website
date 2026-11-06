@@ -36,7 +36,13 @@ class Experience extends Model
 
     public function seasonLabels(): string
     {
-        return collect($this->seasons ?? [])
+        $selected = collect($this->seasons ?? []);
+        // Отмечены все сезоны — значит круглый год.
+        if ($selected->isNotEmpty() && collect(array_keys(config('tenir.seasons', [])))->diff($selected)->isEmpty()) {
+            return __('site.common.all_year');
+        }
+
+        return $selected
             ->map(fn ($s) => Locales::pick(config("tenir.seasons.$s", [])))
             ->filter()
             ->implode(' · ');

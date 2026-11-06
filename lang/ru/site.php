@@ -82,6 +82,7 @@ return [
         'book_now' => 'Забронировать',
         'back' => 'Назад',
         'seasons' => 'Сезон',
+        'all_year' => 'Круглый год',
         'duration' => 'Длительность',
         'price_from' => 'от :price ₸',
         'valid_until' => 'до :date',

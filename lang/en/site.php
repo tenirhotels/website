@@ -82,6 +82,7 @@ return [
         'book_now' => 'Book now',
         'back' => 'Back',
         'seasons' => 'Season',
+        'all_year' => 'All year',
         'duration' => 'Duration',
         'price_from' => 'from :price ₸',
         'valid_until' => 'until :date',

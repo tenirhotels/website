@@ -83,6 +83,7 @@ return [
         'book_now' => '立即预订',
         'back' => '返回',
         'seasons' => '季节',
+        'all_year' => '全年',
         'duration' => '时长',
         'price_from' => ':price ₸ 起',
         'valid_until' => '截至 :date',
