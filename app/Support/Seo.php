@@ -18,6 +18,9 @@ class Seo
         public ?string $image = null,
         public array $schema = [],
         public bool $noindex = false,
+        public ?string $keywords = null,
+        public string $type = 'website',
+        public ?string $imageAlt = null,
     ) {}
 
     public static function make(?string $title = null, ?string $description = null, ?string $image = null): self
@@ -34,6 +37,8 @@ class Seo
             title: $suffix ? "$title — $suffix" : $title,
             description: $model->seoDescription(),
             image: $model->og_image ?: ($model->hero_image ?? $model->image ?? null),
+            keywords: $model->seoKeywords(),
+            imageAlt: $title,
         );
     }
 
@@ -42,6 +47,38 @@ class Seo
         $this->schema[] = $schema;
 
         return $this;
+    }
+
+    public function withKeywords(?string $keywords): self
+    {
+        $this->keywords = $keywords;
+
+        return $this;
+    }
+
+    public function ofType(string $type): self
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    public function metaKeywords(): ?string
+    {
+        $text = $this->keywords ?: Setting::text('seo.default_keywords');
+
+        return $text ? str(strip_tags($text))->squish()->limit(250, '')->toString() : null;
+    }
+
+    /** schema.org/BreadcrumbList: Главная → [отель] → текущая страница. */
+    public function breadcrumbs(array $trail): array
+    {
+        $items = [];
+        foreach (array_values($trail) as $i => [$name, $url]) {
+            $items[] = ['@type' => 'ListItem', 'position' => $i + 1, 'name' => $name, 'item' => $url];
+        }
+
+        return ['@context' => 'https://schema.org', '@type' => 'BreadcrumbList', 'itemListElement' => $items];
     }
 
     public function noindex(): self
@@ -68,7 +105,7 @@ class Seo
 
     public function imageUrl(): ?string
     {
-        $path = $this->image ?: Setting::get('seo.og_image');
+        $path = $this->image ?: Setting::get('seo.og_image') ?: \App\Support\Property::primary()?->hero_image;
 
         return $path ? (str_starts_with($path, 'http') ? $path : url(Storage::disk('public')->url($path))) : null;
     }
@@ -126,6 +163,55 @@ class Seo
             'award' => $hotel->slug === config('tenir.recognition_hotel')
                 ? (\App\Models\Recognition::forHome()->where('kind', 'award')->map(fn ($r) => trim($r->t('title').' — '.$r->source.' '.$r->year))->values()->all() ?: null)
                 : null,
+        ]);
+    }
+
+    public static function websiteSchema(): array
+    {
+        return [
+            '@context' => 'https://schema.org',
+            '@type' => 'WebSite',
+            'name' => Setting::text('brand.name', 'Tenir Hotels'),
+            'url' => url('/'),
+            'inLanguage' => Locales::codes(),
+        ];
+    }
+
+    public static function roomSchema($room, Hotel $hotel): array
+    {
+        return array_filter([
+            '@context' => 'https://schema.org',
+            '@type' => 'HotelRoom',
+            'name' => $room->t('name'),
+            'description' => strip_tags((string) $room->t('summary')),
+            'url' => $room->url(),
+            'image' => $room->image ? url(Storage::disk('public')->url($room->image)) : null,
+            'bed' => $room->t('bed'),
+            'occupancy' => $room->max_guests ? ['@type' => 'QuantitativeValue', 'maxValue' => $room->max_guests] : null,
+            'floorSize' => $room->size_m2 ? ['@type' => 'QuantitativeValue', 'value' => $room->size_m2, 'unitCode' => 'MTK'] : null,
+            'amenityFeature' => array_map(fn ($a) => ['@type' => 'LocationFeatureSpecification', 'name' => $a, 'value' => true], $room->amenityList()) ?: null,
+            'containedInPlace' => ['@type' => 'Hotel', 'name' => $hotel->t('name'), 'url' => $hotel->url()],
+        ]);
+    }
+
+    public static function eventSchema($event): array
+    {
+        return array_filter([
+            '@context' => 'https://schema.org',
+            '@type' => 'Event',
+            'name' => $event->t('title'),
+            'description' => strip_tags((string) $event->t('summary')),
+            'startDate' => $event->starts_on?->toDateString(),
+            'endDate' => ($event->ends_on ?? $event->starts_on)?->toDateString(),
+            'eventAttendanceMode' => 'https://schema.org/OfflineEventAttendanceMode',
+            'eventStatus' => 'https://schema.org/EventScheduled',
+            'image' => $event->image ? url(Storage::disk('public')->url($event->image)) : null,
+            'location' => array_filter([
+                '@type' => 'Place',
+                'name' => $event->t('place') ?: $event->hotel?->t('name') ?: Setting::text('brand.name', 'Tenir Hotels'),
+                'address' => $event->hotel?->t('address') ?: null,
+            ]),
+            'url' => $event->url(),
         ]);
     }
 

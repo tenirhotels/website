@@ -28,10 +28,11 @@ class HomeController extends Controller
 
         if (Property::isSingle()) {
             $hotel = Property::primary();
-            $seo = Seo::make()->withSchema(Seo::organizationSchema());
+            $seo = Seo::make()->withSchema(Seo::organizationSchema())->withSchema(Seo::websiteSchema());
             if ($hotel) {
                 $seo->withSchema(Seo::hotelSchema($hotel));
                 $seo->image = $hotel->hero_image;
+                $seo->keywords = $hotel->seoKeywords();
             }
 
             return view('site.home.single', [
@@ -51,7 +52,7 @@ class HomeController extends Controller
             'comingSoon' => Hotel::published()->where('status', Hotel::STATUS_COMING_SOON)->ordered()->get(),
             'experiences' => Experience::published()->with('hotel')->where('is_featured', true)->ordered()->limit(3)->get(),
             'offers' => Offer::active()->with('hotel')->where('is_featured', true)->ordered()->limit(3)->get(),
-            'seo' => Seo::make()->withSchema(Seo::organizationSchema()),
+            'seo' => Seo::make()->withSchema(Seo::organizationSchema())->withSchema(Seo::websiteSchema()),
         ]);
     }
 }
