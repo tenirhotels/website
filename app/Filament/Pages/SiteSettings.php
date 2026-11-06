@@ -70,7 +70,7 @@ class SiteSettings extends Page
             Section::make('Бренд')->schema([
                 Fields::translatable(fn (string $l) => [
                     TextInput::make("brand.name.$l")->label('Название бренда')->placeholder('Tenir Hotels'),
-                    TextInput::make("brand.tagline.$l")->label('Слоган бренда')->placeholder('Ближе к небу'),
+                    TextInput::make("brand.tagline.$l")->label('Слоган бренда')->placeholder('Back to Nature'),
                     Textarea::make("brand.footer_text.$l")->label('Текст в футере')->rows(2),
                     TextInput::make("brand.newsletter_heading.$l")->label('Заголовок подписки')->placeholder('Новые места Tenir'),
                 ], 'brand'),

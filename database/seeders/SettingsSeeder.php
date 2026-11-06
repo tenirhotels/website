@@ -11,7 +11,7 @@ class SettingsSeeder extends Seeder
     {
         Setting::put('brand', [
             'name' => ['ru' => 'Tenir Hotels', 'en' => 'Tenir Hotels', 'kk' => 'Tenir Hotels', 'zh' => 'Tenir Hotels'],
-            'tagline' => ['ru' => 'Ближе к небу', 'en' => 'Closer to the sky', 'kk' => 'Аспанға жақын', 'zh' => '离天空更近'],
+            'tagline' => ['ru' => 'Назад к природе', 'en' => 'Back to Nature', 'kk' => 'Табиғатқа оралу', 'zh' => '回归自然'],
             'footer_text' => [
                 'ru' => 'Эко-отели в горах Казахстана. Тишина, звёзды и снег — у вас за окном.',
                 'en' => 'Eco hotels in the mountains of Kazakhstan. Silence, stars and snow outside your window.',
