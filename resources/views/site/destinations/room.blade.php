@@ -28,7 +28,7 @@
 
         {{-- Карточка бронирования: закреплена при прокрутке на десктопе --}}
         <aside class="flex-1">
-            <div class="sticky top-40 flex flex-col gap-6 bg-white p-8">
+            <div class="sticky top-40 lg:top-56 flex flex-col gap-6 bg-white p-8">
                 <dl class="grid grid-cols-2 gap-5 text-[15px]">
                     @foreach ([
                         __('site.hotel.size') => $room->size_m2 ? $room->size_m2.' м²' : null,

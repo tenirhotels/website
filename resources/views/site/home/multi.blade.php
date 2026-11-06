@@ -7,11 +7,6 @@
         :title="Setting::text('brand.tagline') ?? 'Tenir Hotels'"
         :text="__('site.destinations.intro')" />
 
-    {{-- Плашка бронирования с выбором отеля --}}
-    <div class="container-site relative z-10 -mt-16 max-w-[1280px]">
-        <x-site.booking-bar id="home" />
-        <p class="mt-3 text-[13px] text-stone">{{ __('site.booking.best_rate') }}</p>
-    </div>
 
     {{-- Отели и курорты --}}
     <section class="container-site flex flex-col gap-12 py-24 md:py-32">

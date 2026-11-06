@@ -7,12 +7,6 @@
         :title="Setting::text('brand.tagline') ?? $hotel?->t('tagline') ?? 'Tenir'"
         :text="$hotel?->t('summary')" />
 
-    @if ($hotel?->isOpen())
-        <div class="container-site relative z-10 -mt-16 max-w-[1280px]">
-            <x-site.booking-bar :hotel="$hotel" id="home" />
-            <p class="mt-3 text-[13px] text-stone">{{ __('site.booking.best_rate') }}</p>
-        </div>
-    @endif
 
     @if ($hotel)
         {{-- Об отеле --}}
