@@ -1,4 +1,4 @@
-<article class="group flex flex-col gap-4">
+<article class="group flex h-full flex-col gap-4">
     <a href="{{ $g['url'] }}" class="block aspect-[4/3] overflow-hidden rounded-2xl bg-sand" tabindex="-1" aria-hidden="true">
         @if ($g['image'])
             <img src="{{ $g['image'] }}" alt="" loading="lazy" decoding="async" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]">
@@ -6,11 +6,19 @@
             <div class="flex h-full w-full items-center justify-center bg-forest text-ember-light"><span class="font-display text-5xl">T</span></div>
         @endif
     </a>
-    <p class="text-xs uppercase tracking-[0.2em] text-stone">{{ __('gifts.validity') }}: {{ $g['validity'] }}</p>
-    <h3 class="font-display text-[28px] leading-tight"><a href="{{ $g['url'] }}" class="hover:text-ember">{{ $g['name'] }}</a></h3>
-    @if ($g['description'])<p class="line-clamp-3 text-base leading-relaxed text-slate">{{ $g['description'] }}</p>@endif
-    <div class="mt-1 flex items-center justify-between gap-4">
-        <span class="font-display text-3xl text-forest">{{ number_format($g['price'], 0, '.', ' ') }} ₸</span>
+    @php
+        $name = $g['name'] === mb_strtoupper($g['name']) ? mb_convert_case(mb_strtolower($g['name']), MB_CASE_TITLE) : $g['name'];
+    @endphp
+    @if ($g['validity'])
+        <p class="inline-flex w-fit max-w-full items-center gap-2 rounded-full bg-sand px-3.5 py-1.5 text-[13px] leading-snug text-slate">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0 text-ember" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>
+            <span>{{ $g['validity'] }}</span>
+        </p>
+    @endif
+    <h3 class="font-display text-[28px] leading-tight"><a href="{{ $g['url'] }}" class="hover:text-ember">{{ $name }}</a></h3>
+    @if ($g['description'])<p class="line-clamp-3 text-[15px] leading-relaxed text-slate">{{ $g['description'] }}</p>@endif
+    <div class="mt-auto flex items-center justify-between gap-4 pt-2">
+        <span class="whitespace-nowrap font-display text-3xl text-forest">{{ number_format($g['price'], 0, '.', ' ') }}<span class="ml-1 font-sans text-[0.6em] text-stone">₸</span></span>
         <a href="{{ $g['url'] }}" class="text-[13px] uppercase tracking-[0.2em] text-ember hover:text-forest">{{ __('gifts.give') }} →</a>
     </div>
 </article>
