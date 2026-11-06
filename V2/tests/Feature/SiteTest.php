@@ -63,6 +63,11 @@ class SiteTest extends TestCase
 
         $this->get("/ru/booking?hotel=shymbulak&check_in=$in&check_out=$out&adults=2&children=1&promo_code=SKY")
             ->assertRedirect("/ru/booking?hotel=shymbulak&date=$in&nights=3&adults=2&children=1&promo-code=SKY");
+
+        // Адрес после перенаправления открывается без нового редиректа (раньше был бесконечный цикл).
+        $this->get("/ru/booking?hotel=shymbulak&date=$in&nights=3&adults=2&children=1&promo-code=SKY")->assertOk();
+        $this->get('/ru/booking?adults=2&children=0')->assertOk();
+        $this->get('/ru/booking?hotel=shymbulak')->assertOk();
     }
 
     public function test_booking_page_embeds_travelline_with_context_and_language(): void
