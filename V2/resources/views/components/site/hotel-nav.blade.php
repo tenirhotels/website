@@ -17,7 +17,7 @@
         ?? ($routeName === 'destinations.rooms.show' ? 'rooms' : null);
 @endphp
 @unless (Property::isSingleHotel($hotel))
-    <nav aria-label="{{ $hotel->t('name') }}" class="sticky top-[72px] z-30 border-b border-mist bg-snow/95 backdrop-blur lg:top-[calc(84px+var(--bar-h,0px))]">
+    <nav aria-label="{{ $hotel->t('name') }}" class="sticky top-[72px] z-30 border-b border-mist bg-snow/95 backdrop-blur lg:top-[84px]">
         <div class="container-site flex items-center justify-between gap-6">
             <ul class="-mb-px flex gap-7 overflow-x-auto whitespace-nowrap text-[13px] uppercase tracking-[0.14em]">
                 @foreach ($sections as $section => $label)
