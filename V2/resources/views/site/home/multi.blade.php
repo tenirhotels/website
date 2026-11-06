@@ -24,11 +24,10 @@
         </div>
     </section>
 
-    <x-site.recognition />
-
     @include('site.home.partials.experiences')
     @include('site.home.partials.offers')
     @include('site.home.partials.events')
     <x-site.gifts />
+    <x-site.recognition />
     @include('site.home.partials.stories-horizon')
 </x-layouts.site>
