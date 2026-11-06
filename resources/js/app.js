@@ -1,6 +1,7 @@
 /*
  * Tenir Hotels — небольшой JS без фреймворков:
- * - мобильное меню;
+ * - форма бронирования Exely: большая на первом экране → в шапке при прокрутке (как у Airbnb);
+ * - мобильное меню (на десктопе открывается кнопкой в «сжатой» шапке);
  * - компактная шапка при прокрутке.
  */
 
@@ -23,3 +24,28 @@ if (header?.dataset.transparent === 'true') {
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
 }
+
+// Форма бронирования: один и тот же виджет Exely переезжает между первым экраном и шапкой.
+(() => {
+    const hero = document.querySelector('[data-search-slot="hero"]');
+    const slot = document.querySelector('[data-search-slot="header"]');
+    const box = document.getElementById('tl-search-form');
+    if (!hero || !slot || !box || !header) return;
+
+    const desktop = window.matchMedia('(min-width: 1024px)');
+    let compact = null;
+
+    const update = () => {
+        const next = desktop.matches && hero.getBoundingClientRect().top < header.offsetHeight - 8;
+        if (next === compact) return;
+        compact = next;
+        (next ? slot : hero).appendChild(box);
+        box.dataset.state = next ? 'header' : 'hero';
+        header.dataset.compact = String(next);
+        if (!next) document.getElementById('mobile-menu')?.setAttribute('hidden', '');
+    };
+
+    window.addEventListener('scroll', update, { passive: true });
+    desktop.addEventListener('change', update);
+    update();
+})();

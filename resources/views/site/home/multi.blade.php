@@ -1,11 +1,13 @@
 {{-- Главная в режиме сети: витрина бренда (как Six Senses / Aman). --}}
 @php use App\Models\Setting; @endphp
-<x-layouts.site :seo="$seo">
+<x-layouts.site :seo="$seo" hero-search>
 
     <x-site.page-hero tall :image="$hotels->first()?->hero_image"
         :eyebrow="Setting::text('brand.name', 'Tenir Hotels')"
         :title="Setting::text('brand.tagline') ?? 'Tenir Hotels'"
-        :text="__('site.destinations.intro')" />
+        :text="__('site.destinations.intro')">
+        <x-site.search-hero />
+    </x-site.page-hero>
 
 
     {{-- Отели и курорты --}}
