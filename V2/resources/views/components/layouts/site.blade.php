@@ -71,6 +71,11 @@
 
     <x-site.header :alternates="$alternates" />
 
+    {{-- Плашка Exely под шапкой на всех страницах, кроме самой страницы бронирования --}}
+    @unless (request()->routeIs('booking'))
+        <x-site.booking-bar :hotel="$hotel" />
+    @endunless
+
     <main id="content">
         {{ $slot }}
     </main>
