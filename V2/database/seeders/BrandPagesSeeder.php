@@ -23,7 +23,7 @@ class BrandPagesSeeder extends Seeder
                 'ru' => 'Вновь почувствовать природу и свою связь с ней.',
                 'en' => 'To reconnect with nature and feel part of it again.',
             ],
-            'hero_image' => $this->media('philosophy.webp'),
+            'hero_image' => $this->media('tenir-glacier.webp'),
             'placement' => 'main',
             'sort' => 1,
             'content' => [
@@ -37,14 +37,14 @@ class BrandPagesSeeder extends Seeder
                         'eyebrow' => 'Философия',
                         'heading' => 'Природа как живое, священное присутствие',
                         'body' => '<p>Философия Tenir — дать гостям возможность вновь соединиться с природой, почувствовать её присутствие и осознать, что мы лишь малая часть огромного, прекрасного и гармоничного мира.</p><p>Здесь можно смотреть на звёздное небо, слушать тишину белого снега и шёпот ветра или просто погрузиться в покой величественных вершин Заилийского Алатау — обретая гармонию и силу в природной энергии гор.</p>',
-                        'image' => $this->media('about.webp'),
+                        'image' => $this->media('tenir-logo-portrait.webp'),
                         'image_side' => 'right',
                     ]],
                     ['type' => 'text', 'data' => [
                         'heading' => 'Происхождение имени',
                         'body' => '<p>Имя Tenir восходит к Тенгри — древнему божеству неба в тенгрианской традиции. По-казахски «Тәңір» означает «небо». Тенгрианство выросло из мировоззрения тюркских кочевых племён и было тесно связано с восприятием природы как живого, священного присутствия.</p><p>С древних времён эта вера сближала людей с природой: кочевники считали себя её частью и жили в гармонии с окружающим миром. Верховным божеством, давшим вере имя, был Тенгри — воплощение вечного неба.</p>',
                     ]],
-                    PhilosophyContent::sustainability('ru', $this->media('exp-4.webp')),
+                    PhilosophyContent::sustainability('ru', $this->media('tenir-glacier-portrait.webp')),
                     ['type' => 'cta', 'data' => [
                         'heading' => 'Ближе к небу',
                         'text' => 'Десять модулей на высоте 3 200 м ждут вас.',
@@ -62,14 +62,14 @@ class BrandPagesSeeder extends Seeder
                         'eyebrow' => 'Philosophy',
                         'heading' => 'Nature as a living, sacred presence',
                         'body' => '<p>The philosophy of Tenir is to offer guests the chance to reconnect with nature, to feel its presence, and to realise that we are only a small part of a vast, beautiful and harmonious world.</p><p>Here you can gaze at the star-filled sky, hear the silence of white snow and the whisper of the wind, or simply immerse yourself in the stillness of the Trans-Ili Alatau peaks — finding peace and renewal in the natural energy of the mountains.</p>',
-                        'image' => $this->media('about.webp'),
+                        'image' => $this->media('tenir-logo-portrait.webp'),
                         'image_side' => 'right',
                     ]],
                     ['type' => 'text', 'data' => [
                         'heading' => 'Origin of the name',
                         'body' => '<p>The name Tenir comes from Tengri, the ancient sky deity of the Tengrian tradition. In Kazakh, “Тәңір” means “sky”. Tengrism grew out of the worldview of Turkic nomadic tribes and was closely tied to seeing nature as a living, sacred presence.</p><p>Since ancient times this belief brought people closer to nature: nomads saw themselves as part of it and lived in harmony with the world around them. The supreme deity who gave the belief its name was Tengri — the embodiment of the eternal sky.</p>',
                     ]],
-                    PhilosophyContent::sustainability('en', $this->media('exp-4.webp')),
+                    PhilosophyContent::sustainability('en', $this->media('tenir-glacier-portrait.webp')),
                     ['type' => 'cta', 'data' => [
                         'heading' => 'Closer to the sky',
                         'text' => 'Ten modules at 3,200 m are waiting for you.',
@@ -77,7 +77,7 @@ class BrandPagesSeeder extends Seeder
                         'button_url' => 'booking',
                     ]],
                 ],
-                'kk' => PhilosophyContent::kk($this->media('about.webp'), $this->media('exp-4.webp')),
+                'kk' => PhilosophyContent::kk($this->media('tenir-logo-portrait.webp'), $this->media('tenir-glacier-portrait.webp')),
             ],
             'is_published' => true,
         ]);
@@ -85,7 +85,7 @@ class BrandPagesSeeder extends Seeder
         Page::updateOrCreate(['slug' => 'sustainability'], [
             'title' => ['ru' => 'Устойчивое развитие', 'en' => 'Sustainability', 'kk' => 'Тұрақты даму', 'zh' => '可持续发展'],
             'summary' => SustainabilityContent::summary(),
-            'hero_image' => $this->media('hero-back.webp'),
+            'hero_image' => $this->media('tenir-stilts.webp'),
             'placement' => 'brand',
             'sort' => 2,
             'content' => SustainabilityContent::content(),
