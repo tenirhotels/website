@@ -59,6 +59,7 @@
 
     @include('site.home.partials.experiences')
     @include('site.home.partials.offers')
+    @include('site.home.partials.events')
     <x-site.gifts />
     @include('site.home.partials.brand')
 

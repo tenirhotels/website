@@ -17,6 +17,7 @@ class Experience extends Model
         'booking' => 'Бронирование номера',
         'sales' => 'Запрос в отдел продаж (корп. телефон и e-mail)',
         'contact' => 'Позвонить или написать (телефон, WhatsApp, e-mail бронирования)',
+        'none' => 'Без кнопки (только информация)',
     ];
 
     protected $guarded = ['id'];

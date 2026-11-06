@@ -310,4 +310,17 @@ class SiteTest extends TestCase
         $this->get('/ru')->assertSee('Наша философия')->assertSee('Политика конфиденциальности')->assertSee('Карта курорта');
         $this->get('/en')->assertSee('Our philosophy');
     }
+
+    public function test_events_calendar_shows_upcoming_and_hides_past(): void
+    {
+        $base = ['cta' => 'sales', 'is_published' => true, 'summary' => ['ru' => 'Описание']];
+        \App\Models\Event::create($base + ['slug' => 'new-year', 'title' => ['ru' => 'Новогодний ужин'], 'starts_on' => now()->addDays(10), 'ends_on' => now()->addDays(12), 'time_text' => '20:00']);
+        \App\Models\Event::create($base + ['slug' => 'old-party', 'title' => ['ru' => 'Прошлая вечеринка'], 'starts_on' => now()->subDays(20), 'cta' => 'booking']);
+
+        $this->get('/ru/events')->assertOk()->assertSee('Новогодний ужин')->assertDontSee('Прошлая вечеринка');
+        $this->get('/ru/events/new-year')->assertOk()->assertSee('Запрос на мероприятие', false)->assertSee('sales@tenirhotels.com', false);
+        $this->get('/ru/events/old-party')->assertOk()->assertSee('уже прошло', false);
+        $this->get('/ru')->assertOk()->assertSee('Новогодний ужин');
+        $this->get('/sitemap.xml')->assertSee('/ru/events/new-year', false);
+    }
 }

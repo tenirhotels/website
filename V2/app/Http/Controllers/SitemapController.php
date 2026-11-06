@@ -24,6 +24,7 @@ class SitemapController extends Controller
             $entries[] = ['destinations.index', [], null];
         }
         $entries[] = ['experiences.index', [], null];
+        $entries[] = ['events.index', [], null];
         $entries[] = ['offers.index', [], null];
         $entries[] = ['stories.index', [], null];
         $entries[] = ['map', [], null];
@@ -52,6 +53,9 @@ class SitemapController extends Controller
         }
         foreach (Experience::published()->get() as $e) {
             $entries[] = ['experiences.show', ['experience' => $e->slug], $e->updated_at];
+        }
+        foreach (\App\Models\Event::upcoming()->get() as $ev) {
+            $entries[] = ['events.show', ['event' => $ev->slug], $ev->updated_at];
         }
         foreach (Offer::active()->get() as $o) {
             $entries[] = ['offers.show', ['offer' => $o->slug], $o->updated_at];

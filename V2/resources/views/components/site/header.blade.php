@@ -14,11 +14,13 @@
             [__('site.hotel.dining'), $hotel->sectionUrl('dining')],
             [__('site.nav.experiences'), route('experiences.index')],
             [__('site.nav.offers'), route('offers.index')],
+            [__('site.nav.events'), route('events.index')],
         ]
         : [
             [__('site.nav.destinations'), route('destinations.index')],
             [__('site.nav.experiences'), route('experiences.index')],
             [__('site.nav.offers'), route('offers.index')],
+            [__('site.nav.events'), route('events.index')],
         ];
     foreach ($brandPages as $page) {
         $menu[] = [$page->t('title'), $page->url()];

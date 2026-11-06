@@ -24,6 +24,8 @@ class SettingsSeeder extends Seeder
             'phone' => '+7 727 313 14 15',
             'whatsapp' => '+7 727 313 14 15',
             'email' => 'reservations@tenirhotels.com',
+            'sales_phone' => '+7 700 427 18 48',
+            'sales_email' => 'sales@tenirhotels.com',
             'hours' => '09:00–21:00',
         ]);
 
