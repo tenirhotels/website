@@ -20,7 +20,7 @@
             @endif
         </div>
         <aside class="flex-1">
-            <div class="sticky top-32 lg:top-52 flex flex-col gap-4 bg-white p-8">
+            <div class="sticky top-32 flex flex-col gap-4 bg-white p-8">
                 @if ($offer->min_nights)<p>{{ __('site.offers.min_nights', ['count' => $offer->min_nights]) }}</p>@endif
                 @if ($offer->valid_to)<p class="text-slate">{{ __('site.common.valid_until', ['date' => $offer->valid_to->translatedFormat('j F Y')]) }}</p>@endif
                 @if ($offer->promo_code)<p class="text-slate">{{ __('site.offers.promo', ['code' => $offer->promo_code]) }}</p>@endif

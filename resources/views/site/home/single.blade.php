@@ -1,14 +1,17 @@
 {{-- Главная в режиме одного отеля: весь сайт — сайт этого отеля. --}}
 @php use App\Models\Setting; use App\Support\Locales; @endphp
-<x-layouts.site :seo="$seo" :hotel="$hotel" :hero-search="(bool) $hotel?->isOpen()">
+<x-layouts.site :seo="$seo" :hotel="$hotel">
 
     <x-site.page-hero tall :image="$hotel?->hero_image"
         :eyebrow="$hotel ? collect([$hotel->altitude_m ? number_format($hotel->altitude_m, 0, ',', ' ').' м' : null, $hotel->t('name'), $hotel->t('city')])->filter()->implode(' · ') : null"
         :title="Setting::text('brand.tagline') ?? $hotel?->t('tagline') ?? 'Tenir'"
-        :text="$hotel?->t('summary')">
-        @if ($hotel?->isOpen())<x-site.search-hero />@endif
-    </x-site.page-hero>
+        :text="$hotel?->t('summary')" />
 
+    @if ($hotel?->isOpen())
+        <div class="container-site relative z-10 -mt-14">
+            <x-site.booking-bar :hotel="$hotel" id="home" />
+        </div>
+    @endif
 
     @if ($hotel)
         {{-- Об отеле --}}

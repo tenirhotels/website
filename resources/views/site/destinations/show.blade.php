@@ -1,16 +1,19 @@
-<x-layouts.site :seo="$seo" :hotel="$hotel" :hero-search="$hotel->isOpen()">
+<x-layouts.site :seo="$seo" :hotel="$hotel">
     <x-site.page-hero tall :image="$hotel->hero_image"
         :eyebrow="collect([$hotel->altitude_m ? __('site.hotel.altitude', ['value' => number_format($hotel->altitude_m, 0, ',', ' ')]) : null, $hotel->t('region')])->filter()->implode(' · ')"
         :title="$hotel->t('name')" :text="$hotel->t('tagline')">
-        @if ($hotel->isOpen())
-            <x-site.search-hero />
-        @else
+        @unless ($hotel->isOpen())
             <p class="eyebrow-light">{{ $hotel->t('opening_label') ?? __('site.hotel.coming_soon') }}</p>
-        @endif
+        @endunless
     </x-site.page-hero>
 
-    <x-site.hotel-nav :hotel="$hotel" />
+    @if ($hotel->isOpen())
+        <div class="container-site relative z-10 -mt-14">
+            <x-site.booking-bar :hotel="$hotel" id="hotel" />
+        </div>
+    @endif
 
+    <x-site.hotel-nav :hotel="$hotel" />
 
     <section class="container-site flex flex-col gap-12 py-20 md:py-28 lg:flex-row lg:gap-20">
         <div class="flex flex-[1.3] flex-col gap-6">
