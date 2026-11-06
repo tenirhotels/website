@@ -58,7 +58,7 @@
     <x-site.analytics />
     @if ($custom = Setting::get('analytics.custom_head')){!! $custom !!}@endif
 </head>
-<body @class(['min-h-screen', 'pb-[88px] lg:pb-0' => ! request()->attributes->get('tenir.exely_widget')])>
+<body @class(['min-h-screen', 'pb-[88px] lg:pb-0' => ! request()->attributes->get('tenir.exely_widget') && ! request()->routeIs('map')])>
     <a href="#content" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:bg-white focus:px-4 focus:py-2">{{ __('site.nav.skip') }}</a>
 
     <x-site.header :alternates="$alternates" />
@@ -71,7 +71,7 @@
 
     {{-- Телефон: на страницах без виджета Exely — одна кнопка внизу, ведёт на страницу бронирования
          (там календарь с ценами). На главной и странице отеля есть плавающая кнопка Exely «Узнать цены». --}}
-    @if (! request()->routeIs('booking') && ! request()->attributes->get('tenir.exely_widget'))
+    @if (! request()->routeIs('booking', 'map') && ! request()->attributes->get('tenir.exely_widget'))
         <div class="fixed inset-x-0 bottom-0 z-30 bg-white px-4 pb-5 pt-3 shadow-[0_-8px_24px_rgba(22,33,27,0.12)] lg:hidden">
             <a href="{{ route('booking') }}" class="btn-primary w-full min-h-[52px]">{{ __('site.nav.book') }}</a>
         </div>
