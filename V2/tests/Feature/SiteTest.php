@@ -257,7 +257,7 @@ class SiteTest extends TestCase
         foreach (['kk' => 'Курорт картасы', 'ru' => 'Карта курорта', 'en' => 'Resort map', 'zh' => '度假区地图'] as $locale => $title) {
             $this->get("/$locale/map")->assertOk()->assertSee($title)->assertSee('data-pin="r1"', false)->assertSee('data-pin="st-combi1"', false);
         }
-        $this->get('/ru/map')->assertSee('≈22 мин', false)->assertSee('Верёвочный парк Медеу')->assertSee('Лестница здоровья');
+        $this->get('/ru/map')->assertSee('≈22 мин', false)->assertSee('↑ Вверх: Combi-1', false)->assertSee('↓ Вниз: Медеу', false)->assertSee('Верёвочный парк Медеу')->assertSee('Лестница здоровья');
         $this->get('/en/map')->assertSee('Rope park Medeu')->assertSee('Cable cars');
         $this->get('/ru/map')->assertDontSee('z-30 bg-white px-4 pb-5', false);
         $this->get('/ru/contact')->assertSee('z-30 bg-white px-4 pb-5', false);
