@@ -28,6 +28,7 @@
 
     @include('site.home.partials.experiences')
     @include('site.home.partials.offers')
+    <x-site.gifts />
     @include('site.home.partials.brand')
     @include('site.home.partials.stories-horizon')
 </x-layouts.site>
