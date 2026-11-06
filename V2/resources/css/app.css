@@ -101,7 +101,7 @@
 }
 
 /* Лента карточек: на телефоне — горизонтальная прокрутка (страница короче), с sm — сетка */
-.rail { display: flex; gap: 1rem; margin-inline: -1rem; padding-inline: 1rem; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; overscroll-behavior-x: contain; }
+.rail { display: flex; gap: 1rem; margin-inline: -1rem; padding-inline: 1rem; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: 1rem; scrollbar-width: none; overscroll-behavior-x: contain; }
 .rail::-webkit-scrollbar { display: none; }
 .rail > * { flex: 0 0 82%; scroll-snap-align: start; }
 @media (min-width: 640px) {
