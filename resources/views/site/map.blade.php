@@ -49,7 +49,14 @@
                             if (isset($p['cable'])) {
                                 $idx = $stations->search(fn ($c) => $c['key'] === $p['cable']);
                                 $cur = $stations[$idx];
-                                $note = $cur['next'] ? __('map.next').': '.$stationName($stations[$idx + 1]['key']).' · ≈'.$cur['next'].' '.__('map.min') : null;
+                                $lines = [];
+                                if ($cur['next']) {
+                                    $lines[] = '↑ '.__('map.up').': '.__('map.tags.station_'.$stations[$idx + 1]['key']).' · ≈'.$cur['next'].' '.__('map.min');
+                                }
+                                if ($idx > 0 && $stations[$idx - 1]['next']) {
+                                    $lines[] = '↓ '.__('map.down').': '.__('map.tags.station_'.$stations[$idx - 1]['key']).' · ≈'.$stations[$idx - 1]['next'].' '.__('map.min');
+                                }
+                                $note = $lines ? implode("\n", $lines) : null;
                             }
                         @endphp
                         <button type="button" id="pin-{{ $p['id'] }}" data-pin="{{ $p['id'] }}" data-kind="{{ $p['kind'] }}"
@@ -83,7 +90,7 @@
                     <button type="button" data-card-close class="map-card-close" aria-label="{{ __('map.close') }}">×</button>
                     <p class="eyebrow" data-card-kind></p>
                     <h2 class="h-display mt-1 text-2xl text-forest md:text-3xl" data-card-name></h2>
-                    <p class="mt-2 text-[15px] text-slate" data-card-note hidden></p>
+                    <p class="mt-2 whitespace-pre-line text-[15px] leading-relaxed text-slate" data-card-note hidden></p>
                     <a class="link-line mt-4" data-card-link hidden></a>
                 </div>
             </div>
@@ -103,7 +110,7 @@
                             <span class="relative mt-1.5 size-[15px] shrink-0 rounded-full border-2 border-forest bg-snow"></span>
                             <div>
                                 <button type="button" data-focus="st-{{ $c['key'] }}" class="text-left text-lg text-ink hover:text-ember">{{ $stationName($c['key']) }}</button>
-                                @if ($c['next'])<p class="text-sm text-stone">≈{{ $c['next'] }} {{ __('map.min') }} {{ __('map.next') }}</p>@endif
+                                @if ($c['next'])<p class="text-sm text-stone">≈{{ $c['next'] }} {{ __('map.min') }} {{ __('map.next') }} · {{ __('map.both_ways') }}</p>@endif
                             </div>
                         </li>
                     @endforeach
