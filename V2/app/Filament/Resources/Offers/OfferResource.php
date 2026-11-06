@@ -24,6 +24,8 @@ use UnitEnum;
 
 class OfferResource extends Resource
 {
+    use \App\Filament\Support\UsesIdInUrls;
+
     // В админке адреса записей по id, на сайте — по слагу.
     protected static ?string $recordRouteKeyName = 'id';
 
