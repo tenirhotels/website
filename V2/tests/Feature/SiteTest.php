@@ -251,4 +251,19 @@ class SiteTest extends TestCase
         $this->assertSame('+7 700 000 00 00', Setting::get('contacts.phone'));
         $this->assertSame('reservations@tenirhotels.com', Setting::get('contacts.email'));
     }
+    public function test_resort_map_page_in_all_languages(): void
+    {
+        foreach (['kk' => 'Курорт картасы', 'ru' => 'Карта курорта', 'en' => 'Resort map', 'zh' => '度假区地图'] as $locale => $title) {
+            $this->get("/$locale/map")->assertOk()->assertSee($title)->assertSee('data-pin="r1"', false)->assertSee('data-pin="st-combi1"', false);
+        }
+        $this->get('/ru/map')->assertSee('≈22 мин', false)->assertSee('Верёвочный парк Медеу')->assertSee('Лестница здоровья');
+        $this->get('/en/map')->assertSee('Rope park Medeu')->assertSee('Cable cars');
+        $this->get('/sitemap.xml')->assertSee('/ru/map', false);
+        $this->assertFileExists(public_path('images/map/winter.webp'));
+        $this->assertFileExists(public_path('images/map/summer.webp'));
+
+        $this->assertCount(3, \App\Support\ResortMap::geoPoints());
+        $this->assertSame('winter', \App\Support\ResortMap::defaultSeason(new \DateTimeImmutable('2026-12-15')));
+        $this->assertSame('summer', \App\Support\ResortMap::defaultSeason(new \DateTimeImmutable('2026-07-15')));
+    }
 }

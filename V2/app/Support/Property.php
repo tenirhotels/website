@@ -114,6 +114,6 @@ class Property
     /** Слаги, занятые короткими адресами одного отеля. */
     public static function reservedSlugs(): array
     {
-        return ['rooms', 'dining', 'gallery', 'getting-here'];
+        return ['rooms', 'dining', 'gallery', 'getting-here', 'map'];
     }
 }
