@@ -15,7 +15,7 @@
 
     @if ($hotel)
         {{-- Об отеле --}}
-        <section class="container-site flex flex-col gap-16 py-24 md:py-32 lg:flex-row lg:items-center lg:gap-20">
+        <section class="container-site flex flex-col gap-10 md:gap-16 py-14 md:py-20 lg:py-28 lg:flex-row lg:items-center lg:gap-20">
             <div class="flex flex-1 flex-col gap-7">
                 <p class="eyebrow">{{ $hotel->t('name') }}</p>
                 <h2 class="h-section">{{ $hotel->t('tagline') }}</h2>
@@ -45,7 +45,7 @@
     {{-- Ресторан --}}
     @if ($venues->isNotEmpty())
         @php($venue = $venues->first())
-        <section class="container-site flex flex-col gap-12 py-24 lg:flex-row-reverse lg:items-center lg:gap-20">
+        <section class="container-site flex flex-col gap-8 md:gap-12 py-14 md:py-20 lg:py-24 lg:flex-row-reverse lg:items-center lg:gap-20">
             <div class="flex flex-1 flex-col gap-6">
                 <p class="eyebrow">{{ __('site.hotel.dining') }}</p>
                 <h2 class="h-section">{{ $venue->t('name') }}</h2>
@@ -62,7 +62,7 @@
     @include('site.home.partials.brand')
 
     @if ($widget = Locales::pick($hotel?->reviews_widget ?? []))
-        <section id="reviews" class="bg-white"><div class="container-site py-24">{!! $widget !!}</div></section>
+        <section id="reviews" class="bg-white"><div class="container-site py-14 md:py-20 lg:py-24">{!! $widget !!}</div></section>
     @endif
 
     @include('site.home.partials.stories-horizon')

@@ -7,7 +7,7 @@
 @endphp
 <footer class="relative isolate overflow-hidden bg-forest-deep text-[#D8DCD8]">
     <div class="pattern-tile -z-10 bg-white opacity-[0.035]" aria-hidden="true"></div>
-    <div class="container-site flex flex-col gap-14 pb-10 pt-20">
+    <div class="container-site flex flex-col gap-8 md:gap-14 pb-10 pt-20">
         <div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
             <div class="flex flex-col gap-5">
                 <img src="/images/logo-light.svg" alt="Tenir" width="150" height="36" class="h-9 w-auto self-start">

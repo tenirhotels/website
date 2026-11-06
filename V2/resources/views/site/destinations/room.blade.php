@@ -2,7 +2,7 @@
     <x-site.page-hero :image="$room->image" :eyebrow="$hotel->t('name')" :title="$room->t('name')" :text="$room->t('summary')" />
     <x-site.hotel-nav :hotel="$hotel" />
 
-    <section class="container-site flex flex-col gap-14 py-20 lg:flex-row lg:gap-20">
+    <section class="container-site flex flex-col gap-8 md:gap-14 py-12 md:py-16 lg:py-20 lg:flex-row lg:gap-20">
         <div class="flex flex-[1.5] flex-col gap-10">
             <div class="prose-tenir">{!! $room->t('description') !!}</div>
 
@@ -52,7 +52,7 @@
 
     @if ($others->isNotEmpty())
         <section class="bg-white">
-            <div class="container-site flex flex-col gap-12 py-20">
+            <div class="container-site flex flex-col gap-8 md:gap-12 py-12 md:py-16 lg:py-20">
                 <x-site.section-head :title="__('site.hotel.other_rooms')" level="h2" />
                 <div class="grid gap-8 md:grid-cols-3">
                     @foreach ($others as $r)

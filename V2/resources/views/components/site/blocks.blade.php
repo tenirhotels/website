@@ -4,7 +4,7 @@
     @php($d = $block['data'] ?? [])
     @switch($block['type'] ?? null)
         @case('intro')
-            <section class="container-site flex max-w-4xl flex-col gap-6 py-20 text-center md:py-28">
+            <section class="container-site flex max-w-4xl flex-col gap-6 py-12 md:py-16 lg:py-20 text-center md:py-28">
                 @if (! empty($d['eyebrow']))<p class="eyebrow">{{ $d['eyebrow'] }}</p>@endif
                 <h2 class="h-section">{{ $d['heading'] ?? '' }}</h2>
                 @if (! empty($d['text']))<p class="lead mx-auto max-w-2xl">{{ $d['text'] }}</p>@endif
@@ -19,7 +19,7 @@
             @break
 
         @case('image_text')
-            <section class="container-site py-16 md:py-24">
+            <section class="container-site py-10 md:py-14 md:py-24">
                 <div @class(['flex flex-col items-center gap-12 lg:flex-row lg:gap-20', 'lg:flex-row-reverse' => ($d['image_side'] ?? 'right') === 'left'])>
                     <div class="flex flex-1 flex-col gap-6">
                         @if (! empty($d['eyebrow']))<p class="eyebrow">{{ $d['eyebrow'] }}</p>@endif
@@ -35,7 +35,7 @@
 
         @case('quote')
             <section class="bg-sand">
-                <figure class="container-site flex max-w-4xl flex-col items-center gap-6 py-20 text-center md:py-28">
+                <figure class="container-site flex max-w-4xl flex-col items-center gap-6 py-12 md:py-16 lg:py-20 text-center md:py-28">
                     <blockquote class="font-display text-3xl italic leading-snug md:text-4xl">«{{ $d['quote'] ?? '' }}»</blockquote>
                     @if (! empty($d['caption']))<figcaption class="text-sm uppercase tracking-[0.2em] text-stone">{{ $d['caption'] }}</figcaption>@endif
                 </figure>
@@ -44,7 +44,7 @@
 
         @case('word')
             <section class="bg-forest text-snow">
-                <div class="container-site flex max-w-4xl flex-col items-center gap-6 py-24 text-center md:py-32">
+                <div class="container-site flex max-w-4xl flex-col items-center gap-6 py-14 text-center md:py-20 lg:py-28">
                     <p class="font-display text-7xl tracking-[0.04em] md:text-9xl">{{ $d['word'] ?? 'Тәңір' }}</p>
                     @if (! empty($d['meaning']))<p class="text-sm uppercase tracking-[0.3em] text-snow/80">{{ $d['meaning'] }}</p>@endif
                     @if (! empty($d['text']))<p class="font-display text-2xl italic leading-relaxed md:text-3xl">{{ $d['text'] }}</p>@endif
@@ -53,7 +53,7 @@
             @break
 
         @case('pillars')
-            <section class="container-site py-16 md:py-24">
+            <section class="container-site py-10 md:py-14 md:py-24">
                 @if (! empty($d['heading']))
                     <x-site.section-head :eyebrow="$d['eyebrow'] ?? null" :title="$d['heading']" class="mb-12" />
                 @endif
@@ -93,7 +93,7 @@
         @case('cta')
             @php($href = ($d['button_url'] ?? '') === 'booking' ? route('booking') : ($d['button_url'] ?? null))
             <section class="bg-sand">
-                <div class="container-site flex flex-col items-center gap-5 py-20 text-center">
+                <div class="container-site flex flex-col items-center gap-5 py-12 md:py-16 lg:py-20 text-center">
                     <h2 class="h-section">{{ $d['heading'] ?? '' }}</h2>
                     @if (! empty($d['text']))<p class="lead max-w-xl">{{ $d['text'] }}</p>@endif
                     @if ($href && ! empty($d['button_label']))

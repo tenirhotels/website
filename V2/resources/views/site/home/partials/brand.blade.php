@@ -6,7 +6,7 @@
 
 @if ($brandPage)
     <section class="bg-forest text-snow">
-        <div class="container-site flex max-w-4xl flex-col items-center gap-7 py-28 text-center md:py-36">
+        <div class="container-site flex max-w-4xl flex-col items-center gap-7 py-16 text-center md:py-24 lg:py-32">
             <p class="eyebrow-light">{{ $brandPage->t('title') }}</p>
             <p class="font-display text-7xl tracking-[0.04em] md:text-[120px] md:leading-none">{{ $word['word'] ?? 'Тәңір' }}</p>
             @if (! empty($word['meaning']))<p class="text-sm uppercase tracking-[0.3em] text-snow/80">{{ $word['meaning'] }}</p>@endif
@@ -17,7 +17,7 @@
 @endif
 
 @if ($sustainabilityPage && $pillars)
-    <section class="container-site flex flex-col gap-12 py-24">
+    <section class="container-site flex flex-col gap-8 md:gap-12 py-14 md:py-20 lg:py-24">
         <x-site.section-head :eyebrow="$sustainabilityPage->t('title')" :title="$pillars['heading'] ?? $sustainabilityPage->t('summary')" :link="$sustainabilityPage->url()" :link-label="__('site.common.learn_more')" />
         <ol class="grid border-t border-mist sm:grid-cols-2 lg:grid-cols-4">
             @foreach (array_slice($pillars['items'] ?? [], 0, 4) as $i => $item)

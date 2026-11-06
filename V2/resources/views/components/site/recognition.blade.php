@@ -2,7 +2,7 @@
 @if ($items->isNotEmpty())
     {{-- Награды и публикации: ведутся в админке «Сайт → Награды и СМИ»; только подтверждённые факты со ссылкой на источник. --}}
     <section class="bg-sand" aria-labelledby="recognition-title">
-        <div class="container-site flex flex-col gap-10 py-16 md:py-20">
+        <div class="container-site flex flex-col gap-10 py-10 md:py-14 md:py-20">
             <div class="flex flex-col gap-3">
                 <p class="eyebrow">{{ __('site.recognition.eyebrow') }}</p>
                 <h2 id="recognition-title" class="h-section">{{ __('site.recognition.title') }}</h2>

@@ -1,7 +1,7 @@
 <x-layouts.site :seo="$seo" :hotel="$experience->hotel">
     <x-site.page-hero :image="$experience->image" :eyebrow="collect([$experience->categoryLabel(), $experience->hotel?->t('name')])->filter()->implode(' · ')" :title="$experience->t('title')" :text="$experience->t('summary')" />
 
-    <section class="container-site flex flex-col gap-14 py-20 lg:flex-row lg:gap-20">
+    <section class="container-site flex flex-col gap-8 md:gap-14 py-12 md:py-16 lg:py-20 lg:flex-row lg:gap-20">
         <div class="flex flex-[1.5] flex-col gap-10">
             <div class="prose-tenir">{!! $experience->t('description') !!}</div>
             @if ($experience->gallery)
@@ -30,7 +30,7 @@
 
     @if ($related->isNotEmpty())
         <section class="bg-sand">
-            <div class="container-site flex flex-col gap-12 py-20">
+            <div class="container-site flex flex-col gap-8 md:gap-12 py-12 md:py-16 lg:py-20">
                 <x-site.section-head :title="__('site.common.related')" />
                 <div class="grid gap-8 md:grid-cols-3">
                     @foreach ($related as $e)
