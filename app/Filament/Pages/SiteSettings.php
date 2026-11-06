@@ -88,10 +88,12 @@ class SiteSettings extends Page
                 Toggle::make('gifts.enabled')->label('Показывать сертификаты на сайте')->default(true),
                 TextInput::make('gifts.url')->label('Адрес витрины gifter')->url()->placeholder('https://gifts.tenirhotels.com'),
             ]),
-            Section::make('Соцсети')->columns(3)->schema([
+            Section::make('Соцсети')->columns(2)->schema([
                 TextInput::make('social.instagram')->label('Instagram')->url(),
-                TextInput::make('social.facebook')->label('Facebook')->url(),
                 TextInput::make('social.youtube')->label('YouTube')->url(),
+                TextInput::make('social.tiktok')->label('TikTok')->url(),
+                TextInput::make('social.soundcloud')->label('SoundCloud')->url(),
+                TextInput::make('social.facebook')->label('Facebook')->url(),
             ]),
             Section::make('Аналитика и пиксели')
                 ->description('Счётчики подключаются после первого действия посетителя (скролл, касание) или через 4 секунды — так они не замедляют загрузку страницы. Пустое поле — счётчик не выводится.')

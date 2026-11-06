@@ -16,7 +16,7 @@ class BrandPagesSeeder extends Seeder
     public function run(): void
     {
         Page::updateOrCreate(['slug' => 'about'], [
-            'title' => ['ru' => 'О бренде', 'en' => 'About', 'kk' => 'Бренд туралы', 'zh' => '品牌'],
+            'title' => ['ru' => 'Наша философия', 'en' => 'Our philosophy', 'kk' => 'Біздің философия', 'zh' => '我们的理念'],
             'summary' => [
                 'ru' => 'Вновь почувствовать природу и свою связь с ней.',
                 'en' => 'To reconnect with nature and feel part of it again.',
