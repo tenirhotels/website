@@ -1,0 +1,6 @@
+.env
+*.log
+/public/storage
+/public/hot
+/storage/*.key
+/database/*.sqlite
