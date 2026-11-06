@@ -742,6 +742,7 @@ class ComposerStaticInitbed664a3137a0af20c24a0f2c8436f70
         'App\\Filament\\Resources\\Venues\\Pages\\ListVenues' => __DIR__ . '/../..' . '/app/Filament/Resources/Venues/Pages/ListVenues.php',
         'App\\Filament\\Resources\\Venues\\VenueResource' => __DIR__ . '/../..' . '/app/Filament/Resources/Venues/VenueResource.php',
         'App\\Filament\\Support\\Fields' => __DIR__ . '/../..' . '/app/Filament/Support/Fields.php',
+        'App\\Filament\\Support\\UsesIdInUrls' => __DIR__ . '/../..' . '/app/Filament/Support/UsesIdInUrls.php',
         'App\\Http\\Controllers\\BookingController' => __DIR__ . '/../..' . '/app/Http/Controllers/BookingController.php',
         'App\\Http\\Controllers\\Concerns\\RendersHotelPages' => __DIR__ . '/../..' . '/app/Http/Controllers/Concerns/RendersHotelPages.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',

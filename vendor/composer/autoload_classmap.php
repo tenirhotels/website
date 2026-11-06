@@ -55,6 +55,7 @@ return array(
     'App\\Filament\\Resources\\Venues\\Pages\\ListVenues' => $baseDir . '/app/Filament/Resources/Venues/Pages/ListVenues.php',
     'App\\Filament\\Resources\\Venues\\VenueResource' => $baseDir . '/app/Filament/Resources/Venues/VenueResource.php',
     'App\\Filament\\Support\\Fields' => $baseDir . '/app/Filament/Support/Fields.php',
+    'App\\Filament\\Support\\UsesIdInUrls' => $baseDir . '/app/Filament/Support/UsesIdInUrls.php',
     'App\\Http\\Controllers\\BookingController' => $baseDir . '/app/Http/Controllers/BookingController.php',
     'App\\Http\\Controllers\\Concerns\\RendersHotelPages' => $baseDir . '/app/Http/Controllers/Concerns/RendersHotelPages.php',
     'App\\Http\\Controllers\\Controller' => $baseDir . '/app/Http/Controllers/Controller.php',

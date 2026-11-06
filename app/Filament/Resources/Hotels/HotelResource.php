@@ -27,6 +27,8 @@ use UnitEnum;
 
 class HotelResource extends Resource
 {
+    use \App\Filament\Support\UsesIdInUrls;
+
     // В админке адреса записей по id, на сайте — по слагу.
     protected static ?string $recordRouteKeyName = 'id';
 
