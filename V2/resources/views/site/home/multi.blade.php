@@ -30,6 +30,5 @@
     @include('site.home.partials.offers')
     @include('site.home.partials.events')
     <x-site.gifts />
-    @include('site.home.partials.brand')
     @include('site.home.partials.stories-horizon')
 </x-layouts.site>

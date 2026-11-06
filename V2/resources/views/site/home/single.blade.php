@@ -61,7 +61,6 @@
     @include('site.home.partials.offers')
     @include('site.home.partials.events')
     <x-site.gifts />
-    @include('site.home.partials.brand')
 
     @if ($widget = Locales::pick($hotel?->reviews_widget ?? []))
         <section id="reviews" class="bg-white"><div class="container-site py-14 md:py-20 lg:py-24">{!! $widget !!}</div></section>
