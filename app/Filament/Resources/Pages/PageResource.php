@@ -63,6 +63,8 @@ class PageResource extends Resource
                 RichEditor::make('body')->label('Текст'),
                 Fields::image('image', 'Фото', 'pages'),
                 Select::make('image_side')->label('Фото')->options(['left' => 'Слева', 'right' => 'Справа'])->default('right'),
+                TextInput::make('link_label')->label('Ссылка: текст'),
+                TextInput::make('link_url')->label('Ссылка: адрес')->helperText('page:адрес-страницы — другая страница сайта (напр. page:sustainability), или адрес /ru/...'),
             ]),
             Block::make('quote')->label('Цитата')->icon(Heroicon::OutlinedChatBubbleBottomCenterText)->schema([
                 Textarea::make('quote')->label('Цитата')->required()->rows(3),
