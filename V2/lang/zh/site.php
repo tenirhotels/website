@@ -116,6 +116,7 @@ return [
         'brand' => '品牌',
         'follow' => '关注我们',
         'rights' => '版权所有。',
+        'sales' => '企业咨询与旅行社',
         'reservations' => '预订部',
     ],
 ];

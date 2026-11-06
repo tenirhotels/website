@@ -80,6 +80,8 @@ class SiteSettings extends Page
                 TextInput::make('contacts.phone')->label('Телефон')->tel(),
                 TextInput::make('contacts.whatsapp')->label('WhatsApp')->tel(),
                 TextInput::make('contacts.email')->label('E-mail')->email(),
+                TextInput::make('contacts.sales_phone')->label('Телефон: корпоративные запросы, туроператоры')->tel(),
+                TextInput::make('contacts.sales_email')->label('E-mail: корпоративные запросы, туроператоры')->email(),
                 TextInput::make('contacts.hours')->label('Часы работы')->placeholder('09:00–21:00'),
             ]),
             Section::make('Соцсети')->columns(3)->schema([

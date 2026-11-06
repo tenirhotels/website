@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Experience;
+use App\Models\Faq;
 use App\Models\Hotel;
 use App\Models\Offer;
 use App\Models\Page;
@@ -48,6 +49,30 @@ class SiteTest extends TestCase
 
         \App\Models\Recognition::query()->get()->each->update(['is_published' => false]);
         $this->get('/en')->assertOk()->assertDontSee('One MICHELIN Key');
+    }
+
+    public function test_legacy_site_content_import_fills_placeholders_and_keeps_edits(): void
+    {
+        $hotel = Hotel::where('slug', 'shymbulak')->first();
+        $offer = Offer::where('slug', 'long-stay')->first();
+        $this->assertSame(3, (int) $offer->min_nights);
+
+        $migration = require database_path('migrations/2026_11_06_000300_import_legacy_site_content.php');
+        $migration->up();
+        $migration->up(); // идемпотентно
+
+        $this->get('/ru/getting-here')->assertOk()->assertSee('Комби-1')->assertSee('Multipass')->assertSee('50 000');
+        $this->get('/kk/getting-here')->assertOk()->assertSee('Комби-2');
+        $this->get('/ru/experiences/welcome-tour')->assertOk()->assertSee('сертифицированными гидами')->assertDontSee('Дополните');
+        $this->get('/ru/dining')->assertOk()->assertDontSee('Опишите')->assertSee('Самый высокогорный ресторан');
+        $this->get('/ru/contact')->assertOk()->assertSee('sales@tenirhotels.com');
+        $this->assertSame(4, (int) $offer->fresh()->min_nights);
+        $this->assertSame(1, Faq::where('hotel_id', $hotel->id)->get()->filter(fn ($f) => ($f->question['ru'] ?? '') === 'Что такое Multipass?')->count());
+
+        // Правка редактора не перезаписывается.
+        $hotel->update(['getting_here' => ['ru' => str_repeat('Свой длинный текст редактора. ', 30)]]);
+        $migration->up();
+        $this->assertStringContainsString('Свой длинный текст', $hotel->fresh()->getting_here['ru']);
     }
 
     public function test_kazakh_is_the_first_language(): void
