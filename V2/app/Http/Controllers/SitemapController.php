@@ -27,6 +27,9 @@ class SitemapController extends Controller
         $entries[] = ['offers.index', [], null];
         $entries[] = ['stories.index', [], null];
         $entries[] = ['map', [], null];
+        if (\App\Support\Gifts::offers() !== []) {
+            $entries[] = ['gifts', [], null];
+        }
         $entries[] = ['contact', [], null];
 
         // Разделы отелей — адреса текущего режима (один отель: /rooms; сеть: /destinations/{отель}/rooms).

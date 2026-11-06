@@ -84,6 +84,10 @@ class SiteSettings extends Page
                 TextInput::make('contacts.sales_email')->label('E-mail: корпоративные запросы, туроператоры')->email(),
                 TextInput::make('contacts.hours')->label('Часы работы')->placeholder('09:00–21:00'),
             ]),
+            Section::make('Подарочные сертификаты')->description('Список и цены берутся из gifter (gifts.tenirhotels.com), заказ и оплата — на его странице.')->columns(2)->schema([
+                Toggle::make('gifts.enabled')->label('Показывать сертификаты на сайте')->default(true),
+                TextInput::make('gifts.url')->label('Адрес витрины gifter')->url()->placeholder('https://gifts.tenirhotels.com'),
+            ]),
             Section::make('Соцсети')->columns(3)->schema([
                 TextInput::make('social.instagram')->label('Instagram')->url(),
                 TextInput::make('social.facebook')->label('Facebook')->url(),

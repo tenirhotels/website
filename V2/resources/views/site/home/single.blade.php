@@ -59,6 +59,7 @@
 
     @include('site.home.partials.experiences')
     @include('site.home.partials.offers')
+    <x-site.gifts />
     @include('site.home.partials.brand')
 
     @if ($widget = Locales::pick($hotel?->reviews_widget ?? []))

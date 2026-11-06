@@ -13,6 +13,7 @@ use App\Filament\Resources\Hotels\Pages\EditHotel;
 use App\Filament\Resources\Pages\Pages\CreatePage;
 use App\Models\Setting;
 use App\Models\User;
+use Illuminate\Support\Facades\Http;
 use Livewire\Livewire;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -267,5 +268,35 @@ class SiteTest extends TestCase
         $this->assertCount(3, \App\Support\ResortMap::geoPoints());
         $this->assertSame('winter', \App\Support\ResortMap::defaultSeason(new \DateTimeImmutable('2026-12-15')));
         $this->assertSame('summer', \App\Support\ResortMap::defaultSeason(new \DateTimeImmutable('2026-07-15')));
+    }
+
+    public function test_gift_certificates_from_gifter(): void
+    {
+        config(['tenir.gifts.url' => 'https://gifts.example.test']);
+        $offer = fn (int $id, string $ru, bool $open = true) => [
+            'id' => $id, 'name' => ['ru' => $ru, 'en' => $ru.' EN', 'kk' => $ru.' KK'], 'description' => ['ru' => 'Описание'],
+            'validity' => ['ru' => '3 месяца с даты продажи', 'en' => '3 months', 'kk' => '3 ай'], 'price' => 50000, 'currency' => 'KZT',
+            'image' => null, 'sale' => $open ? 'open' : 'ended', 'open' => $open, 'url' => 'https://gifts.example.test/order/'.$id,
+        ];
+        Http::fake(['gifts.example.test/api/offers' => Http::sequence()
+            ->push(['offers' => [$offer(7, 'Романтический вечер'), $offer(8, 'Закрытый', false)]])
+            ->whenEmpty(Http::response('', 500))]);
+        \Illuminate\Support\Facades\Cache::forget('gifts.offers');
+
+        $this->get('/ru/gifts')->assertOk()->assertSee('Романтический вечер')->assertSee('50 000 ₸')
+            ->assertSee('https://gifts.example.test/order/7?lang=ru', false)->assertDontSee('Закрытый');
+        $this->get('/kk/gifts')->assertSee('Романтический вечер KK')->assertSee('lang=kk', false);
+        $this->get('/zh/gifts')->assertSee('Романтический вечер EN')->assertSee('lang=en', false);
+        $this->get('/ru')->assertSee('Подарочные сертификаты');
+        $this->get('/sitemap.xml')->assertSee('/ru/gifts', false);
+
+        // gifter недоступен — остаётся последняя копия
+        $this->assertNull(\App\Support\Gifts::sync());
+        $this->assertCount(1, \App\Support\Gifts::offers('ru'));
+
+        // выключено в админке — раздела нет
+        Setting::put('gifts', ['enabled' => false]);
+        $this->get('/ru/gifts')->assertNotFound();
+        $this->get('/ru')->assertDontSee('Подарочные сертификаты');
     }
 }

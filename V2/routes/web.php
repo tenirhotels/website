@@ -3,6 +3,7 @@
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\DestinationController;
 use App\Http\Controllers\ExperienceController;
+use App\Http\Controllers\GiftController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MapController;
 use App\Http\Controllers\OfferController;
@@ -49,6 +50,7 @@ $publicWithoutSession = [
 | /{locale}/offers[/{slug}]                     спецпредложения
 | /{locale}/stories[/{slug}]                    истории и новости
 | /{locale}/booking                             модуль бронирования Exely
+| /{locale}/gifts                               подарочные сертификаты (список из gifter)
 | /{locale}/map                                 интерактивная карта курорта (зима/лето)
 | /{locale}/contact                             контакты
 | /{locale}/{page}                              страницы бренда: about, sustainability, ...
@@ -118,6 +120,7 @@ Route::prefix('{locale}')
 
         Route::get('booking', BookingController::class)->name('booking');
         Route::get('map', MapController::class)->name('map');
+        Route::get('gifts', GiftController::class)->name('gifts');
         Route::get('contact', [PageController::class, 'contact'])->name('contact');
 
         // Последним: страницы бренда по слагу.
