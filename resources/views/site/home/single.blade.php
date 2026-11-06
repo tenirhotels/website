@@ -40,8 +40,6 @@
 
     @include('site.home.partials.rooms')
 
-    <x-site.recognition />
-
     {{-- Ресторан --}}
     @if ($venues->isNotEmpty())
         @php($venue = $venues->first())
@@ -61,6 +59,7 @@
     @include('site.home.partials.offers')
     @include('site.home.partials.events')
     <x-site.gifts />
+    <x-site.recognition />
 
     @if ($widget = Locales::pick($hotel?->reviews_widget ?? []))
         <section id="reviews" class="bg-white"><div class="container-site py-14 md:py-20 lg:py-24">{!! $widget !!}</div></section>
