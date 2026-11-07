@@ -1,6 +1,6 @@
 <article class="group flex flex-col overflow-hidden rounded-3xl bg-white">
     <a href="{{ $offer->url() }}" class="block aspect-[3/2] overflow-hidden" tabindex="-1" aria-hidden="true">
-        <x-site.media :src="$offer->image" :alt="$offer->t('title')" class="transition-transform duration-700 group-hover:scale-[1.03]" />
+        <x-site.media :src="$offer->image" :alt="$offer->t('title')" round="rounded-none" class="transition-transform duration-700 group-hover:scale-[1.03]" />
     </a>
     <div class="flex flex-1 flex-col gap-3 p-8">
         <p class="text-xs uppercase tracking-[0.2em] text-stone">
