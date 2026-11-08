@@ -91,52 +91,28 @@
             ['Combi-1', \App\Models\Setting::get('cable.hours_combi1') ?: '09:00–17:00'],
             ['Combi-2', \App\Models\Setting::get('cable.hours_combi2') ?: '09:00–16:30'],
         ];
-        $endOf = fn (string $h, string $fallback) => preg_match('/(\d{1,2}[:.]\d{2})\s*$/u', $h, $m) ? str_replace('.', ':', $m[1]) : $fallback;
-        $medeuClose = $endOf((string) $lifts[0][1], '18:00');
-        $combi2Close = $endOf((string) $lifts[2][1], '16:30');
-        $medeuLast = \Illuminate\Support\Carbon::createFromFormat('H:i', $medeuClose)->subMinutes(30);
-        $dayLast = \Illuminate\Support\Carbon::createFromFormat('H:i', $combi2Close)->subMinutes(30 + 48 + 30);
-        $dayLast->setTime($dayLast->hour, intdiv($dayLast->minute, 15) * 15);
         $guestFrom = \App\Models\Setting::get('cable.guest_from') ?: '18:00';
         $guestTo = \App\Models\Setting::get('cable.guest_to') ?: '19:00';
     @endphp
     <h2 class="font-display text-2xl md:text-3xl">{{ __('access.hours_title') }}</h2>
     <p class="mt-3 max-w-2xl text-lg leading-relaxed text-slate">{{ __('access.hours_text') }}</p>
-    <ol class="mt-8 grid gap-4 md:grid-cols-3">
-        @foreach ([
-            ['day', $dayLast->format('H:i'), 'bg-white border border-mist', 'text-ember'],
-            ['evening', $medeuLast->format('H:i'), 'bg-forest text-white', 'text-ember-light'],
-            ['late', '—', 'bg-white border border-mist', 'text-stone'],
-        ] as [$k, $t, $box, $tc])
-            <li class="flex flex-col gap-2 rounded-3xl p-6 md:p-8 {{ $box }}">
-                <p class="text-[13px] uppercase tracking-[0.18em] {{ $k === 'evening' ? 'text-white/70' : 'text-stone' }}">{{ __('access.when_'.$k) }}</p>
-                <p class="font-display text-3xl {{ $tc }}">{{ $k === 'late' ? __('access.when_late_value', ['to' => $guestTo]) : __('access.when_at_medeu', ['time' => $t]) }}</p>
-                <p class="text-[15px] leading-relaxed {{ $k === 'evening' ? 'text-white/80' : 'text-slate' }}">{{ __('access.when_'.$k.'_text', ['time' => $t, 'from' => $guestFrom, 'to' => $guestTo, 'medeu_close' => $medeuClose]) }}</p>
-            </li>
-        @endforeach
-    </ol>
-    <h3 class="mt-12 font-display text-xl md:text-2xl">{{ __('access.hours_table') }}</h3>
-    <div class="mt-5 grid gap-4 md:grid-cols-2">
-        <div class="flex flex-col gap-2 rounded-3xl border border-mist p-6 md:p-8">
-            <span class="flex h-11 w-11 items-center justify-center rounded-full bg-sand text-ember">{{ site_icon('cable', 'h-6 w-6') }}</span>
-            <p class="eyebrow mt-2">{{ __('access.hours_standard') }}</p>
-            <ul class="divide-y divide-mist">
-                @foreach ($lifts as [$lname, $lhours])
-                    <li class="flex items-baseline justify-between gap-4 py-2.5">
-                        <span class="text-lg">{{ $lname }}</span>
-                        <span class="whitespace-nowrap font-display text-xl">{{ $lhours }}</span>
-                    </li>
-                @endforeach
-            </ul>
-            <p class="text-[15px] leading-relaxed text-stone">{{ $cableNote !== '' ? $cableNote.'. ' : '' }}{{ __('access.hours_last') }}</p>
-        </div>
-        <div class="flex flex-col gap-2 rounded-3xl bg-forest p-6 text-white md:p-8">
-            <span class="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-ember-light">{{ site_icon('cable', 'h-6 w-6') }}</span>
-            <p class="eyebrow-light mt-2">{{ __('access.hours_guest') }}</p>
-            <p class="whitespace-nowrap font-display text-3xl text-ember-light">{{ $guestFrom }}–{{ $guestTo }}</p>
-            <p class="text-[15px] leading-relaxed text-white/80">{{ __('access.hours_guest_text') }}</p>
-        </div>
+    <div class="mt-8 flex flex-col gap-4 rounded-3xl border border-mist p-6 md:p-10">
+        <span class="flex h-11 w-11 items-center justify-center rounded-full bg-sand text-ember">{{ site_icon('cable', 'h-6 w-6') }}</span>
+        <p class="eyebrow mt-2">{{ __('access.hours_standard') }}</p>
+        <ul class="divide-y divide-mist md:max-w-xl">
+            @foreach ($lifts as [$lname, $lhours])
+                <li class="flex items-baseline justify-between gap-4 py-3.5">
+                    <span class="text-lg md:text-xl">{{ $lname }}</span>
+                    <span class="whitespace-nowrap font-display text-2xl md:text-3xl">{{ $lhours }}</span>
+                </li>
+            @endforeach
+        </ul>
+        <p class="text-[15px] leading-relaxed text-stone">{{ $cableNote !== '' ? $cableNote.'. ' : '' }}{{ __('access.hours_last') }}</p>
     </div>
+    <p class="mt-4 flex items-start gap-3 rounded-2xl bg-sand px-5 py-4 text-[15px] leading-relaxed text-slate">
+        <span class="mt-0.5 shrink-0 text-ember">{{ site_icon('cable', 'h-5 w-5') }}</span>
+        <span><strong class="font-bold text-ink">{{ __('access.hours_guest') }}: {{ $guestFrom }}–{{ $guestTo }}.</strong> {{ __('access.hours_guest_text') }}</span>
+    </p>
 </section>
 <section class="container-site py-12 md:py-16">
     <h2 class="font-display text-2xl md:text-3xl">{{ __('access.route_title') }}</h2>
