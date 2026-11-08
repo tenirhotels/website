@@ -34,7 +34,7 @@
         [__('site.nav.contact'), route('contact')],
     ]);
 @endphp
-<header data-header class="sticky top-0 z-40 bg-forest text-snow">
+<header data-header @if (\App\Models\Setting::get('site.header_autohide', true) !== false) data-autohide @endif class="sticky top-0 z-40 bg-forest text-snow">
     <div class="container-site flex h-[72px] items-center justify-between gap-6 lg:h-[84px]">
         <div class="flex min-w-0 items-center gap-3">
             <button type="button" class="-ml-2 flex size-11 items-center justify-center xl:hidden" data-menu-toggle aria-controls="mobile-menu" aria-expanded="false" aria-label="{{ __('site.nav.menu') }}">

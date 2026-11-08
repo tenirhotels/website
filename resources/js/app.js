@@ -42,6 +42,28 @@ if (header?.dataset.transparent === 'true') {
     onScroll();
 }
 
+// Шапка уходит при прокрутке вниз и возвращается при прокрутке вверх (настройка «Скрывать шапку»)
+if (header?.hasAttribute('data-autohide')) {
+    let lastY = window.scrollY;
+    let ticking = false;
+    const langs = header.querySelectorAll('details');
+    const show = () => header.classList.remove('is-hidden');
+    const update = () => {
+        ticking = false;
+        const y = Math.max(window.scrollY, 0);
+        const dy = y - lastY;
+        const busy = menu?.classList.contains('is-open') || [...langs].some((d) => d.open);
+        if (y < 80 || busy || dy < -6) {
+            show();
+        } else if (dy > 6) {
+            header.classList.add('is-hidden');
+        }
+        if (Math.abs(dy) > 6 || y < 80) lastY = y;
+    };
+    window.addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
+    header.addEventListener('focusin', show);
+}
+
 // Запоминаем выбранный язык: корень сайта «/» дальше ведёт на него, а не на язык браузера.
 document.addEventListener('click', (e) => {
     const link = e.target.closest('a[hreflang][lang]');

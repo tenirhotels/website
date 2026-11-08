@@ -125,10 +125,13 @@
 /* Переходы между страницами: мягкое затухание, шапка остаётся на месте */
 @view-transition { navigation: auto; }
 [data-header] { view-transition-name: site-header; }
+[data-header][data-autohide] { transition: transform .3s ease; }
+[data-header].is-hidden { transform: translateY(-100%); }
 ::view-transition-old(root), ::view-transition-new(root) { animation-duration: .25s; }
 
 @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
+    [data-header][data-autohide] { transition: none !important; }
     .reveal, #mobile-menu, #mobile-menu * , .burger path { transition: none !important; animation: none !important; transform: none !important; }
     .reveal { opacity: 1; }
     ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
