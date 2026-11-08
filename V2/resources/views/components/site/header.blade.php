@@ -45,7 +45,7 @@
             </a>
         </div>
 
-        <nav aria-label="{{ __('site.nav.menu') }}" class="hidden items-center gap-5 text-[13px] xl:gap-8 uppercase tracking-[0.16em] xl:flex">
+        <nav aria-label="{{ __('site.nav.menu') }}" class="hidden min-w-0 items-center gap-4 text-[12px] uppercase tracking-[0.1em] xl:flex 2xl:gap-8 2xl:text-[13px] 2xl:tracking-[0.16em]">
             @foreach ($menu as [$label, $href])
                 <a href="{{ $href }}" class="whitespace-nowrap hover:text-ember-light">{{ $label }}</a>
             @endforeach

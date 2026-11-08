@@ -4,7 +4,7 @@ return [
     'nav' => [
         'destinations' => 'Отели',
         'experiences' => 'Впечатления',
-        'offers' => 'Спецпредложения',
+        'offers' => 'Предложения',
         'stories' => 'Истории',
         'events' => 'События',
         'about' => 'О бренде',
