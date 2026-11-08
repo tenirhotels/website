@@ -63,7 +63,6 @@
         <div class="flex flex-col gap-8">
             <div class="flex flex-col gap-3">
                 <h2 class="font-display text-2xl md:text-3xl">{{ __('access.levels_title') }}</h2>
-                <p class="text-lg leading-relaxed text-slate">{{ __('access.levels_text') }}</p>
             </div>
             <ol class="flex flex-col divide-y divide-mist border-y border-mist">
                 @foreach ([
@@ -190,7 +189,6 @@
         </a>
         <div class="mt-5 flex flex-wrap items-center justify-between gap-4">
             <p class="max-w-xl text-slate">{{ __('access.map_text') }}</p>
-            <a href="{{ route('map') }}" class="btn-dark">{{ __('map.open_map') }}</a>
         </div>
     </div>
 </section>
