@@ -26,7 +26,7 @@
                 @if ($offer->valid_to)<p class="text-slate">{{ __('site.common.valid_until', ['date' => $offer->valid_to->translatedFormat('j F Y')]) }}</p>@endif
                 @if ($offer->promo_code)<p class="text-slate">{{ __('site.offers.promo', ['code' => $offer->promo_code]) }}</p>@endif
                 @unless ($expired)
-                    <a href="{{ $offer->bookingUrl() }}" class="btn-primary mt-2 w-full">{{ __('site.common.book_now') }}</a>
+                    <a href="{{ $offer->bookingUrl() }}" class="btn-primary mt-2 w-full max-lg:hidden">{{ __('site.common.book_now') }}</a>
                     <p class="text-center text-[13px] text-stone">{{ __('site.booking.best_rate') }}</p>
                 @endunless
             </div>
