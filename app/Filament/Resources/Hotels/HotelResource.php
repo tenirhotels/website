@@ -74,7 +74,9 @@ class HotelResource extends Resource
                 ]),
 
                 Tab::make('Фото и видео')->schema([
-                    Fields::image('hero_image', 'Главное фото (герой)', 'hotels'),
+                    Fields::image('hero_image', 'Главное фото (герой) — зима, с ноября по апрель', 'hotels'),
+                    Fields::image('hero_image_summer', 'Главное фото — лето, с мая по октябрь (необязательно)', 'hotels')
+                        ->helperText('Если не загружено, круглый год показывается основное фото.'),
                     TextInput::make('hero_video')->label('Видео для героя (URL mp4)')->url(),
                     Fields::gallery('gallery', 'hotels/gallery'),
                 ]),

@@ -2,7 +2,7 @@
 @php use App\Models\Setting; use App\Support\Locales; @endphp
 <x-layouts.site :seo="$seo" :hotel="$hotel">
 
-    <x-site.page-hero tall :image="$hotel?->hero_image"
+    <x-site.page-hero tall :image="$hotel?->seasonHero()"
         :eyebrow="$hotel ? collect([$hotel->altitude_m ? number_format($hotel->altitude_m, 0, ',', ' ').' м' : null, $hotel->t('name'), $hotel->t('city')])->filter()->implode(' · ') : null"
         :title="Setting::text('brand.tagline') ?? $hotel?->t('tagline') ?? 'Tenir'"
         :text="$hotel?->t('summary')" />
