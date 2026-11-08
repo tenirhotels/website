@@ -26,7 +26,7 @@
                 ['≈ '.ResortMap::ONE_WAY_MINUTES.' '.__('map.min'), __('access.stat_time')],
                 [$rides, __('access.stat_rides')],
             ] as [$value, $label])
-                <div class="flex flex-col justify-center gap-1 border-white/15 px-4 py-5 md:p-8 [&:not(:first-child)]:border-l lg:[&:not(:first-child)]:border-l-0 lg:[&:not(:first-child)]:border-t">
+                <div class="flex flex-col justify-start gap-1 border-white/15 px-4 py-5 md:p-8 [&:not(:first-child)]:border-l lg:[&:not(:first-child)]:border-l-0 lg:[&:not(:first-child)]:border-t">
                     <dt class="whitespace-nowrap font-display text-xl leading-none text-ember-light sm:text-2xl md:text-4xl">{{ $value }}</dt>
                     <dd class="text-[13px] leading-snug text-white/70">{{ $label }}</dd>
                 </div>
