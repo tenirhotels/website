@@ -91,6 +91,11 @@
             ['Combi-1', \App\Models\Setting::get('cable.hours_combi1') ?: '09:00–17:00'],
             ['Combi-2', \App\Models\Setting::get('cable.hours_combi2') ?: '09:00–16:30'],
         ];
+        $endOf = fn (string $h, string $fallback) => preg_match('/(\d{1,2}[:.]\d{2})\s*$/u', $h, $m) ? str_replace('.', ':', $m[1]) : $fallback;
+        $reserve = 30; // запас на очереди, мин
+        $medeuLast = \Illuminate\Support\Carbon::createFromFormat('H:i', $endOf((string) $lifts[0][1], '18:00'))->subMinutes(30 + $reserve);
+        $dayLast = \Illuminate\Support\Carbon::createFromFormat('H:i', $endOf((string) $lifts[2][1], '16:30'))->subMinutes(30 + 55 + $reserve);
+        $dayLast->setTime($dayLast->hour, intdiv($dayLast->minute, 15) * 15);
         $guestFrom = \App\Models\Setting::get('cable.guest_from') ?: '18:00';
         $guestTo = \App\Models\Setting::get('cable.guest_to') ?: '19:00';
     @endphp
@@ -108,6 +113,20 @@
             @endforeach
         </ul>
         <p class="text-[15px] leading-relaxed text-stone">{{ $cableNote !== '' ? $cableNote.'. ' : '' }}{{ __('access.hours_last') }}</p>
+    </div>
+    <div class="mt-4 grid gap-4 md:grid-cols-2">
+        <div class="flex flex-col gap-2 rounded-3xl bg-forest p-6 text-white md:p-8">
+            <p class="eyebrow-light">{{ __('access.early_title') }}</p>
+            <p class="text-lg leading-relaxed text-white/90">{{ __('access.early_text') }}</p>
+        </div>
+        <div class="flex flex-col gap-3 rounded-3xl border border-mist p-6 md:p-8">
+            <p class="eyebrow">{{ __('access.plan_title') }}</p>
+            <ul class="flex flex-col gap-3 text-[15px] leading-relaxed text-slate">
+                <li><span class="font-display text-xl text-ink">{{ $dayLast->format('H:i') }}</span> — {{ __('access.plan_day') }}</li>
+                <li><span class="font-display text-xl text-ink">{{ $medeuLast->format('H:i') }}</span> — {{ __('access.plan_evening', ['from' => $guestFrom, 'to' => $guestTo]) }}</li>
+            </ul>
+            <p class="text-[14px] leading-relaxed text-stone">{{ __('access.plan_note') }}</p>
+        </div>
     </div>
     <p class="mt-4 flex items-start gap-3 rounded-2xl bg-sand px-5 py-4 text-[15px] leading-relaxed text-slate">
         <span class="mt-0.5 shrink-0 text-ember">{{ site_icon('cable', 'h-5 w-5') }}</span>
