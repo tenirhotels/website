@@ -2,6 +2,10 @@
     <x-site.page-hero :image="$hotel->gallery[0] ?? $hotel->hero_image" :eyebrow="$hotel->t('name')" :title="__('site.hotel.getting_here')" :text="$hotel->t('address')" />
     <x-site.hotel-nav :hotel="$hotel" />
 
+    @if ($hotel->slug === config('tenir.recognition_hotel'))
+        <x-site.access :hotel="$hotel" />
+    @endif
+
     <section class="container-site flex flex-col gap-8 md:gap-14 py-12 md:py-16 lg:py-20 lg:flex-row lg:gap-20">
         <div class="prose-tenir flex-[1.5]">{!! $hotel->t('getting_here') !!}</div>
         <aside class="flex flex-1 flex-col gap-3 text-base text-slate">
