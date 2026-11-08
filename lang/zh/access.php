@@ -1,0 +1,23 @@
+<?php
+
+return [
+    'm' => '米',
+    'eyebrow' => '唯一的上山方式',
+    'title' => 'Tenir 位于山顶，只能乘缆车抵达',
+    'text' => '通往酒店没有公路。从麦迪奥下站出发，缆车经 Shymbulak 抵达 Combi-2 站，含换乘单程约一小时。',
+    'stat_altitude' => '海拔',
+    'stat_time' => '单程（含换乘）',
+    'stat_rides' => '段缆车',
+    'route_title' => '上山路线',
+    'at_hotel' => '抵达酒店',
+    'level_almaty' => '阿拉木图',
+    'level_medeu' => '麦迪奥',
+    'levels_title' => '从城市到山顶',
+    'levels_text' => '从阿拉木图市中心到山顶：先驱车短途前往麦迪奥，然后直接乘缆车上山。',
+    'leg_car' => '阿拉木图 → 麦迪奥下站',
+    'leg_car_meta' => '约 21–22 公里，驱车 30–40 分钟',
+    'leg_cable' => '麦迪奥 → 酒店',
+    'leg_cable_meta' => '缆车，含换乘约 :min 分钟',
+    'map_title' => '度假区地图',
+    'map_text' => '从麦迪奥到酒店的路线，标注在度假区插画地图上。',
+];

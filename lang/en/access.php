@@ -1,0 +1,23 @@
+<?php
+
+return [
+    'm' => 'm',
+    'eyebrow' => 'The only way up',
+    'title' => 'Tenir sits on top of the mountain — and is reached by cable car only',
+    'text' => 'There is no road to the hotel. From the lower station at Medeu, cable cars take you up via Shymbulak to Combi-2 — about an hour one way, including changes.',
+    'stat_altitude' => 'above sea level',
+    'stat_time' => 'one way, with changes',
+    'stat_rides' => 'cable car sections',
+    'route_title' => 'Your route up',
+    'at_hotel' => 'Arrive at the hotel',
+    'level_almaty' => 'Almaty',
+    'level_medeu' => 'Medeu',
+    'levels_title' => 'From the city to the top',
+    'levels_text' => 'From central Almaty to the mountain top: a short drive to Medeu, then straight up by cable car.',
+    'leg_car' => 'Almaty → Medeu lower station',
+    'leg_car_meta' => '≈ 21–22 km, 30–40 minutes by car',
+    'leg_cable' => 'Medeu → hotel',
+    'leg_cable_meta' => 'Cable cars, ≈ :min min with changes',
+    'map_title' => 'On the resort map',
+    'map_text' => 'The route from Medeu to the hotel, marked on the illustrated resort map.',
+];

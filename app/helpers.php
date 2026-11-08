@@ -71,6 +71,8 @@ if (! function_exists('site_icon')) {
             'bath' => '<path d="M3 12h18v2a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5zM6 12V6a2 2 0 0 1 3.5-1.3M7 19l-1 2M17 19l1 2"/>',
             'locker' => '<rect x="4" y="3" width="16" height="18" rx="1.5"/><path d="M12 3v18M4 12h16M9 7.5v1M15 15.5v1"/>',
             'robe' => '<path d="M8 3l4 4 4-4 3 4-2 3v11H7V10L5 7zM12 7v14"/>',
+            'car' => '<path d="M4 16v-4l2-5h12l2 5v4M3 16h18M7.5 19a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zM16.5 19a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zM4 12h16"/>',
+            'cable' => '<path d="M3 5l18 5M12 7.5V12M7 12h10v6a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1z"/>',
             'heat' => '<path d="M7 20V6a3 3 0 0 1 6 0v14M10 9h.01M17 7c-1.5 2 1.5 3 0 5s1.5 3 0 5"/>',
         ];
 
