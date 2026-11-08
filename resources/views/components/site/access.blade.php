@@ -95,7 +95,7 @@
         ];
         $endOf = fn (string $h, string $fallback) => preg_match('/(\d{1,2}[:.]\d{2})\s*$/u', $h, $m) ? str_replace('.', ':', $m[1]) : $fallback;
         $dayReserve = 0;      // запас днём, мин (в тексте не упоминается)
-        $eveningReserve = 30; // запас вечером, мин (в тексте не упоминается)
+        $eveningReserve = 0;  // подъём для гостей: быть на Медеу к последней посадке (закрытие − 30 мин)
         $medeuLast = \Illuminate\Support\Carbon::createFromFormat('H:i', $endOf((string) $lifts[0][1], '18:00'))->subMinutes(30 + $eveningReserve);
         $dayLast = \Illuminate\Support\Carbon::createFromFormat('H:i', $endOf((string) $lifts[2][1], '16:30'))->subMinutes(30 + 55 + $dayReserve);
         $dayLast->setTime($dayLast->hour, intdiv($dayLast->minute, 15) * 15);
@@ -130,13 +130,26 @@
             <p class="text-lg leading-relaxed text-white/90">{{ __('access.early_text') }}</p>
         </div>
     </div>
-    <p class="mt-4 flex items-start gap-3 rounded-2xl bg-sand px-5 py-4 text-[15px] leading-relaxed text-slate">
-        <span class="mt-0.5 shrink-0 text-ember">{{ site_icon('cable', 'h-5 w-5') }}</span>
-        <span>
-            <strong class="font-bold text-ink">{{ __('access.hours_guest') }}: {{ $guestFrom }}–{{ $guestTo }}.</strong> {{ __('access.hours_guest_text') }}
-            <span class="mt-2 block">{{ __('access.hours_guest_arrive', ['time' => $medeuLast->format('H:i')]) }}</span>
-        </span>
-    </p>
+    <div class="mt-4 flex items-start gap-4 rounded-3xl bg-sand p-6 md:p-8">
+        <span class="mt-1 hidden shrink-0 text-ember sm:block">{{ site_icon('cable', 'h-6 w-6') }}</span>
+        <div class="flex flex-col gap-4">
+            <div class="flex flex-col gap-1">
+                <h3 class="font-display text-xl text-ink md:text-2xl">{{ __('access.hours_guest') }}</h3>
+                <p class="text-[15px] leading-relaxed text-slate">{{ __('access.hours_guest_text') }}</p>
+            </div>
+            <dl class="grid gap-x-8 gap-y-3 sm:grid-cols-2">
+                <div class="flex flex-col gap-1 rounded-2xl bg-white px-4 py-3">
+                    <dt class="text-[13px] uppercase tracking-[0.14em] text-stone">{{ __('access.guest_depart') }}</dt>
+                    <dd class="whitespace-nowrap font-display text-2xl text-ember">{{ $guestFrom }}–{{ $guestTo }}</dd>
+                </div>
+                <div class="flex flex-col gap-1 rounded-2xl bg-white px-4 py-3">
+                    <dt class="text-[13px] uppercase tracking-[0.14em] text-stone">{{ __('access.guest_be_at') }}</dt>
+                    <dd class="whitespace-nowrap font-display text-2xl text-ember">{{ __('access.plan_until', ['time' => $medeuLast->format('H:i')]) }}</dd>
+                </div>
+            </dl>
+            <p class="text-[15px] leading-relaxed text-slate">{{ __('access.hours_guest_arrive') }}</p>
+        </div>
+    </div>
 </section>
 <section class="container-site py-10 md:py-16">
     <h2 class="font-display text-2xl md:text-3xl">{{ __('access.route_title') }}</h2>
