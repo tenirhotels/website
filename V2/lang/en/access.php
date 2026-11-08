@@ -2,9 +2,9 @@
 
 return [
     'm' => 'm',
-    'eyebrow' => 'The only way up',
-    'title' => 'Tenir sits on top of the mountain — and is reached by cable car only',
-    'text' => 'There is no road to the hotel. From Medeu station, the cable cars take you via Shymbulak to Combi-2 station.',
+    'eyebrow' => 'The way to the hotel',
+    'title' => 'Tenir sits at the top of the mountain — cable cars lead the way',
+    'text' => 'There is no road: from Medeu station, the resort\'s cable cars take you via Shymbulak to Combi-2 station.',
     'stat_altitude' => 'above sea level',
     'stat_time' => 'one way, with changes',
     'stat_rides' => 'cable car sections',
