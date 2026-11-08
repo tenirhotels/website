@@ -18,23 +18,4 @@
             @if ($hotel->whatsapp)<a href="https://wa.me/{{ preg_replace('/\D/', '', $hotel->whatsapp) }}" class="hover:text-ember">WhatsApp</a>@endif
         </aside>
     </section>
-
-    @if ($faqs->isNotEmpty())
-        <section class="bg-white">
-            <div class="container-site max-w-4xl py-12 md:py-16 lg:py-20">
-                <h2 class="h-section mb-10">{{ __('site.hotel.faq') }}</h2>
-                <div class="divide-y divide-mist border-y border-mist">
-                    @foreach ($faqs as $faq)
-                        <details class="group py-5">
-                            <summary class="flex cursor-pointer list-none items-center justify-between gap-6 text-lg">
-                                {{ $faq->t('question') }}
-                                <span class="text-2xl text-ember transition-transform group-open:rotate-45" aria-hidden="true">+</span>
-                            </summary>
-                            <div class="prose-tenir mt-4">{!! $faq->t('answer') !!}</div>
-                        </details>
-                    @endforeach
-                </div>
-            </div>
-        </section>
-    @endif
 </x-layouts.site>

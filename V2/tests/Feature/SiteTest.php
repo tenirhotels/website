@@ -62,7 +62,8 @@ class SiteTest extends TestCase
         $migration->up();
         $migration->up(); // идемпотентно
 
-        $this->get('/ru/getting-here')->assertOk()->assertSee('Комби-1')->assertSee('Multipass')->assertSee('50 000');
+        $this->get('/ru/getting-here')->assertOk()->assertSee('Комби-1')->assertSee('Multipass')->assertDontSee('Частые вопросы');
+        $this->assertTrue(\App\Models\Faq::where('is_published', true)->exists()); // вопросы остаются в данных, на странице их нет
         $this->get('/kk/getting-here')->assertOk()->assertSee('Комби-2');
         $this->get('/ru/experiences/welcome-tour')->assertOk()->assertSee('сертифицированными гидами')->assertDontSee('Дополните');
         $this->get('/ru/dining')->assertOk()->assertDontSee('Опишите')->assertSee('Самый высокогорный ресторан');
