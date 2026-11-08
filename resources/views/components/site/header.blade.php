@@ -36,10 +36,6 @@
 @endphp
 <header data-header class="sticky top-0 z-40 bg-forest text-snow">
     <div class="container-site flex h-[72px] items-center justify-between gap-6 lg:h-[84px]">
-        <button type="button" class="-ml-2 flex size-11 items-center justify-center xl:hidden" data-menu-toggle aria-controls="mobile-menu" aria-expanded="false" aria-label="{{ __('site.nav.menu') }}">
-            <svg class="burger" aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path class="b1" d="M3 7h18"/><path class="b2" d="M3 12h18"/><path class="b3" d="M3 17h18"/></svg>
-        </button>
-
         <a href="{{ route('home') }}" class="shrink-0" aria-label="{{ $single && $hotel ? $hotel->t('name') : 'Tenir Hotels' }}">
             <img src="/images/logo-light.svg" alt="Tenir" width="150" height="36" class="h-8 w-auto lg:h-9">
         </a>
@@ -50,8 +46,8 @@
             @endforeach
         </nav>
 
-        <div class="flex items-center gap-4">
-            <details class="relative hidden sm:block">
+        <div class="flex items-center gap-3 sm:gap-4">
+            <details class="relative">
                 <summary class="flex min-h-11 cursor-pointer list-none items-center gap-1 text-[13px] tracking-[0.1em]" aria-label="{{ __('site.nav.language') }}">
                     {{ Locales::all()[$current]['label'] }}
                     <svg aria-hidden="true" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor"><path d="M3 4.5 6 7.5l3-3"/></svg>
@@ -67,10 +63,13 @@
                 </ul>
             </details>
             <a href="{{ route('booking') }}" class="btn-primary hidden sm:inline-flex">{{ __('site.nav.book') }}</a>
+            <button type="button" class="-mr-2 flex size-11 items-center justify-center xl:hidden" data-menu-toggle aria-controls="mobile-menu" aria-expanded="false" aria-label="{{ __('site.nav.menu') }}">
+                <svg class="burger" aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path class="b1" d="M3 7h18"/><path class="b2" d="M3 12h18"/><path class="b3" d="M3 17h18"/></svg>
+            </button>
         </div>
     </div>
 
-    {{-- Мобильное меню: основные разделы, дополнительные, язык, связь и кнопка бронирования --}}
+    {{-- Мобильное меню: основные разделы, дополнительные и кнопка бронирования (язык — в шапке) --}}
     <div id="mobile-menu" aria-hidden="true" inert class="fixed inset-x-0 bottom-0 top-[72px] z-40 flex flex-col overflow-y-auto overflow-x-hidden overscroll-contain isolate bg-forest px-6 pb-8 pt-4 xl:hidden">
         <div class="pattern-scene -z-10 bottom-4 right-0 h-[420px] w-[320px] bg-ember-light opacity-[0.10]" aria-hidden="true"></div>
         <nav aria-label="{{ __('site.nav.menu') }}" class="flex flex-col font-display text-[24px] leading-tight">
@@ -91,13 +90,6 @@
                 @endforeach
             </nav>
         @endif
-
-        <div class="mt-6 flex flex-wrap gap-2 border-t border-white/20 pt-5">
-            @foreach (Locales::all() as $code => $meta)
-                <a href="{{ $alternates[$code] ?? route('home', ['locale' => $code]) }}" lang="{{ $code }}"
-                   @class(['min-h-11 rounded-full border px-5 py-2.5 text-[15px]', 'border-ember-light text-ember-light' => $code === $current, 'border-white/30' => $code !== $current])>{{ $meta['label'] }}</a>
-            @endforeach
-        </div>
 
         <a href="{{ route('booking') }}" class="btn-primary mt-auto w-full min-h-[52px]" style="margin-top: 2rem">{{ __('site.nav.book') }}</a>
     </div>
