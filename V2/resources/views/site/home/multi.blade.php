@@ -27,7 +27,7 @@
     @include('site.home.partials.experiences')
     @include('site.home.partials.offers')
     @include('site.home.partials.events')
-    <x-site.gifts />
+    @if (\App\Models\Setting::get('gifts.on_home', false) === true)<x-site.gifts />@endif
     <x-site.recognition />
     @include('site.home.partials.stories-horizon')
 </x-layouts.site>

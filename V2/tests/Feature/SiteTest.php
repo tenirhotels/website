@@ -288,7 +288,11 @@ class SiteTest extends TestCase
             ->assertSee('https://gifts.example.test/order/7?lang=ru', false)->assertDontSee('Закрытый');
         $this->get('/kk/gifts')->assertSee('Романтический вечер KK')->assertSee('lang=kk', false);
         $this->get('/zh/gifts')->assertSee('Романтический вечер EN')->assertSee('lang=en', false);
-        $this->get('/ru')->assertSee('Подарочные сертификаты');
+        // на главной блока по умолчанию нет, включается настройкой
+        $lead = __('gifts.lead', [], 'ru');
+        $this->get('/ru')->assertDontSee($lead, false);
+        Setting::put('gifts', ['on_home' => true]);
+        $this->get('/ru')->assertSee($lead, false);
         $this->get('/sitemap.xml')->assertSee('/ru/gifts', false);
 
         // gifter недоступен — остаётся последняя копия
@@ -296,9 +300,9 @@ class SiteTest extends TestCase
         $this->assertCount(1, \App\Support\Gifts::offers('ru'));
 
         // выключено в админке — раздела нет
-        Setting::put('gifts', ['enabled' => false]);
+        Setting::put('gifts', ['enabled' => false, 'on_home' => true]);
         $this->get('/ru/gifts')->assertNotFound();
-        $this->get('/ru')->assertDontSee('Подарочные сертификаты');
+        $this->get('/ru')->assertDontSee($lead, false);
     }
 
     public function test_footer_has_social_strip_brand_and_legal_links(): void

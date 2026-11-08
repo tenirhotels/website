@@ -88,6 +88,7 @@ class SiteSettings extends Page
             ]),
             Section::make('Подарочные сертификаты')->description('Список и цены берутся из gifter (gifts.tenirhotels.com), заказ и оплата — на его странице.')->columns(2)->schema([
                 Toggle::make('gifts.enabled')->label('Показывать сертификаты на сайте')->default(true),
+                Toggle::make('gifts.on_home')->label('Показывать блок сертификатов на главной')->helperText('Страница сертификатов и пункт меню не зависят от этой настройки.')->default(false),
                 TextInput::make('gifts.url')->label('Адрес витрины gifter')->url()->placeholder('https://gifts.tenirhotels.com'),
             ]),
             Section::make('Канатная дорога (страница «Как добраться»)')
