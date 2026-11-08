@@ -101,7 +101,7 @@
          (там календарь с ценами). На главной и странице отеля есть плавающая кнопка Exely «Узнать цены». --}}
     @if (! request()->routeIs('booking', 'map') && ! request()->attributes->get('tenir.exely_widget'))
         <div class="fixed inset-x-0 bottom-0 z-30 bg-white px-4 pb-5 pt-3 shadow-[0_-8px_24px_rgba(22,33,27,0.12)] lg:hidden">
-            <a href="{{ route('booking') }}" class="btn-primary w-full min-h-[52px]">{{ __('site.nav.book') }}</a>
+            <a href="{{ request()->attributes->get('tenir.book_url') ?: route('booking') }}" class="btn-primary w-full min-h-[52px]">{{ __('site.nav.book') }}</a>
         </div>
     @endif
     @if ($customBody = Setting::get('analytics.custom_body')){!! $customBody !!}@endif
