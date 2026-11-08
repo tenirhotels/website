@@ -123,14 +123,16 @@
             <p class="eyebrow">{{ __('access.plan_title') }}</p>
             <ul class="flex flex-col gap-3 text-[15px] leading-relaxed text-slate">
                 <li><span class="font-display text-xl text-ink">{{ __('access.plan_until', ['time' => $dayLast->format('H:i')]) }}</span> — {{ __('access.plan_day') }}</li>
-                <li><span class="font-display text-xl text-ink">{{ __('access.plan_until', ['time' => $medeuLast->format('H:i')]) }}</span> — {{ __('access.plan_evening', ['from' => $guestFrom, 'to' => $guestTo]) }}</li>
             </ul>
             <p class="text-[14px] leading-relaxed text-stone">{{ __('access.plan_note') }}</p>
         </div>
     </div>
     <p class="mt-4 flex items-start gap-3 rounded-2xl bg-sand px-5 py-4 text-[15px] leading-relaxed text-slate">
         <span class="mt-0.5 shrink-0 text-ember">{{ site_icon('cable', 'h-5 w-5') }}</span>
-        <span><strong class="font-bold text-ink">{{ __('access.hours_guest') }}: {{ $guestFrom }}–{{ $guestTo }}.</strong> {{ __('access.hours_guest_text') }}</span>
+        <span>
+            <strong class="font-bold text-ink">{{ __('access.hours_guest') }}: {{ $guestFrom }}–{{ $guestTo }}.</strong> {{ __('access.hours_guest_text') }}
+            <span class="mt-2 block">{{ __('access.hours_guest_arrive', ['time' => $medeuLast->format('H:i')]) }}</span>
+        </span>
     </p>
 </section>
 <section class="container-site py-12 md:py-16">
