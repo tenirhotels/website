@@ -31,7 +31,8 @@ return [
     'hours_standard' => '常规运行时间',
     'hours_last' => '最后一班于缆车线路关闭前30分钟登乘。',
     'hours_guest' => '酒店住客专享',
-    'hours_guest_text' => '从Shymbulak站出发的专线缆车——仅限上行、单程。下山按缆车常规时间表。',
+    'hours_guest_arrive' => '如需乘坐，请最晚于 :time 到达Medeu缆车站——这样可赶上Medeu至Shymbulak的最后一班缆车。',
+    'hours_guest_text' => '从Shymbulak站出发的专线缆车——仅限特殊情况，仅限上行、单程。下山按常规时间表。',
     'map_title' => '度假区地图',
     'map_text' => '路线已标注在度假区插画地图上：请按数字 1 至酒店的顺序前行。',
 ];
