@@ -129,7 +129,7 @@ class PropertyModeTest extends TestCase
         ])->assertSuccessful()->assertCanSeeTableRecords($hotel->rooms);
 
         $this->get('/admin/hotels/'.$hotel->id.'/edit')->assertOk()
-            ->assertSee('Номера')->assertSee('Рестораны и бары')->assertSee('Спецпредложения')->assertSee('Впечатления');
+            ->assertSee('Номера')->assertSee('Рестораны и бары')->assertSee('Предложения')->assertSee('Впечатления');
     }
 
     // ---------------------------------------------------------------- сеть
