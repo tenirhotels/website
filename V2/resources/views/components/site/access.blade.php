@@ -136,7 +136,7 @@
             <li>{{ __('access.guest_depart') }}: <strong class="whitespace-nowrap font-bold text-ink">{{ $guestFrom }}–{{ $guestTo }}</strong></li>
             <li>{{ __('access.guest_be_at') }}: <strong class="font-bold text-ink">{{ __('access.plan_until', ['time' => $medeuLast->format('H:i')]) }}</strong></li>
         </ul>
-        <p>{{ __('access.hours_guest_arrive') }}</p>
+        <p>{{ __('access.hours_guest_arrive', ['time' => $dayLast->format('H:i')]) }}</p>
     </div>
     </div>
 </section>
