@@ -19,5 +19,5 @@ return [
     'leg_cable' => 'Medeu → hotel',
     'leg_cable_meta' => 'Cable cars, ≈ :min min with changes',
     'map_title' => 'On the resort map',
-    'map_text' => 'The route from Medeu to the hotel, marked on the illustrated resort map.',
+    'map_text' => 'Your route is marked on the illustrated resort map: follow the numbers from 1 to the hotel.',
 ];
