@@ -49,3 +49,34 @@ document.addEventListener('click', (e) => {
         document.cookie = 'tenir_lang=' + link.getAttribute('lang') + '; path=/; max-age=31536000; samesite=lax';
     }
 });
+
+// Лента карточек: тонкий индикатор прокрутки (как у Aman) — длина бегунка = видимая часть, положение = где вы в ленте
+document.querySelectorAll('.rail').forEach((rail) => {
+    const bar = document.createElement('div');
+    bar.className = 'rail-progress';
+    bar.setAttribute('aria-hidden', 'true');
+    bar.innerHTML = '<span class="rail-progress__thumb"></span>';
+    rail.after(bar);
+    const thumb = bar.firstElementChild;
+
+    const update = () => {
+        const max = rail.scrollWidth - rail.clientWidth;
+        bar.hidden = max <= 2;
+        if (bar.hidden) return;
+        const ratio = rail.clientWidth / rail.scrollWidth;
+        thumb.style.width = (ratio * 100) + '%';
+        thumb.style.transform = 'translateX(' + (rail.scrollLeft / max) * ((1 - ratio) / ratio) * 100 + '%)';
+    };
+
+    const seek = (e) => {
+        const r = bar.getBoundingClientRect();
+        const p = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width));
+        rail.scrollTo({ left: p * (rail.scrollWidth - rail.clientWidth), behavior: 'smooth' });
+    };
+    bar.addEventListener('click', seek);
+
+    rail.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    new ResizeObserver(update).observe(rail);
+    update();
+});
