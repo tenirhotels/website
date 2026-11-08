@@ -17,8 +17,8 @@
     @endif
     <h3 class="font-display text-[24px] leading-tight"><a href="{{ $g['url'] }}" class="hover:text-ember">{{ $name }}</a></h3>
     @if ($g['description'])<p class="line-clamp-3 text-base leading-relaxed text-slate">{{ $g['description'] }}</p>@endif
-    <div class="mt-auto flex flex-wrap items-center justify-between gap-x-4 gap-y-4 pt-3">
-        <span class="whitespace-nowrap font-display text-3xl text-forest">{{ number_format($g['price'], 0, '.', ' ') }}<span class="ml-1 font-sans text-[0.6em] text-stone">₸</span></span>
-        <a href="{{ $g['url'] }}" class="btn-primary">{{ __('gifts.give') }}</a>
+    <div class="mt-auto flex flex-nowrap items-center justify-between gap-3 pt-3">
+        <span class="whitespace-nowrap font-display text-[26px] leading-none text-forest sm:text-3xl">{{ number_format($g['price'], 0, '.', ' ') }}<span class="ml-1 font-sans text-[0.6em] text-stone">₸</span></span>
+        <a href="{{ $g['url'] }}" class="btn-primary shrink-0 whitespace-nowrap !px-5 !tracking-[0.12em]">{{ __('gifts.give') }}</a>
     </div>
 </article>
