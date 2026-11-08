@@ -51,7 +51,7 @@ class OfferResource extends Resource
             Fields::translatable(fn (string $l, bool $d) => [
                 Fields::titleInput('title', $l, $d),
                 Textarea::make("summary.$l")->label('Кратко')->rows(2),
-                RichEditor::make("description.$l")->label('Что входит'),
+                RichEditor::make("description.$l")->label('Описание и что включено'),
                 RichEditor::make("terms.$l")->label('Условия'),
             ]),
             Section::make('Бронирование и сроки')->columns(3)->columnSpanFull()->schema([
