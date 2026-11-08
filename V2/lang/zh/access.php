@@ -27,7 +27,7 @@ return [
     'plan_title' => '何时到达Medeu缆车站',
     'plan_day' => '白天乘常规缆车：在所有线路运行期间，从容抵达酒店',
     'plan_evening' => '傍晚：您可赶上Medeu至Shymbulak的最后一班缆车，并在Shymbulak站换乘酒店住客专享缆车（:from–:to）',
-    'plan_note' => '时间为大致估算，我们已预留约30分钟余量。周末和旺季缆车可能排队，建议您再稍早一些出发。',
+    'plan_note' => '时间为大致估算。周末和旺季缆车可能排队，建议您提早抵达。',
     'hours_standard' => '常规运行时间',
     'hours_last' => '最后一班于缆车线路关闭前30分钟登乘。',
     'hours_guest' => '酒店住客专享',
