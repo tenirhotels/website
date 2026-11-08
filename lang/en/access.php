@@ -23,6 +23,7 @@ return [
     'hours_title' => 'Cable car hours',
     'hours_text' => 'The cable car is the only way to the hotel, so plan your arrival around its schedule. The resort sets the timetable, and it can change with the season and weather — please check with us before you travel.',
     'hours_standard' => 'Standard operating hours',
+    'hours_last' => 'Last boarding is 30 minutes before the line closes.',
     'hours_by_resort' => 'Follows the resort schedule',
     'hours_guest' => 'For hotel guests',
     'hours_guest_text' => 'A special ride for hotel guests from Shymbulak station — uphill only, one way. Going down follows the regular cable car timetable.',

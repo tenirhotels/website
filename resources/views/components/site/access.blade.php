@@ -85,8 +85,12 @@
 </section>
 <section class="container-site pb-4 pt-12 md:pt-16">
     @php
-        $cableHours = trim((string) \App\Models\Setting::get('cable.hours', ''));
         $cableNote = trim((string) \App\Models\Setting::get('cable.hours_note', ''));
+        $lifts = [
+            [__('map.tags.station_medeu').' → '.__('map.tags.station_shymbulak'), \App\Models\Setting::get('cable.hours_medeu') ?: '09:00–18:00'],
+            ['Combi-1', \App\Models\Setting::get('cable.hours_combi1') ?: '09:00–17:00'],
+            ['Combi-2', \App\Models\Setting::get('cable.hours_combi2') ?: '09:00–16:30'],
+        ];
         $guestFrom = \App\Models\Setting::get('cable.guest_from') ?: '18:00';
         $guestTo = \App\Models\Setting::get('cable.guest_to') ?: '19:00';
     @endphp
@@ -96,12 +100,15 @@
         <div class="flex flex-col gap-2 rounded-3xl border border-mist p-6 md:p-8">
             <span class="flex h-11 w-11 items-center justify-center rounded-full bg-sand text-ember">{{ site_icon('cable', 'h-6 w-6') }}</span>
             <p class="eyebrow mt-2">{{ __('access.hours_standard') }}</p>
-            @if ($cableHours !== '')
-                <p class="whitespace-nowrap font-display text-3xl">{{ $cableHours }}</p>
-                @if ($cableNote !== '')<p class="text-[15px] text-stone">{{ $cableNote }}</p>@endif
-            @else
-                <p class="font-display text-2xl leading-snug">{{ __('access.hours_by_resort') }}</p>
-            @endif
+            <ul class="divide-y divide-mist">
+                @foreach ($lifts as [$lname, $lhours])
+                    <li class="flex items-baseline justify-between gap-4 py-2.5">
+                        <span class="text-lg">{{ $lname }}</span>
+                        <span class="whitespace-nowrap font-display text-xl">{{ $lhours }}</span>
+                    </li>
+                @endforeach
+            </ul>
+            <p class="text-[15px] leading-relaxed text-stone">{{ $cableNote !== '' ? $cableNote.'. ' : '' }}{{ __('access.hours_last') }}</p>
         </div>
         <div class="flex flex-col gap-2 rounded-3xl bg-forest p-6 text-white md:p-8">
             <span class="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-ember-light">{{ site_icon('cable', 'h-6 w-6') }}</span>

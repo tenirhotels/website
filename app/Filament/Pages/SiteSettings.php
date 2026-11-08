@@ -89,12 +89,13 @@ class SiteSettings extends Page
                 TextInput::make('gifts.url')->label('Адрес витрины gifter')->url()->placeholder('https://gifts.tenirhotels.com'),
             ]),
             Section::make('Канатная дорога (страница «Как добраться»)')
-                ->description('Расписание задаёт курорт. Здесь — то, что показывается гостям; пустые поля скрываются или берутся по умолчанию.')
+                ->description('Расписание задаёт курорт (shymbulak.com/info). Пустые поля — значения по умолчанию; меняйте при смене сезона.')
                 ->columns(2)
                 ->schema([
-                    TextInput::make('cable.hours')->label('Стандартное время работы')->placeholder('09:00–17:00')
-                        ->helperText('Пока пусто — гостям пишется «по графику курорта» без цифр.'),
-                    TextInput::make('cable.hours_note')->label('Пояснение к времени (сезон, дни)')->placeholder('ежедневно, в зимний сезон'),
+                    TextInput::make('cable.hours_medeu')->label('Медеу — Шымбулак')->placeholder('09:00–18:00'),
+                    TextInput::make('cable.hours_combi1')->label('Комби-1')->placeholder('09:00–17:00'),
+                    TextInput::make('cable.hours_combi2')->label('Комби-2')->placeholder('09:00–16:30'),
+                    TextInput::make('cable.hours_note')->label('Пояснение (сезон, дни)')->placeholder('ежедневно, будни и выходные'),
                     TextInput::make('cable.guest_from')->label('Подъём для гостей отеля: с')->default('18:00')->placeholder('18:00'),
                     TextInput::make('cable.guest_to')->label('Подъём для гостей отеля: до')->default('19:00')->placeholder('19:00'),
                 ]),
