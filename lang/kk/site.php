@@ -109,7 +109,7 @@ return [
         'price_from' => ':price ₸ бастап',
         'valid_until' => ':date дейін',
         'terms' => 'Шарттар',
-        'included' => 'Не кіреді',
+        'included' => 'Пакетке не кіреді',
         'related' => 'Сізге бұл да ұнауы мүмкін',
         'email' => 'E-mail',
         'subscribe' => 'Жазылу',

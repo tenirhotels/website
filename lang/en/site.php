@@ -108,7 +108,7 @@ return [
         'price_from' => 'from :price ₸',
         'valid_until' => 'until :date',
         'terms' => 'Terms',
-        'included' => 'What’s included',
+        'included' => 'What’s included in the package',
         'related' => 'You may also like',
         'email' => 'E-mail',
         'subscribe' => 'Subscribe',
