@@ -27,6 +27,7 @@ return [
         'promo' => 'Promo code',
         'promo_add' => 'Have a promo code?',
         'search' => 'Choose dates and rooms',
+        'direct_title' => 'Book direct',
         'best_rate' => 'Best rate guaranteed on our official website',
         'intro' => 'Choose your dates and room. Instant confirmation.',
         'help' => 'Need help with your booking?',
