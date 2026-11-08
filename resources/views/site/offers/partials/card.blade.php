@@ -14,7 +14,7 @@
         <p class="leading-relaxed text-slate">{{ $offer->t('summary') }}</p>
         <div class="mt-auto flex flex-wrap items-center gap-6 pt-3">
             <a href="{{ $offer->bookingUrl() }}" class="btn-primary">{{ __('site.common.book_now') }}</a>
-            <a href="{{ $offer->url() }}" class="text-[13px] uppercase tracking-[0.2em] hover:text-ember">{{ __('site.common.learn_more') }}</a>
+            <a href="{{ $offer->url() }}" class="link-line">{{ __('site.common.learn_more') }}</a>
         </div>
     </div>
 </article>

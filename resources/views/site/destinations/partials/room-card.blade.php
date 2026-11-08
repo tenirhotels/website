@@ -11,6 +11,6 @@
         @if ($room->price_from)
             <span class="text-[15px] text-slate">{{ __('site.hotel.from') }} <strong class="text-lg font-normal text-ink">{{ price($room->price_from) }} ₸</strong></span>
         @endif
-        <a href="{{ $room->bookingUrl() }}" class="text-[13px] uppercase tracking-[0.2em] text-ember hover:text-forest">{{ __('site.hotel.check_prices') }} →</a>
+        <a href="{{ $room->bookingUrl() }}" class="text-[13px] uppercase tracking-[0.2em] text-ember hover:text-forest inline-block border-b border-current pb-1.5">{{ __('site.hotel.check_prices') }} →</a>
     </div>
 </article>
