@@ -18,6 +18,8 @@ return [
     'leg_car_meta' => '≈ 21–22 km, 30–40 minutes by car',
     'leg_cable' => 'Medeu → hotel',
     'leg_cable_meta' => 'Cable cars, ≈ :min min with changes',
+    'asl' => 'above sea level',
+    'altitude' => 'Altitude above sea level',
     'map_title' => 'On the resort map',
     'map_text' => 'Your route is marked on the illustrated resort map: follow the numbers from 1 to the hotel.',
 ];
