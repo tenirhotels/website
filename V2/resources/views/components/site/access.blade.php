@@ -92,9 +92,10 @@
             ['Combi-2', \App\Models\Setting::get('cable.hours_combi2') ?: '09:00–16:30'],
         ];
         $endOf = fn (string $h, string $fallback) => preg_match('/(\d{1,2}[:.]\d{2})\s*$/u', $h, $m) ? str_replace('.', ':', $m[1]) : $fallback;
-        $reserve = 0; // запас на очереди, мин (0 — без запаса)
-        $medeuLast = \Illuminate\Support\Carbon::createFromFormat('H:i', $endOf((string) $lifts[0][1], '18:00'))->subMinutes(30 + $reserve);
-        $dayLast = \Illuminate\Support\Carbon::createFromFormat('H:i', $endOf((string) $lifts[2][1], '16:30'))->subMinutes(30 + 55 + $reserve);
+        $dayReserve = 0;      // запас днём, мин (в тексте не упоминается)
+        $eveningReserve = 30; // запас вечером, мин (в тексте не упоминается)
+        $medeuLast = \Illuminate\Support\Carbon::createFromFormat('H:i', $endOf((string) $lifts[0][1], '18:00'))->subMinutes(30 + $eveningReserve);
+        $dayLast = \Illuminate\Support\Carbon::createFromFormat('H:i', $endOf((string) $lifts[2][1], '16:30'))->subMinutes(30 + 55 + $dayReserve);
         $dayLast->setTime($dayLast->hour, intdiv($dayLast->minute, 15) * 15);
         $guestFrom = \App\Models\Setting::get('cable.guest_from') ?: '18:00';
         $guestTo = \App\Models\Setting::get('cable.guest_to') ?: '19:00';
