@@ -2,9 +2,9 @@
 
 return [
     'm' => '米',
-    'eyebrow' => '唯一的上山方式',
-    'title' => 'Tenir 位于山顶，只能乘缆车抵达',
-    'text' => '酒店没有公路通达。从Medeu站出发，缆车经Shymbulak直达Combi-2站。',
+    'eyebrow' => '前往酒店',
+    'title' => 'Tenir坐落山顶——缆车带您抵达',
+    'text' => '没有公路：从Medeu站出发，度假区缆车经Shymbulak直达Combi-2站。',
     'stat_altitude' => '海拔',
     'stat_time' => '单程（含换乘）',
     'stat_rides' => '段缆车',
