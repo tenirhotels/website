@@ -99,7 +99,7 @@ class SiteSettings extends Page
                     TextInput::make('cable.hours_combi2')->label('Комби-2')->placeholder('09:00–16:30'),
                     TextInput::make('cable.hours_note')->label('Пояснение (сезон, дни)')->placeholder('ежедневно, будни и выходные'),
                     TextInput::make('cable.guest_from')->label('Подъём для гостей отеля: с')->default('18:00')->placeholder('18:00'),
-                    TextInput::make('cable.guest_to')->label('Подъём для гостей отеля: до')->default('19:00')->placeholder('19:00'),
+                    TextInput::make('cable.guest_to')->label('Подъём для гостей отеля: до')->default('18:30')->placeholder('18:30'),
                 ]),
             Section::make('Соцсети')->columns(2)->schema([
                 TextInput::make('social.instagram')->label('Instagram')->url(),

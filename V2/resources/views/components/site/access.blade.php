@@ -100,7 +100,7 @@
         $dayLast = \Illuminate\Support\Carbon::createFromFormat('H:i', $endOf((string) $lifts[2][1], '16:30'))->subMinutes(30 + 55 + $dayReserve);
         $dayLast->setTime($dayLast->hour, intdiv($dayLast->minute, 15) * 15);
         $guestFrom = \App\Models\Setting::get('cable.guest_from') ?: '18:00';
-        $guestTo = \App\Models\Setting::get('cable.guest_to') ?: '19:00';
+        $guestTo = \App\Models\Setting::get('cable.guest_to') ?: '18:30';
     @endphp
     <h2 class="font-display text-2xl md:text-3xl">{{ __('access.hours_title') }}</h2>
     <p class="mt-3 max-w-2xl text-lg leading-relaxed text-slate">{{ __('access.hours_text') }}</p>
