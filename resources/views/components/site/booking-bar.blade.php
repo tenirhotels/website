@@ -9,11 +9,11 @@
     // Страница с виджетом: нижняя кнопка на телефоне не нужна (у Exely есть своя плавающая «Узнать цены»).
     request()->attributes->set('tenir.exely_widget', true);
 @endphp
-<div class="tenir-search lg:rounded-3xl lg:bg-sand lg:shadow-[0_20px_50px_rgba(22,33,27,0.22)]">
-    <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:gap-10 lg:px-8 lg:py-6">
-        <div class="hidden shrink-0 lg:block lg:w-52">
+<div class="tenir-search rounded-3xl border border-white/40 bg-sand p-4 shadow-[0_20px_50px_rgba(22,33,27,0.22)] lg:border-0 lg:p-0">
+    <div class="flex flex-col gap-3 lg:flex-row lg:items-center lg:gap-10 lg:px-8 lg:py-6">
+        <div class="shrink-0 text-center lg:w-52 lg:text-left">
             <p class="text-xs font-medium uppercase tracking-[0.3em] text-forest">{{ __('site.booking.title') }}</p>
-            <p class="mt-1.5 text-[13px] leading-snug text-stone">{{ __('site.booking.best_rate') }}</p>
+            <p class="mt-1 text-[13px] leading-snug text-stone">{{ __('site.booking.best_rate') }}</p>
         </div>
         <div id="tl-search-form" class="tl-container min-w-0 flex-1 lg:min-h-[52px]">
             <noscript><a href="{{ route('booking') }}" class="btn-primary">{{ __('site.booking.search') }}</a></noscript>
