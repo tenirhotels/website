@@ -31,7 +31,7 @@ return [
     'hours_standard' => 'Standard operating hours',
     'hours_last' => 'Last boarding is 30 minutes before the line closes.',
     'hours_guest' => 'For hotel guests',
-    'hours_guest_arrive' => 'To use it, be at Medeu cable car station by :time. If you will arrive later than the standard hours, please let us know in advance using the hotel contacts — we will help you get here without any adventures.',
+    'hours_guest_arrive' => 'To use it, be at Medeu cable car station by :time. If you will arrive later than the standard hours, please let us know in advance using the hotel contacts — we will then help you organise and plan your arrival properly.',
     'hours_guest_text' => 'A special ride from Shymbulak station — for exceptional cases only, uphill only, one way.',
     'map_title' => 'On the resort map',
     'map_text' => 'Your route is marked on the illustrated resort map: follow the numbers from 1 to the hotel.',
