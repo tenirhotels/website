@@ -18,6 +18,8 @@ return [
     'leg_car_meta' => '约 21–22 公里，驱车 30–40 分钟',
     'leg_cable' => '麦迪奥 → 酒店',
     'leg_cable_meta' => '缆车，含换乘约 :min 分钟',
+    'asl' => '海拔',
+    'altitude' => '海拔高度',
     'map_title' => '度假区地图',
     'map_text' => '路线已标注在度假区插画地图上：请按数字 1 至酒店的顺序前行。',
 ];
