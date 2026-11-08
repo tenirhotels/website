@@ -1,6 +1,6 @@
 @php(request()->attributes->set('tenir.book_url', $expired ? null : $offer->bookingUrl()))
 <x-layouts.site :seo="$seo" :hotel="$offer->hotel">
-    <x-site.page-hero :image="$offer->image" :eyebrow="$offer->hotel?->t('name') ?? __('site.nav.offers')" :title="$offer->t('title')" :text="$offer->t('summary')" />
+    <x-site.page-hero :image="$offer->image" :eyebrow="$offer->hotel?->t('name') ?? __('site.nav.offers')" :title="$offer->t('title')" />
 
     <section class="container-site flex flex-col gap-8 md:gap-14 py-12 md:py-16 lg:py-20 lg:flex-row lg:gap-20">
         <div class="flex flex-[1.5] flex-col gap-10">
@@ -9,6 +9,12 @@
             @endif
             @if ($offer->t('description'))
                 <div class="prose-tenir">{!! $offer->t('description') !!}</div>
+            @endif
+            @if ($offer->t('included'))
+                <div>
+                    <h2 class="mb-5 font-display text-2xl">{{ __('site.common.included') }}</h2>
+                    <div class="prose-tenir">{!! $offer->t('included') !!}</div>
+                </div>
             @endif
             @if ($offer->t('terms'))
                 <div>

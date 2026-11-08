@@ -111,8 +111,9 @@ class PropertyModeTest extends TestCase
         $this->get('/admin/offers/create')->assertOk()->assertSee('Локация (отель)');
         $this->get('/admin/room-types/create')->assertOk()->assertSee('Локация (отель)');
 
+        \Illuminate\Support\Facades\Storage::fake('public');
         Livewire::test(CreateOffer::class)
-            ->fillForm(['slug' => 'ski-week', 'title.ru' => 'Лыжная неделя'])
+            ->fillForm(['slug' => 'ski-week', 'title.ru' => 'Лыжная неделя', 'summary.ru' => 'Кратко', 'description.ru' => '<p>Полное описание</p>', 'image' => [\Illuminate\Http\UploadedFile::fake()->image('offer.jpg')]])
             ->call('create')
             ->assertHasNoFormErrors();
 

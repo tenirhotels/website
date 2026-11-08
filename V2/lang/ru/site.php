@@ -108,7 +108,7 @@ return [
         'price_from' => 'от :price ₸',
         'valid_until' => 'до :date',
         'terms' => 'Условия',
-        'included' => 'Что входит',
+        'included' => 'Что входит в пакет',
         'related' => 'Вам также понравится',
         'email' => 'E-mail',
         'subscribe' => 'Подписаться',

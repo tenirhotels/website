@@ -50,9 +50,10 @@ class OfferResource extends Resource
             ]),
             Fields::translatable(fn (string $l, bool $d) => [
                 Fields::titleInput('title', $l, $d),
-                Textarea::make("summary.$l")->label('Кратко')->rows(2),
-                RichEditor::make("description.$l")->label('Описание и что включено'),
-                RichEditor::make("terms.$l")->label('Условия'),
+                Textarea::make("summary.$l")->label('1. Короткое описание (для карточек)')->rows(2)->maxLength(200)->required($d),
+                RichEditor::make("description.$l")->label('2. Полное описание (на странице предложения)')->required($d),
+                RichEditor::make("included.$l")->label('3. Что входит в пакет (можно не заполнять)')->helperText('Если пусто — блок не показывается. Заголовок добавляется автоматически.'),
+                RichEditor::make("terms.$l")->label('4. Условия (можно не заполнять)')->helperText('Если пусто — блок не показывается.'),
             ]),
             Section::make('Бронирование и сроки')->columns(3)->columnSpanFull()->schema([
                 TextInput::make('exely_special_offer_id')->label('ID предложения в Exely')
@@ -62,7 +63,7 @@ class OfferResource extends Resource
                 DatePicker::make('valid_from')->label('Действует с'),
                 DatePicker::make('valid_to')->label('Действует до')->afterOrEqual('valid_from'),
             ]),
-            Section::make('Фото')->columnSpanFull()->schema([Fields::image('image', 'Обложка', 'offers')]),
+            Section::make('Фото')->columnSpanFull()->schema([Fields::image('image', 'Фото', 'offers')->required()]),
             Fields::seo(),
             Fields::publishing(featured: true),
         ]);

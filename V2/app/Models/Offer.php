@@ -14,7 +14,7 @@ class Offer extends Model
 
     protected $guarded = ['id'];
 
-    protected array $translatable = ['title', 'summary', 'description', 'terms'];
+    protected array $translatable = ['title', 'summary', 'description', 'included', 'terms'];
 
     protected $casts = [
         'valid_from' => 'date',
