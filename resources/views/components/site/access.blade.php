@@ -130,25 +130,14 @@
             <p class="text-lg leading-relaxed text-white/90">{{ __('access.early_text') }}</p>
         </div>
     </div>
-    <div class="mt-4 flex items-start gap-4 rounded-3xl bg-sand p-6 md:p-8">
-        <span class="mt-1 hidden shrink-0 text-ember sm:block">{{ site_icon('cable', 'h-6 w-6') }}</span>
-        <div class="flex flex-col gap-4">
-            <div class="flex flex-col gap-1">
-                <h3 class="font-display text-xl text-ink md:text-2xl">{{ __('access.hours_guest') }}</h3>
-                <p class="text-[15px] leading-relaxed text-slate">{{ __('access.hours_guest_text') }}</p>
-            </div>
-            <dl class="grid gap-x-8 gap-y-3 sm:grid-cols-2">
-                <div class="flex flex-col gap-1 rounded-2xl bg-white px-4 py-3">
-                    <dt class="text-[13px] uppercase tracking-[0.14em] text-stone">{{ __('access.guest_depart') }}</dt>
-                    <dd class="whitespace-nowrap font-display text-2xl text-ember">{{ $guestFrom }}–{{ $guestTo }}</dd>
-                </div>
-                <div class="flex flex-col gap-1 rounded-2xl bg-white px-4 py-3">
-                    <dt class="text-[13px] uppercase tracking-[0.14em] text-stone">{{ __('access.guest_be_at') }}</dt>
-                    <dd class="whitespace-nowrap font-display text-2xl text-ember">{{ __('access.plan_until', ['time' => $medeuLast->format('H:i')]) }}</dd>
-                </div>
-            </dl>
-            <p class="text-[15px] leading-relaxed text-slate">{{ __('access.hours_guest_arrive') }}</p>
-        </div>
+    <div class="mt-6 flex flex-col gap-2 border-l-2 border-mist pl-4 text-[15px] leading-relaxed text-slate">
+        <p><strong class="font-bold text-ink">{{ __('access.hours_guest') }}.</strong> {{ __('access.hours_guest_text') }}</p>
+        <ul class="flex flex-col gap-0.5">
+            <li>{{ __('access.guest_depart') }}: <strong class="whitespace-nowrap font-bold text-ink">{{ $guestFrom }}–{{ $guestTo }}</strong></li>
+            <li>{{ __('access.guest_be_at') }}: <strong class="font-bold text-ink">{{ __('access.plan_until', ['time' => $medeuLast->format('H:i')]) }}</strong></li>
+        </ul>
+        <p>{{ __('access.hours_guest_arrive') }}</p>
+    </div>
     </div>
 </section>
 <section class="container-site py-10 md:py-16">
