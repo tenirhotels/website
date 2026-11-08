@@ -94,10 +94,10 @@
 .rail::-webkit-scrollbar { display: none; }
 .rail > * { flex: 0 0 82%; scroll-snap-align: start; }
 /* Индикатор прокрутки ленты */
-.rail-progress { position: relative; height: 2px; margin-top: 1.5rem; background: color-mix(in srgb, var(--color-ink) 14%, transparent); cursor: pointer; }
+.rail-progress { position: relative; height: 1px; margin-top: 1.25rem; background: color-mix(in srgb, var(--color-ink) 12%, transparent); cursor: pointer; }
 .rail-progress::before { content: ''; position: absolute; inset: -12px 0; } /* большая зона касания */
 .rail-progress[hidden] { display: none; }
-.rail-progress__thumb { position: absolute; left: 0; top: -0.5px; height: 3px; background: var(--color-forest); transition: transform 0.12s linear; will-change: transform; }
+.rail-progress__thumb { position: absolute; left: 0; top: -0.5px; height: 2px; border-radius: 1px; background: color-mix(in srgb, var(--color-forest) 60%, transparent); transition: transform 0.12s linear; will-change: transform; }
 @media (min-width: 640px) {
     .rail-progress { display: none; }
     .rail { display: grid; gap: 2rem; margin-inline: 0; padding-inline: 0; overflow: visible; }
