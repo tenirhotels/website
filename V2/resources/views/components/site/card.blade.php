@@ -8,6 +8,6 @@
     <h3 class="font-display text-[24px] leading-tight"><a href="{{ $href }}" class="hover:text-ember">{{ $title }}</a></h3>
     @if ($text)<p class="text-base leading-relaxed text-slate">{{ $text }}</p>@endif
     @if ($cta)
-        <a href="{{ $ctaHref ?? $href }}" class="mt-1 text-[13px] uppercase tracking-[0.2em] text-ember hover:text-forest">{{ $cta }} →</a>
+        <a href="{{ $ctaHref ?? $href }}" class="mt-1 text-[13px] uppercase tracking-[0.2em] text-ember hover:text-forest inline-block border-b border-current pb-1.5">{{ $cta }} →</a>
     @endif
 </article>
