@@ -48,15 +48,15 @@
 
         <div class="flex items-center gap-3 sm:gap-4">
             <details class="relative">
-                <summary class="flex min-h-11 cursor-pointer list-none items-center gap-1 text-[13px] tracking-[0.1em]" aria-label="{{ __('site.nav.language') }}">
+                <summary class="flex min-h-10 cursor-pointer list-none items-center gap-1.5 rounded-full border border-ember-light px-4 text-[14px] text-ember-light" aria-label="{{ __('site.nav.language') }}">
                     {{ Locales::all()[$current]['label'] }}
                     <svg aria-hidden="true" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor"><path d="M3 4.5 6 7.5l3-3"/></svg>
                 </summary>
-                <ul class="absolute right-0 mt-2 min-w-36 bg-white py-2 text-ink shadow-lg">
+                <ul class="absolute right-0 z-50 mt-3 flex min-w-40 flex-col gap-1 rounded-3xl border border-white/15 bg-forest p-2 shadow-xl">
                     @foreach (Locales::all() as $code => $meta)
                         <li>
                             <a href="{{ $alternates[$code] ?? route('home', ['locale' => $code]) }}" hreflang="{{ $meta['hreflang'] }}" lang="{{ $code }}"
-                               @class(['block px-4 py-2 text-[15px] hover:bg-snow', 'text-ember' => $code === $current])
+                               @class(['flex min-h-11 items-center rounded-full px-4 text-[15px]', 'bg-white/10 text-ember-light' => $code === $current, 'hover:bg-white/10' => $code !== $current])
                                @if ($code === $current) aria-current="true" @endif>{{ $meta['name'] }}</a>
                         </li>
                     @endforeach
