@@ -1,3 +1,4 @@
+@php(request()->attributes->set('tenir.book_url', $expired ? null : $offer->bookingUrl()))
 <x-layouts.site :seo="$seo" :hotel="$offer->hotel">
     <x-site.page-hero :image="$offer->image" :eyebrow="$offer->hotel?->t('name') ?? __('site.nav.offers')" :title="$offer->t('title')" :text="$offer->t('summary')" />
 
