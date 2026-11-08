@@ -15,7 +15,7 @@
                             <p class="text-xs uppercase tracking-[0.2em] text-ember">{{ collect([$item->source, $item->year])->filter()->implode(' · ') }}</p>
                             <p class="font-display text-[30px] leading-tight text-forest [font-variant-numeric:lining-nums]">{{ $item->t('title') }}</p>
                             @if ($sub = $item->t('subtitle'))
-                                <p class="text-[15px] leading-relaxed text-slate">{{ $sub }}</p>
+                                <p class="text-base leading-relaxed text-slate">{{ $sub }}</p>
                             @endif
                             @if ($item->url)<span class="mt-auto text-[13px] uppercase tracking-[0.2em] text-stone group-hover:text-ember">{{ __('site.recognition.source') }} →</span>@endif
                         </{{ $item->url ? 'a' : 'div' }}>

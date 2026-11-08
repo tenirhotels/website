@@ -11,7 +11,7 @@
             @endif
         </div>
         <aside class="flex-1">
-            <dl class="flex flex-col gap-5 rounded-3xl bg-white p-8 text-[15px]">
+            <dl class="flex flex-col gap-5 rounded-3xl bg-white p-8 text-base">
                 <div><dt class="field-label mb-1">{{ __('site.events.when') }}</dt><dd>{{ $event->dateLabel() }}@if ($event->time_text), {{ $event->time_text }}@endif</dd></div>
                 @if ($event->t('place') || $event->hotel)
                     <div><dt class="field-label mb-1">{{ __('site.events.where') }}</dt><dd>{{ collect([$event->t('place'), $event->hotel?->t('name') ?? __('site.events.whole_resort')])->filter()->unique()->implode(' · ') }}</dd></div>

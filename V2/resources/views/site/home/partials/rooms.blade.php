@@ -9,7 +9,7 @@
                     <x-site.media :src="$room->image" :alt="$room->t('name')" round="" />
                 </a>
                 <div class="flex flex-1 flex-col justify-center gap-6 p-8 lg:p-14">
-                    <h3 class="font-display text-4xl leading-tight"><a href="{{ $room->url() }}" class="hover:text-ember">{{ $room->t('name') }}</a></h3>
+                    <h3 class="font-display text-3xl leading-tight"><a href="{{ $room->url() }}" class="hover:text-ember">{{ $room->t('name') }}</a></h3>
                     <p class="lead">{{ $room->t('summary') }}</p>
                     @php
                         $facts = collect([
@@ -20,14 +20,14 @@
                         ])->filter(fn ($f) => $f[1]);
                     @endphp
                     @if ($facts->isNotEmpty())
-                        <ul class="flex flex-wrap gap-x-7 gap-y-3 border-t border-mist pt-6 text-[15px] text-ink">
+                        <ul class="flex flex-wrap gap-x-7 gap-y-3 border-t border-mist pt-6 text-base text-ink">
                             @foreach ($facts as [$icon, $text])
                                 <li class="flex items-center gap-2.5"><span class="text-ember">{{ site_icon($icon, 'h-5 w-5') }}</span>{{ $text }}</li>
                             @endforeach
                         </ul>
                     @endif
                     @if ($amenities = array_slice($room->amenityList(), 0, 6))
-                        <ul class="grid grid-cols-2 gap-x-6 gap-y-3 text-[15px] text-slate">
+                        <ul class="grid grid-cols-2 gap-x-6 gap-y-3 text-base text-slate">
                             @foreach ($amenities as $a)
                                 <li class="flex items-center gap-2.5"><span class="text-forest">{{ amenity_icon($a, 'h-5 w-5') }}</span>{{ $a }}</li>
                             @endforeach
@@ -35,7 +35,7 @@
                     @endif
                     <div class="flex flex-wrap items-center gap-7 pt-2">
                         @if ($room->price_from)
-                            <span class="text-[15px] text-slate">{{ __('site.hotel.from') }} <strong class="text-2xl font-normal text-ink">{{ price($room->price_from) }} ₸</strong> / {{ __('site.hotel.per_night') }}</span>
+                            <span class="text-base text-slate">{{ __('site.hotel.from') }} <strong class="text-2xl font-normal text-ink">{{ price($room->price_from) }} ₸</strong> / {{ __('site.hotel.per_night') }}</span>
                         @endif
                         @if ($rooms->count() === 1)
                             <a href="{{ $room->url() }}" class="link-line">{{ __('site.common.learn_more') }}</a>

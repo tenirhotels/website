@@ -39,7 +39,7 @@
             <section class="bg-sand">
                 <figure class="container-site flex max-w-4xl flex-col items-center gap-6 py-12 md:py-16 lg:py-20 text-center md:py-28">
                     <blockquote class="font-display text-3xl italic leading-snug md:text-4xl">«{{ $d['quote'] ?? '' }}»</blockquote>
-                    @if (! empty($d['caption']))<figcaption class="text-sm uppercase tracking-[0.2em] text-stone">{{ $d['caption'] }}</figcaption>@endif
+                    @if (! empty($d['caption']))<figcaption class="text-[15px] uppercase tracking-[0.2em] text-stone">{{ $d['caption'] }}</figcaption>@endif
                 </figure>
             </section>
             @break
@@ -48,7 +48,7 @@
             <section class="bg-forest text-snow">
                 <div class="container-site flex max-w-4xl flex-col items-center gap-6 py-14 text-center md:py-20 lg:py-28">
                     <p class="font-display text-7xl tracking-[0.04em] md:text-9xl">{{ $d['word'] ?? 'Тәңір' }}</p>
-                    @if (! empty($d['meaning']))<p class="text-sm uppercase tracking-[0.3em] text-snow/80">{{ $d['meaning'] }}</p>@endif
+                    @if (! empty($d['meaning']))<p class="text-[15px] uppercase tracking-[0.3em] text-snow/80">{{ $d['meaning'] }}</p>@endif
                     @if (! empty($d['text']))<p class="font-display text-2xl italic leading-relaxed md:text-3xl">{{ $d['text'] }}</p>@endif
                 </div>
             </section>

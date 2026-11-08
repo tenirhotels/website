@@ -48,7 +48,7 @@
                 <p class="eyebrow">{{ __('site.hotel.dining') }}</p>
                 <h2 class="h-section">{{ $venue->t('name') }}</h2>
                 <p class="lead">{{ $venue->t('summary') }}</p>
-                @if ($venue->t('hours'))<p class="text-sm text-stone">{{ $venue->t('hours') }}</p>@endif
+                @if ($venue->t('hours'))<p class="text-[15px] text-stone">{{ $venue->t('hours') }}</p>@endif
                 <a href="{{ $hotel->sectionUrl('dining') }}" class="link-line self-start">{{ __('site.common.learn_more') }}</a>
             </div>
             <div class="aspect-[4/3] w-full flex-1"><x-site.media :src="$venue->image" :alt="$venue->t('name')" /></div>

@@ -26,11 +26,11 @@
             <div class="flex flex-col gap-5">
                 <img src="/images/logo-light.svg" alt="Tenir" width="150" height="36" class="h-9 w-auto self-start">
                 @if ($text = Setting::text('brand.footer_text'))
-                    <p class="max-w-sm text-[15px] leading-relaxed text-[#B4BCB7]">{{ $text }}</p>
+                    <p class="max-w-sm text-base leading-relaxed text-[#B4BCB7]">{{ $text }}</p>
                 @endif
             </div>
 
-            <div class="flex flex-col gap-3 text-[15px]">
+            <div class="flex flex-col gap-3 text-base">
                 <p class="text-xs uppercase tracking-[0.2em] text-[#9AA59F]">{{ __('site.footer.reservations') }}</p>
                 @if ($phone)<a href="tel:{{ preg_replace('/[^\d+]/', '', $phone) }}" class="hover:text-white">{{ $phone }}</a>@endif
                 @if ($whatsapp)<a href="https://wa.me/{{ preg_replace('/\D/', '', $whatsapp) }}" class="hover:text-white">WhatsApp</a>@endif
@@ -38,7 +38,7 @@
                 @if ($hours = Setting::get('contacts.hours'))<span class="text-[#9AA59F]">{{ $hours }}</span>@endif
             </div>
 
-            <nav aria-label="{{ __('site.footer.guests') }}" class="flex flex-col gap-3 text-[15px]">
+            <nav aria-label="{{ __('site.footer.guests') }}" class="flex flex-col gap-3 text-base">
                 <p class="text-xs uppercase tracking-[0.2em] text-[#9AA59F]">{{ __('site.footer.guests') }}</p>
                 @if (\App\Support\Property::isSingle() && ($single = \App\Support\Property::primary()))
                     {{-- Один отель: ссылка на главную бессмысленна — ведём в разделы отеля. --}}
@@ -59,7 +59,7 @@
             </nav>
 
             {{-- Бренд: философия и устойчивое развитие (страницы с размещением «основное меню»). --}}
-            <nav aria-label="{{ __('site.footer.brand') }}" class="flex flex-col gap-3 text-[15px]">
+            <nav aria-label="{{ __('site.footer.brand') }}" class="flex flex-col gap-3 text-base">
                 <p class="text-xs uppercase tracking-[0.2em] text-[#9AA59F]">{{ __('site.footer.brand') }}</p>
                 @foreach ($brandPages as $page)
                     <a href="{{ $page->url() }}" class="hover:text-white">{{ $page->t('title') }}</a>

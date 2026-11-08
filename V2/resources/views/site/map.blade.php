@@ -21,7 +21,7 @@
             <div class="flex flex-wrap items-end justify-between gap-x-10 gap-y-5">
                 <div class="max-w-2xl">
                     <p class="eyebrow">{{ $hotel?->t('name') ?? __('map.eyebrow') }} · {{ __('map.eyebrow') }}</p>
-                    <h1 class="h-display mt-2 text-4xl text-forest md:text-6xl">{{ __('map.title') }}</h1>
+                    <h1 class="h-display mt-2 text-4xl text-forest md:text-5xl">{{ __('map.title') }}</h1>
                     <p class="lead mt-4">{{ __('map.lead') }}</p>
                 </div>
                 <div role="group" aria-label="{{ __('map.season_label') }}" class="inline-flex rounded-full border border-mist bg-white p-1 text-[13px] uppercase tracking-[0.14em]">
@@ -90,7 +90,7 @@
                     <button type="button" data-card-close class="map-card-close" aria-label="{{ __('map.close') }}">×</button>
                     <p class="eyebrow" data-card-kind></p>
                     <h2 class="h-display mt-1 text-2xl text-forest md:text-3xl" data-card-name></h2>
-                    <p class="mt-2 whitespace-pre-line text-[15px] leading-relaxed text-slate" data-card-note hidden></p>
+                    <p class="mt-2 whitespace-pre-line text-base leading-relaxed text-slate" data-card-note hidden></p>
                     <a class="link-line mt-4" data-card-link hidden></a>
                 </div>
             </div>
@@ -110,12 +110,12 @@
                             <span class="relative mt-1.5 size-[15px] shrink-0 rounded-full border-2 border-forest bg-snow"></span>
                             <div>
                                 <button type="button" data-focus="st-{{ $c['key'] }}" class="text-left text-lg text-ink hover:text-ember">{{ $stationName($c['key']) }}</button>
-                                @if ($c['next'])<p class="text-sm text-stone">≈{{ $c['next'] }} {{ __('map.min') }} {{ __('map.next') }}</p>@endif
+                                @if ($c['next'])<p class="text-[15px] text-stone">≈{{ $c['next'] }} {{ __('map.min') }} {{ __('map.next') }}</p>@endif
                             </div>
                         </li>
                     @endforeach
                 </ol>
-                <p class="mt-6 text-sm text-stone">{{ __('map.one_way_note') }}</p>
+                <p class="mt-6 text-[15px] text-stone">{{ __('map.one_way_note') }}</p>
                 @if ($hotel)
                     <a href="{{ $hotel->sectionUrl('getting-here') }}" class="link-line mt-8">{{ __('map.getting_here') }}</a>
                 @endif

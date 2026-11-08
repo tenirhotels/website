@@ -4,7 +4,7 @@
 
     <section class="container-site flex flex-col gap-8 md:gap-14 py-12 md:py-16 lg:py-20 lg:flex-row lg:gap-20">
         <div class="prose-tenir flex-[1.5]">{!! $hotel->t('getting_here') !!}</div>
-        <aside class="flex flex-1 flex-col gap-3 text-[15px] text-slate">
+        <aside class="flex flex-1 flex-col gap-3 text-base text-slate">
             <a href="{{ route('map') }}" class="btn-primary self-start">{{ __('map.open_map') }}</a>
             @if ($hotel->latitude)
                 <a href="https://www.google.com/maps/search/?api=1&query={{ $hotel->latitude }},{{ $hotel->longitude }}" class="btn-dark self-start" target="_blank" rel="noopener">Google Maps</a>

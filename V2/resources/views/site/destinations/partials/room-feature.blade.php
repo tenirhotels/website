@@ -18,7 +18,7 @@
 
         <div class="flex flex-col gap-7">
             <div class="flex flex-col gap-4">
-                <h2 class="font-display text-4xl leading-tight md:text-5xl">{{ $room->t('name') }}</h2>
+                <h2 class="font-display text-3xl leading-tight md:text-4xl">{{ $room->t('name') }}</h2>
                 <p class="text-lg leading-relaxed text-slate">{{ $room->t('summary') }}</p>
             </div>
 
@@ -27,7 +27,7 @@
                     @foreach ($facts as [$k, $label, $value])
                         <div class="flex items-start gap-3">
                             <span class="mt-0.5 text-ember">{{ site_icon($k) }}</span>
-                            <div><dt class="field-label mb-0.5">{{ $label }}</dt><dd class="text-[15px]">{{ $value }}</dd></div>
+                            <div><dt class="field-label mb-0.5">{{ $label }}</dt><dd class="text-base">{{ $value }}</dd></div>
                         </div>
                     @endforeach
                 </dl>
@@ -48,12 +48,12 @@
 @if ($amenities)
     <section class="bg-white">
         <div class="container-site flex flex-col gap-10 py-12 md:py-16">
-            <h2 class="font-display text-3xl md:text-4xl">{{ __('site.hotel.amenities') }}</h2>
+            <h2 class="font-display text-2xl md:text-3xl">{{ __('site.hotel.amenities') }}</h2>
             <ul class="grid grid-cols-2 gap-4 md:grid-cols-4">
                 @foreach ($amenities as $a)
                     <li class="flex flex-col gap-3 rounded-2xl bg-sand/60 p-5 text-forest">
                         {{ amenity_icon($a) }}
-                        <span class="text-[15px] leading-snug text-ink">{{ $a }}</span>
+                        <span class="text-base leading-snug text-ink">{{ $a }}</span>
                     </li>
                 @endforeach
             </ul>
