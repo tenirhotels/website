@@ -35,9 +35,9 @@ class OfferResource extends Resource
 
     protected static string|UnitEnum|null $navigationGroup = 'Контент';
 
-    protected static ?string $modelLabel = 'спецпредложение';
+    protected static ?string $modelLabel = 'предложение';
 
-    protected static ?string $pluralModelLabel = 'Спецпредложения';
+    protected static ?string $pluralModelLabel = 'Предложения';
 
     protected static ?int $navigationSort = 1;
 
@@ -55,7 +55,7 @@ class OfferResource extends Resource
                 RichEditor::make("terms.$l")->label('Условия'),
             ]),
             Section::make('Бронирование и сроки')->columns(3)->columnSpanFull()->schema([
-                TextInput::make('exely_special_offer_id')->label('ID спецпредложения в Exely')
+                TextInput::make('exely_special_offer_id')->label('ID предложения в Exely')
                     ->helperText('Напр. 10137078 — кнопка ведёт сразу на тариф'),
                 TextInput::make('promo_code')->label('Промокод'),
                 TextInput::make('min_nights')->label('Минимум ночей')->numeric(),
