@@ -9,6 +9,8 @@
     $rides = $stations->whereNotNull('next')->count();
     $route = $stations->map(fn ($s) => $pins['st-'.$s['key']])->push($pins['hotel']);
     $points = $route->map(fn ($p) => $p['x'].','.$p['y'])->implode(' ');
+    $W = ResortMap::WIDTH;
+    $H = ResortMap::HEIGHT;
 @endphp
 
 <section class="container-site pt-12 md:pt-16">
@@ -31,34 +33,6 @@
             @endforeach
         </dl>
     </div>
-</section>
-
-<section class="container-site py-12 md:py-16">
-    <h2 class="font-display text-2xl md:text-3xl">{{ __('access.route_title') }}</h2>
-    <ol class="mt-8 grid gap-0 md:grid-cols-5">
-        @foreach ($stations as $i => $s)
-            <li class="relative flex gap-4 pb-8 md:flex-col md:gap-3 md:pb-0">
-                {{-- линия между остановками --}}
-                <span class="absolute left-[15px] top-8 h-[calc(100%-2rem)] w-px bg-ember/40 md:left-8 md:top-[15px] md:h-px md:w-[calc(100%-2rem)]" aria-hidden="true"></span>
-                <span class="relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-ember text-[13px] text-white">{{ $i + 1 }}</span>
-                <div class="flex flex-col gap-1">
-                    <p class="text-lg leading-snug">{{ __('map.names.station_'.$s['key']) }}</p>
-                    @if ($s['next'])
-                        <p class="text-[15px] text-stone">↑ ≈ {{ $s['next'] }} {{ __('map.min') }}</p>
-                    @endif
-                </div>
-            </li>
-        @endforeach
-        <li class="relative flex gap-4 md:flex-col md:gap-3">
-            <span class="relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-forest text-white">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" aria-hidden="true"><path d="M3 11l9-7 9 7v9H3z"/><path d="M10 20v-6h4v6"/></svg>
-            </span>
-            <div class="flex flex-col gap-1">
-                <p class="text-lg leading-snug">{{ $hotel->t('name') }}</p>
-                <p class="text-[15px] text-stone">{{ __('access.at_hotel') }}</p>
-            </div>
-        </li>
-    </ol>
 </section>
 
 <section class="bg-white">
@@ -105,7 +79,68 @@
                     </li>
                 @endforeach
             </ol>
-            <a href="{{ route('map') }}" class="btn-dark self-start">{{ __('map.open_map') }}</a>
         </div>
     </div>
 </section>
+<section class="container-site py-12 md:py-16">
+    <h2 class="font-display text-2xl md:text-3xl">{{ __('access.route_title') }}</h2>
+    <ol class="mt-8 grid gap-0 md:grid-cols-5">
+        @foreach ($stations as $i => $s)
+            <li class="relative flex gap-4 pb-8 md:flex-col md:gap-3 md:pb-0">
+                {{-- линия между остановками --}}
+                <span class="absolute left-[15px] top-8 h-[calc(100%-2rem)] w-px bg-ember/40 md:left-8 md:top-[15px] md:h-px md:w-[calc(100%-2rem)]" aria-hidden="true"></span>
+                <span class="relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-ember text-[13px] text-white">{{ $i + 1 }}</span>
+                <div class="flex flex-col gap-1">
+                    <p class="text-lg leading-snug">{{ __('map.names.station_'.$s['key']) }}</p>
+                    @if ($s['next'])
+                        <p class="text-[15px] text-stone">↑ ≈ {{ $s['next'] }} {{ __('map.min') }}</p>
+                    @endif
+                </div>
+            </li>
+        @endforeach
+        <li class="relative flex gap-4 md:flex-col md:gap-3">
+            <span class="relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-forest text-white">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" aria-hidden="true"><path d="M3 11l9-7 9 7v9H3z"/><path d="M10 20v-6h4v6"/></svg>
+            </span>
+            <div class="flex flex-col gap-1">
+                <p class="text-lg leading-snug">{{ $hotel->t('name') }}</p>
+                <p class="text-[15px] text-stone">{{ __('access.at_hotel') }}</p>
+            </div>
+        </li>
+    </ol>
+
+    {{-- Тот же маршрут на иллюстрированной карте курорта --}}
+    <div class="mt-10 md:mt-14">
+        <a href="{{ route('map') }}" class="relative block overflow-hidden rounded-3xl bg-[#dce9f6]" aria-label="{{ __('map.open_map') }}">
+            <img src="/images/map/{{ $season }}-sm.webp" alt="" width="{{ $W }}" height="{{ $H }}" loading="lazy" decoding="async" class="block h-auto w-full">
+            <svg viewBox="0 0 {{ $W }} {{ $H }}" class="absolute inset-0 h-full w-full" aria-hidden="true">
+                <polyline points="{{ $points }}" fill="none" stroke="#fff" stroke-width="22" stroke-linecap="round" stroke-linejoin="round" opacity=".9"/>
+                <polyline points="{{ $points }}" fill="none" stroke="#B5561F" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+                @foreach ($route as $i => $p)
+                    @if ($p['kind'] === 'hotel')
+                        <circle cx="{{ $p['x'] }}" cy="{{ $p['y'] }}" r="42" fill="#1F3A2E" stroke="#fff" stroke-width="8"/>
+                        <path transform="translate({{ $p['x'] - 20 }} {{ $p['y'] - 21 }}) scale(1.7)" d="M3 11l9-7 9 7v9H3z" fill="none" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/>
+                    @else
+                        <circle cx="{{ $p['x'] }}" cy="{{ $p['y'] }}" r="42" fill="#B5561F" stroke="#fff" stroke-width="8"/>
+                        <text x="{{ $p['x'] }}" y="{{ $p['y'] + 16 }}" text-anchor="middle" font-size="46" font-weight="700" fill="#fff">{{ $i + 1 }}</text>
+                    @endif
+                @endforeach
+            </svg>
+            {{-- подписи (на телефоне названия — в списке шагов выше) --}}
+            @foreach ($route as $i => $p)
+                @php
+                    $name = $p['kind'] === 'hotel' ? $hotel->t('name') : __('map.tags.station_'.$stations[$i]['key']);
+                    $side = $p['kind'] === 'hotel' ? 'left' : ($i < 2 ? 'right' : 'left');
+                @endphp
+                <span class="pointer-events-none absolute hidden -translate-y-1/2 whitespace-nowrap rounded-full bg-white px-3 py-1 text-[13px] text-ink shadow-md md:block {{ $side === 'right' ? 'ml-9' : '-translate-x-full -ml-9' }}"
+                      style="left: {{ round($p['x'] / $W * 100, 2) }}%; top: {{ round(($p['y'] - ($p['kind'] === 'hotel' ? 55 : 0)) / $H * 100, 2) }}%">{{ $name }}</span>
+            @endforeach
+        </a>
+        <div class="mt-5 flex flex-wrap items-center justify-between gap-4">
+            <p class="max-w-xl text-slate">{{ __('access.map_text') }}</p>
+            <a href="{{ route('map') }}" class="btn-dark">{{ __('map.open_map') }}</a>
+        </div>
+    </div>
+</section>
+
+
