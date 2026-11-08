@@ -81,8 +81,10 @@
 .pattern-tile, .pattern-scene { position: absolute; pointer-events: none; }
 .pattern-tile {
     inset: 0;
-    -webkit-mask: url('/images/pattern/petroglyph-tile.svg') 0 0 / 520px auto repeat;
-    mask: url('/images/pattern/petroglyph-tile.svg') 0 0 / 520px auto repeat;
+    /* Плитка не бесшовна по вертикали (на стыке — тёмная полоса), поэтому по высоте она растянута
+       на весь блок и повторяется только по горизонтали: там стык чистый. */
+    -webkit-mask: url('/images/pattern/petroglyph-tile.svg') 0 0 / auto 100% repeat-x;
+    mask: url('/images/pattern/petroglyph-tile.svg') 0 0 / auto 100% repeat-x;
 }
 .pattern-scene {
     -webkit-mask: url('/images/pattern/petroglyph-scene.svg') center / contain no-repeat;
