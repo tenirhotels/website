@@ -137,30 +137,40 @@
 </section>
 <section class="container-site py-10 md:py-16">
     <h2 class="font-display text-2xl md:text-3xl">{{ __('access.route_title') }}</h2>
-    <ol class="mt-8 grid gap-0 md:grid-cols-5">
+    <ol class="mt-8 max-w-2xl">
         @foreach ($stations as $i => $s)
-            <li class="relative flex gap-4 pb-8 md:flex-col md:gap-3 md:pb-0">
-                {{-- линия между остановками --}}
-                <span class="absolute left-[15px] top-8 h-[calc(100%-2rem)] w-px bg-ember/40 md:left-8 md:top-[15px] md:h-px md:w-[calc(100%-2rem)]" aria-hidden="true"></span>
-                <span class="relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-ember text-[13px] text-white">{{ $i + 1 }}</span>
-                <div class="flex flex-col gap-1">
-                    <p class="text-lg leading-snug">{{ __('map.names.station_'.$s['key']) }}</p>
-                    @if ($s['next'])
-                        <p class="mt-1 inline-flex w-fit items-center gap-1.5 rounded-full bg-ember/10 px-3.5 py-1.5 font-display text-base leading-none text-ember md:text-[15px] xl:text-base"><span aria-hidden="true">↑</span> {{ __('access.ride_to', ['min' => $s['next'], 'unit' => __('map.min'), 'name' => __('map.tags.station_'.$stations[$i + 1]['key'])]) }}</p>
-                    @endif
-                </div>
+            {{-- станция --}}
+            <li class="relative flex items-center gap-4">
+                <span class="relative z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-ember text-[15px] text-white">{{ $i + 1 }}</span>
+                <p class="text-xl leading-snug">{{ __('map.names.station_'.$s['key']) }}</p>
             </li>
+            {{-- участок между станциями: сколько едем на канатной дороге --}}
+            @if ($s['next'])
+                <li class="flex gap-4" aria-label="{{ __('access.ride_label') }}">
+                    <span class="flex w-9 shrink-0 justify-center" aria-hidden="true"><span class="w-0.5 bg-ember/40"></span></span>
+                    <div class="my-2 flex flex-1 items-center gap-4 rounded-2xl bg-ember/10 px-4 py-3.5">
+                        <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-ember">{{ site_icon('cable', 'h-6 w-6') }}</span>
+                        <div class="flex flex-col gap-0.5">
+                            <p class="text-[13px] uppercase tracking-[0.14em] text-stone">{{ __('access.ride_label') }}</p>
+                            <p class="font-display text-2xl leading-none text-ember">≈ {{ $s['next'] }} {{ __('map.min') }}</p>
+                            <p class="text-[15px] text-slate">{{ __('access.ride_to_name', ['name' => __('map.tags.station_'.$stations[$i + 1]['key'])]) }}</p>
+                        </div>
+                    </div>
+                </li>
+            @endif
         @endforeach
-        <li class="relative flex gap-4 md:flex-col md:gap-3">
-            <span class="relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-forest text-white">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" aria-hidden="true"><path d="M3 11l9-7 9 7v9H3z"/><path d="M10 20v-6h4v6"/></svg>
+        <li class="flex gap-4" aria-hidden="true"><span class="flex w-9 shrink-0 justify-center"><span class="my-1 h-6 w-0.5 bg-ember/40"></span></span></li>
+        <li class="flex items-center gap-4">
+            <span class="relative z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-forest text-white">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5" aria-hidden="true"><path d="M3 11l9-7 9 7v9H3z"/><path d="M10 20v-6h4v6"/></svg>
             </span>
-            <div class="flex flex-col gap-1">
-                <p class="text-lg leading-snug">{{ $hotel->t('name') }}</p>
+            <div class="flex flex-col">
+                <p class="text-xl leading-snug">{{ $hotel->t('name') }}</p>
                 <p class="text-[15px] text-stone">{{ __('access.at_hotel') }}</p>
             </div>
         </li>
     </ol>
+    <p class="mt-6 max-w-2xl text-[15px] leading-relaxed text-stone">{{ __('access.ride_total', ['min' => ResortMap::ONE_WAY_MINUTES, 'unit' => __('map.min')]) }}</p>
 
     {{-- Тот же маршрут на иллюстрированной карте курорта --}}
     <div class="mt-10 md:mt-14">
