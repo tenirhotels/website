@@ -115,16 +115,16 @@
         <p class="text-[15px] leading-relaxed text-stone">{{ $cableNote !== '' ? $cableNote.'. ' : '' }}{{ __('access.hours_last') }}</p>
     </div>
     <div class="mt-4 grid gap-4 md:grid-cols-2">
-        <div class="flex flex-col gap-2 rounded-3xl bg-forest p-6 text-white md:p-8">
-            <p class="eyebrow-light">{{ __('access.early_title') }}</p>
-            <p class="text-lg leading-relaxed text-white/90">{{ __('access.early_text') }}</p>
-        </div>
         <div class="flex flex-col gap-3 rounded-3xl border border-mist p-6 md:p-8">
             <p class="eyebrow">{{ __('access.plan_title') }}</p>
             <ul class="flex flex-col gap-3 text-[15px] leading-relaxed text-slate">
                 <li><span class="font-display text-xl text-ink">{{ __('access.plan_until', ['time' => $dayLast->format('H:i')]) }}</span> — {{ __('access.plan_day') }}</li>
             </ul>
             <p class="text-[14px] leading-relaxed text-stone">{{ __('access.plan_note') }}</p>
+        </div>
+        <div class="flex flex-col gap-2 rounded-3xl bg-forest p-6 text-white md:p-8">
+            <p class="eyebrow-light">{{ __('access.early_title') }}</p>
+            <p class="text-lg leading-relaxed text-white/90">{{ __('access.early_text') }}</p>
         </div>
     </div>
     <p class="mt-4 flex items-start gap-3 rounded-2xl bg-sand px-5 py-4 text-[15px] leading-relaxed text-slate">
