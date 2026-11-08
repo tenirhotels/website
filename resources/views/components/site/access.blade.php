@@ -123,8 +123,8 @@
         <div class="flex flex-col gap-3 rounded-3xl border border-mist p-6 md:p-8">
             <p class="eyebrow">{{ __('access.plan_title') }}</p>
             <ul class="flex flex-col gap-3 text-[15px] leading-relaxed text-slate">
-                <li><span class="font-display text-xl text-ink">{{ $dayLast->format('H:i') }}</span> — {{ __('access.plan_day') }}</li>
-                <li><span class="font-display text-xl text-ink">{{ $medeuLast->format('H:i') }}</span> — {{ __('access.plan_evening', ['from' => $guestFrom, 'to' => $guestTo]) }}</li>
+                <li><span class="font-display text-xl text-ink">{{ __('access.plan_until', ['time' => $dayLast->format('H:i')]) }}</span> — {{ __('access.plan_day') }}</li>
+                <li><span class="font-display text-xl text-ink">{{ __('access.plan_until', ['time' => $medeuLast->format('H:i')]) }}</span> — {{ __('access.plan_evening', ['from' => $guestFrom, 'to' => $guestTo]) }}</li>
             </ul>
             <p class="text-[14px] leading-relaxed text-stone">{{ __('access.plan_note') }}</p>
         </div>
