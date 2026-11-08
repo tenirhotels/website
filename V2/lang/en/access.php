@@ -27,6 +27,7 @@ return [
     'plan_title' => 'When to be at Medeu cable car station',
     'plan_day' => 'By day, on the regular cable cars: you reach the hotel without rushing while all the lines are running',
     'plan_evening' => 'In the evening: you catch the last cable car from Medeu to Shymbulak, and at Shymbulak station a special ride for hotel guests awaits you (:from–:to)',
+    'plan_until' => 'by :time',
     'plan_note' => 'Times are approximate. At weekends and in high season there can be queues at the cable cars — we suggest arriving in good time.',
     'hours_standard' => 'Standard operating hours',
     'hours_last' => 'Last boarding is 30 minutes before the line closes.',
