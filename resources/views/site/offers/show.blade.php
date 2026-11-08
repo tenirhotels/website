@@ -8,10 +8,7 @@
                 <p class="border-l-0 rounded-2xl bg-sand p-5 text-slate">{{ __('site.offers.expired') }}</p>
             @endif
             @if ($offer->t('description'))
-                <div>
-                    <h2 class="mb-5 font-display text-2xl">{{ __('site.common.included') }}</h2>
-                    <div class="prose-tenir">{!! $offer->t('description') !!}</div>
-                </div>
+                <div class="prose-tenir">{!! $offer->t('description') !!}</div>
             @endif
             @if ($offer->t('terms'))
                 <div>
