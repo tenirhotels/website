@@ -36,9 +36,14 @@
 @endphp
 <header data-header class="sticky top-0 z-40 bg-forest text-snow">
     <div class="container-site flex h-[72px] items-center justify-between gap-6 lg:h-[84px]">
-        <a href="{{ route('home') }}" class="shrink-0" aria-label="{{ $single && $hotel ? $hotel->t('name') : 'Tenir Hotels' }}">
-            <img src="/images/logo-light.svg" alt="Tenir" width="150" height="36" class="h-8 w-auto lg:h-9">
-        </a>
+        <div class="flex min-w-0 items-center gap-3">
+            <button type="button" class="-ml-2 flex size-11 items-center justify-center xl:hidden" data-menu-toggle aria-controls="mobile-menu" aria-expanded="false" aria-label="{{ __('site.nav.menu') }}">
+                <svg class="burger" aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path class="b1" d="M3 7h18"/><path class="b2" d="M3 12h18"/><path class="b3" d="M3 17h18"/></svg>
+            </button>
+            <a href="{{ route('home') }}" class="shrink-0" aria-label="{{ $single && $hotel ? $hotel->t('name') : 'Tenir Hotels' }}">
+                <img src="/images/logo-light.svg" alt="Tenir" width="150" height="36" class="h-8 w-auto lg:h-9">
+            </a>
+        </div>
 
         <nav aria-label="{{ __('site.nav.menu') }}" class="hidden items-center gap-5 text-[13px] xl:gap-8 uppercase tracking-[0.16em] xl:flex">
             @foreach ($menu as [$label, $href])
@@ -63,9 +68,6 @@
                 </ul>
             </details>
             <a href="{{ route('booking') }}" class="btn-primary hidden sm:inline-flex">{{ __('site.nav.book') }}</a>
-            <button type="button" class="-mr-2 flex size-11 items-center justify-center xl:hidden" data-menu-toggle aria-controls="mobile-menu" aria-expanded="false" aria-label="{{ __('site.nav.menu') }}">
-                <svg class="burger" aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path class="b1" d="M3 7h18"/><path class="b2" d="M3 12h18"/><path class="b3" d="M3 17h18"/></svg>
-            </button>
         </div>
     </div>
 
