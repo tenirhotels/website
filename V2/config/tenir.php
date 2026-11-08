@@ -12,9 +12,9 @@ return [
     | hreflang — значение для <link rel="alternate" hreflang>.
     */
     'locales' => [
-        'kk' => ['label' => 'ҚАЗ', 'name' => 'Қазақша', 'hreflang' => 'kk', 'exely' => 'kk', 'fallback' => 'ru'],
-        'ru' => ['label' => 'РУС', 'name' => 'Русский', 'hreflang' => 'ru', 'exely' => 'ru', 'fallback' => null],
-        'en' => ['label' => 'ENG', 'name' => 'English', 'hreflang' => 'en', 'exely' => 'en', 'fallback' => 'ru'],
+        'kk' => ['label' => 'QZ', 'name' => 'Қазақша', 'hreflang' => 'kk', 'exely' => 'kk', 'fallback' => 'ru'],
+        'ru' => ['label' => 'RU', 'name' => 'Русский', 'hreflang' => 'ru', 'exely' => 'ru', 'fallback' => null],
+        'en' => ['label' => 'EN', 'name' => 'English', 'hreflang' => 'en', 'exely' => 'en', 'fallback' => 'ru'],
         'zh' => ['label' => '中文', 'name' => '中文', 'hreflang' => 'zh-Hans', 'exely' => 'zh', 'fallback' => 'en'],
     ],
 
