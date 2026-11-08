@@ -36,7 +36,7 @@
 </section>
 
 <section class="bg-white">
-    <div class="container-site grid items-center gap-10 py-12 md:py-16 lg:grid-cols-2 lg:gap-20">
+    <div class="container-site grid items-center gap-8 py-10 md:py-16 lg:grid-cols-2 lg:gap-20">
         {{-- Профиль высот из V1: Алматы → Медеу → отель --}}
         <div class="relative mx-auto aspect-[426/500] w-full max-w-[480px] overflow-hidden rounded-3xl bg-forest-deep">
             <x-site.media :src="$hotel->gallery[0] ?? $hotel->hero_image" alt="" round="" class="absolute inset-0 opacity-40" />
@@ -82,7 +82,7 @@
         </div>
     </div>
 </section>
-<section class="container-site pb-4 pt-12 md:pt-16">
+<section class="container-site pb-0 pt-10 md:pt-16">
     @php
         $cableNote = trim((string) \App\Models\Setting::get('cable.hours_note', ''));
         $lifts = [
@@ -135,7 +135,7 @@
         </span>
     </p>
 </section>
-<section class="container-site py-12 md:py-16">
+<section class="container-site py-10 md:py-16">
     <h2 class="font-display text-2xl md:text-3xl">{{ __('access.route_title') }}</h2>
     <ol class="mt-8 grid gap-0 md:grid-cols-5">
         @foreach ($stations as $i => $s)
