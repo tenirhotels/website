@@ -28,6 +28,7 @@ return [
     'plan_evening' => 'In the evening: you catch the last cable car from Medeu to Shymbulak and the ride for hotel guests from Shymbulak station',
     'plan_until' => 'by :time',
     'plan_note' => 'Times are approximate. At weekends and in high season there can be queues at the cable cars — we suggest arriving in good time.',
+    'ride_to' => '≈ :min :unit to :name',
     'hours_standard' => 'Standard operating hours',
     'hours_last' => 'Last boarding is 30 minutes before the line closes.',
     'hours_guest' => 'Special ride for hotel guests',

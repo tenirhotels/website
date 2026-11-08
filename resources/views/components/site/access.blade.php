@@ -146,7 +146,7 @@
                 <div class="flex flex-col gap-1">
                     <p class="text-lg leading-snug">{{ __('map.names.station_'.$s['key']) }}</p>
                     @if ($s['next'])
-                        <p class="mt-1 inline-flex w-fit items-center gap-1.5 rounded-full bg-ember/10 px-3.5 py-1.5 font-display text-lg leading-none text-ember"><span aria-hidden="true">↑</span> ≈ {{ $s['next'] }} {{ __('map.min') }}</p>
+                        <p class="mt-1 inline-flex w-fit items-center gap-1.5 rounded-full bg-ember/10 px-3.5 py-1.5 font-display text-base leading-none text-ember md:text-[15px] xl:text-base"><span aria-hidden="true">↑</span> {{ __('access.ride_to', ['min' => $s['next'], 'unit' => __('map.min'), 'name' => __('map.tags.station_'.$stations[$i + 1]['key'])]) }}</p>
                     @endif
                 </div>
             </li>
