@@ -83,6 +83,34 @@
         </div>
     </div>
 </section>
+<section class="container-site pb-4 pt-12 md:pt-16">
+    @php
+        $cableHours = trim((string) \App\Models\Setting::get('cable.hours', ''));
+        $cableNote = trim((string) \App\Models\Setting::get('cable.hours_note', ''));
+        $guestFrom = \App\Models\Setting::get('cable.guest_from') ?: '18:00';
+        $guestTo = \App\Models\Setting::get('cable.guest_to') ?: '19:00';
+    @endphp
+    <h2 class="font-display text-2xl md:text-3xl">{{ __('access.hours_title') }}</h2>
+    <p class="mt-3 max-w-2xl text-lg leading-relaxed text-slate">{{ __('access.hours_text') }}</p>
+    <div class="mt-8 grid gap-4 md:grid-cols-2">
+        <div class="flex flex-col gap-2 rounded-3xl border border-mist p-6 md:p-8">
+            <span class="flex h-11 w-11 items-center justify-center rounded-full bg-sand text-ember">{{ site_icon('cable', 'h-6 w-6') }}</span>
+            <p class="eyebrow mt-2">{{ __('access.hours_standard') }}</p>
+            @if ($cableHours !== '')
+                <p class="whitespace-nowrap font-display text-3xl">{{ $cableHours }}</p>
+                @if ($cableNote !== '')<p class="text-[15px] text-stone">{{ $cableNote }}</p>@endif
+            @else
+                <p class="font-display text-2xl leading-snug">{{ __('access.hours_by_resort') }}</p>
+            @endif
+        </div>
+        <div class="flex flex-col gap-2 rounded-3xl bg-forest p-6 text-white md:p-8">
+            <span class="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-ember-light">{{ site_icon('cable', 'h-6 w-6') }}</span>
+            <p class="eyebrow-light mt-2">{{ __('access.hours_guest') }}</p>
+            <p class="whitespace-nowrap font-display text-3xl text-ember-light">{{ $guestFrom }}–{{ $guestTo }}</p>
+            <p class="text-[15px] leading-relaxed text-white/80">{{ __('access.hours_guest_text') }}</p>
+        </div>
+    </div>
+</section>
 <section class="container-site py-12 md:py-16">
     <h2 class="font-display text-2xl md:text-3xl">{{ __('access.route_title') }}</h2>
     <ol class="mt-8 grid gap-0 md:grid-cols-5">

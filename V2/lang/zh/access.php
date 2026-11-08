@@ -20,6 +20,12 @@ return [
     'leg_cable_meta' => '缆车，含换乘约 :min 分钟',
     'asl' => '海拔',
     'altitude' => '海拔高度',
+    'hours_title' => '缆车运行时间',
+    'hours_text' => '缆车是抵达酒店的唯一方式，请按缆车时间安排行程。时间表由度假区制定，可能随季节和天气调整——出发前请向我们确认。',
+    'hours_standard' => '常规运行时间',
+    'hours_by_resort' => '以度假区时间表为准',
+    'hours_guest' => '酒店住客专享',
+    'hours_guest_text' => '酒店住客专享从Shymbulak站出发的缆车——仅限上行、单程。下山按缆车常规时间表。',
     'map_title' => '度假区地图',
     'map_text' => '路线已标注在度假区插画地图上：请按数字 1 至酒店的顺序前行。',
 ];

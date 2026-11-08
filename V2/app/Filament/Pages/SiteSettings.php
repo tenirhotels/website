@@ -38,7 +38,7 @@ class SiteSettings extends Page
 
     protected static ?int $navigationSort = 0;
 
-    private const GROUPS = ['site', 'brand', 'contacts', 'social', 'analytics', 'perf', 'seo'];
+    private const GROUPS = ['site', 'brand', 'contacts', 'social', 'analytics', 'perf', 'seo', 'cable'];
 
     public ?array $data = [];
 
@@ -88,6 +88,16 @@ class SiteSettings extends Page
                 Toggle::make('gifts.enabled')->label('Показывать сертификаты на сайте')->default(true),
                 TextInput::make('gifts.url')->label('Адрес витрины gifter')->url()->placeholder('https://gifts.tenirhotels.com'),
             ]),
+            Section::make('Канатная дорога (страница «Как добраться»)')
+                ->description('Расписание задаёт курорт. Здесь — то, что показывается гостям; пустые поля скрываются или берутся по умолчанию.')
+                ->columns(2)
+                ->schema([
+                    TextInput::make('cable.hours')->label('Стандартное время работы')->placeholder('09:00–17:00')
+                        ->helperText('Пока пусто — гостям пишется «по графику курорта» без цифр.'),
+                    TextInput::make('cable.hours_note')->label('Пояснение к времени (сезон, дни)')->placeholder('ежедневно, в зимний сезон'),
+                    TextInput::make('cable.guest_from')->label('Подъём для гостей отеля: с')->default('18:00')->placeholder('18:00'),
+                    TextInput::make('cable.guest_to')->label('Подъём для гостей отеля: до')->default('19:00')->placeholder('19:00'),
+                ]),
             Section::make('Соцсети')->columns(2)->schema([
                 TextInput::make('social.instagram')->label('Instagram')->url(),
                 TextInput::make('social.youtube')->label('YouTube')->url(),
