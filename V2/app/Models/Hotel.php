@@ -71,6 +71,16 @@ class Hotel extends Model
         return $query->where('status', self::STATUS_OPEN);
     }
 
+    /** Фото героя по сезону (зима — hero_image, лето — hero_image_summer; нет летнего — всегда основное). */
+    public function seasonHero(): ?string
+    {
+        if ($this->hero_image_summer && \App\Support\ResortMap::defaultSeason() === 'summer') {
+            return $this->hero_image_summer;
+        }
+
+        return $this->hero_image;
+    }
+
     public function isOpen(): bool
     {
         return $this->status === self::STATUS_OPEN;

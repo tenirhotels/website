@@ -328,4 +328,14 @@ class SiteTest extends TestCase
         $this->get('/ru')->assertOk()->assertSee('Новогодний ужин');
         $this->get('/sitemap.xml')->assertSee('/ru/events/new-year', false);
     }
+
+    public function test_hotel_hero_follows_season(): void
+    {
+        $hotel = new \App\Models\Hotel(['hero_image' => 'w.jpg', 'hero_image_summer' => 's.jpg']);
+        $this->travelTo(now()->setDate(2026, 1, 15));
+        $this->assertSame('w.jpg', $hotel->seasonHero());
+        $this->travelTo(now()->setDate(2026, 7, 15));
+        $this->assertSame('s.jpg', $hotel->seasonHero());
+        $this->assertSame('w.jpg', (new \App\Models\Hotel(['hero_image' => 'w.jpg']))->seasonHero());
+    }
 }
