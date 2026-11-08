@@ -10,7 +10,7 @@
                 $offer->valid_to ? __('site.common.valid_until', ['date' => $offer->valid_to->translatedFormat('j F Y')]) : null,
             ])->filter()->implode(' · ') }}
         </p>
-        <h3 class="font-display text-[28px] leading-tight"><a href="{{ $offer->url() }}" class="hover:text-ember">{{ $offer->t('title') }}</a></h3>
+        <h3 class="font-display text-[24px] leading-tight"><a href="{{ $offer->url() }}" class="hover:text-ember">{{ $offer->t('title') }}</a></h3>
         <p class="leading-relaxed text-slate">{{ $offer->t('summary') }}</p>
         <div class="mt-auto flex flex-wrap items-center gap-6 pt-3">
             <a href="{{ $offer->bookingUrl() }}" class="btn-primary">{{ __('site.common.book_now') }}</a>

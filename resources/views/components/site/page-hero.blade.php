@@ -11,7 +11,7 @@
     @endif
     <div class="container-site relative flex h-full flex-col justify-end gap-5 pb-20 lg:pb-28">
         @if ($eyebrow)<p class="eyebrow-light">{{ $eyebrow }}</p>@endif
-        <h1 @class(['h-display max-w-4xl', 'text-6xl md:text-8xl' => $tall, 'text-5xl md:text-7xl' => ! $tall])>{{ $title }}</h1>
+        <h1 @class(['h-display max-w-4xl', 'text-5xl md:text-7xl' => $tall, 'text-4xl md:text-6xl' => ! $tall])>{{ $title }}</h1>
         @if ($text)<p class="max-w-xl text-lg leading-relaxed text-snow/90 md:text-xl">{{ $text }}</p>@endif
         {{ $slot }}
     </div>

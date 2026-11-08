@@ -16,7 +16,7 @@
 
             @if ($amenities = $room->amenityList())
                 <div>
-                    <h2 class="mb-5 font-display text-3xl">{{ __('site.hotel.amenities') }}</h2>
+                    <h2 class="mb-5 font-display text-2xl">{{ __('site.hotel.amenities') }}</h2>
                     <ul class="grid gap-x-8 gap-y-3 text-slate sm:grid-cols-2">
                         @foreach ($amenities as $a)
                             <li class="border-b border-mist pb-3">{{ $a }}</li>
@@ -29,7 +29,7 @@
         {{-- Карточка бронирования: закреплена при прокрутке на десктопе --}}
         <aside class="flex-1">
             <div class="sticky top-40 flex flex-col gap-6 bg-white p-8 rounded-3xl">
-                <dl class="grid grid-cols-2 gap-5 text-[15px]">
+                <dl class="grid grid-cols-2 gap-5 text-base">
                     @foreach ([
                         __('site.hotel.size') => $room->size_m2 ? $room->size_m2.' м²' : null,
                         __('site.hotel.guests') => $room->max_guests,

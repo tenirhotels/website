@@ -26,12 +26,12 @@
                     @foreach ($hotel->highlights as $hl)
                         <div class="flex flex-col-reverse gap-1">
                             <dt class="text-xs uppercase tracking-[0.12em] text-stone">{{ \App\Support\Locales::pick($hl['label'] ?? []) }}</dt>
-                            <dd class="font-display text-4xl text-forest">{{ $hl['value'] }}</dd>
+                            <dd class="font-display text-3xl text-forest">{{ $hl['value'] }}</dd>
                         </div>
                     @endforeach
                 </dl>
             @endif
-            <div class="flex flex-col gap-2 text-[15px] text-slate">
+            <div class="flex flex-col gap-2 text-base text-slate">
                 <p class="field-label mb-1">{{ __('site.hotel.contacts') }}</p>
                 @if ($hotel->t('address'))<p>{{ $hotel->t('address') }}</p>@endif
                 @if ($hotel->phone)<a href="tel:{{ preg_replace('/[^\d+]/', '', $hotel->phone) }}" class="hover:text-ember">{{ $hotel->phone }}</a>@endif
@@ -62,7 +62,7 @@
                 <p class="eyebrow">{{ __('site.hotel.dining') }}</p>
                 <h2 class="h-section">{{ $venue->t('name') }}</h2>
                 <p class="lead">{{ $venue->t('summary') }}</p>
-                @if ($venue->t('hours'))<p class="text-sm text-stone">{{ $venue->t('hours') }}</p>@endif
+                @if ($venue->t('hours'))<p class="text-[15px] text-stone">{{ $venue->t('hours') }}</p>@endif
                 <a href="{{ $hotel->sectionUrl('dining') }}" class="link-line self-start">{{ __('site.common.learn_more') }}</a>
             </div>
             <div class="aspect-[4/3] w-full flex-1"><x-site.media :src="$venue->image" :alt="$venue->t('name')" /></div>

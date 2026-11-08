@@ -29,7 +29,7 @@
                     <p class="eyebrow">{{ $hotel?->t('name') }}</p>
                     <h1 class="h-display mt-1 text-3xl text-forest md:text-4xl">{{ __('site.booking.title') }}</h1>
                 </div>
-                <p class="max-w-md text-sm text-exely-ink">{{ __('site.booking.intro') }}</p>
+                <p class="max-w-md text-[15px] text-exely-ink">{{ __('site.booking.intro') }}</p>
             </div>
 
             <div id="tl-booking-form" class="min-h-[420px]">
@@ -37,7 +37,7 @@
             </div>
             <noscript><p class="py-10 text-center">{{ __('site.booking.noscript') }}</p></noscript>
 
-            <div class="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-exely-line pt-4 text-sm text-exely-ink">
+            <div class="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-exely-line pt-4 text-[15px] text-exely-ink">
                 <span>{{ __('site.booking.help') }}</span>
                 @if ($phone = $hotel?->phone ?? Setting::get('contacts.phone'))
                     <a href="tel:{{ preg_replace('/[^\d+]/', '', $phone) }}" class="hover:text-ember">{{ $phone }}</a>

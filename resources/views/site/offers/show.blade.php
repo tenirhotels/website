@@ -8,14 +8,14 @@
             @endif
             @if ($offer->t('description'))
                 <div>
-                    <h2 class="mb-5 font-display text-3xl">{{ __('site.common.included') }}</h2>
+                    <h2 class="mb-5 font-display text-2xl">{{ __('site.common.included') }}</h2>
                     <div class="prose-tenir">{!! $offer->t('description') !!}</div>
                 </div>
             @endif
             @if ($offer->t('terms'))
                 <div>
-                    <h2 class="mb-5 font-display text-3xl">{{ __('site.common.terms') }}</h2>
-                    <div class="prose-tenir text-[15px]">{!! $offer->t('terms') !!}</div>
+                    <h2 class="mb-5 font-display text-2xl">{{ __('site.common.terms') }}</h2>
+                    <div class="prose-tenir text-base">{!! $offer->t('terms') !!}</div>
                 </div>
             @endif
         </div>

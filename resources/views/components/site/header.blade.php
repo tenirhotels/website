@@ -60,7 +60,7 @@
                     @foreach (Locales::all() as $code => $meta)
                         <li>
                             <a href="{{ $alternates[$code] ?? route('home', ['locale' => $code]) }}" hreflang="{{ $meta['hreflang'] }}" lang="{{ $code }}"
-                               @class(['block px-4 py-2 text-sm hover:bg-snow', 'text-ember' => $code === $current])
+                               @class(['block px-4 py-2 text-[15px] hover:bg-snow', 'text-ember' => $code === $current])
                                @if ($code === $current) aria-current="true" @endif>{{ $meta['name'] }}</a>
                         </li>
                     @endforeach
@@ -73,7 +73,7 @@
     {{-- Мобильное меню: основные разделы, дополнительные, язык, связь и кнопка бронирования --}}
     <div id="mobile-menu" aria-hidden="true" inert class="fixed inset-x-0 bottom-0 top-[72px] z-40 flex flex-col overflow-y-auto overflow-x-hidden overscroll-contain isolate bg-forest px-6 pb-8 pt-4 xl:hidden">
         <div class="pattern-scene -z-10 bottom-4 right-0 h-[420px] w-[320px] bg-ember-light opacity-[0.10]" aria-hidden="true"></div>
-        <nav aria-label="{{ __('site.nav.menu') }}" class="flex flex-col font-display text-[28px] leading-tight">
+        <nav aria-label="{{ __('site.nav.menu') }}" class="flex flex-col font-display text-[24px] leading-tight">
             @unless ($single)
                 @foreach ($openHotels as $h)
                     <a href="{{ $h->url() }}" class="border-b border-white/10 py-3.5">{{ $h->t('name') }}</a>
@@ -95,7 +95,7 @@
         <div class="mt-6 flex flex-wrap gap-2 border-t border-white/20 pt-5">
             @foreach (Locales::all() as $code => $meta)
                 <a href="{{ $alternates[$code] ?? route('home', ['locale' => $code]) }}" lang="{{ $code }}"
-                   @class(['min-h-11 rounded-full border px-5 py-2.5 text-sm', 'border-ember-light text-ember-light' => $code === $current, 'border-white/30' => $code !== $current])>{{ $meta['label'] }}</a>
+                   @class(['min-h-11 rounded-full border px-5 py-2.5 text-[15px]', 'border-ember-light text-ember-light' => $code === $current, 'border-white/30' => $code !== $current])>{{ $meta['label'] }}</a>
             @endforeach
         </div>
 

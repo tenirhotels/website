@@ -15,8 +15,8 @@
             <span>{{ $g['validity'] }}</span>
         </p>
     @endif
-    <h3 class="font-display text-[28px] leading-tight"><a href="{{ $g['url'] }}" class="hover:text-ember">{{ $name }}</a></h3>
-    @if ($g['description'])<p class="line-clamp-3 text-[15px] leading-relaxed text-slate">{{ $g['description'] }}</p>@endif
+    <h3 class="font-display text-[24px] leading-tight"><a href="{{ $g['url'] }}" class="hover:text-ember">{{ $name }}</a></h3>
+    @if ($g['description'])<p class="line-clamp-3 text-base leading-relaxed text-slate">{{ $g['description'] }}</p>@endif
     <div class="mt-auto flex items-center justify-between gap-4 pt-2">
         <span class="whitespace-nowrap font-display text-3xl text-forest">{{ number_format($g['price'], 0, '.', ' ') }}<span class="ml-1 font-sans text-[0.6em] text-stone">₸</span></span>
         <a href="{{ $g['url'] }}" class="text-[13px] uppercase tracking-[0.2em] text-ember hover:text-forest">{{ __('gifts.give') }} →</a>
