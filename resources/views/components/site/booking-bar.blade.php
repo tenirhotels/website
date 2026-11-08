@@ -9,16 +9,16 @@
     // Страница с виджетом: нижняя кнопка на телефоне не нужна (у Exely есть своя плавающая «Узнать цены»).
     request()->attributes->set('tenir.exely_widget', true);
 @endphp
-<div class="tenir-search rounded-3xl border border-white/40 bg-sand p-4 shadow-[0_20px_50px_rgba(22,33,27,0.22)] md:border-0 md:p-0">
-    <div class="flex flex-col gap-1 md:flex-row md:items-center md:gap-8 md:px-7 md:py-4">
-        <div class="shrink-0 text-center md:w-52 md:text-left">
+<div class="tenir-search rounded-3xl border border-white/40 bg-sand p-4 shadow-[0_20px_50px_rgba(22,33,27,0.22)] md:px-8 md:py-5">
+    <div class="flex flex-col gap-0">
+        <div class="shrink-0 text-center md:flex md:items-baseline md:justify-center md:gap-4">
             <p class="text-[15px] font-medium text-forest md:text-base">{{ __('site.booking.direct_title') }}</p>
             <p class="mt-1 inline-flex items-center gap-1.5 text-[13px] leading-snug text-stone">
                 <svg class="h-3.5 w-3.5 shrink-0 text-forest" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M16.7 5.3a1 1 0 010 1.4l-7.5 7.5a1 1 0 01-1.4 0L3.3 9.7a1 1 0 111.4-1.4l3.8 3.8 6.8-6.8a1 1 0 011.4 0z" clip-rule="evenodd"/></svg>
                 <span>{{ __('site.booking.best_rate') }}</span>
             </p>
         </div>
-        <div id="tl-search-form" class="tl-container min-w-0 flex-1 md:min-h-[52px]">
+        <div id="tl-search-form" class="tl-container -mb-6 -mt-4 min-w-0 flex-1 md:-mt-1 md:mb-0 md:min-h-[52px]">
             <noscript><a href="{{ route('booking') }}" class="btn-primary">{{ __('site.booking.search') }}</a></noscript>
         </div>
     </div>
