@@ -100,6 +100,7 @@ Route::prefix('{locale}')
             Route::get('{hotel}/offers', 'offers')->name('offers');
             Route::get('{hotel}/gallery', 'gallery')->name('gallery');
             Route::get('{hotel}/getting-here', 'gettingHere')->name('getting-here');
+            Route::get('{hotel}/reviews', 'reviews')->name('reviews');
         });
 
         // Короткие адреса режима «один отель». В режиме сети — 301 на /destinations/{отель}/...
@@ -109,6 +110,7 @@ Route::prefix('{locale}')
             Route::get('dining', 'dining')->name('dining');
             Route::get('gallery', 'gallery')->name('gallery');
             Route::get('getting-here', 'gettingHere')->name('getting-here');
+            Route::get('reviews', 'reviews')->name('reviews');
         });
 
         Route::get('experiences', [ExperienceController::class, 'index'])->name('experiences.index');

@@ -31,6 +31,7 @@ class Property
         'offers' => ['single' => 'offers.index', 'multi' => 'destinations.offers'],
         'gallery' => ['single' => 'hotel.gallery', 'multi' => 'destinations.gallery'],
         'getting-here' => ['single' => 'hotel.getting-here', 'multi' => 'destinations.getting-here'],
+        'reviews' => ['single' => 'hotel.reviews', 'multi' => 'destinations.reviews'],
     ];
 
     private static ?array $state = null;
@@ -114,6 +115,6 @@ class Property
     /** Слаги, занятые короткими адресами одного отеля. */
     public static function reservedSlugs(): array
     {
-        return ['rooms', 'dining', 'gallery', 'getting-here', 'map', 'gifts', 'events'];
+        return ['rooms', 'dining', 'gallery', 'getting-here', 'reviews', 'map', 'gifts', 'events'];
     }
 }

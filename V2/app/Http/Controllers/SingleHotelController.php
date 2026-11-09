@@ -40,6 +40,11 @@ class SingleHotelController extends Controller
         return $this->toFull('getting-here') ?? $this->renderGettingHere($this->hotel());
     }
 
+    public function reviews()
+    {
+        return $this->toFull('reviews') ?? $this->renderReviews($this->hotel());
+    }
+
     private function hotel(): Hotel
     {
         return Property::primary() ?? abort(404);

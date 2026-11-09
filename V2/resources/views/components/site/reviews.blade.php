@@ -1,4 +1,4 @@
-@props(['hotel' => null])
+@props(['hotel' => null, 'heading' => true])
 @php
     // Отзывы гостей — виджет Exely (TravelLine) «reviews-widget»: отзывы приходят из Exely, вручную их вести не нужно.
     $context = $hotel?->exelyContext() ?? config('tenir.exely.context');
@@ -6,7 +6,7 @@
 @endphp
 <section id="reviews" class="bg-white">
     <div class="container-site py-14 md:py-20 lg:py-24">
-        <h2 class="h-section mb-8">{{ __('site.reviews.title') }}</h2>
+        @if ($heading)<h2 class="h-section mb-8">{{ __('site.reviews.title') }}</h2>@endif
         <div id="tl-reviews-widget" class="min-h-[120px]"></div>
     </div>
 </section>

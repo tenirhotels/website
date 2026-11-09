@@ -43,6 +43,7 @@ return [
         'offers' => 'Предложения',
         'gallery' => 'Галерея',
         'getting_here' => 'Как добраться',
+        'reviews' => 'Отзывы',
         'check_prices' => 'Проверить цены',
         'from' => 'от',
         'per_night' => 'ночь',
