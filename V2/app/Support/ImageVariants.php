@@ -35,9 +35,14 @@ class ImageVariants
         imagealphablending($img, true);
         imagesavealpha($img, true);
 
-        self::write($img, "$base.webp", 2400);
+        // Главный файл обязателен; если его не удалось записать — сохраняем исходник как есть (без 500).
+        if (! self::write($img, "$base.webp", 2400)) {
+            imagedestroy($img);
+
+            return $file->storePublicly($directory, 'public');
+        }
         foreach (self::WIDTHS as $w) {
-            self::write($img, "$base-$w.webp", $w);
+            self::write($img, "$base-$w.webp", $w); // копии для srcset — необязательны
         }
         imagedestroy($img);
 
@@ -61,22 +66,47 @@ class ImageVariants
             if (! $img) {
                 return $made;
             }
-            self::write($img, "{$m[1]}-$w.webp", $w);
-            $made++;
+            if (self::write($img, "{$m[1]}-$w.webp", $w)) {
+                $made++;
+            }
         }
 
         return $made;
     }
 
-    private static function write($img, string $target, int $maxWidth): void
+    /** Пишет копию в WebP; false — если GD не справился (тогда вызывающий сохранит файл как есть). */
+    private static function write($img, string $target, int $maxWidth): bool
     {
         $w = imagesx($img);
         $h = imagesy($img);
+        $out = $img;
         if ($w > $maxWidth) {
-            $img = imagescale($img, $maxWidth, (int) round($h * $maxWidth / $w), IMG_BICUBIC);
+            // imagecopyresampled надёжнее imagescale: тот на части сборок GD возвращает false.
+            $nh = max(1, (int) round($h * $maxWidth / $w));
+            $out = imagecreatetruecolor($maxWidth, $nh);
+            if (! $out) {
+                return false;
+            }
+            imagealphablending($out, false);
+            imagesavealpha($out, true);
+            imagefill($out, 0, 0, imagecolorallocatealpha($out, 0, 0, 0, 127));
+            if (! imagecopyresampled($out, $img, 0, 0, 0, 0, $maxWidth, $nh, $w, $h)) {
+                imagedestroy($out);
+
+                return false;
+            }
         }
         ob_start();
-        imagewebp($img, null, 78);
-        Storage::disk('public')->put($target, ob_get_clean());
+        $ok = imagewebp($out, null, 78);
+        $data = ob_get_clean();
+        if ($out !== $img) {
+            imagedestroy($out);
+        }
+        if (! $ok || $data === '' || $data === false) {
+            return false;
+        }
+        Storage::disk('public')->put($target, $data);
+
+        return true;
     }
 }
