@@ -49,4 +49,10 @@ return [
     'calc_no' => 'You will not be able to go up today: the last boarding at Medeu is at :time. Arrive earlier or move your arrival to another day.',
     'calc_write' => 'Message the hotel',
     'calc_hint' => 'This is an estimate: it includes travel time and transfers.',
+    'st_board' => 'boarding',
+    'st_change' => 'change',
+    'st_arrive' => 'arrival',
+    'st_std' => 'standard cable cars',
+    'st_last' => 'last boarding',
+    'st_special' => 'Special ride for guests',
 ];
