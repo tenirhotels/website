@@ -134,6 +134,7 @@ return [
         'min_nights' => 'from :count nights',
         'promo' => 'Promo code: :code',
     ],
+    'hero' => ['sound_on' => 'Turn sound on', 'sound_off' => 'Turn sound off'],
     'footer' => ['info' => 'Information', 
         'guests' => 'For guests',
         'brand' => 'Brand',

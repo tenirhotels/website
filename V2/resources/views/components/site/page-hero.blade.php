@@ -7,14 +7,44 @@
                  Пока не загрузилось, видно фото; на телефоне видео не грузится вообще. --}}
             <video id="hero-video" data-src="{{ $video }}" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"
                    class="pointer-events-none absolute inset-0 hidden h-full w-full object-cover opacity-0 transition-opacity duration-700 lg:block"></video>
+            <button type="button" id="hero-sound" hidden aria-pressed="false" aria-label="{{ __('site.hero.sound_on') }}" title="{{ __('site.hero.sound_on') }}"
+                    class="absolute right-6 top-6 z-10 hidden size-12 items-center justify-center rounded-full border border-white/50 bg-forest-deep/40 text-snow backdrop-blur-sm transition-colors hover:bg-forest-deep/70 lg:right-10 lg:top-8">
+                <svg data-off viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg>
+                <svg data-on viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="hidden"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5z"/><path d="M15.5 9a4.2 4.2 0 0 1 0 6M18 6.5a7.6 7.6 0 0 1 0 11"/></svg>
+            </button>
             <script>
                 (function (w) {
                     var v = document.getElementById('hero-video');
                     if (!v || !w.matchMedia('(min-width: 1024px)').matches || w.matchMedia('(prefers-reduced-motion: reduce)').matches || (w.navigator.connection && w.navigator.connection.saveData)) return;
+                    // Кнопка звука — только если в файле есть звуковая дорожка.
+                    var btn = document.getElementById('hero-sound'), labels = [@json(__('site.hero.sound_on')), @json(__('site.hero.sound_off'))];
+                    function hasAudio() {
+                        try {
+                            if (v.audioTracks && v.audioTracks.length) return true;
+                            if (v.mozHasAudio) return true;
+                            if (v.webkitAudioDecodedByteCount > 0) return true;
+                            var st = v.captureStream ? v.captureStream() : null;
+                            if (st && st.getAudioTracks().length) return true;
+                        } catch (e) {}
+                        return false;
+                    }
+                    function sound() {
+                        if (!btn || !hasAudio()) return;
+                        btn.hidden = false; btn.classList.remove('hidden'); btn.classList.add('lg:flex');
+                        btn.addEventListener('click', function () {
+                            v.muted = !v.muted;
+                            if (!v.muted) { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
+                            var on = !v.muted;
+                            btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+                            btn.setAttribute('aria-label', labels[on ? 1 : 0]); btn.title = labels[on ? 1 : 0];
+                            btn.querySelector('[data-off]').classList.toggle('hidden', on);
+                            btn.querySelector('[data-on]').classList.toggle('hidden', !on);
+                        });
+                    }
                     function go() {
                         v.src = v.getAttribute('data-src');
                         v.muted = true;
-                        v.addEventListener('playing', function () { v.classList.remove('opacity-0'); });
+                        v.addEventListener('playing', function () { v.classList.remove('opacity-0'); setTimeout(sound, 600); }, { once: true });
                         var p = v.play(); if (p && p.catch) p.catch(function () {});
                     }
                     function later() { ('requestIdleCallback' in w) ? w.requestIdleCallback(go, { timeout: 3000 }) : w.setTimeout(go, 1000); }

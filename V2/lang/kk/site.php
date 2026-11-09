@@ -135,6 +135,7 @@ return [
         'min_nights' => ':count түннен бастап',
         'promo' => 'Промокод: :code',
     ],
+    'hero' => ['sound_on' => 'Дыбысты қосу', 'sound_off' => 'Дыбысты өшіру'],
     'footer' => ['info' => 'Ақпарат', 
         'guests' => 'Қонақтарға',
         'brand' => 'Бренд',
