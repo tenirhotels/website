@@ -107,7 +107,7 @@
             @if ($s['next'])
                 <li class="flex gap-4" aria-label="{{ __('access.ride_label') }}">
                     <span class="flex w-9 shrink-0 justify-center" aria-hidden="true"><span class="w-0.5 bg-ember/40"></span></span>
-                    <div class="my-2 flex flex-1 items-center gap-4 rounded-2xl bg-ember/10 px-4 py-3.5">
+                    <div class="my-2 flex flex-1 items-center gap-4 overflow-hidden rounded-2xl bg-ember/10 px-4 py-3.5">
                         <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-ember">{{ site_icon('cable', 'h-6 w-6') }}</span>
                         <div class="flex min-w-0 flex-1 flex-col gap-0.5">
                             <p class="text-[13px] uppercase tracking-[0.14em] text-stone">{{ __('access.ride_label') }}</p>
@@ -119,7 +119,9 @@
                             $photo = media($photoPath);
                         @endphp
                         @if ($photo)
-                            <img src="{{ $photo }}" srcset="{{ media_srcset($photoPath) }}" sizes="144px" alt="{{ __('map.names.station_'.$s['key']) }}" width="144" height="96" loading="lazy" decoding="async" class="h-20 w-28 shrink-0 rounded-xl object-cover sm:h-24 sm:w-36">
+                            <div class="relative -my-3.5 -mr-4 w-28 shrink-0 self-stretch sm:w-40">
+                                <img src="{{ $photo }}" srcset="{{ media_srcset($photoPath) }}" sizes="160px" alt="{{ __('map.names.station_'.$s['key']) }}" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover">
+                            </div>
                         @endif
                     </div>
                 </li>
