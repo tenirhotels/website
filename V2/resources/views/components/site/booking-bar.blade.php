@@ -11,7 +11,7 @@
 @endphp
 <link rel="preconnect" href="https://ibe.tlintegration.com">
 <link rel="preconnect" href="https://bf2gc.travellinecdn.com" crossorigin>
-<div class="tenir-search rounded-3xl border border-exely-line bg-exely p-4 shadow-[0_20px_50px_rgba(22,33,27,0.22)] md:px-8 md:py-5">
+<div class="tenir-search rounded-3xl border border-exely-line bg-exely p-4 pt-[21px] shadow-[0_20px_50px_rgba(22,33,27,0.22)] md:px-8 md:py-5">
     <div class="flex flex-col gap-0">
         <div class="shrink-0 text-center md:flex md:items-baseline md:justify-center md:gap-4">
             <p class="text-[15px] font-medium text-exely-ink md:text-base">{{ __('site.booking.direct_title') }}</p>
@@ -20,7 +20,7 @@
                 <span>{{ __('site.booking.best_rate') }}</span>
             </p>
         </div>
-        <div id="tl-search-form" class="tl-container -mb-[25px] -mt-1 min-h-[260px] min-w-0 flex-1 md:-mt-1 md:mb-0 md:min-h-[52px]">
+        <div id="tl-search-form" class="tl-container -mb-5 -mt-1 min-h-[260px] min-w-0 flex-1 md:-mt-1 md:mb-0 md:min-h-[52px]">
             <noscript><a href="{{ route('booking') }}" class="btn-primary">{{ __('site.booking.search') }}</a></noscript>
         </div>
     </div>
