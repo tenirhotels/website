@@ -10,7 +10,7 @@ return [
         'about' => 'About',
         'sustainability' => 'Sustainability',
         'contact' => 'Contact',
-        'book' => 'Book',
+        'book' => 'Reserve Now',
         'menu' => 'Menu',
         'more' => 'More',
         'close' => 'Close',
@@ -102,7 +102,7 @@ return [
     'common' => [
         'learn_more' => 'Learn more',
         'view_all' => 'View all',
-        'book_now' => 'Book now',
+        'book_now' => 'Reserve Now',
         'back' => 'Back',
         'seasons' => 'Season',
         'all_year' => 'All year',
