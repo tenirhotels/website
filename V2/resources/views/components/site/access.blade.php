@@ -3,6 +3,8 @@
 @php
     use App\Support\ResortMap;
 
+    // Версия граней панорамы = сумма размеров файлов: при замене снимков адрес меняется и кэш браузера/Cloudflare обходится.
+    $panoV = fn ($k) => dechex(array_sum(array_map(fn ($f) => (int) @filesize(public_path("panoramas/$k/$f.jpg")), str_split('lfrbud'))));
     $stations = collect(ResortMap::CABLE);
     $pins = collect(ResortMap::pins())->keyBy('id');
     $season = ResortMap::defaultSeason();
@@ -103,7 +105,7 @@
                 <span class="relative z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-ember text-[15px] text-white">{{ $i + 1 }}</span>
                 <p class="text-xl leading-snug">{{ __('map.names.station_'.$s['key']) }}</p>
                 @if (is_file(public_path('panoramas/'.$s['key'].'/f.jpg')))
-                    <button type="button" data-pano="{{ $s['key'] }}" data-title="{{ __('map.names.station_'.$s['key']) }}" aria-label="{{ __('access.pano_open') }}: {{ __('map.names.station_'.$s['key']) }}" class="ml-1 inline-flex shrink-0 items-center gap-1.5 rounded-full border border-ember/50 px-3 py-1 text-[13px] leading-none text-ember transition hover:bg-ember/10">
+                    <button type="button" data-pano="{{ $s['key'] }}" data-v="{{ $panoV($s['key']) }}" data-title="{{ __('map.names.station_'.$s['key']) }}" aria-label="{{ __('access.pano_open') }}: {{ __('map.names.station_'.$s['key']) }}" class="ml-1 inline-flex shrink-0 items-center gap-1.5 rounded-full border border-ember/50 px-3 py-1 text-[13px] leading-none text-ember transition hover:bg-ember/10">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" class="h-4 w-4" aria-hidden="true"><ellipse cx="12" cy="12" rx="9" ry="4"/><path d="M12 3v18M5 7.5C7 9 17 9 19 7.5"/></svg>360°
                     </button>
                 @endif
@@ -143,7 +145,7 @@
                 <p class="text-[15px] text-stone">{{ __('access.at_hotel') }}</p>
             </div>
             @if (is_file(public_path('panoramas/tenir/f.jpg')))
-                <button type="button" data-pano="tenir" data-title="{{ $hotel->t('name') }}" aria-label="{{ __('access.pano_open') }}: {{ $hotel->t('name') }}" class="ml-1 inline-flex shrink-0 items-center gap-1.5 rounded-full border border-ember/50 px-3 py-1 text-[13px] leading-none text-ember transition hover:bg-ember/10">
+                <button type="button" data-pano="tenir" data-v="{{ $panoV('tenir') }}" data-title="{{ $hotel->t('name') }}" aria-label="{{ __('access.pano_open') }}: {{ $hotel->t('name') }}" class="ml-1 inline-flex shrink-0 items-center gap-1.5 rounded-full border border-ember/50 px-3 py-1 text-[13px] leading-none text-ember transition hover:bg-ember/10">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" class="h-4 w-4" aria-hidden="true"><ellipse cx="12" cy="12" rx="9" ry="4"/><path d="M12 3v18M5 7.5C7 9 17 9 19 7.5"/></svg>360°
                     </button>
             @endif
@@ -319,7 +321,7 @@
         if (viewer) viewer.destroy();
         viewer = pannellum.viewer('pano-view', {
             type: 'cubemap',
-            cubeMap: FACES.map(f => '/panoramas/' + b.dataset.pano + '/' + f + '.jpg'),
+            cubeMap: FACES.map(f => '/panoramas/' + b.dataset.pano + '/' + f + '.jpg?v=' + (b.dataset.v || '')),
             autoLoad: true, showControls: true, showZoomCtrl: true, showFullscreenCtrl: true,
             mouseZoom: true, draggable: true, hfov: 100, minHfov: 40, maxHfov: 120, pitch: 0, yaw: 0,
         });
