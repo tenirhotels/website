@@ -57,4 +57,6 @@ return [
     'st_special' => '住客专用上行',
     'photo_zoom' => '放大照片',
     'photo_close' => '关闭',
+    'pano_open' => '360°全景',
+    'pano_hint' => '拖动即可环视',
 ];

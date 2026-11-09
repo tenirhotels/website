@@ -57,4 +57,6 @@ return [
     'st_special' => 'Special ride for guests',
     'photo_zoom' => 'Enlarge photo',
     'photo_close' => 'Close',
+    'pano_open' => '360° view',
+    'pano_hint' => 'Drag to look around',
 ];
