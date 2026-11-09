@@ -102,6 +102,11 @@
             <li class="relative flex items-center gap-4">
                 <span class="relative z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-ember text-[15px] text-white">{{ $i + 1 }}</span>
                 <p class="text-xl leading-snug">{{ __('map.names.station_'.$s['key']) }}</p>
+                @if (is_file(public_path('panoramas/'.$s['key'].'/f.jpg')))
+                    <button type="button" data-pano="{{ $s['key'] }}" data-title="{{ __('map.names.station_'.$s['key']) }}" aria-label="{{ __('access.pano_open') }}: {{ __('map.names.station_'.$s['key']) }}" class="ml-1 inline-flex shrink-0 items-center gap-1.5 rounded-full border border-ember/50 px-3 py-1 text-[13px] leading-none text-ember transition hover:bg-ember/10">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" class="h-4 w-4" aria-hidden="true"><ellipse cx="12" cy="12" rx="9" ry="4"/><path d="M12 3v18M5 7.5C7 9 17 9 19 7.5"/></svg>360°
+                    </button>
+                @endif
             </li>
             {{-- участок между станциями: сколько едем на канатной дороге --}}
             @if ($s['next'])
@@ -137,6 +142,11 @@
                 <p class="text-xl leading-snug">{{ $hotel->t('name') }}</p>
                 <p class="text-[15px] text-stone">{{ __('access.at_hotel') }}</p>
             </div>
+            @if (is_file(public_path('panoramas/tenir/f.jpg')))
+                <button type="button" data-pano="tenir" data-title="{{ $hotel->t('name') }}" aria-label="{{ __('access.pano_open') }}: {{ $hotel->t('name') }}" class="ml-1 inline-flex shrink-0 items-center gap-1.5 rounded-full border border-ember/50 px-3 py-1 text-[13px] leading-none text-ember transition hover:bg-ember/10">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" class="h-4 w-4" aria-hidden="true"><ellipse cx="12" cy="12" rx="9" ry="4"/><path d="M12 3v18M5 7.5C7 9 17 9 19 7.5"/></svg>360°
+                    </button>
+            @endif
         </li>
     </ol>
     <p class="mt-6 max-w-2xl text-[15px] leading-relaxed text-stone">{{ __('access.ride_total', ['min' => ResortMap::ONE_WAY_MINUTES, 'unit' => __('map.min')]) }}</p>
@@ -272,5 +282,47 @@
     }));
     d.addEventListener('click', e => { if (e.target !== img) d.close(); });
     document.getElementById('photo-zoom-close').addEventListener('click', () => d.close());
+})();
+</script>
+
+<dialog id="pano-modal" class="m-auto h-[min(86vh,760px)] w-[min(96vw,1200px)] overflow-visible bg-transparent p-0 backdrop:bg-black/80">
+    <div class="relative h-full w-full overflow-hidden rounded-2xl bg-[#1b1f1d]">
+        <div id="pano-view" class="h-full w-full"></div>
+        <p id="pano-title" class="pointer-events-none absolute left-14 top-3 z-10 max-w-[60%] truncate rounded-full bg-black/50 px-4 py-2 text-sm text-white"></p>
+        <p class="pointer-events-none absolute bottom-3 left-1/2 z-10 -translate-x-1/2 whitespace-nowrap rounded-full bg-black/50 px-4 py-2 text-xs text-white">{{ __('access.pano_hint') }}</p>
+    </div>
+    <button type="button" id="pano-close" aria-label="{{ __('access.photo_close') }}" class="absolute -top-3 right-0 z-20 flex h-10 w-10 items-center justify-center rounded-full bg-white text-ink shadow md:-right-3">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="h-5 w-5" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+</dialog>
+<style>#pano-view.pnlm-container{background:#1b1f1d}</style>
+<script>
+(() => {
+    const d = document.getElementById('pano-modal');
+    if (!d || !d.showModal) return;
+    const V = '/vendor/pannellum/', FACES = ['l', 'f', 'r', 'b', 'u', 'd'];
+    let viewer = null, loading = null;
+    // Pannellum грузим только при первом открытии панорамы.
+    const lib = () => loading ??= new Promise((ok, fail) => {
+        const l = document.createElement('link'); l.rel = 'stylesheet'; l.href = V + 'pannellum.css'; document.head.appendChild(l);
+        const s = document.createElement('script'); s.src = V + 'pannellum.js'; s.onload = ok; s.onerror = () => { loading = null; fail(); };
+        document.head.appendChild(s);
+    });
+    const close = () => { d.close(); };
+    d.addEventListener('close', () => { if (viewer) { viewer.destroy(); viewer = null; } });
+    d.addEventListener('click', e => { if (e.target === d) close(); });
+    document.getElementById('pano-close').addEventListener('click', close);
+    document.querySelectorAll('[data-pano]').forEach(b => b.addEventListener('click', async () => {
+        document.getElementById('pano-title').textContent = b.dataset.title || '';
+        d.showModal();
+        try { await lib(); } catch (e) { return; }
+        if (viewer) viewer.destroy();
+        viewer = pannellum.viewer('pano-view', {
+            type: 'cubemap',
+            cubeMap: FACES.map(f => '/panoramas/' + b.dataset.pano + '/' + f + '.jpg'),
+            autoLoad: true, showControls: true, showZoomCtrl: true, showFullscreenCtrl: true,
+            mouseZoom: true, draggable: true, hfov: 100, minHfov: 40, maxHfov: 120, pitch: 0, yaw: 0,
+        });
+    }));
 })();
 </script>
