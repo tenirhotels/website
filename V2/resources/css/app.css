@@ -144,3 +144,13 @@ body.overflow-hidden #tl-search-form,
 body.overflow-hidden [id^='tl-'],
 body.overflow-hidden [class^='tl-'],
 body.overflow-hidden [class*=' tl-'] { visibility: hidden !important; }
+
+
+/* Бегунок калькулятора прибытия: своя дорожка и ползунок, без рамки фокуса вокруг всей полосы. */
+.calc-range { -webkit-appearance: none; appearance: none; height: 6px; border-radius: 9999px; cursor: pointer; outline: none;
+  background: linear-gradient(to right, var(--color-ember) var(--p, 0%), var(--color-mist) var(--p, 0%)); }
+.calc-range::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 26px; height: 26px; border-radius: 9999px;
+  background: #fff; border: 3px solid var(--color-ember); box-shadow: 0 2px 6px rgb(22 33 27 / 0.25); }
+.calc-range::-moz-range-thumb { width: 20px; height: 20px; border-radius: 9999px; background: #fff; border: 3px solid var(--color-ember); box-shadow: 0 2px 6px rgb(22 33 27 / 0.25); }
+.calc-range:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 5px rgb(181 86 31 / 0.25); }
+.calc-range:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 5px rgb(181 86 31 / 0.25); }
