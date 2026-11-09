@@ -41,7 +41,8 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => rtrim(env('APP_URL', 'http://localhost'), '/').'/storage',
+            // Относительный адрес: работает на любом домене, даже если APP_URL на сервере не задан (иначе админка ссылалась на localhost).
+            'url' => '/storage',
             'visibility' => 'public',
             'throw' => false,
             'report' => false,
