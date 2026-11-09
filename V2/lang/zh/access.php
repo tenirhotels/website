@@ -55,4 +55,6 @@ return [
     'st_std' => '标准缆车',
     'st_last' => '末班登车',
     'st_special' => '住客专用上行',
+    'photo_zoom' => '放大照片',
+    'photo_close' => '关闭',
 ];
