@@ -46,7 +46,7 @@ return [
     'calc_label' => 'At Medeu station at',
     'calc_ok' => 'You will make it. You will reach the hotel around :time.',
     'calc_guest' => 'The standard cable cars will be too late, but hotel guests can use a special ride: departure from Shymbulak station :from–:to. Please tell the hotel in advance.',
-    'calc_no' => 'You will not be able to go up today: the last boarding at Medeu is at :time. Arrive earlier or move your arrival to tomorrow.',
+    'calc_no' => 'You will not be able to go up today: the last boarding at Medeu is at :time. Arrive earlier or move your arrival to another day.',
     'calc_write' => 'Message the hotel',
     'calc_hint' => 'This is an estimate: it includes travel time and transfers. Queues and weather may add time.',
 ];
