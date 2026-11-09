@@ -101,6 +101,9 @@ class SiteSettings extends Page
                     TextInput::make('cable.hours_note')->label('Пояснение (сезон, дни)')->placeholder('ежедневно, будни и выходные'),
                     TextInput::make('cable.guest_from')->label('Подъём для гостей отеля: с')->default('18:00')->placeholder('18:00'),
                     TextInput::make('cable.guest_to')->label('Подъём для гостей отеля: до')->default('18:30')->placeholder('18:30'),
+                    Fields::image('cable.photo_medeu', 'Фото станции Медеу', 'cable')->helperText('Показывается справа в карточке «Канатная дорога» на странице «Как добраться». Лучше горизонтальное фото.'),
+                    Fields::image('cable.photo_shymbulak', 'Фото станции Шымбулак', 'cable'),
+                    Fields::image('cable.photo_combi1', 'Фото станции Combi-1', 'cable'),
                 ]),
             Section::make('Соцсети')->columns(2)->schema([
                 TextInput::make('social.instagram')->label('Instagram')->url(),
