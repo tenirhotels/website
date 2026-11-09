@@ -17,6 +17,7 @@ return [
         'language' => 'Language',
         'skip' => 'Skip to content',
     ],
+    'reviews' => ['title' => 'Guest reviews'],
     'booking' => [
         'title' => 'Reservations',
         'hotel' => 'Hotel',

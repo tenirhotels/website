@@ -18,6 +18,7 @@ return [
         'language' => '语言',
         'skip' => '跳至内容',
     ],
+    'reviews' => ['title' => '住客评价'],
     'booking' => [
         'title' => '预订',
         'hotel' => '酒店',

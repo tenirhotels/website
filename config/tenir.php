@@ -79,6 +79,8 @@ return [
     'exely' => [
         'context' => env('EXELY_CONTEXT', 'TL-INT-tenirhotels'),
         'loader' => 'https://ibe.tlintegration.com/integration/loader.js',
+        // Код отеля в Exely (TravelLine) для виджета отзывов
+        'provider' => env('EXELY_PROVIDER', '9305'),
         'params' => [
             'check_in' => 'date',          // YYYY-MM-DD
             'nights' => 'nights',
