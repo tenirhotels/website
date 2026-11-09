@@ -103,7 +103,7 @@
         $guestTo = \App\Models\Setting::get('cable.guest_to') ?: '18:30';
     @endphp
     <h2 class="font-display text-2xl md:text-3xl">{{ __('access.hours_title') }}</h2>
-    <p class="mt-3 max-w-2xl text-lg leading-relaxed text-slate">{{ __('access.hours_text') }}</p>
+    <p class="mt-3 max-w-2xl text-base leading-relaxed text-slate md:text-lg">{{ __('access.hours_text') }}</p>
     {{-- На компьютере: слева режим работы, справа — когда быть на станции и ранний заезд (без пустого места). --}}
     <div class="mt-8 grid gap-4 lg:grid-cols-2">
     <div class="flex flex-col gap-4 rounded-3xl border border-mist p-6 md:p-10">
@@ -112,28 +112,28 @@
         <ul class="divide-y divide-mist">
             @foreach ($lifts as [$lname, $lhours])
                 <li class="flex items-baseline justify-between gap-4 py-3.5">
-                    <span class="text-lg md:text-xl">{{ $lname }}</span>
-                    <span class="whitespace-nowrap font-display text-2xl md:text-3xl">{{ $lhours }}</span>
+                    <span class="text-base md:text-lg">{{ $lname }}</span>
+                    <span class="whitespace-nowrap font-display text-2xl">{{ $lhours }}</span>
                 </li>
             @endforeach
         </ul>
-        <p class="text-[15px] leading-relaxed text-stone">{{ $cableNote !== '' ? $cableNote.'. ' : '' }}{{ __('access.hours_last') }}</p>
+        <p class="text-sm leading-relaxed text-stone">{{ $cableNote !== '' ? $cableNote.'. ' : '' }}{{ __('access.hours_last') }}</p>
     </div>
     <div class="flex flex-col gap-4">
         <div class="flex flex-col gap-3 rounded-3xl border border-mist p-6 md:p-8">
             <p class="eyebrow">{{ __('access.plan_title') }}</p>
-            <ul class="flex flex-col gap-3 text-[15px] leading-relaxed text-slate">
-                <li><span class="font-display text-xl text-ink">{{ __('access.plan_until', ['time' => $dayLast->format('H:i')]) }}</span> — {{ __('access.plan_day') }}</li>
+            <ul class="flex flex-col gap-3 text-base leading-relaxed text-slate">
+                <li><span class="font-display text-2xl text-ink">{{ __('access.plan_until', ['time' => $dayLast->format('H:i')]) }}</span> — {{ __('access.plan_day') }}</li>
             </ul>
-            <p class="text-[14px] leading-relaxed text-stone">{{ __('access.plan_note') }}</p>
+            <p class="text-sm leading-relaxed text-stone">{{ __('access.plan_note') }}</p>
         </div>
         <div class="flex flex-col gap-2 rounded-3xl bg-forest p-6 text-white md:p-8 lg:flex-1">
             <p class="eyebrow-light">{{ __('access.early_title') }}</p>
-            <p class="text-lg leading-relaxed text-white/90">{{ __('access.early_text') }}</p>
+            <p class="text-base leading-relaxed text-white/90">{{ __('access.early_text') }}</p>
         </div>
     </div>
     </div>
-    <div class="mt-6 flex flex-col gap-2 border-l-2 border-mist pl-4 text-[15px] leading-relaxed text-slate">
+    <div class="mt-6 flex flex-col gap-2 border-l-2 border-mist pl-4 text-base leading-relaxed text-slate">
         <p><strong class="font-bold text-ink">{{ __('access.hours_guest') }}.</strong> {{ __('access.hours_guest_text') }}</p>
         <ul class="flex flex-col gap-0.5">
             <li>{{ __('access.guest_depart') }}: <strong class="whitespace-nowrap font-bold text-ink">{{ $guestFrom }}–{{ $guestTo }}</strong></li>
