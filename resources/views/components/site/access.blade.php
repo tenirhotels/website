@@ -189,7 +189,7 @@
         $wa = \App\Models\Setting::get('contacts.whatsapp');
         $writeUrl = $wa ? 'https://wa.me/'.preg_replace('/\D/', '', $wa) : route('contact');
     @endphp
-    <aside id="arrival-calc" class="rounded-3xl border border-mist bg-white p-6 shadow-sm md:p-8 lg:sticky lg:top-28"
+    <aside id="arrival-calc" class="rounded-3xl border border-mist p-6 md:p-8"
            data-std-last="{{ $mins($dayLast) }}" data-medeu-last="{{ $mins($medeuLast) }}" data-total="{{ ResortMap::ONE_WAY_MINUTES }}"
            data-from="{{ $guestFrom }}" data-to="{{ $guestTo }}"
            data-msg="{{ json_encode(['ok' => __('access.calc_ok'), 'guest' => __('access.calc_guest'), 'no' => __('access.calc_no')], JSON_UNESCAPED_UNICODE) }}">
@@ -202,11 +202,11 @@
                 <span>{{ __('access.calc_label') }}</span>
                 <output id="calc-out" class="font-display text-4xl leading-none text-ink">12:00</output>
             </label>
-            <input id="calc-time" type="range" min="540" max="1080" step="15" value="720" class="mt-5 w-full cursor-pointer accent-[#B5561F]">
+            <input id="calc-time" type="range" min="540" max="1080" step="15" value="720" class="mt-5 w-full cursor-pointer accent-ember">
             <div class="mt-1 flex justify-between text-sm text-stone" aria-hidden="true"><span>09:00</span><span>12:00</span><span>15:00</span><span>18:00</span></div>
         </div>
 
-        <div id="calc-result" class="mt-6 rounded-2xl bg-[#E7EFE9] p-5 text-base leading-relaxed text-forest" aria-live="polite">
+        <div id="calc-result" class="mt-6 rounded-2xl border-l-4 border-forest bg-sand p-5 text-base leading-relaxed text-ink" aria-live="polite">
             <p id="calc-text"></p>
             <a id="calc-write" href="{{ $writeUrl }}" hidden class="btn-primary mt-4 inline-flex">{{ __('access.calc_write') }}</a>
         </div>
@@ -228,7 +228,7 @@
                 else { state = 'no'; text = msg.no.replace(':time', f(last)); }
                 txt.textContent = text;
                 wr.hidden = state !== 'guest';
-                res.className = 'mt-6 rounded-2xl p-5 text-base leading-relaxed ' + (state === 'ok' ? 'bg-[#E7EFE9] text-forest' : state === 'guest' ? 'bg-ember/10 text-ink' : 'bg-sand text-ink');
+                res.className = 'mt-6 rounded-2xl border-l-4 bg-sand p-5 text-base leading-relaxed text-ink ' + (state === 'ok' ? 'border-forest' : state === 'guest' ? 'border-ember' : 'border-stone');
             }
             rng.addEventListener('input', upd); upd();
         })();
