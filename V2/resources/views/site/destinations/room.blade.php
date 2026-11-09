@@ -19,7 +19,7 @@
                     <h2 class="mb-5 font-display text-2xl">{{ __('site.hotel.amenities') }}</h2>
                     <ul class="grid gap-x-8 gap-y-3 text-slate sm:grid-cols-2">
                         @foreach ($amenities as $a)
-                            <li class="border-b border-mist pb-3">{{ $a }}</li>
+                            <li class="flex items-center gap-3 border-b border-mist pb-3"><span class="shrink-0 text-forest">{{ amenity_icon($a, 'h-5 w-5') }}</span><span>{{ $a }}</span></li>
                         @endforeach
                     </ul>
                 </div>
