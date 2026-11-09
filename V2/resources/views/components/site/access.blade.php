@@ -189,13 +189,13 @@
     @endphp
     <div class="flex flex-col">
     <h2 class="font-display text-2xl md:text-3xl">{{ __('access.calc_title') }}</h2>
-    <aside id="arrival-calc" class="mt-8 flex flex-1 flex-col justify-between gap-6 rounded-3xl border border-mist p-6 md:p-8"
+    <aside id="arrival-calc" class="mt-8 flex flex-1 flex-col gap-6 rounded-3xl border border-mist p-6 md:p-8"
            data-std-last="{{ $mins($dayLast) }}" data-medeu-last="{{ $mins($medeuLast) }}" data-total="{{ ResortMap::ONE_WAY_MINUTES }}"
            data-from="{{ $guestFrom }}" data-to="{{ $guestTo }}"
            data-msg="{{ json_encode(['ok' => __('access.calc_ok'), 'guest' => __('access.calc_guest'), 'no' => __('access.calc_no')], JSON_UNESCAPED_UNICODE) }}">
         <p class="text-base leading-relaxed text-slate">{{ __('access.calc_text') }}</p>
 
-        <div class="mt-7">
+        <div class="mt-4">
             <label for="calc-time" class="flex items-baseline justify-between gap-4 text-base text-slate">
                 <span>{{ __('access.calc_label') }}</span>
                 <output id="calc-out" class="font-display text-4xl leading-none text-ink">12:00</output>
@@ -204,14 +204,14 @@
             <div class="mt-1 flex justify-between text-sm text-stone" aria-hidden="true"><span>09:00</span><span>12:00</span><span>15:00</span><span>18:00</span></div>
         </div>
 
-        <div id="calc-result" class="mt-6 flex items-start gap-3 rounded-2xl bg-sand p-5 text-base leading-relaxed text-ink" aria-live="polite">
+        <div id="calc-result" class="flex min-h-[11.5rem] items-start gap-3 rounded-2xl bg-sand p-5 text-base leading-relaxed text-ink" aria-live="polite">
             <span id="calc-dot" class="mt-2 size-2.5 shrink-0 rounded-full bg-forest" aria-hidden="true"></span>
             <div>
                 <p id="calc-text"></p>
                 <a id="calc-write" href="{{ $writeUrl }}" hidden class="btn-primary mt-4 inline-flex">{{ __('access.calc_write') }}</a>
             </div>
         </div>
-        <p class="mt-4 text-sm leading-relaxed text-stone">{{ __('access.calc_hint') }}</p>
+        <p class="mt-auto text-sm leading-relaxed text-stone">{{ __('access.calc_hint') }}</p>
     </aside>
     </div>
     </div>
