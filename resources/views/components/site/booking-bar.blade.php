@@ -20,7 +20,7 @@
                 <span>{{ __('site.booking.best_rate') }}</span>
             </p>
         </div>
-        <div id="tl-search-form" class="tl-container -mb-6 -mt-4 min-h-[260px] min-w-0 flex-1 md:-mt-1 md:mb-0 md:min-h-[52px]">
+        <div id="tl-search-form" class="tl-container -mb-5 -mt-1 min-h-[260px] min-w-0 flex-1 md:-mt-1 md:mb-0 md:min-h-[52px]">
             <noscript><a href="{{ route('booking') }}" class="btn-primary">{{ __('site.booking.search') }}</a></noscript>
         </div>
     </div>
