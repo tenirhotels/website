@@ -104,10 +104,12 @@
     @endphp
     <h2 class="font-display text-2xl md:text-3xl">{{ __('access.hours_title') }}</h2>
     <p class="mt-3 max-w-2xl text-lg leading-relaxed text-slate">{{ __('access.hours_text') }}</p>
-    <div class="mt-8 flex flex-col gap-4 rounded-3xl border border-mist p-6 md:p-10">
+    {{-- На компьютере: слева режим работы, справа — когда быть на станции и ранний заезд (без пустого места). --}}
+    <div class="mt-8 grid gap-4 lg:grid-cols-2">
+    <div class="flex flex-col gap-4 rounded-3xl border border-mist p-6 md:p-10">
         <span class="flex h-11 w-11 items-center justify-center rounded-full bg-sand text-ember">{{ site_icon('cable', 'h-6 w-6') }}</span>
         <p class="eyebrow mt-2">{{ __('access.hours_standard') }}</p>
-        <ul class="divide-y divide-mist md:max-w-xl">
+        <ul class="divide-y divide-mist">
             @foreach ($lifts as [$lname, $lhours])
                 <li class="flex items-baseline justify-between gap-4 py-3.5">
                     <span class="text-lg md:text-xl">{{ $lname }}</span>
@@ -117,7 +119,7 @@
         </ul>
         <p class="text-[15px] leading-relaxed text-stone">{{ $cableNote !== '' ? $cableNote.'. ' : '' }}{{ __('access.hours_last') }}</p>
     </div>
-    <div class="mt-4 grid gap-4 md:grid-cols-2">
+    <div class="flex flex-col gap-4">
         <div class="flex flex-col gap-3 rounded-3xl border border-mist p-6 md:p-8">
             <p class="eyebrow">{{ __('access.plan_title') }}</p>
             <ul class="flex flex-col gap-3 text-[15px] leading-relaxed text-slate">
@@ -125,10 +127,11 @@
             </ul>
             <p class="text-[14px] leading-relaxed text-stone">{{ __('access.plan_note') }}</p>
         </div>
-        <div class="flex flex-col gap-2 rounded-3xl bg-forest p-6 text-white md:p-8">
+        <div class="flex flex-col gap-2 rounded-3xl bg-forest p-6 text-white md:p-8 lg:flex-1">
             <p class="eyebrow-light">{{ __('access.early_title') }}</p>
             <p class="text-lg leading-relaxed text-white/90">{{ __('access.early_text') }}</p>
         </div>
+    </div>
     </div>
     <div class="mt-6 flex flex-col gap-2 border-l-2 border-mist pl-4 text-[15px] leading-relaxed text-slate">
         <p><strong class="font-bold text-ink">{{ __('access.hours_guest') }}.</strong> {{ __('access.hours_guest_text') }}</p>
