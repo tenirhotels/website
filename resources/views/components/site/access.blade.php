@@ -114,9 +114,12 @@
                             <p class="font-display text-2xl leading-none text-ember">≈ {{ $s['next'] }} {{ __('map.min') }}</p>
                             <p class="text-[15px] text-slate">{{ __('access.ride_to_name', ['name' => __('map.tags.station_'.$stations[$i + 1]['key'])]) }}</p>
                         </div>
-                        @php($photo = media(\App\Models\Setting::get('cable.photo_'.$s['key'])))
+                        @php
+                            $photoPath = \App\Models\Setting::get('cable.photo_'.$s['key']);
+                            $photo = media($photoPath);
+                        @endphp
                         @if ($photo)
-                            <img src="{{ $photo }}" srcset="{{ media_srcset(\App\Models\Setting::get('cable.photo_'.$s['key'])) }}" sizes="144px" alt="{{ __('map.names.station_'.$s['key']) }}" width="144" height="96" loading="lazy" decoding="async" class="h-20 w-28 shrink-0 rounded-xl object-cover sm:h-24 sm:w-36">
+                            <img src="{{ $photo }}" srcset="{{ media_srcset($photoPath) }}" sizes="144px" alt="{{ __('map.names.station_'.$s['key']) }}" width="144" height="96" loading="lazy" decoding="async" class="h-20 w-28 shrink-0 rounded-xl object-cover sm:h-24 sm:w-36">
                         @endif
                     </div>
                 </li>
