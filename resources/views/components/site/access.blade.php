@@ -109,11 +109,15 @@
                     <span class="flex w-9 shrink-0 justify-center" aria-hidden="true"><span class="w-0.5 bg-ember/40"></span></span>
                     <div class="my-2 flex flex-1 items-center gap-4 rounded-2xl bg-ember/10 px-4 py-3.5">
                         <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-ember">{{ site_icon('cable', 'h-6 w-6') }}</span>
-                        <div class="flex flex-col gap-0.5">
+                        <div class="flex min-w-0 flex-1 flex-col gap-0.5">
                             <p class="text-[13px] uppercase tracking-[0.14em] text-stone">{{ __('access.ride_label') }}</p>
                             <p class="font-display text-2xl leading-none text-ember">≈ {{ $s['next'] }} {{ __('map.min') }}</p>
                             <p class="text-[15px] text-slate">{{ __('access.ride_to_name', ['name' => __('map.tags.station_'.$stations[$i + 1]['key'])]) }}</p>
                         </div>
+                        @php($photo = media(\App\Models\Setting::get('cable.photo_'.$s['key'])))
+                        @if ($photo)
+                            <img src="{{ $photo }}" srcset="{{ media_srcset(\App\Models\Setting::get('cable.photo_'.$s['key'])) }}" sizes="144px" alt="{{ __('map.names.station_'.$s['key']) }}" width="144" height="96" loading="lazy" decoding="async" class="h-20 w-28 shrink-0 rounded-xl object-cover sm:h-24 sm:w-36">
+                        @endif
                     </div>
                 </li>
             @endif
