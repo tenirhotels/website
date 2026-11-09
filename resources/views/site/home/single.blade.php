@@ -64,7 +64,7 @@
     @if ($widget = Locales::pick($hotel?->reviews_widget ?? []))
         <section id="reviews" class="bg-white"><div class="container-site py-14 md:py-20 lg:py-24">{!! $widget !!}</div></section>
     @elseif ($hotel?->isOpen())
-        <x-site.reviews :hotel="$hotel" />
+        <x-site.reviews :hotel="$hotel" compact />
     @endif
 
     @include('site.home.partials.stories-horizon')

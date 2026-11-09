@@ -17,7 +17,7 @@ return [
         'language' => 'Language',
         'skip' => 'Skip to content',
     ],
-    'reviews' => ['title' => 'Guest reviews'],
+    'reviews' => ['title' => 'Guest reviews', 'all' => 'All reviews'],
     'booking' => [
         'title' => 'Reservations',
         'hotel' => 'Hotel',
