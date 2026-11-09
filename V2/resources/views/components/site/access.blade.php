@@ -135,6 +135,16 @@
     {{-- Калькулятор прибытия: успеваете ли подняться стандартными канатками (только со станции Медеу). --}}
     @php
         $mins = fn ($c) => $c->hour * 60 + $c->minute;
+        // Смещения посадок от выезда с Медеу: участки + равные пересадки (сумма = время в пути в одну сторону).
+        $legs = $stations->pluck('next')->filter()->values();
+        $transfer = ($legs->count() > 1) ? (ResortMap::ONE_WAY_MINUTES - $legs->sum()) / ($legs->count() - 1) : 0;
+        $offsets = [0, $legs[0] + $transfer, $legs[0] + $transfer + $legs[1] + $transfer, ResortMap::ONE_WAY_MINUTES];
+        $stationNames = $stations->map(fn ($st) => __('map.tags.station_'.$st['key']))->values()->all();
+        $steps = [
+            'board' => __('access.st_board'), 'change' => __('access.st_change'), 'arrive' => __('access.st_arrive'),
+            'std' => __('access.st_std'), 'last' => __('access.st_last'), 'special' => __('access.st_special'),
+            'until' => __('access.plan_until'), 'hotel' => $hotel->t('name'),
+        ];
         $wa = \App\Models\Setting::get('contacts.whatsapp');
         $writeUrl = $wa ? 'https://wa.me/'.preg_replace('/\D/', '', $wa) : route('contact');
     @endphp
@@ -143,6 +153,7 @@
     <aside id="arrival-calc" class="mt-8 flex flex-1 flex-col gap-6 rounded-3xl border border-mist p-6 md:p-8"
            data-std-last="{{ $mins($dayLast) }}" data-medeu-last="{{ $mins($medeuLast) }}" data-total="{{ ResortMap::ONE_WAY_MINUTES }}"
            data-from="{{ $guestFrom }}" data-to="{{ $guestTo }}"
+           data-offsets="{{ json_encode($offsets) }}" data-names="{{ json_encode($stationNames, JSON_UNESCAPED_UNICODE) }}" data-steps="{{ json_encode($steps, JSON_UNESCAPED_UNICODE) }}"
            data-msg="{{ json_encode(['ok' => __('access.calc_ok'), 'guest' => __('access.calc_guest'), 'no' => __('access.calc_no')], JSON_UNESCAPED_UNICODE) }}">
         <p class="text-base leading-relaxed text-slate">{{ __('access.calc_text') }}</p>
 
@@ -155,12 +166,14 @@
             <div class="mt-1 flex justify-between text-sm text-stone" aria-hidden="true"><span>09:00</span><span>12:00</span><span>15:00</span><span>18:00</span></div>
         </div>
 
-        <div id="calc-result" class="flex min-h-[11.5rem] items-start gap-3 rounded-2xl bg-sand p-5 text-base leading-relaxed text-ink" aria-live="polite">
+        <div id="calc-result" class="flex min-h-[7.5rem] items-start gap-3 rounded-2xl bg-sand p-5 text-base leading-relaxed text-ink" aria-live="polite">
             <span id="calc-dot" class="mt-2 size-2.5 shrink-0 rounded-full bg-forest" aria-hidden="true"></span>
-            <div>
-                <p id="calc-text"></p>
-                <a id="calc-write" href="{{ $writeUrl }}" hidden class="btn-primary mt-4 inline-flex">{{ __('access.calc_write') }}</a>
-            </div>
+            <p id="calc-text"></p>
+        </div>
+        {{-- Ход подъёма по времени; для остальных вариантов — ключевые времена. Высота фиксирована, чтобы ничего не прыгало. --}}
+        <div class="min-h-[12rem]">
+            <ol id="calc-steps" class="divide-y divide-mist border-t border-mist"></ol>
+            <a id="calc-write" href="{{ $writeUrl }}" hidden class="btn-primary mt-5 inline-flex">{{ __('access.calc_write') }}</a>
         </div>
         <p class="mt-auto text-sm leading-relaxed text-stone">{{ __('access.calc_hint') }}</p>
     </aside>
@@ -171,7 +184,8 @@
             var box = document.getElementById('arrival-calc'); if (!box) return;
             var d = box.dataset, msg = JSON.parse(d.msg), std = +d.stdLast, last = +d.medeuLast, total = +d.total;
             var rng = document.getElementById('calc-time'), out = document.getElementById('calc-out'),
-                dot = document.getElementById('calc-dot'), txt = document.getElementById('calc-text'), wr = document.getElementById('calc-write');
+                dot = document.getElementById('calc-dot'), txt = document.getElementById('calc-text'), wr = document.getElementById('calc-write'), ol = document.getElementById('calc-steps'),
+                off = JSON.parse(d.offsets), names = JSON.parse(d.names), st = JSON.parse(d.steps);
             function f(m) { m = Math.round(m); return ('0' + Math.floor(m / 60) % 24).slice(-2) + ':' + ('0' + m % 60).slice(-2); }
             function upd() {
                 var t = +rng.value, state, text;
@@ -180,6 +194,18 @@
                 else if (t <= last) { state = 'guest'; text = msg.guest.replace(':from', d.from).replace(':to', d.to); }
                 else { state = 'no'; text = msg.no.replace(':time', f(last)); }
                 txt.textContent = text;
+                var until = function (m) { return st.until.replace(':time', f(m)); }, rows;
+                if (state === 'ok') rows = [[f(t), names[0], st.board], [f(t + off[1]), names[1], st.change], [f(t + off[2]), names[2], st.change], [f(t + off[3]), names[3] + ' \u00b7 ' + st.hotel, st.arrive]];
+                else if (state === 'guest') rows = [[until(last), names[0], st.last], [d.from + '\u2013' + d.to, names[1], st.special]];
+                else rows = [[until(std), names[0], st.std], [until(last), names[0], st.last + ' \u00b7 ' + st.special.toLowerCase()]];
+                ol.textContent = '';
+                rows.forEach(function (r) {
+                    var li = document.createElement('li'); li.className = 'flex items-baseline gap-4 py-2.5';
+                    var tm = document.createElement('span'); tm.className = 'w-32 shrink-0 whitespace-nowrap font-display text-xl text-ink'; tm.textContent = r[0];
+                    var bx = document.createElement('div'), n = document.createElement('p'), sb = document.createElement('p');
+                    n.className = 'text-base leading-snug text-ink'; n.textContent = r[1]; sb.className = 'text-sm text-stone'; sb.textContent = r[2];
+                    bx.appendChild(n); bx.appendChild(sb); li.appendChild(tm); li.appendChild(bx); ol.appendChild(li);
+                });
                 wr.hidden = state !== 'guest';
                 dot.className = 'mt-2 size-2.5 shrink-0 rounded-full ' + (state === 'ok' ? 'bg-forest' : state === 'guest' ? 'bg-ember' : 'bg-stone');
                 rng.style.setProperty('--p', ((t - rng.min) / (rng.max - rng.min) * 100) + '%');
