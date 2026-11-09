@@ -44,6 +44,7 @@ return [
         'offers' => '优惠',
         'gallery' => '图库',
         'getting_here' => '交通指南',
+        'reviews' => '住客评价',
         'check_prices' => '查询价格',
         'from' => '起',
         'per_night' => '晚',

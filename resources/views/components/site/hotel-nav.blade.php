@@ -11,6 +11,7 @@
         'offers' => __('site.hotel.offers'),
         'gallery' => __('site.hotel.gallery'),
         'getting-here' => __('site.hotel.getting_here'),
+        'reviews' => __('site.hotel.reviews'),
     ];
     $routeName = request()->route()?->getName();
     $current = collect(array_keys($sections))->first(fn ($s) => Property::routeName($s, Property::MULTI) === $routeName)

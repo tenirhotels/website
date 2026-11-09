@@ -28,6 +28,7 @@
     $mobileExtra = array_filter([
         $single && $hotel ? [__('site.hotel.gallery'), $hotel->sectionUrl('gallery')] : null,
         $single && $hotel ? [__('site.hotel.getting_here'), $hotel->sectionUrl('getting-here')] : null,
+        $single && $hotel ? [__('site.hotel.reviews'), $hotel->sectionUrl('reviews')] : null,
         $single && $hotel ? [__('map.open_map'), route('map')] : null,
         \App\Support\Gifts::offers() ? [__('gifts.open'), route('gifts')] : null,
         [__('site.nav.stories'), route('stories.index')],

@@ -44,6 +44,7 @@ return [
         'offers' => 'Ұсыныстар',
         'gallery' => 'Галерея',
         'getting_here' => 'Қалай жетуге болады',
+        'reviews' => 'Пікірлер',
         'check_prices' => 'Бағаны тексеру',
         'from' => 'бастап',
         'per_night' => 'түн',

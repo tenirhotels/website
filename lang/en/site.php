@@ -43,6 +43,7 @@ return [
         'offers' => 'Offers',
         'gallery' => 'Gallery',
         'getting_here' => 'Getting here',
+        'reviews' => 'Reviews',
         'check_prices' => 'Check rates',
         'from' => 'from',
         'per_night' => 'night',

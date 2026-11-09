@@ -86,6 +86,14 @@ trait RendersHotelPages
         ]);
     }
 
+    protected function renderReviews(Hotel $hotel)
+    {
+        return view('site.destinations.reviews', [
+            'hotel' => $hotel,
+            'seo' => Seo::make($this->title('reviews', $hotel), $hotel->t('summary'))->withKeywords($hotel->seoKeywords()),
+        ]);
+    }
+
     private function title(string $key, Hotel $hotel): string
     {
         return __("site.hotel.$key").' — '.$hotel->t('name');

@@ -53,6 +53,7 @@
                 <a href="{{ route('offers.index') }}" class="hover:text-white">{{ __('site.nav.offers') }}</a>
                 <a href="{{ route('events.index') }}" class="hover:text-white">{{ __('site.nav.events') }}</a>
                 @if (Gifts::offers())<a href="{{ route('gifts') }}" class="hover:text-white">{{ __('gifts.open') }}</a>@endif
+                @if (\App\Support\Property::isSingle() && ($rh = \App\Support\Property::primary()))<a href="{{ $rh->sectionUrl('reviews') }}" class="hover:text-white">{{ __('site.hotel.reviews') }}</a>@endif
                 <a href="{{ route('map') }}" class="hover:text-white">{{ __('map.open_map') }}</a>
                 <a href="{{ route('stories.index') }}" class="hover:text-white">{{ __('site.nav.stories') }}</a>
                 <a href="{{ route('contact') }}" class="hover:text-white">{{ __('site.nav.contact') }}</a>
