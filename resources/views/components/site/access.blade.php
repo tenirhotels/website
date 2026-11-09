@@ -202,13 +202,16 @@
                 <span>{{ __('access.calc_label') }}</span>
                 <output id="calc-out" class="font-display text-4xl leading-none text-ink">12:00</output>
             </label>
-            <input id="calc-time" type="range" min="540" max="1080" step="15" value="720" class="mt-5 w-full cursor-pointer accent-ember">
+            <input id="calc-time" type="range" min="540" max="1080" step="15" value="720" class="calc-range mt-5 w-full">
             <div class="mt-1 flex justify-between text-sm text-stone" aria-hidden="true"><span>09:00</span><span>12:00</span><span>15:00</span><span>18:00</span></div>
         </div>
 
-        <div id="calc-result" class="mt-6 rounded-2xl border-l-4 border-forest bg-sand p-5 text-base leading-relaxed text-ink" aria-live="polite">
-            <p id="calc-text"></p>
-            <a id="calc-write" href="{{ $writeUrl }}" hidden class="btn-primary mt-4 inline-flex">{{ __('access.calc_write') }}</a>
+        <div id="calc-result" class="mt-6 flex items-start gap-3 rounded-2xl bg-sand p-5 text-base leading-relaxed text-ink" aria-live="polite">
+            <span id="calc-dot" class="mt-2 size-2.5 shrink-0 rounded-full bg-forest" aria-hidden="true"></span>
+            <div>
+                <p id="calc-text"></p>
+                <a id="calc-write" href="{{ $writeUrl }}" hidden class="btn-primary mt-4 inline-flex">{{ __('access.calc_write') }}</a>
+            </div>
         </div>
         <p class="mt-4 text-sm leading-relaxed text-stone">{{ __('access.calc_hint') }}</p>
     </aside>
@@ -218,7 +221,7 @@
             var box = document.getElementById('arrival-calc'); if (!box) return;
             var d = box.dataset, msg = JSON.parse(d.msg), std = +d.stdLast, last = +d.medeuLast, total = +d.total;
             var rng = document.getElementById('calc-time'), out = document.getElementById('calc-out'),
-                res = document.getElementById('calc-result'), txt = document.getElementById('calc-text'), wr = document.getElementById('calc-write');
+                dot = document.getElementById('calc-dot'), txt = document.getElementById('calc-text'), wr = document.getElementById('calc-write');
             function f(m) { m = Math.round(m); return ('0' + Math.floor(m / 60) % 24).slice(-2) + ':' + ('0' + m % 60).slice(-2); }
             function upd() {
                 var t = +rng.value, state, text;
@@ -228,7 +231,8 @@
                 else { state = 'no'; text = msg.no.replace(':time', f(last)); }
                 txt.textContent = text;
                 wr.hidden = state !== 'guest';
-                res.className = 'mt-6 rounded-2xl border-l-4 bg-sand p-5 text-base leading-relaxed text-ink ' + (state === 'ok' ? 'border-forest' : state === 'guest' ? 'border-ember' : 'border-stone');
+                dot.className = 'mt-2 size-2.5 shrink-0 rounded-full ' + (state === 'ok' ? 'bg-forest' : state === 'guest' ? 'bg-ember' : 'bg-stone');
+                rng.style.setProperty('--p', ((t - rng.min) / (rng.max - rng.min) * 100) + '%');
             }
             rng.addEventListener('input', upd); upd();
         })();
