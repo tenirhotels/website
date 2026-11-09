@@ -84,6 +84,8 @@ return [
         // Виджет отзывов работает через прежнюю интеграцию (как на tenirhotels.com):
         // другой загрузчик, пространство имён bookingengine и контекст TL-EXPRESS.
         'reviews_loader' => env('EXELY_REVIEWS_LOADER', 'https://kz-ibe.hopenapi.com/integration/loader.js'),
+        // Форма поиска на главной — как на tenirhotels.com: профиль TL-EXPRESS.express-3-new-aa (серая тема).
+        'search_context' => env('EXELY_SEARCH_CONTEXT', 'TL-EXPRESS.express-3-new-aa'),
         'reviews_context' => env('EXELY_REVIEWS_CONTEXT', 'TL-EXPRESS'),
         'params' => [
             'check_in' => 'date',          // YYYY-MM-DD
