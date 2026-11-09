@@ -143,7 +143,7 @@
     </div>
 </section>
 <section class="container-site py-10 md:py-16">
-    <div class="grid items-start gap-10 lg:grid-cols-2 lg:gap-16">
+    <div class="grid items-stretch gap-10 lg:grid-cols-2 lg:gap-16">
     <div>
     <h2 class="font-display text-2xl md:text-3xl">{{ __('access.route_title') }}</h2>
     <ol class="mt-8 max-w-2xl">
@@ -188,13 +188,13 @@
         $wa = \App\Models\Setting::get('contacts.whatsapp');
         $writeUrl = $wa ? 'https://wa.me/'.preg_replace('/\D/', '', $wa) : route('contact');
     @endphp
-    <aside id="arrival-calc" class="rounded-3xl border border-mist p-6 md:p-8"
+    <div class="flex flex-col">
+    <h2 class="font-display text-2xl md:text-3xl">{{ __('access.calc_title') }}</h2>
+    <aside id="arrival-calc" class="mt-8 flex flex-1 flex-col justify-between gap-6 rounded-3xl border border-mist p-6 md:p-8"
            data-std-last="{{ $mins($dayLast) }}" data-medeu-last="{{ $mins($medeuLast) }}" data-total="{{ ResortMap::ONE_WAY_MINUTES }}"
            data-from="{{ $guestFrom }}" data-to="{{ $guestTo }}"
            data-msg="{{ json_encode(['ok' => __('access.calc_ok'), 'guest' => __('access.calc_guest'), 'no' => __('access.calc_no')], JSON_UNESCAPED_UNICODE) }}">
-        <p class="eyebrow">{{ __('access.calc_eyebrow') }}</p>
-        <h3 class="mt-2 font-display text-2xl leading-tight md:text-3xl">{{ __('access.calc_title') }}</h3>
-        <p class="mt-3 text-base leading-relaxed text-slate">{{ __('access.calc_text') }}</p>
+        <p class="text-base leading-relaxed text-slate">{{ __('access.calc_text') }}</p>
 
         <div class="mt-7">
             <label for="calc-time" class="flex items-baseline justify-between gap-4 text-base text-slate">
@@ -214,6 +214,7 @@
         </div>
         <p class="mt-4 text-sm leading-relaxed text-stone">{{ __('access.calc_hint') }}</p>
     </aside>
+    </div>
     </div>
     <script>
         (function () {
