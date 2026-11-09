@@ -21,25 +21,44 @@
 @endphp
 <footer class="relative isolate overflow-hidden bg-forest-deep text-[#D8DCD8]">
     <div class="pattern-tile -z-10 bg-white opacity-[0.035]" aria-hidden="true"></div>
-    <div class="container-site flex flex-col gap-10 pb-8 pt-16 md:gap-14 md:pt-20">
-        <div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
-            <div class="flex flex-col gap-5">
+    <div class="container-site flex flex-col gap-8 pb-7 pt-12 md:gap-10 md:pt-14">
+        <div class="grid grid-cols-2 gap-x-8 gap-y-10 lg:grid-cols-[1.35fr_1fr_1fr_1fr]">
+            {{-- Бренд, подпись и соцсети --}}
+            <div class="col-span-2 flex flex-col gap-4 lg:col-span-1">
                 <img src="/images/logo-light.svg" alt="Tenir" width="150" height="36" class="h-9 w-auto self-start">
                 @if ($text = Setting::text('brand.footer_text'))
-                    <p class="max-w-sm text-base leading-relaxed text-[#B4BCB7]">{{ $text }}</p>
+                    <p class="max-w-xs text-[15px] leading-relaxed text-[#B4BCB7]">{{ $text }}</p>
+                @endif
+                @if ($social->isNotEmpty())
+                    <ul class="mt-1 flex flex-wrap items-center gap-2.5">
+                        @foreach ($social as $network => $url)
+                            @php([$label, $icon] = $networks[$network] ?? [ucfirst($network), null])
+                            <li>
+                                <a href="{{ $url }}" target="_blank" rel="noopener" aria-label="{{ $label }}" title="{{ $label }}"
+                                   class="flex size-10 items-center justify-center rounded-full border border-[#3A4A41] text-[#D8DCD8] transition-colors hover:border-ember-light hover:text-ember-light">
+                                    @if ($icon)
+                                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{!! $icon !!}</svg>
+                                    @else
+                                        <span class="text-xs">{{ mb_substr($label, 0, 2) }}</span>
+                                    @endif
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
                 @endif
             </div>
 
-            <div class="flex flex-col gap-3 text-base">
-                <p class="text-xs uppercase tracking-[0.2em] text-[#9AA59F]">{{ __('site.footer.reservations') }}</p>
+            {{-- Бронирование и связь --}}
+            <div class="col-span-2 flex flex-col gap-2.5 text-[15px] sm:col-span-1">
+                <p class="mb-1 text-xs uppercase tracking-[0.2em] text-[#9AA59F]">{{ __('site.footer.reservations') }}</p>
                 @if ($phone)<a href="tel:{{ preg_replace('/[^\d+]/', '', $phone) }}" class="hover:text-white">{{ $phone }}</a>@endif
                 @if ($whatsapp)<a href="https://wa.me/{{ preg_replace('/\D/', '', $whatsapp) }}" class="hover:text-white">WhatsApp</a>@endif
-                @if ($email)<a href="mailto:{{ $email }}" class="hover:text-white">{{ $email }}</a>@endif
+                @if ($email)<a href="mailto:{{ $email }}" class="break-all hover:text-white">{{ $email }}</a>@endif
                 @if ($hours = Setting::get('contacts.hours'))<span class="text-[#9AA59F]">{{ $hours }}</span>@endif
             </div>
 
-            <nav aria-label="{{ __('site.footer.guests') }}" class="flex flex-col gap-3 text-base">
-                <p class="text-xs uppercase tracking-[0.2em] text-[#9AA59F]">{{ __('site.footer.guests') }}</p>
+            <nav aria-label="{{ __('site.footer.guests') }}" class="flex flex-col gap-2.5 text-[15px]">
+                <p class="mb-1 text-xs uppercase tracking-[0.2em] text-[#9AA59F]">{{ __('site.footer.guests') }}</p>
                 @if (\App\Support\Property::isSingle() && ($single = \App\Support\Property::primary()))
                     {{-- Один отель: ссылка на главную бессмысленна — ведём в разделы отеля. --}}
                     <a href="{{ $single->sectionUrl('rooms') }}" class="hover:text-white">{{ __('site.hotel.rooms') }}</a>
@@ -53,42 +72,20 @@
                 <a href="{{ route('offers.index') }}" class="hover:text-white">{{ __('site.nav.offers') }}</a>
                 <a href="{{ route('events.index') }}" class="hover:text-white">{{ __('site.nav.events') }}</a>
                 @if (Gifts::offers())<a href="{{ route('gifts') }}" class="hover:text-white">{{ __('gifts.open') }}</a>@endif
-                @if (\App\Support\Property::isSingle() && ($rh = \App\Support\Property::primary()))<a href="{{ $rh->sectionUrl('reviews') }}" class="hover:text-white">{{ __('site.hotel.reviews') }}</a>@endif
-                <a href="{{ route('map') }}" class="hover:text-white">{{ __('map.open_map') }}</a>
-                <a href="{{ route('stories.index') }}" class="hover:text-white">{{ __('site.nav.stories') }}</a>
-                <a href="{{ route('contact') }}" class="hover:text-white">{{ __('site.nav.contact') }}</a>
             </nav>
 
-            {{-- Бренд: философия и устойчивое развитие (страницы с размещением «основное меню»). --}}
-            <nav aria-label="{{ __('site.footer.brand') }}" class="flex flex-col gap-3 text-base">
-                <p class="text-xs uppercase tracking-[0.2em] text-[#9AA59F]">{{ __('site.footer.brand') }}</p>
+            {{-- Информация: карта, истории, отзывы, контакты и страницы бренда. --}}
+            <nav aria-label="{{ __('site.footer.info') }}" class="flex flex-col gap-2.5 text-[15px]">
+                <p class="mb-1 text-xs uppercase tracking-[0.2em] text-[#9AA59F]">{{ __('site.footer.info') }}</p>
+                <a href="{{ route('map') }}" class="hover:text-white">{{ __('map.open_map') }}</a>
+                <a href="{{ route('stories.index') }}" class="hover:text-white">{{ __('site.nav.stories') }}</a>
+                @if (\App\Support\Property::isSingle() && ($rh = \App\Support\Property::primary()))<a href="{{ $rh->sectionUrl('reviews') }}" class="hover:text-white">{{ __('site.hotel.reviews') }}</a>@endif
                 @foreach ($brandPages as $page)
                     <a href="{{ $page->url() }}" class="hover:text-white">{{ $page->t('title') }}</a>
                 @endforeach
+                <a href="{{ route('contact') }}" class="hover:text-white">{{ __('site.nav.contact') }}</a>
             </nav>
         </div>
-
-        {{-- Соцсети отдельной полосой --}}
-        @if ($social->isNotEmpty())
-            <div class="flex flex-col gap-5 border-t border-[#2E3A33] pt-8 sm:flex-row sm:items-center sm:justify-between">
-                <p class="text-xs uppercase tracking-[0.2em] text-[#9AA59F]">{{ __('site.footer.follow') }}</p>
-                <ul class="flex flex-wrap items-center gap-3">
-                    @foreach ($social as $network => $url)
-                        @php([$label, $icon] = $networks[$network] ?? [ucfirst($network), null])
-                        <li>
-                            <a href="{{ $url }}" target="_blank" rel="noopener" aria-label="{{ $label }}" title="{{ $label }}"
-                               class="flex size-12 items-center justify-center rounded-full border border-[#3A4A41] text-[#D8DCD8] transition-colors hover:border-ember-light hover:text-ember-light">
-                                @if ($icon)
-                                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{!! $icon !!}</svg>
-                                @else
-                                    <span class="text-xs">{{ mb_substr($label, 0, 2) }}</span>
-                                @endif
-                            </a>
-                        </li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
 
         <div class="flex flex-wrap items-center justify-between gap-x-8 gap-y-3 border-t border-[#2E3A33] pt-6 text-[13px] text-[#9AA59F]">
             <span>© {{ now()->year }} {{ Setting::text('brand.name', 'Tenir Hotels') }}@if ($legal = Setting::get('brand.legal_name')) · {{ $legal }}@endif. {{ __('site.footer.rights') }}</span>

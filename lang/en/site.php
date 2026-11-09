@@ -134,7 +134,7 @@ return [
         'min_nights' => 'from :count nights',
         'promo' => 'Promo code: :code',
     ],
-    'footer' => [
+    'footer' => ['info' => 'Information', 
         'guests' => 'For guests',
         'brand' => 'Brand',
         'follow' => 'Follow us',
