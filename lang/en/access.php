@@ -55,4 +55,6 @@ return [
     'st_std' => 'standard cable cars',
     'st_last' => 'last boarding',
     'st_special' => 'Special ride for guests',
+    'photo_zoom' => 'Enlarge photo',
+    'photo_close' => 'Close',
 ];

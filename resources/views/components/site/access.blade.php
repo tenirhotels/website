@@ -119,9 +119,10 @@
                             $photo = media($photoPath);
                         @endphp
                         @if ($photo)
-                            <div class="relative -my-3.5 -mr-4 w-28 shrink-0 self-stretch sm:w-40">
-                                <img src="{{ $photo }}" srcset="{{ media_srcset($photoPath) }}" sizes="160px" alt="{{ __('map.names.station_'.$s['key']) }}" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover">
-                            </div>
+                            <button type="button" data-zoom="{{ $photo }}" data-alt="{{ __('map.names.station_'.$s['key']) }}" aria-label="{{ __('access.photo_zoom') }}: {{ __('map.names.station_'.$s['key']) }}" class="group relative -my-3.5 -mr-4 w-28 shrink-0 cursor-zoom-in self-stretch sm:w-40">
+                                <img src="{{ $photo }}" srcset="{{ media_srcset($photoPath) }}" sizes="160px" alt="" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover transition group-hover:brightness-90">
+                                <span class="absolute bottom-2 right-2 flex h-7 w-7 items-center justify-center rounded-full bg-white/90 text-ink" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" class="h-4 w-4"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5M11 8.5v5M8.5 11h5"/></svg></span>
+                            </button>
                         @endif
                     </div>
                 </li>
@@ -256,4 +257,20 @@
     </div>
 </section>
 
-
+<dialog id="photo-zoom" class="m-auto max-h-[92vh] w-[min(94vw,1100px)] overflow-visible bg-transparent p-0 backdrop:bg-black/80">
+    <img id="photo-zoom-img" src="" alt="" class="max-h-[88vh] w-full rounded-2xl object-contain">
+    <button type="button" id="photo-zoom-close" aria-label="{{ __('access.photo_close') }}" class="absolute -top-3 right-0 flex h-10 w-10 items-center justify-center rounded-full bg-white text-ink shadow md:-right-3">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="h-5 w-5" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+</dialog>
+<script>
+(() => {
+    const d = document.getElementById('photo-zoom'), img = document.getElementById('photo-zoom-img');
+    if (!d || !d.showModal) return;
+    document.querySelectorAll('[data-zoom]').forEach(b => b.addEventListener('click', () => {
+        img.src = b.dataset.zoom; img.alt = b.dataset.alt || ''; d.showModal();
+    }));
+    d.addEventListener('click', e => { if (e.target !== img) d.close(); });
+    document.getElementById('photo-zoom-close').addEventListener('click', () => d.close());
+})();
+</script>
