@@ -13,7 +13,7 @@
     $H = ResortMap::HEIGHT;
 @endphp
 
-<section class="container-site pt-12 md:pt-16">
+<section class="container-site py-12 md:py-16">
     <div class="grid overflow-hidden rounded-3xl bg-forest text-white lg:grid-cols-[1.25fr_1fr]">
         <div class="flex flex-col gap-5 p-7 md:p-12">
             <p class="eyebrow-light">{{ __('access.eyebrow') }}</p>
@@ -144,6 +144,8 @@
     </div>
 </section>
 <section class="container-site py-10 md:py-16">
+    <div class="grid items-start gap-10 lg:grid-cols-2 lg:gap-16">
+    <div>
     <h2 class="font-display text-2xl md:text-3xl">{{ __('access.route_title') }}</h2>
     <ol class="mt-8 max-w-2xl">
         @foreach ($stations as $i => $s)
@@ -179,6 +181,58 @@
         </li>
     </ol>
     <p class="mt-6 max-w-2xl text-[15px] leading-relaxed text-stone">{{ __('access.ride_total', ['min' => ResortMap::ONE_WAY_MINUTES, 'unit' => __('map.min')]) }}</p>
+    </div>
+
+    {{-- Калькулятор прибытия: успеваете ли подняться стандартными канатками (только со станции Медеу). --}}
+    @php
+        $mins = fn ($c) => $c->hour * 60 + $c->minute;
+        $wa = \App\Models\Setting::get('contacts.whatsapp');
+        $writeUrl = $wa ? 'https://wa.me/'.preg_replace('/\D/', '', $wa) : route('contact');
+    @endphp
+    <aside id="arrival-calc" class="rounded-3xl border border-mist bg-white p-6 shadow-sm md:p-8 lg:sticky lg:top-28"
+           data-std-last="{{ $mins($dayLast) }}" data-medeu-last="{{ $mins($medeuLast) }}" data-total="{{ ResortMap::ONE_WAY_MINUTES }}"
+           data-from="{{ $guestFrom }}" data-to="{{ $guestTo }}"
+           data-msg="{{ json_encode(['ok' => __('access.calc_ok'), 'guest' => __('access.calc_guest'), 'no' => __('access.calc_no')], JSON_UNESCAPED_UNICODE) }}">
+        <p class="eyebrow">{{ __('access.calc_eyebrow') }}</p>
+        <h3 class="mt-2 font-display text-2xl leading-tight md:text-3xl">{{ __('access.calc_title') }}</h3>
+        <p class="mt-3 text-base leading-relaxed text-slate">{{ __('access.calc_text') }}</p>
+
+        <div class="mt-7">
+            <label for="calc-time" class="flex items-baseline justify-between gap-4 text-base text-slate">
+                <span>{{ __('access.calc_label') }}</span>
+                <output id="calc-out" class="font-display text-4xl leading-none text-ink">12:00</output>
+            </label>
+            <input id="calc-time" type="range" min="540" max="1080" step="15" value="720" class="mt-5 w-full cursor-pointer accent-[#B5561F]">
+            <div class="mt-1 flex justify-between text-sm text-stone" aria-hidden="true"><span>09:00</span><span>12:00</span><span>15:00</span><span>18:00</span></div>
+        </div>
+
+        <div id="calc-result" class="mt-6 rounded-2xl bg-[#E7EFE9] p-5 text-base leading-relaxed text-forest" aria-live="polite">
+            <p id="calc-text"></p>
+            <a id="calc-write" href="{{ $writeUrl }}" hidden class="btn-primary mt-4 inline-flex">{{ __('access.calc_write') }}</a>
+        </div>
+        <p class="mt-4 text-sm leading-relaxed text-stone">{{ __('access.calc_hint') }}</p>
+    </aside>
+    </div>
+    <script>
+        (function () {
+            var box = document.getElementById('arrival-calc'); if (!box) return;
+            var d = box.dataset, msg = JSON.parse(d.msg), std = +d.stdLast, last = +d.medeuLast, total = +d.total;
+            var rng = document.getElementById('calc-time'), out = document.getElementById('calc-out'),
+                res = document.getElementById('calc-result'), txt = document.getElementById('calc-text'), wr = document.getElementById('calc-write');
+            function f(m) { m = Math.round(m); return ('0' + Math.floor(m / 60) % 24).slice(-2) + ':' + ('0' + m % 60).slice(-2); }
+            function upd() {
+                var t = +rng.value, state, text;
+                out.textContent = f(t);
+                if (t <= std) { state = 'ok'; text = msg.ok.replace(':time', f(t + total)); }
+                else if (t <= last) { state = 'guest'; text = msg.guest.replace(':from', d.from).replace(':to', d.to); }
+                else { state = 'no'; text = msg.no.replace(':time', f(last)); }
+                txt.textContent = text;
+                wr.hidden = state !== 'guest';
+                res.className = 'mt-6 rounded-2xl p-5 text-base leading-relaxed ' + (state === 'ok' ? 'bg-[#E7EFE9] text-forest' : state === 'guest' ? 'bg-ember/10 text-ink' : 'bg-sand text-ink');
+            }
+            rng.addEventListener('input', upd); upd();
+        })();
+    </script>
 
     {{-- Тот же маршрут на иллюстрированной карте курорта --}}
     <div class="mt-10 md:mt-14">
