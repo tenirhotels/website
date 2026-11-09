@@ -135,7 +135,7 @@ return [
         'min_nights' => ':count түннен бастап',
         'promo' => 'Промокод: :code',
     ],
-    'footer' => [
+    'footer' => ['info' => 'Ақпарат', 
         'guests' => 'Қонақтарға',
         'brand' => 'Бренд',
         'follow' => 'Әлеуметтік желілер',

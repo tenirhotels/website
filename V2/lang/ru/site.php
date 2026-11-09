@@ -134,7 +134,7 @@ return [
         'min_nights' => 'от :count ночей',
         'promo' => 'Промокод: :code',
     ],
-    'footer' => [
+    'footer' => ['info' => 'Информация', 
         'guests' => 'Гостям',
         'brand' => 'Бренд',
         'follow' => 'Соцсети',
