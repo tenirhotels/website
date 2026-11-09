@@ -135,6 +135,7 @@ return [
         'min_nights' => ':count 晚起',
         'promo' => '优惠码：:code',
     ],
+    'hero' => ['sound_on' => '开启声音', 'sound_off' => '关闭声音'],
     'footer' => ['info' => '信息', 
         'guests' => '宾客服务',
         'brand' => '品牌',

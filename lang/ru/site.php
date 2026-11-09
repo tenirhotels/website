@@ -134,6 +134,7 @@ return [
         'min_nights' => 'от :count ночей',
         'promo' => 'Промокод: :code',
     ],
+    'hero' => ['sound_on' => 'Включить звук', 'sound_off' => 'Выключить звук'],
     'footer' => ['info' => 'Информация', 
         'guests' => 'Гостям',
         'brand' => 'Бренд',
