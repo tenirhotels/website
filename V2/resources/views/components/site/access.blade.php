@@ -140,7 +140,6 @@
         </ul>
         <p>{{ __('access.hours_guest_arrive', ['time' => $dayLast->format('H:i')]) }}</p>
     </div>
-    </div>
 </section>
 <section class="container-site py-10 md:py-16">
     <div class="grid items-stretch gap-10 lg:grid-cols-2 lg:gap-16">
