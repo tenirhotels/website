@@ -1,5 +1,5 @@
 <x-layouts.site :seo="$seo" :hotel="$hotel">
-    <x-site.page-hero tall :image="$hotel->seasonHero()"
+    <x-site.page-hero tall :image="$hotel->seasonHero()" :video="media($hotel->hero_video)"
         :eyebrow="collect([$hotel->altitude_m ? __('site.hotel.altitude', ['value' => number_format($hotel->altitude_m, 0, ',', ' ')]) : null, $hotel->t('region')])->filter()->implode(' · ')"
         :title="$hotel->t('name')" :text="$hotel->t('tagline')">
         @unless ($hotel->isOpen())

@@ -77,7 +77,11 @@ class HotelResource extends Resource
                     Fields::image('hero_image', 'Главное фото (герой) — зима, с ноября по апрель', 'hotels'),
                     Fields::image('hero_image_summer', 'Главное фото — лето, с мая по октябрь (необязательно)', 'hotels')
                         ->helperText('Если не загружено, круглый год показывается основное фото.'),
-                    TextInput::make('hero_video')->label('Видео для героя (URL mp4)')->url(),
+                    \Filament\Forms\Components\FileUpload::make('hero_video')
+                        ->label('Видео для героя (mp4, только компьютер)')
+                        ->helperText('Без звука, 10–15 секунд, 1920×1080, до 15 МБ. Показывается только на компьютере поверх главного фото; на телефоне остаётся фото. Чтобы убрать видео — удалите файл.')
+                        ->disk('public')->directory('hotels/video')
+                        ->acceptedFileTypes(['video/mp4'])->maxSize(15360),
                     Fields::gallery('gallery', 'hotels/gallery'),
                 ]),
 
