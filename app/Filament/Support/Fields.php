@@ -160,6 +160,9 @@ class Fields
             ->multiple()
             ->reorderable()
             ->panelLayout('grid')
+            ->imagePreviewHeight('160')
+            ->openable()
+            ->downloadable(false)
             ->columnSpanFull();
     }
 
