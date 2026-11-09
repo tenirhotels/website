@@ -5,6 +5,10 @@
 
     // Версия граней панорамы = сумма размеров файлов: при замене снимков адрес меняется и кэш браузера/Cloudflare обходится.
     $panoV = fn ($k) => dechex(array_sum(array_map(fn ($f) => (int) @filesize(public_path("panoramas/$k/$f.jpg")), str_split('lfrbud'))));
+    $panoList = collect(['medeu', 'shymbulak', 'combi1'])
+        ->map(fn ($k) => ['key' => $k, 'title' => __('map.names.station_'.$k)])
+        ->push(['key' => 'tenir', 'title' => $hotel->t('name')])
+        ->filter(fn ($p) => is_file(public_path('panoramas/'.$p['key'].'/f.jpg')))->values();
     $stations = collect(ResortMap::CABLE);
     $pins = collect(ResortMap::pins())->keyBy('id');
     $season = ResortMap::defaultSeason();
@@ -290,8 +294,12 @@
 <dialog id="pano-modal" class="m-auto h-[min(86vh,760px)] w-[min(96vw,1200px)] overflow-visible bg-transparent p-0 backdrop:bg-black/80">
     <div class="relative h-full w-full overflow-hidden rounded-2xl bg-[#1b1f1d]">
         <div id="pano-view" class="h-full w-full"></div>
-        <p id="pano-title" class="pointer-events-none absolute left-14 top-3 z-10 max-w-[60%] truncate rounded-full bg-black/50 px-4 py-2 text-sm text-white"></p>
-        <p class="pointer-events-none absolute bottom-3 left-1/2 z-10 -translate-x-1/2 whitespace-nowrap rounded-full bg-black/50 px-4 py-2 text-xs text-white">{{ __('access.pano_hint') }}</p>
+        <nav class="absolute bottom-3 left-3 right-3 z-10 flex gap-2 overflow-x-auto pb-1 sm:justify-center" aria-label="{{ __('access.pano_open') }}">
+            @foreach ($panoList as $p)
+                <button type="button" data-pano-go="{{ $p['key'] }}" data-v="{{ $panoV($p['key']) }}" class="shrink-0 whitespace-nowrap rounded-full bg-black/50 px-4 py-2 text-sm text-white transition hover:bg-black/70 aria-[current=true]:bg-white aria-[current=true]:text-ink">{{ $p['title'] }}</button>
+            @endforeach
+        </nav>
+        <p class="pointer-events-none absolute left-1/2 top-3 z-10 -translate-x-1/2 whitespace-nowrap rounded-full bg-black/50 px-4 py-2 text-xs text-white">{{ __('access.pano_hint') }}</p>
     </div>
     <button type="button" id="pano-close" aria-label="{{ __('access.photo_close') }}" class="absolute -top-3 right-0 z-20 flex h-10 w-10 items-center justify-center rounded-full bg-white text-ink shadow md:-right-3">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="h-5 w-5" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
@@ -314,17 +322,22 @@
     d.addEventListener('close', () => { if (viewer) { viewer.destroy(); viewer = null; } });
     d.addEventListener('click', e => { if (e.target === d) close(); });
     document.getElementById('pano-close').addEventListener('click', close);
-    document.querySelectorAll('[data-pano]').forEach(b => b.addEventListener('click', async () => {
-        document.getElementById('pano-title').textContent = b.dataset.title || '';
-        d.showModal();
+    const chips = [...document.querySelectorAll('[data-pano-go]')];
+    const show = async (key, v) => {
+        chips.forEach(c => c.setAttribute('aria-current', c.dataset.panoGo === key ? 'true' : 'false'));
         try { await lib(); } catch (e) { return; }
         if (viewer) viewer.destroy();
         viewer = pannellum.viewer('pano-view', {
             type: 'cubemap',
-            cubeMap: FACES.map(f => '/panoramas/' + b.dataset.pano + '/' + f + '.jpg?v=' + (b.dataset.v || '')),
+            cubeMap: FACES.map(f => '/panoramas/' + key + '/' + f + '.jpg?v=' + (v || '')),
             autoLoad: true, showControls: true, showZoomCtrl: true, showFullscreenCtrl: true,
             mouseZoom: true, draggable: true, hfov: 100, minHfov: 40, maxHfov: 120, pitch: 0, yaw: 0,
         });
+    };
+    document.querySelectorAll('[data-pano]').forEach(b => b.addEventListener('click', () => {
+        d.showModal();
+        show(b.dataset.pano, b.dataset.v);
     }));
+    chips.forEach(c => c.addEventListener('click', () => show(c.dataset.panoGo, c.dataset.v)));
 })();
 </script>
