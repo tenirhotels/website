@@ -36,9 +36,9 @@
 </section>
 
 <section class="bg-white">
-    <div class="container-site grid items-center gap-8 py-10 md:py-16 lg:grid-cols-2 lg:gap-20">
+    <div class="container-site grid items-center gap-6 py-8 md:py-10 lg:grid-cols-2 lg:gap-16">
         {{-- Профиль высот из V1: Алматы → Медеу → отель --}}
-        <div class="relative mx-auto aspect-[426/500] w-full max-w-[480px] overflow-hidden rounded-3xl bg-forest-deep">
+        <div class="relative mx-auto aspect-[426/500] w-full max-w-[340px] overflow-hidden lg:mx-0 lg:ml-auto rounded-3xl bg-forest-deep">
             <x-site.media :src="$hotel->gallery[0] ?? $hotel->hero_image" alt="" round="" class="absolute inset-0 opacity-40" />
             <div class="absolute inset-0 bg-gradient-to-t from-forest-deep/80 via-forest/50 to-forest/20"></div>
             <p class="absolute left-4 top-4 rounded-full bg-white/15 px-3 py-1 text-[13px] text-white backdrop-blur-sm">{{ __('access.altitude') }}</p>
@@ -57,8 +57,8 @@
                 ['92.1%', '19.9%', true, $hotel->t('name'), '3 200'],
             ] as [$x, $y, $left, $name, $alt])
                 <div class="absolute -translate-y-1/2 text-white {{ $left ? '-translate-x-full pr-4 text-right' : 'pl-4' }}" style="left: {{ $x }}; top: {{ $y }}">
-                    <p class="text-base font-bold leading-tight md:text-lg">{{ $name }}</p>
-                    <p class="text-[15px] leading-tight text-white/80">{{ $alt }} {{ __('access.m') }}</p>
+                    <p class="text-sm font-bold leading-tight md:text-base">{{ $name }}</p>
+                    <p class="text-[13px] leading-tight text-white/80">{{ $alt }} {{ __('access.m') }}</p>
                 </div>
             @endforeach
         </div>
