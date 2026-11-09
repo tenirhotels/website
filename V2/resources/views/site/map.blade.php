@@ -42,6 +42,20 @@
                              class="map-layer" draggable="false" decoding="async" @if ($s !== $season) data-off @endif>
                     @endforeach
 
+                    {{-- Время в пути: шкала из 4 точек (станции) и подписи у стрелок между станциями --}}
+                    @php
+                        $legs = [
+                            ['m' => $stations[0]['next'], 'dot' => [138, 542], 'arrow' => [440, 815]],
+                            ['m' => $stations[1]['next'], 'dot' => [286, 542], 'arrow' => [833, 512]],
+                            ['m' => $stations[2]['next'], 'dot' => [374, 542], 'arrow' => [1108, 327]],
+                        ];
+                    @endphp
+                    @foreach ($legs as $l)
+                        <span class="map-time" style="left:{{ $l['dot'][0] }}px;top:{{ $l['dot'][1] }}px" aria-hidden="true">{{ $l['m'] }} {{ __('map.min') }}</span>
+                        <span class="map-time" style="left:{{ $l['arrow'][0] }}px;top:{{ $l['arrow'][1] }}px" aria-hidden="true">{{ $l['m'] }} {{ __('map.min') }}</span>
+                    @endforeach
+                    <span class="map-time is-total" style="left:226px;top:578px" aria-hidden="true">{{ __('map.one_way') }}</span>
+
                     @foreach ($pins as $p)
                         @php
                             $seasons = $p['seasons'] ?? null;
