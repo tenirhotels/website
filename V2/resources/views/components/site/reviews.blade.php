@@ -1,7 +1,7 @@
 @props(['hotel' => null, 'heading' => true])
 @php
     // Отзывы гостей — виджет Exely (TravelLine) «reviews-widget»: отзывы приходят из Exely, вручную их вести не нужно.
-    $context = $hotel?->exelyContext() ?? config('tenir.exely.context');
+    $context = config('tenir.exely.reviews_context');
     $exelyLocale = \App\Support\Locales::all()[app()->getLocale()]['exely'] ?? 'ru';
 @endphp
 <section id="reviews" class="bg-white">
@@ -16,13 +16,13 @@
             ['setContext', @json($context), @json($exelyLocale)],
             ['embed', 'reviews-widget', { provider: @json((string) config('tenir.exely.provider')), container: 'tl-reviews-widget', theme: 'global', bookingUrl: @json(route('booking')) }]
         ];
-        var t = w.travelline = (w.travelline || {}), ti = t.integration = (t.integration || {});
+        var t = w.bookingengine = (w.bookingengine || {}), ti = t.integration = (t.integration || {});
         ti.__cq = ti.__cq ? ti.__cq.concat(q) : q;
         if (!ti.__loader) {
             ti.__loader = true;
             var d = w.document, s = d.createElement('script');
             s.async = true;
-            s.src = @json(config('tenir.exely.loader'));
+            s.src = @json(config('tenir.exely.reviews_loader'));
             (d.getElementsByTagName('head')[0] || d.getElementsByTagName('body')[0]).appendChild(s);
         }
     })(window);

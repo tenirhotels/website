@@ -81,6 +81,10 @@ return [
         'loader' => 'https://ibe.tlintegration.com/integration/loader.js',
         // Код отеля в Exely (TravelLine) для виджета отзывов
         'provider' => env('EXELY_PROVIDER', '9305'),
+        // Виджет отзывов работает через прежнюю интеграцию (как на tenirhotels.com):
+        // другой загрузчик, пространство имён bookingengine и контекст TL-EXPRESS.
+        'reviews_loader' => env('EXELY_REVIEWS_LOADER', 'https://kz-ibe.hopenapi.com/integration/loader.js'),
+        'reviews_context' => env('EXELY_REVIEWS_CONTEXT', 'TL-EXPRESS'),
         'params' => [
             'check_in' => 'date',          // YYYY-MM-DD
             'nights' => 'nights',
