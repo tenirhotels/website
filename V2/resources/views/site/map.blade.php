@@ -42,19 +42,24 @@
                              class="map-layer" draggable="false" decoding="async" @if ($s !== $season) data-off @endif>
                     @endforeach
 
-                    {{-- Время в пути: шкала из 4 точек (станции) и подписи у стрелок между станциями --}}
+                    {{-- Время в пути (как на исходной карте): шкала из 4 точек и подписи у стрелок --}}
                     @php
                         $legs = [
-                            ['m' => $stations[0]['next'], 'dot' => [138, 542], 'arrow' => [440, 815]],
-                            ['m' => $stations[1]['next'], 'dot' => [286, 542], 'arrow' => [833, 512]],
-                            ['m' => $stations[2]['next'], 'dot' => [374, 542], 'arrow' => [1108, 327]],
+                            ['m' => $stations[0]['next'], 'dot' => [138, 542], 'arrow' => [445, 800, -12]],
+                            ['m' => $stations[1]['next'], 'dot' => [286, 542], 'arrow' => [815, 495, -32]],
+                            ['m' => $stations[2]['next'], 'dot' => [374, 542], 'arrow' => [1085, 305, -26]],
                         ];
+                        $dots = [[52, 'medeu'], [224, 'shymbulak'], [348, 'combi1'], [400, 'combi2']];
                     @endphp
-                    @foreach ($legs as $l)
-                        <span class="map-time" style="left:{{ $l['dot'][0] }}px;top:{{ $l['dot'][1] }}px" aria-hidden="true">{{ $l['m'] }} {{ __('map.min') }}</span>
-                        <span class="map-time" style="left:{{ $l['arrow'][0] }}px;top:{{ $l['arrow'][1] }}px" aria-hidden="true">{{ $l['m'] }} {{ __('map.min') }}</span>
+                    <span class="map-time is-total" style="left:20px;top:490px" aria-hidden="true">{{ __('map.one_way') }}</span>
+                    <span class="map-time is-arrow" style="left:80px;top:966px;transform:translate(-50%,-50%) rotate(28deg)" aria-hidden="true">≈15 {{ __('map.min') }}</span>
+                    @foreach ($dots as $d)
+                        <span class="map-time is-name" style="left:{{ $d[0] }}px;top:520px" aria-hidden="true">{{ __('map.tags.station_'.$d[1]) }}</span>
                     @endforeach
-                    <span class="map-time is-total" style="left:226px;top:578px" aria-hidden="true">{{ __('map.one_way') }}</span>
+                    @foreach ($legs as $l)
+                        <span class="map-time" style="left:{{ $l['dot'][0] }}px;top:552px" aria-hidden="true">≈{{ $l['m'] }} {{ __('map.min') }}</span>
+                        <span class="map-time is-arrow" style="left:{{ $l['arrow'][0] }}px;top:{{ $l['arrow'][1] }}px;transform:translate(-50%,-50%) rotate({{ $l['arrow'][2] }}deg)" aria-hidden="true">≈{{ $l['m'] }} {{ __('map.min') }}</span>
+                    @endforeach
 
                     @foreach ($pins as $p)
                         @php
