@@ -45,14 +45,14 @@
                     {{-- Время в пути (как на исходной карте): шкала из 4 точек и подписи у стрелок --}}
                     @php
                         $legs = [
-                            ['m' => $stations[0]['next'], 'dot' => [138, 542], 'arrow' => [445, 800, -12]],
-                            ['m' => $stations[1]['next'], 'dot' => [286, 542], 'arrow' => [815, 495, -32]],
-                            ['m' => $stations[2]['next'], 'dot' => [374, 542], 'arrow' => [1085, 305, -26]],
+                            ['m' => $stations[0]['next'], 'dot' => [138, 542], 'arrow' => [445, 815, -12]],
+                            ['m' => $stations[1]['next'], 'dot' => [286, 542], 'arrow' => [832, 514, -34]],
+                            ['m' => $stations[2]['next'], 'dot' => [374, 542], 'arrow' => [1110, 331, -24]],
                         ];
                         $dots = [[52, 'medeu'], [224, 'shymbulak'], [348, 'combi1'], [400, 'combi2']];
                     @endphp
                     <span class="map-time is-total" style="left:20px;top:490px" aria-hidden="true">{{ __('map.one_way') }}</span>
-                    <span class="map-time is-arrow" style="left:80px;top:966px;transform:translate(-50%,-50%) rotate(28deg)" aria-hidden="true">≈15 {{ __('map.min') }}</span>
+                    <span class="map-time is-arrow" style="left:176px;top:788px;transform:translate(-50%,-50%) rotate(35deg)" aria-hidden="true">≈15 {{ __('map.min') }}</span>
                     @foreach ($dots as $d)
                         <span class="map-time is-name" style="left:{{ $d[0] }}px;top:520px" aria-hidden="true">{{ __('map.tags.station_'.$d[1]) }}</span>
                     @endforeach
