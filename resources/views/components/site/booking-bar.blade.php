@@ -9,6 +9,8 @@
     // Страница с виджетом: нижняя кнопка на телефоне не нужна (у Exely есть своя плавающая «Узнать цены»).
     request()->attributes->set('tenir.exely_widget', true);
 @endphp
+<link rel="preconnect" href="https://ibe.tlintegration.com">
+<link rel="preconnect" href="https://bf2gc.travellinecdn.com" crossorigin>
 <div class="tenir-search rounded-3xl border border-exely-line bg-exely p-4 shadow-[0_20px_50px_rgba(22,33,27,0.22)] md:px-8 md:py-5">
     <div class="flex flex-col gap-0">
         <div class="shrink-0 text-center md:flex md:items-baseline md:justify-center md:gap-4">
@@ -18,7 +20,7 @@
                 <span>{{ __('site.booking.best_rate') }}</span>
             </p>
         </div>
-        <div id="tl-search-form" class="tl-container -mb-6 -mt-4 min-w-0 flex-1 md:-mt-1 md:mb-0 md:min-h-[52px]">
+        <div id="tl-search-form" class="tl-container -mb-6 -mt-4 min-h-[260px] min-w-0 flex-1 md:-mt-1 md:mb-0 md:min-h-[52px]">
             <noscript><a href="{{ route('booking') }}" class="btn-primary">{{ __('site.booking.search') }}</a></noscript>
         </div>
     </div>
@@ -31,12 +33,23 @@
         ];
         var t = w.travelline = (w.travelline || {}), ti = t.integration = (t.integration || {});
         ti.__cq = ti.__cq ? ti.__cq.concat(q) : q;
-        if (!ti.__loader) {
+        // Скрипт Exely тяжёлый (~400 КБ): грузим после загрузки страницы, чтобы он не мешал первому экрану.
+        function inject() {
+            if (ti.__loader) return;
             ti.__loader = true;
             var d = w.document, s = d.createElement('script');
             s.async = true;
             s.src = @json(config('tenir.exely.loader'));
             (d.getElementsByTagName('head')[0] || d.getElementsByTagName('body')[0]).appendChild(s);
+        }
+        function later() { ('requestIdleCallback' in w) ? w.requestIdleCallback(inject, { timeout: 2500 }) : w.setTimeout(inject, 800); }
+        if (w.document.readyState === 'complete') later(); else w.addEventListener('load', later);
+        // Подпись для iframe формы (доступность): виджет создаёт его без title.
+        var box = w.document.getElementById('tl-search-form');
+        if (box && 'MutationObserver' in w) {
+            new MutationObserver(function () {
+                box.querySelectorAll('iframe:not([title])').forEach(function (f) { f.title = @json(__('site.booking.search')); });
+            }).observe(box, { childList: true, subtree: true });
         }
     })(window);
 </script>

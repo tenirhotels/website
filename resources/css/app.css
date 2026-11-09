@@ -57,7 +57,7 @@
 
 @layer components {
     .container-site { @apply mx-auto w-full max-w-[1360px] px-4 sm:px-6 lg:px-10; }
-    .eyebrow { @apply text-[13px] uppercase tracking-[0.3em] text-ember; }
+    .eyebrow { @apply text-[13px] uppercase tracking-[0.3em] text-[#9A4516]; } /* темнее акцента ember — достаточный контраст на светлом фоне */
     .eyebrow-light { @apply text-[13px] uppercase tracking-[0.34em] text-ember-light; }
     .h-display { @apply font-display font-normal leading-[1.05]; }
     .h-section { @apply font-display font-normal text-[30px] leading-tight md:text-4xl; }
