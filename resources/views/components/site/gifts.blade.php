@@ -5,7 +5,7 @@
     $link = $link && $all->count() > $gifts->count();
 @endphp
 @if ($gifts->isNotEmpty())
-    <section class="bg-snow">
+    <section class="band band-snow bg-snow">
         <div class="container-site flex flex-col gap-8 md:gap-12 py-14 md:py-20 lg:py-24">
             <x-site.section-head :eyebrow="__('gifts.eyebrow')" :title="__('gifts.title')" :link="$link ? route('gifts') : null" :linkLabel="__('gifts.all')">
                 <p class="lead">{{ __('gifts.lead') }}</p>

@@ -1,6 +1,6 @@
 {{-- Истории --}}
 @if ($stories->isNotEmpty())
-<section class="bg-white">
+<section class="band band-white bg-white">
     <div class="container-site flex flex-col gap-8 md:gap-12 py-14 md:py-20 lg:py-24 lg:flex-row lg:gap-16">
         <div class="flex flex-1 flex-col gap-10">
                 <x-site.section-head :title="__('site.home.stories_title')" :link="\App\Models\Story::live()->count() > $stories->count() ? route('stories.index') : null" />
