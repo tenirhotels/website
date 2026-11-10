@@ -38,13 +38,13 @@
         </div>
         <template x-if="open">
             <div x-ref="box" style="margin-top:.75rem;max-height:70vh;overflow:auto;border:1px solid #e4e4e7;border-radius:.75rem;background:#dce9f6;-webkit-overflow-scrolling:touch">
-                <div style="position:relative" x-bind:style="'width:' + (zoom * 100) + '%'">
+                <div style="position:relative" x-bind:style="{ width: (zoom * 100) + '%' }">
                     <img x-ref="img" src="{{ $image }}" alt="" draggable="false" x-on:click="pick($event)"
                          style="display:block;width:100%;height:auto;cursor:crosshair;user-select:none">
                     @foreach ($others as $o)
                         <span title="{{ $o['label'] }}" style="position:absolute;left:{{ round($o['x'] / max(1, $width) * 100, 3) }}%;top:{{ round($o['y'] / max(1, $height) * 100, 3) }}%;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:rgba(255,255,255,.85);border:2px solid rgba(31,58,46,.7);pointer-events:none"></span>
                     @endforeach
-                    <span x-show="x && y" x-bind:style="'left:' + (x / W * 100) + '%;top:' + (y / H * 100) + '%'"
+                    <span x-show="x && y" x-bind:style="{ left: (x / W * 100) + '%', top: (y / H * 100) + '%' }"
                           style="position:absolute;width:22px;height:22px;margin:-11px 0 0 -11px;border-radius:50%;background:#B5561F;border:3px solid #fff;box-shadow:0 1px 6px rgba(0,0,0,.5);pointer-events:none"></span>
                 </div>
             </div>
