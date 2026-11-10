@@ -102,6 +102,7 @@ return [
     ],
     'common' => [
         'learn_more' => 'Learn more',
+        'all_experiences' => 'All experiences',
         'view_all' => 'View all',
         'book_now' => 'Reserve Now',
         'back' => 'Back',

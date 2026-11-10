@@ -102,6 +102,7 @@ return [
     ],
     'common' => [
         'learn_more' => 'Подробнее',
+        'all_experiences' => 'Все впечатления',
         'view_all' => 'Смотреть все',
         'book_now' => 'Забронировать',
         'back' => 'Назад',

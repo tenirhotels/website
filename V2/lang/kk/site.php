@@ -103,6 +103,7 @@ return [
     ],
     'common' => [
         'learn_more' => 'Толығырақ',
+        'all_experiences' => 'Барлық әсерлер',
         'view_all' => 'Барлығын көру',
         'book_now' => 'Брондау',
         'back' => 'Артқа',
