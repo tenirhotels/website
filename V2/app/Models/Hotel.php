@@ -19,7 +19,7 @@ class Hotel extends Model
     protected $guarded = ['id'];
 
     protected array $translatable = [
-        'name', 'tagline', 'summary', 'description', 'opening_label',
+        'name', 'tagline', 'summary', 'hero_line', 'description', 'opening_label',
     ];
 
     /** Настройки места живут в локации: отель читает (и пишет) их через неё — шаблоны и SEO работают как раньше. */

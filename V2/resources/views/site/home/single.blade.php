@@ -3,7 +3,7 @@
 <x-layouts.site :seo="$seo" :hotel="$hotel">
 
     <x-site.page-hero tall :image="$hotel?->seasonHero()" :video="media($hotel?->hero_video)"
-        :eyebrow="$hotel ? collect([$hotel->altitude_m ? number_format($hotel->altitude_m, 0, ',', ' ').' м' : null, $hotel->t('name'), $hotel->t('city')])->filter()->implode(' · ') : null"
+        :eyebrow="$hotel?->t('hero_line')"
         :title="Setting::text('brand.tagline') ?? $hotel?->t('tagline') ?? 'Tenir'"
         :text="$hotel?->t('summary')" />
 
