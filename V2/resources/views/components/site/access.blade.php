@@ -44,9 +44,9 @@
     @php
         $cableNote = trim((string) \App\Models\Setting::get('cable.hours_note', ''));
         $lifts = [
-            ['M-1 · '.__('map.tags.station_medeu').' → '.__('map.tags.station_shymbulak'), \App\Models\Setting::get('cable.hours_medeu') ?: '09:00–18:00'],
-            ['K-1 · '.__('map.tags.station_shymbulak').' → '.__('map.tags.station_combi1'), \App\Models\Setting::get('cable.hours_combi1') ?: '09:00–17:00'],
-            ['K-2 · '.__('map.tags.station_combi1').' → '.__('map.tags.station_combi2'), \App\Models\Setting::get('cable.hours_combi2') ?: '09:00–16:30'],
+            ['M-1 · '.__('map.tags.station_medeu').' ↔ '.__('map.tags.station_shymbulak'), \App\Models\Setting::get('cable.hours_medeu') ?: '09:00–18:00'],
+            ['K-1 · '.__('map.tags.station_shymbulak').' ↔ '.__('map.tags.station_combi1'), \App\Models\Setting::get('cable.hours_combi1') ?: '09:00–17:00'],
+            ['K-2 · '.__('map.tags.station_combi1').' ↔ '.__('map.tags.station_combi2'), \App\Models\Setting::get('cable.hours_combi2') ?: '09:00–16:30'],
         ];
         $endOf = fn (string $h, string $fallback) => preg_match('/(\d{1,2}[:.]\d{2})\s*$/u', $h, $m) ? str_replace('.', ':', $m[1]) : $fallback;
         $dayReserve = 0;      // запас днём, мин (в тексте не упоминается)
