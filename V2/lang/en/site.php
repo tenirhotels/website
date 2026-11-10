@@ -100,6 +100,11 @@ return [
         'write_email' => 'Write by e-mail',
         'write' => 'Write',
     ],
+    'wa' => [
+        'page' => 'Hello! I am interested in “:title” (:hotel). Date and number of guests: ___.',
+        'stay' => 'Hello! I would like to ask about staying at :hotel. Dates: ___, number of guests: ___.',
+        'arrive' => 'Hello! I am planning to arrive at :hotel. Arrival time: ___. How is it best to get up?',
+    ],
     'common' => [
         'learn_more' => 'Learn more',
         'all_experiences' => 'All experiences',

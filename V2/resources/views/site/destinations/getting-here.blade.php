@@ -91,7 +91,7 @@
                 <a href="https://2gis.kz/geo/{{ $hotel->longitude }},{{ $hotel->latitude }}" class="link-line mt-2 self-start" target="_blank" rel="noopener">2GIS</a>
             @endif
             @if ($hotel->phone)<a href="tel:{{ preg_replace('/[^\d+]/', '', $hotel->phone) }}" class="mt-6 hover:text-ember">{{ $hotel->phone }}</a>@endif
-            @if ($hotel->whatsapp)<a href="https://wa.me/{{ preg_replace('/\D/', '', $hotel->whatsapp) }}" class="hover:text-ember">WhatsApp</a>@endif
+            @if ($hotel->whatsapp)<a href="{{ wa_url($hotel->whatsapp, 'stay', ['hotel' => $hotel->t('name')]) }}" class="hover:text-ember">WhatsApp</a>@endif
         </aside>
     </section>
 </x-layouts.site>

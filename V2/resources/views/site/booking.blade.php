@@ -43,7 +43,7 @@
                     <a href="tel:{{ preg_replace('/[^\d+]/', '', $phone) }}" class="hover:text-ember">{{ $phone }}</a>
                 @endif
                 @if ($wa = $hotel?->whatsapp ?? Setting::get('contacts.whatsapp'))
-                    <a href="https://wa.me/{{ preg_replace('/\D/', '', $wa) }}" class="hover:text-ember">WhatsApp</a>
+                    <a href="{{ wa_url($wa, 'stay', ['hotel' => $hotel?->t('name') ?: 'Tenir Hotels']) }}" class="hover:text-ember">WhatsApp</a>
                 @endif
             </div>
         </div>

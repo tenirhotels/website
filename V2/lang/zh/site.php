@@ -101,6 +101,11 @@ return [
         'write_email' => '发送电子邮件',
         'write' => '留言',
     ],
+    'wa' => [
+        'page' => '您好！我对“:title”（:hotel）感兴趣。日期和人数：___。',
+        'stay' => '您好！我想了解入住信息：:hotel。日期：___，人数：___。',
+        'arrive' => '您好！我计划前往：:hotel。到达时间：___。请问怎样上山最方便？',
+    ],
     'common' => [
         'learn_more' => '了解更多',
         'all_experiences' => '全部体验',

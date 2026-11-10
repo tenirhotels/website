@@ -177,7 +177,7 @@
             'until' => __('access.plan_until'), 'hotel' => $hotel->t('name'),
         ];
         $wa = \App\Models\Setting::get('contacts.whatsapp');
-        $writeUrl = $wa ? 'https://wa.me/'.preg_replace('/\D/', '', $wa) : route('contact');
+        $writeUrl = wa_url($wa, 'arrive', ['hotel' => $hotel->t('name')]) ?? route('contact');
     @endphp
     <div class="flex flex-col">
     <h2 class="font-display text-2xl md:text-3xl">{{ __('access.calc_title') }}</h2>

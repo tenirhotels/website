@@ -118,3 +118,27 @@ if (! function_exists('price')) {
         return $amount ? number_format($amount, 0, ',', ' ') : null;
     }
 }
+
+if (! function_exists('wa_url')) {
+    /** Ссылка WhatsApp с заготовленным сообщением. $kind: page | stay | arrive (lang site.wa.*). */
+    function wa_url(?string $number, string $kind = 'stay', array $replace = []): ?string
+    {
+        $digits = preg_replace('/\D/', '', (string) $number);
+        if ($digits === '') {
+            return null;
+        }
+        $replace += ['hotel' => 'Tenir Hotels', 'title' => ''];
+
+        return 'https://wa.me/'.$digits.'?text='.rawurlencode(__('site.wa.'.$kind, $replace));
+    }
+}
+
+if (! function_exists('email_wrap')) {
+    /** E-mail с допустимым переносом строки перед «@». */
+    function email_wrap(string $email): \Illuminate\Support\HtmlString
+    {
+        [$local, $domain] = array_pad(explode('@', $email, 2), 2, null);
+
+        return new \Illuminate\Support\HtmlString($domain === null ? e($email) : e($local).'<wbr>@'.e($domain));
+    }
+}

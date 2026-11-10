@@ -52,8 +52,8 @@
             <div class="col-span-2 flex flex-col gap-2.5 text-[15px] sm:col-span-1">
                 <p class="mb-1 text-xs uppercase tracking-[0.2em] text-[#9AA59F]">{{ __('site.footer.reservations') }}</p>
                 @if ($phone)<a href="tel:{{ preg_replace('/[^\d+]/', '', $phone) }}" class="hover:text-white">{{ $phone }}</a>@endif
-                @if ($whatsapp)<a href="https://wa.me/{{ preg_replace('/\D/', '', $whatsapp) }}" class="hover:text-white">WhatsApp</a>@endif
-                @if ($email)<a href="mailto:{{ $email }}" class="break-all hover:text-white">{{ $email }}</a>@endif
+                @if ($whatsapp)<a href="{{ wa_url($whatsapp, 'stay') }}" class="hover:text-white">WhatsApp</a>@endif
+                @if ($email)<a href="mailto:{{ $email }}" class="hover:text-white">{{ email_wrap($email) }}</a>@endif
                 @if ($hours = Setting::get('contacts.hours'))<span class="text-[#9AA59F]">{{ $hours }}</span>@endif
             </div>
 
