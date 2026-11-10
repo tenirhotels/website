@@ -41,6 +41,18 @@ class EventResource extends Resource
 
     protected static ?int $navigationSort = 2;
 
+    public static function getNavigationBadge(): ?string
+    {
+        $n = \App\Models\Event::upcoming()->count();
+
+        return $n > 0 ? (string) $n : null;
+    }
+
+    public static function getNavigationBadgeTooltip(): ?string
+    {
+        return 'Предстоящие события';
+    }
+
     public static function form(Schema $schema): Schema
     {
         return $schema->components([

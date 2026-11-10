@@ -29,6 +29,8 @@ class RedirectResource extends Resource
 
     protected static string|UnitEnum|null $navigationGroup = 'Сайт';
 
+    protected static ?int $navigationSort = 2;
+
     protected static ?string $modelLabel = 'редирект';
 
     protected static ?string $pluralModelLabel = 'Редиректы';
