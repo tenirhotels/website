@@ -20,7 +20,7 @@
                             ]
                             : [
                                 $phone ? ['phone', __('site.cta.call'), $phone, 'tel:'.$digits($phone), false] : null,
-                                $wa ? ['chat', 'WhatsApp', $wa, 'https://wa.me/'.preg_replace('/\D/', '', $wa), true] : null,
+                                $wa ? ['chat', 'WhatsApp', $wa, wa_url($wa, 'page', ['title' => $title, 'hotel' => $hotel?->t('name') ?: 'Tenir Hotels']), true] : null,
                                 $email ? ['mail', __('site.cta.write_email'), $email, 'mailto:'.$email.'?subject='.$subject, false] : null,
                             ];
                         $hours = \App\Models\Setting::get('contacts.hours');
@@ -37,7 +37,7 @@
                                     <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-sand text-ember transition group-hover:bg-ember group-hover:text-white">{{ site_icon($icon, 'h-5 w-5') }}</span>
                                     <span class="flex min-w-0 flex-col">
                                         <span class="text-xs uppercase tracking-[0.14em] text-stone">{{ $label }}</span>
-                                        <span class="break-words text-lg leading-snug text-ink">{{ $value }}</span>
+                                        <span class="{{ $icon === 'mail' ? 'text-base sm:text-lg' : 'text-lg' }} break-words leading-snug text-ink">{{ $icon === 'mail' ? email_wrap($value) : $value }}</span>
                                     </span>
                                 </a>
                             </li>
