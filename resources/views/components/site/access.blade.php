@@ -227,7 +227,7 @@
                 ol.textContent = '';
                 rows.forEach(function (r) {
                     var li = document.createElement('li'); li.className = 'flex items-baseline gap-4 py-2.5';
-                    var tm = document.createElement('span'); tm.className = 'w-32 shrink-0 whitespace-nowrap font-display text-xl text-ink'; tm.textContent = r[0];
+                    var tm = document.createElement('span'); tm.className = (state === 'ok' ? 'w-[4.25rem]' : 'w-32') + ' shrink-0 whitespace-nowrap font-display text-xl text-ink'; tm.textContent = r[0];
                     var bx = document.createElement('div'), n = document.createElement('p'), sb = document.createElement('p');
                     n.className = 'text-base leading-snug text-ink'; n.textContent = r[1]; sb.className = 'text-sm text-stone'; sb.textContent = r[2];
                     bx.appendChild(n); bx.appendChild(sb); li.appendChild(tm); li.appendChild(bx); ol.appendChild(li);
