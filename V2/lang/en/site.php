@@ -97,6 +97,7 @@ return [
         'call' => 'Call',
         'ask_label' => 'Ask and order',
         'ask_text' => 'Call or write to us — we will help and arrange your order.',
+        'write_email' => 'Write by e-mail',
         'write' => 'Write',
     ],
     'common' => [

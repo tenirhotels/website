@@ -98,6 +98,7 @@ return [
         'call' => '致电',
         'ask_label' => '咨询与预订',
         'ask_text' => '请致电或留言，我们将协助您下单。',
+        'write_email' => '发送电子邮件',
         'write' => '留言',
     ],
     'common' => [
