@@ -69,7 +69,7 @@
             @foreach ($lifts as [$lcode, $lname, $lhours])
                 <li class="flex items-baseline justify-between gap-4 py-3.5">
                     <span class="flex items-center gap-3 text-base md:text-lg"><span class="inline-flex min-w-[3.25rem] justify-center rounded-full bg-ember/10 px-2.5 py-1 text-sm font-semibold leading-none text-ember" title="{{ __('access.line', ['code' => $lcode]) }}">{{ $lcode }}</span>{{ $lname }}</span>
-                    <span class="whitespace-nowrap font-display text-2xl">{{ $lhours }}</span>
+                    @if ($lhours !== '')<span class="whitespace-nowrap font-display text-2xl">{{ $lhours }}</span>@endif
                 </li>
             @endforeach
         </ul>
