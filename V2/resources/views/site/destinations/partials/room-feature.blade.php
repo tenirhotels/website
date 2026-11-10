@@ -7,7 +7,7 @@
         ['view', __('site.hotel.view'), $room->t('view')],
     ])->filter(fn ($f) => $f[2]);
     $gallery = collect($room->gallery ?? [])->filter()->values();
-    $amenities = $room->amenityList();
+    $amenities = $room->extraAmenities();
 @endphp
 
 <section class="container-site py-12 md:py-16 lg:py-20">
