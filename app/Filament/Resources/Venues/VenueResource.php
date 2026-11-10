@@ -57,6 +57,14 @@ class VenueResource extends Resource
                 RichEditor::make("description.$l")->label('Описание'),
                 TextInput::make("hours.$l")->label('Часы работы')->placeholder('Завтрак 08:30–11:30 · ужин 18:00–22:00'),
             ]),
+            Section::make('Контакты ресторана')->columns(3)->columnSpanFull()
+                ->description('Если у ресторана свои контакты — они показываются на его блоке. Пусто — ничего не показывается (общие контакты отеля остаются в футере и на «Контактах»).')
+                ->schema([
+                    TextInput::make('phone')->label('Телефон')->tel()->placeholder('+7 727 000-00-00'),
+                    TextInput::make('phone_ext')->label('Внутренний номер (с телефона в номере)')->placeholder('102')
+                        ->helperText('Показывается как «Из номера отеля: 102».'),
+                    TextInput::make('email')->label('Эл. почта')->email(),
+                ]),
             Section::make('Меню и фото')->columnSpanFull()->schema([
                 FileUpload::make('menu_file')->label('Меню (PDF)')->disk('public')->directory('menus')
                     ->acceptedFileTypes(['application/pdf']),

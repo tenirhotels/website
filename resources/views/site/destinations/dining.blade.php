@@ -10,6 +10,13 @@
                     @if ($venue->t('hours'))
                         <p><span class="field-label">{{ __('site.hotel.hours') }}</span> <span class="text-slate">{{ $venue->t('hours') }}</span></p>
                     @endif
+                    @if ($venue->phone || $venue->phone_ext || $venue->email)
+                        <ul class="flex flex-col gap-2 text-slate">
+                            @if ($venue->phone)<li><span class="field-label">{{ __('site.hotel.venue_phone') }}</span> <a href="tel:{{ preg_replace('/[^\d+]/', '', $venue->phone) }}" class="hover:text-ember">{{ $venue->phone }}</a></li>@endif
+                            @if ($venue->phone_ext)<li><span class="field-label">{{ __('site.hotel.venue_ext') }}</span> <span class="text-ink">{{ $venue->phone_ext }}</span></li>@endif
+                            @if ($venue->email)<li><span class="field-label">{{ __('site.hotel.venue_email') }}</span> <a href="mailto:{{ $venue->email }}" class="hover:text-ember">{{ email_wrap($venue->email) }}</a></li>@endif
+                        </ul>
+                    @endif
                     <div class="prose-tenir">{!! $venue->t('description') !!}</div>
                     @if ($venue->menu_file)
                         <a href="{{ media($venue->menu_file) }}" class="link-line self-start" target="_blank" rel="noopener">{{ __('site.hotel.menu') }}</a>
