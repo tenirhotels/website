@@ -13,7 +13,7 @@
     </div>
 
     {{-- Отели и курорты --}}
-    <section class="container-site flex flex-col gap-8 md:gap-12 py-14 md:py-20 lg:py-28">
+    <section class="band band-snow container-site flex flex-col gap-8 md:gap-12 py-14 md:py-20 lg:py-24">
         <x-site.section-head :eyebrow="__('site.nav.destinations')" :title="__('site.home.hotels_title')" :link="route('destinations.index')" />
         <div @class(['grid gap-x-8 gap-y-16', 'md:grid-cols-2' => $hotels->count() <= 2, 'md:grid-cols-2 lg:grid-cols-3' => $hotels->count() > 2])>
             @foreach ($hotels as $h)

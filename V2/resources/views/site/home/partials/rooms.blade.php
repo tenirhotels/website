@@ -1,6 +1,6 @@
 {{-- Номера: первый номер крупно (как в макете) --}}
 @if ($hotel && $rooms->isNotEmpty())
-    <section class="bg-white">
+    <section class="band band-white bg-white">
         <div class="container-site flex flex-col gap-8 md:gap-12 py-14 md:py-20 lg:py-24">
             <x-site.section-head :eyebrow="__('site.hotel.rooms')" :title="__('site.home.rooms_title')" :link="$rooms->count() > 1 ? $hotel->sectionUrl('rooms') : null" :link-label="__('site.hotel.all_rooms')" />
             @php $room = $rooms->first(); @endphp
