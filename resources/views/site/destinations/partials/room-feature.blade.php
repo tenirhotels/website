@@ -18,11 +18,11 @@
             </div>
 
             @if ($tiles)
-                <ul class="grid {{ [1 => 'grid-cols-1', 2 => 'grid-cols-2', 3 => 'grid-cols-3'][min(3, max(1, count($tiles)))] }} gap-2.5 border-y border-mist py-6">
+                <ul class="divide-y divide-mist border-y border-mist">
                             @foreach ($tiles as $tile)
-                                <li class="flex flex-col items-start gap-2.5 rounded-2xl border border-mist bg-white px-3.5 py-4">
-                                    <span class="text-ember">{{ site_icon($tile['icon'], 'h-7 w-7') }}</span>
-                                    <span class="font-display text-lg leading-tight text-ink">{{ $tile['text'] }}</span>
+                                <li class="flex items-center gap-4 py-3.5">
+                                    <span class="flex h-7 w-7 shrink-0 items-center justify-center text-ember">{{ site_icon($tile['icon'], 'h-6 w-6') }}</span>
+                                    <span class="font-display text-2xl leading-tight text-ink md:text-3xl">{{ $tile['text'] }}</span>
                                 </li>
                             @endforeach
                         </ul>
