@@ -11,6 +11,7 @@
         'offers' => __('site.hotel.offers'),
         'gallery' => __('site.hotel.gallery'),
         'getting-here' => __('site.hotel.getting_here'),
+        'before-you-arrive' => __('site.hotel.before_arrive'),
         'reviews' => __('site.hotel.reviews'),
     ];
     $routeName = request()->route()?->getName();

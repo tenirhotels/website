@@ -72,6 +72,7 @@ if (! function_exists('site_icon')) {
             'locker' => '<rect x="4" y="3" width="16" height="18" rx="1.5"/><path d="M12 3v18M4 12h16M9 7.5v1M15 15.5v1"/>',
             'robe' => '<path d="M8 3l4 4 4-4 3 4-2 3v11H7V10L5 7zM12 7v14"/>',
             'car' => '<path d="M4 16v-4l2-5h12l2 5v4M3 16h18M7.5 19a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zM16.5 19a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zM4 12h16"/>',
+            'plus' => '<path d="M12 5v14M5 12h14"/>',
             'bus' => '<rect x="4" y="4" width="16" height="13" rx="2"/><path d="M4 11h16M7 20v-3M17 20v-3M8 14h.01M16 14h.01"/>',
             'phone' => '<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/>',
             'chat' => '<path d="M4 5h16v11H9l-5 4z"/><path d="M8 9.5h8M8 12.5h5"/>',

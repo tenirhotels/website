@@ -100,6 +100,7 @@ Route::prefix('{locale}')
             Route::get('{hotel}/offers', 'offers')->name('offers');
             Route::get('{hotel}/gallery', 'gallery')->name('gallery');
             Route::get('{hotel}/getting-here', 'gettingHere')->name('getting-here');
+            Route::get('{hotel}/before-you-arrive', 'beforeYouArrive')->name('before-you-arrive');
             Route::get('{hotel}/reviews', 'reviews')->name('reviews');
         });
 
@@ -110,6 +111,7 @@ Route::prefix('{locale}')
             Route::get('dining', 'dining')->name('dining');
             Route::get('gallery', 'gallery')->name('gallery');
             Route::get('getting-here', 'gettingHere')->name('getting-here');
+            Route::get('before-you-arrive', 'beforeYouArrive')->name('before-you-arrive');
             Route::get('reviews', 'reviews')->name('reviews');
         });
 

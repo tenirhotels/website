@@ -16,7 +16,7 @@ class Location extends Model
 
     protected $guarded = ['id'];
 
-    protected array $translatable = ['name', 'region', 'city', 'address', 'getting_here'];
+    protected array $translatable = ['name', 'region', 'city', 'address', 'getting_here', 'arrival_info'];
 
     protected string $titleAttribute = 'name';
 
