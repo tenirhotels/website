@@ -101,8 +101,8 @@ class BrandPagesSeeder extends Seeder
                 'placement' => 'footer',
                 'sort' => 10,
                 'content' => [
-                    'ru' => [['type' => 'text', 'data' => ['heading' => null, 'body' => '<p>[Вставьте текст из текущего PDF-документа.]</p>']]],
-                    'en' => [['type' => 'text', 'data' => ['heading' => null, 'body' => '<p>[Paste the text from the current PDF document.]</p>']]],
+                    'ru' => [['type' => 'text', 'data' => ['heading' => null, 'body' => '<p>Документ готовится к публикации. По вопросам об условиях и обработке персональных данных напишите на reservations@tenirhotels.com.</p>']]],
+                    'en' => [['type' => 'text', 'data' => ['heading' => null, 'body' => '<p>This document is being prepared for publication. For questions about the terms and the processing of personal data, please write to reservations@tenirhotels.com.</p>']]],
                 ],
                 'is_published' => true,
             ]);
