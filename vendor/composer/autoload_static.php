@@ -807,6 +807,7 @@ class ComposerStaticInitbed664a3137a0af20c24a0f2c8436f70
         'App\\Support\\Gifts' => __DIR__ . '/../..' . '/app/Support/Gifts.php',
         'App\\Support\\ImageVariants' => __DIR__ . '/../..' . '/app/Support/ImageVariants.php',
         'App\\Support\\Locales' => __DIR__ . '/../..' . '/app/Support/Locales.php',
+        'App\\Support\\LocationMap' => __DIR__ . '/../..' . '/app/Support/LocationMap.php',
         'App\\Support\\PageCache' => __DIR__ . '/../..' . '/app/Support/PageCache.php',
         'App\\Support\\Property' => __DIR__ . '/../..' . '/app/Support/Property.php',
         'App\\Support\\ResortMap' => __DIR__ . '/../..' . '/app/Support/ResortMap.php',

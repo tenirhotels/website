@@ -120,6 +120,7 @@ return array(
     'App\\Support\\Gifts' => $baseDir . '/app/Support/Gifts.php',
     'App\\Support\\ImageVariants' => $baseDir . '/app/Support/ImageVariants.php',
     'App\\Support\\Locales' => $baseDir . '/app/Support/Locales.php',
+    'App\\Support\\LocationMap' => $baseDir . '/app/Support/LocationMap.php',
     'App\\Support\\PageCache' => $baseDir . '/app/Support/PageCache.php',
     'App\\Support\\Property' => $baseDir . '/app/Support/Property.php',
     'App\\Support\\ResortMap' => $baseDir . '/app/Support/ResortMap.php',

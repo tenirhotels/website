@@ -114,6 +114,17 @@ class Hotel extends Model
         return (bool) $this->location?->hasCable();
     }
 
+    /** Карта курорта своей локации (null — у локации карты нет). */
+    public function resortMap(): ?\App\Support\LocationMap
+    {
+        return $this->location?->resortMap();
+    }
+
+    public function hasMap(): bool
+    {
+        return $this->resortMap() !== null;
+    }
+
     public function cableSetting(string $key, mixed $default = null): mixed
     {
         return $this->location ? $this->location->cableSetting($key, $default) : $default;

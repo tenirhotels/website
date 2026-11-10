@@ -20,7 +20,7 @@ class Location extends Model
 
     protected string $titleAttribute = 'name';
 
-    protected $casts = ['latitude' => 'float', 'longitude' => 'float'];
+    protected $casts = ['latitude' => 'float', 'longitude' => 'float', 'map' => 'array'];
 
     public function hotels(): HasMany
     {
@@ -38,7 +38,13 @@ class Location extends Model
         return $this->transports->contains('kind', 'cable_line');
     }
 
-    private function transportByCode(string $code): ?Transport
+    /** Карта локации (иллюстрация, станции, метки) — null, если не включена или не заполнена. */
+    public function resortMap(): ?\App\Support\LocationMap
+    {
+        return \App\Support\LocationMap::for($this);
+    }
+
+    public function transportByCode(string $code): ?Transport
     {
         return $this->transports->first(fn ($t) => $t->kind === 'cable_line' && $t->code === $code);
     }

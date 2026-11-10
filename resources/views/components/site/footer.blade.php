@@ -77,7 +77,7 @@
             {{-- Информация: карта, истории, отзывы, контакты и страницы бренда. --}}
             <nav aria-label="{{ __('site.footer.info') }}" class="flex flex-col gap-2.5 text-[15px]">
                 <p class="mb-1 text-xs uppercase tracking-[0.2em] text-[#9AA59F]">{{ __('site.footer.info') }}</p>
-                <a href="{{ route('map') }}" class="hover:text-white">{{ __('map.open_map') }}</a>
+                @if (\App\Support\Property::mapHotel())<a href="{{ route('map') }}" class="hover:text-white">{{ __('map.open_map') }}</a>@endif
                 <a href="{{ route('stories.index') }}" class="hover:text-white">{{ __('site.nav.stories') }}</a>
                 @if (\App\Support\Property::isSingle() && ($rh = \App\Support\Property::primary()))<a href="{{ $rh->sectionUrl('reviews') }}" class="hover:text-white">{{ __('site.hotel.reviews') }}</a>@endif
                 @foreach ($brandPages as $page)
