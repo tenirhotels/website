@@ -73,9 +73,14 @@ class TenirShymbulakSeeder extends Seeder
             'is_published' => true,
             'sort' => 1,
         ]);
-        if (! $hotel->cable) {
-            $hotel->update(['cable' => ['enabled' => true]]);
+        // Транспорт: линии канатной дороги курорта (часы — по умолчанию курорта; меняются в админке «Транспорт»).
+        foreach ([['M-1', '09:00–18:00', 1], ['K-1', '09:00–17:00', 2], ['K-2', '09:00–16:30', 3]] as [$code, $hours, $sort]) {
+            \App\Models\Transport::firstOrCreate(['hotel_id' => $hotel->id, 'kind' => 'cable_line', 'code' => $code], ['hours' => $hours, 'sort' => $sort]);
         }
+        \App\Models\Transport::firstOrCreate(['hotel_id' => $hotel->id, 'kind' => 'guest_ride'], [
+            'hours' => '18:00–18:30', 'sort' => 4,
+            'name' => ['ru' => 'Особый подъём для гостей отеля', 'en' => 'Special ride for hotel guests'],
+        ]);
 
         RoomType::updateOrCreate(['hotel_id' => $hotel->id, 'slug' => 'deluxe-mountain-view'], [
             'name' => ['ru' => 'Deluxe с видом на горы', 'en' => 'Deluxe Room with Mountain View', 'kk' => 'Таулы көрінісі бар Deluxe'],

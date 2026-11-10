@@ -6,6 +6,23 @@
         <x-site.access :hotel="$hotel" />
     @endif
 
+    @php($others = $hotel->transports->whereNotIn('kind', ['cable_line', 'guest_ride']))
+    @if ($others->isNotEmpty())
+        <section class="container-site pt-10 md:pt-14">
+            <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                @foreach ($others as $t)
+                    <article class="flex flex-col gap-3 overflow-hidden rounded-3xl border border-mist p-6">
+                        @if ($t->image)<div class="-mx-6 -mt-6 aspect-[16/9]"><x-site.media :src="$t->image" :alt="$t->t('name')" /></div>@endif
+                        <h3 class="font-display text-xl">{{ $t->t('name') }}</h3>
+                        @if ($t->t('summary'))<p class="text-base leading-relaxed text-slate">{{ $t->t('summary') }}</p>@endif
+                        @if ($t->hours)<p class="font-display text-lg text-ink">{{ $t->hours }}</p>@endif
+                        @if ($t->t('note'))<p class="text-sm text-stone">{{ $t->t('note') }}</p>@endif
+                    </article>
+                @endforeach
+            </div>
+        </section>
+    @endif
+
     <section class="container-site flex flex-col gap-8 md:gap-14 pb-12 pt-0 md:py-16 lg:py-20 lg:flex-row lg:gap-20">
         <div class="prose-tenir flex-[1.5] [&>*:first-child]:mt-0">{!! $hotel->t('getting_here') !!}</div>
         <aside class="flex flex-1 flex-col gap-3 text-base text-slate">

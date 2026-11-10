@@ -27,7 +27,6 @@ class Hotel extends Model
 
     protected $casts = [
         'gallery' => 'array',
-        'cable' => 'array',
         'highlights' => 'array',
         'reviews_widget' => 'array',
         'is_featured' => 'boolean',
@@ -67,16 +66,47 @@ class Hotel extends Model
         return $this->hasMany(Faq::class);
     }
 
-    /** К отелю ведёт канатная дорога (курорт Шымбулак): включается в карточке отеля. */
-    public function hasCable(): bool
+    public function transports(): HasMany
     {
-        return (bool) ($this->cable['enabled'] ?? false);
+        return $this->hasMany(Transport::class)->published()->ordered();
     }
 
-    /** Настройка канатной дороги этого отеля (часы, фото станций…). */
+    /** К отелю ведёт канатная дорога курорта: есть опубликованная линия (запись «Транспорт» с видом «Линия канатной дороги»). */
+    public function hasCable(): bool
+    {
+        return $this->transports->contains('kind', 'cable_line');
+    }
+
+    private function transportByCode(string $code): ?Transport
+    {
+        return $this->transports->first(fn ($t) => $t->kind === 'cable_line' && $t->code === $code);
+    }
+
+    /**
+     * Данные канатной дороги из записей «Транспорт» (для страницы «Как добраться»).
+     * Ключи: hours_medeu (M-1), hours_combi1 (K-1), hours_combi2 (K-2), hours_note, guest_from/guest_to,
+     * photo_medeu (M-1), photo_shymbulak (K-1), photo_combi1 (K-2) — фото станции, откуда идёт линия.
+     */
     public function cableSetting(string $key, mixed $default = null): mixed
     {
-        $v = $this->cable[$key] ?? null;
+        $line = ['hours_medeu' => 'M-1', 'hours_combi1' => 'K-1', 'hours_combi2' => 'K-2',
+            'photo_medeu' => 'M-1', 'photo_shymbulak' => 'K-1', 'photo_combi1' => 'K-2'][$key] ?? null;
+        $v = null;
+        if ($line) {
+            $t = $this->transportByCode($line);
+            $v = str_starts_with($key, 'photo_') ? $t?->image : $t?->hours;
+        } elseif ($key === 'hours_note') {
+            foreach ($this->transports->where('kind', 'cable_line') as $t) {
+                if ($note = trim((string) $t->t('note'))) {
+                    $v = $note;
+                    break;
+                }
+            }
+        } elseif ($key === 'guest_from' || $key === 'guest_to') {
+            $hours = $this->transports->firstWhere('kind', 'guest_ride')?->hours;
+            $parts = $hours ? preg_split('/\s*[–—-]\s*/u', $hours) : [];
+            $v = $parts[$key === 'guest_from' ? 0 : 1] ?? null;
+        }
 
         return $v === null || $v === '' ? $default : $v;
     }
