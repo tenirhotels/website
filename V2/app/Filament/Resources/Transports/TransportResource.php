@@ -9,6 +9,7 @@ use App\Filament\Support\Fields;
 use App\Models\Transport;
 use BackedEnum;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
@@ -57,6 +58,23 @@ class TransportResource extends Resource
                     ->helperText('Для линий канатной дороги не нужно: название берётся из станций.'),
                 Textarea::make("summary.$l")->label('Описание')->rows(2),
                 TextInput::make("note.$l")->label('Пояснение (сезон, дни)')->placeholder('ежедневно, будни и выходные'),
+                TextInput::make("price.$l")->label('Цена')->placeholder('от 8 000 ₸ за машину')
+                    ->helperText('Текстом, как вы хотите показать гостю: сумма, за что (за машину, с человека). Пусто — цена не показывается.')
+                    ->visible(fn (Get $get) => ! in_array($get('kind'), ['cable_line', 'guest_ride'], true)),
+            ]),
+            Fields::twoColumns([
+                Toggle::make('orderable')->label('Кнопка «Заказать»')->default(true)
+                    ->helperText('Ведёт на контакты отеля: WhatsApp с готовым сообщением, телефон, e-mail (Отель → Локация и контакты).')
+                    ->visible(fn (Get $get) => ! in_array($get('kind'), ['cable_line', 'guest_ride'], true)),
+                Select::make('map_pins')->label('Точки на карте')->multiple()->native(false)
+                    ->options(function (Get $get): array {
+                        $map = (array) (\App\Models\Location::find($get('location_id'))?->map ?? []);
+
+                        return collect($map['pins'] ?? [])->whereIn('kind', ['place', 'station'])
+                            ->mapWithKeys(fn ($pin) => [$pin['id'] => ($pin['label']['ru'] ?? null) ?: $pin['id']])->all();
+                    })
+                    ->helperText('Например, зоны высадки. В карточке появятся ссылки на эти точки на карте курорта.')
+                    ->visible(fn (Get $get) => ! in_array($get('kind'), ['cable_line', 'guest_ride'], true)),
             ]),
             Fields::image('image', 'Фото', 'transport')
                 ->helperText('Для линии канатной дороги — фото станции, откуда она идёт. Показывается в карточке поездки, по нажатию открывается крупно.'),

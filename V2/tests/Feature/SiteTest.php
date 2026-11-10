@@ -165,6 +165,25 @@ class SiteTest extends TestCase
         $this->get('/sitemap.xml')->assertDontSee('/ru/map', false);
     }
 
+    public function test_transfer_card_shows_price_order_and_map_points(): void
+    {
+        $hotel = Hotel::where('slug', 'shymbulak')->first();
+        $hotel->update(['whatsapp' => '+7 701 123 45 67', 'phone' => '+7 727 000 00 00']);
+        \App\Models\Transport::create([
+            'location_id' => $hotel->location_id, 'kind' => 'shuttle', 'sort' => 9, 'orderable' => true,
+            'name' => ['ru' => 'Трансфер из аэропорта'], 'price' => ['ru' => 'от 8 000 ₸ за машину'],
+            'map_pins' => ['dropoff-medeu'],
+        ]);
+        \App\Support\PageCache::flush();
+        \App\Support\Property::flush();
+        $html = $this->get($hotel->sectionUrl('getting-here', [], 'ru'))->assertOk()
+            ->assertSee('Трансфер из аэропорта')->assertSee('от 8 000 ₸ за машину')
+            ->assertSee('https://wa.me/77011234567?text=', false)->assertSee('#point-dropoff-medeu', false)->assertSee('Зона высадки · Медеу')
+            ->getContent();
+        $this->assertStringContainsString('Заказать', $html);
+        $this->get('/ru/map')->assertOk()->assertSee('data-pin="dropoff-shymbulak"', false);
+    }
+
     public function test_kazakh_is_the_first_language(): void
     {
         $this->assertSame('kk', array_key_first(\App\Support\Locales::all()));

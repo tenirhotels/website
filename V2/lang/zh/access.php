@@ -1,6 +1,10 @@
 <?php
 
 return [
+    'order' => '预订',
+    'order_call' => '致电',
+    'on_map' => '地图上',
+    'order_msg' => '您好！我想预订：:name（:hotel）。日期和时间：___，人数：___。',
     'm' => '米',
     'eyebrow' => '前往酒店',
     'title' => 'Tenir坐落山顶——缆车带您抵达',

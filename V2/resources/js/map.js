@@ -257,6 +257,8 @@ if (root) {
     const stored = store.get('tenir_map_season');
     setSeason(stored === 'winter' || stored === 'summer' ? stored : ([11, 12, 1, 2, 3, 4].includes(month) ? 'winter' : 'summer'), false);
     fit(true);
+    const fromHash = location.hash.match(/^#point-([\w-]+)$/);
+    if (fromHash) setTimeout(() => select(fromHash[1]), 80);
     window.addEventListener('resize', () => { limits(); apply(); });
     const warm = layers.find((l) => l.dataset.layer !== root.dataset.season);
     window.addEventListener('load', () => setTimeout(() => loadFull(warm), 2500));

@@ -146,6 +146,20 @@ class LocationMap
     }
 
     /**
+     * Зоны высадки (значок «такси» на иллюстрации): у Медеу и у станции Шымбулак.
+     * Координаты — в пикселях карты 1667 × 1179 (найдены по значкам на картинке).
+     */
+    public static function dropoffPins(): array
+    {
+        return [
+            ['id' => 'dropoff-medeu', 'kind' => 'place', 'x' => 305, 'y' => 758, 'label' => [
+                'kk' => 'Түсіру аймағы · Медеу', 'ru' => 'Зона высадки · Медеу', 'en' => 'Drop-off zone · Medeu', 'zh' => '下客区 · Medeu']],
+            ['id' => 'dropoff-shymbulak', 'kind' => 'place', 'x' => 817, 'y' => 728, 'label' => [
+                'kk' => 'Түсіру аймағы · Шымбұлақ', 'ru' => 'Зона высадки · Шымбулак', 'en' => 'Drop-off zone · Shymbulak', 'zh' => '下客区 · Shymbulak']],
+        ];
+    }
+
+    /**
      * Карта курорта Шымбулак (данные из V1: ResortMap и lang-файлы map) — для миграции и сидера.
      * Дальше правится в админке: Локация → «Карта».
      */
@@ -198,6 +212,8 @@ class LocationMap
             $overlay[] = ['kind' => 'time', 'x' => $dx, 'y' => 552, 'rot' => 0, 'station' => $k];
             $overlay[] = ['kind' => 'arrow_time', 'x' => $a[0], 'y' => $a[1], 'rot' => $a[2], 'station' => $k];
         }
+
+        $pins = [...$pins, ...self::dropoffPins()];
 
         return [
             'enabled' => true,
