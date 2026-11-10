@@ -1,6 +1,11 @@
 <?php
 
 return [
+    'kind_taxi' => 'Taxi',
+    'kind_shuttle' => 'Transfer',
+    'route_from' => 'From',
+    'route_to' => 'To',
+    'price' => 'Price',
     'order' => 'Order',
     'order_call' => 'Call us',
     'on_map' => 'On the map',

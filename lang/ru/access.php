@@ -1,6 +1,11 @@
 <?php
 
 return [
+    'kind_taxi' => 'Такси',
+    'kind_shuttle' => 'Трансфер',
+    'route_from' => 'Откуда',
+    'route_to' => 'Куда',
+    'price' => 'Стоимость',
     'order' => 'Заказать',
     'order_call' => 'Позвонить',
     'on_map' => 'На карте',

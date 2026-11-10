@@ -1,6 +1,11 @@
 <?php
 
 return [
+    'kind_taxi' => '出租车',
+    'kind_shuttle' => '接送',
+    'route_from' => '出发地',
+    'route_to' => '目的地',
+    'price' => '费用',
     'order' => '预订',
     'order_call' => '致电',
     'on_map' => '地图上',
