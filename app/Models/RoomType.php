@@ -40,6 +40,33 @@ class RoomType extends Model
         return [];
     }
 
+    /**
+     * Удобства без повторов того, что уже вынесено в ключевые факты (кровать, вид, площадь, гости).
+     *
+     * @return list<string>
+     */
+    public function extraAmenities(): array
+    {
+        $skip = [];
+        if ($this->t('bed')) {
+            array_push($skip, 'кроват', 'king', 'queen', 'twin', 'bed', 'төсек');
+        }
+        if ($this->t('view')) {
+            array_push($skip, 'панорам', 'вид на', 'view', 'көрініс');
+        }
+
+        return array_values(array_filter($this->amenityList(), function ($a) use ($skip) {
+            $t = mb_strtolower($a);
+            foreach ($skip as $w) {
+                if (str_contains($t, $w)) {
+                    return false;
+                }
+            }
+
+            return true;
+        }));
+    }
+
     public function url(?string $locale = null): string
     {
         return $this->hotel->sectionUrl('room', ['room' => $this->slug], $locale);
