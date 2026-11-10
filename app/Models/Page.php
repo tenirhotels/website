@@ -24,13 +24,35 @@ class Page extends Model
     /** @return list<array{type: string, data: array}> */
     public function blocks(?string $locale = null): array
     {
-        foreach (Locales::chain($locale ?? app()->getLocale()) as $code) {
+        $chain = Locales::chain($locale ?? app()->getLocale());
+        foreach ($chain as $code) {
             if (! empty($this->content[$code])) {
-                return array_values($this->content[$code]);
+                return $this->withSharedMedia(array_values($this->content[$code]), $code, $chain);
             }
         }
 
         return [];
+    }
+
+    /** Картинка блока одна на все языки: если у этого языка она не загружена, берём её у такого же блока другого языка. */
+    private function withSharedMedia(array $blocks, string $own, array $chain): array
+    {
+        $others = array_values(array_filter(array_unique([...$chain, ...array_keys((array) $this->content)]), fn ($c) => $c !== $own));
+        foreach ($blocks as $i => $block) {
+            foreach (['image', 'video'] as $key) {
+                if (array_key_exists($key, $block['data'] ?? []) && blank($block['data'][$key])) {
+                    foreach ($others as $code) {
+                        $twin = $this->content[$code][$i] ?? null;
+                        if ($twin && ($twin['type'] ?? null) === ($block['type'] ?? null) && filled($twin['data'][$key] ?? null)) {
+                            $blocks[$i]['data'][$key] = $twin['data'][$key];
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        return $blocks;
     }
 
     public function url(?string $locale = null): string
