@@ -20,7 +20,7 @@ class Location extends Model
 
     protected string $titleAttribute = 'name';
 
-    protected $casts = ['latitude' => 'float', 'longitude' => 'float', 'map' => 'array'];
+    protected $casts = ['latitude' => 'float', 'longitude' => 'float', 'map' => 'array', 'levels' => 'array'];
 
     public function hotels(): HasMany
     {

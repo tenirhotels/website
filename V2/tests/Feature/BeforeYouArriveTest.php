@@ -20,6 +20,7 @@ class BeforeYouArriveTest extends TestCase
         (require database_path('migrations/2026_11_08_000300_getting_here_no_faq_text.php'))->up();
         (require database_path('migrations/2026_11_10_001100_location_arrival_info.php'))->up();
         (require database_path('migrations/2026_11_10_001200_faq_order.php'))->up();
+        (require database_path('migrations/2026_11_10_001300_location_levels.php'))->up();
 
         return Hotel::where('slug', 'shymbulak')->firstOrFail();
     }
@@ -45,6 +46,13 @@ class BeforeYouArriveTest extends TestCase
         $this->assertStringContainsString('Что важно знать', $hotel->arrival_info['ru']);
         $this->assertStringNotContainsString('Что важно знать', (string) $hotel->getting_here['ru']);
         $this->get('/ru/getting-here')->assertOk()->assertSee('/before-you-arrive', false)->assertDontSee('Частые вопросы');
+    }
+
+    public function test_altitude_levels_from_city_to_hotel(): void
+    {
+        $this->importAndMove();
+        $this->get('/ru/before-you-arrive')->assertOk()->assertSee('От города до вершины')->assertSee('Алматы')->assertSee('Медеу')->assertSee("2\u{00A0}300", false);
+        $this->get('/en/before-you-arrive')->assertOk()->assertSee('Almaty')->assertSee('Mid station');
     }
 
     public function test_faq_order_puts_cable_car_first_and_discount_last(): void
