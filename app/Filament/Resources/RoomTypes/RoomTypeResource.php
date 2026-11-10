@@ -63,8 +63,8 @@ class RoomTypeResource extends Resource
             Section::make('Параметры')->columns(4)->columnSpanFull()->schema([
                 TextInput::make('size_m2')->label('Площадь, м²')->numeric(),
                 TextInput::make('max_guests')->label('Гостей макс.')->numeric(),
-                CheckboxList::make('highlights')->label('Параметры в плитках')->options(RoomType::FACTS)->columns(4)->columnSpanFull()
-                    ->helperText('Можно выделить до 3 плиток вместе с закреплёнными удобствами ниже. Остальное идёт списком.')
+                CheckboxList::make('highlights')->label('Крупно на карточке: параметры')->options(RoomType::FACTS)->columns(4)->columnSpanFull()
+                    ->helperText('Отмеченное выводится крупным шрифтом вверху карточки. Всего можно выделить до 3 — вместе с удобствами, отмеченными «Выделить крупно» в блоке «Удобства» ниже. Остальные удобства идут списком.')
                     ->rules([fn (Get $get) => function (string $attribute, $value, \Closure $fail) use ($get) {
                         $n = count((array) $value) + collect((array) $get('features'))->where('pin', true)->count();
                         if ($n > RoomType::MAX_TILES) {
@@ -76,12 +76,12 @@ class RoomTypeResource extends Resource
                 TextInput::make('exely_room_type_id')->label('ID типа номера в Exely')
                     ->helperText('Для кнопки бронирования, напр. 62361'),
             ]),
-            Section::make('Удобства')->columnSpanFull()->description('Порядок — перетаскиванием. Иконку выбираете сами. Отметка «В плитку» выносит удобство в крупные плитки (всего до 3 вместе с параметрами выше).')->schema([
+            Section::make('Удобства')->columnSpanFull()->description('Порядок — перетаскиванием. Иконку выбираете сами. Отметка «Выделить крупно» выносит удобство наверх карточки крупным шрифтом (всего до 3 вместе с параметрами выше).')->schema([
                 Repeater::make('features')->hiddenLabel()->addActionLabel('Добавить удобство')->collapsed()->cloneable()->reorderable()
                     ->itemLabel(fn (array $state) => trim(($state['pin'] ?? false ? '★ ' : '').(\App\Support\Locales::pick((array) ($state['text'] ?? [])) ?? 'Новое удобство')))
                     ->schema([
                         Select::make('icon')->label('Иконка')->options(self::iconOptions())->allowHtml()->native(false)->default('leaf')->required(),
-                        Toggle::make('pin')->label('В плитку (выделить)')->inline(false),
+                        Toggle::make('pin')->label('Выделить крупно')->inline(false),
                         Fields::translatable(fn (string $l) => [TextInput::make("text.$l")->label('Название')], 'feat-text'),
                     ]),
             ]),
