@@ -42,7 +42,10 @@
                     <img x-ref="img" src="{{ $image }}" alt="" draggable="false" x-on:click="pick($event)"
                          style="display:block;width:100%;height:auto;cursor:crosshair;user-select:none">
                     @foreach ($others as $o)
-                        <span title="{{ $o['label'] }}" style="position:absolute;left:{{ round($o['x'] / max(1, $width) * 100, 3) }}%;top:{{ round($o['y'] / max(1, $height) * 100, 3) }}%;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:rgba(255,255,255,.85);border:2px solid rgba(31,58,46,.7);pointer-events:none"></span>
+                        <span style="position:absolute;left:{{ round($o['x'] / max(1, $width) * 100, 3) }}%;top:{{ round($o['y'] / max(1, $height) * 100, 3) }}%;pointer-events:none;display:flex;align-items:center;gap:4px;transform:translate(-5px,-50%)">
+                            <span style="flex:none;width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.9);border:2px solid rgba(31,58,46,.75)"></span>
+                            <span style="white-space:nowrap;font-size:11px;line-height:1;padding:2px 5px;border-radius:9px;background:rgba(255,255,255,.88);color:#1f3a2e;box-shadow:0 1px 2px rgba(0,0,0,.25)">{{ $o['label'] }}</span>
+                        </span>
                     @endforeach
                     <span x-show="x && y" x-bind:style="{ left: (x / W * 100) + '%', top: (y / H * 100) + '%' }"
                           style="position:absolute;width:22px;height:22px;margin:-11px 0 0 -11px;border-radius:50%;background:#B5561F;border:3px solid #fff;box-shadow:0 1px 6px rgba(0,0,0,.5);pointer-events:none"></span>
