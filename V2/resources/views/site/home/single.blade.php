@@ -33,7 +33,7 @@
                 <a href="{{ $hotel->sectionUrl('getting-here') }}" class="link-line self-start">{{ __('site.hotel.getting_here') }}</a>
             </div>
             <div class="aspect-[5/6] w-full flex-1 lg:max-w-[600px]">
-                <x-site.media :src="$hotel->gallery[0] ?? $hotel->hero_image" :alt="$hotel->t('name')" />
+                <x-site.media :src="$hotel->intro_image ?: ($hotel->gallery[0] ?? $hotel->hero_image)" :alt="$hotel->t('name')" />
             </div>
         </section>
     @endif
