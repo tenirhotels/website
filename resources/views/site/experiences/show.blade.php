@@ -30,14 +30,17 @@
 
     @if ($related->isNotEmpty())
         <section class="bg-sand">
-            <div class="container-site flex flex-col gap-8 md:gap-12 py-12 md:py-16 lg:py-20">
-                <div class="flex flex-wrap items-end justify-between gap-4">
-                    <x-site.section-head :title="__('site.common.related')" />
+            <div class="container-site flex flex-col gap-6 py-10 md:py-12">
+                <div class="flex flex-wrap items-baseline justify-between gap-3">
+                    <h2 class="font-display text-2xl leading-tight">{{ __('site.common.related') }}</h2>
                     <a href="{{ $experience->hotel?->sectionUrl('experiences') ?? route('experiences.index') }}" class="link-line">{{ __('site.common.all_experiences') }}</a>
                 </div>
-                <div class="grid gap-8 md:grid-cols-3">
+                <div class="grid grid-cols-2 gap-x-4 gap-y-6 md:grid-cols-3 lg:grid-cols-6">
                     @foreach ($related as $e)
-                        <x-site.card :href="$e->url()" :image="$e->image" :title="$e->t('title')" :text="$e->t('summary')" />
+                        <a href="{{ $e->url() }}" class="group flex flex-col gap-2">
+                            <span class="block aspect-[4/3] overflow-hidden rounded-xl"><x-site.media :src="$e->image" :alt="$e->t('title')" class="transition-transform duration-700 group-hover:scale-[1.04]" /></span>
+                            <span class="font-display text-lg leading-snug group-hover:text-ember">{{ $e->t('title') }}</span>
+                        </a>
                     @endforeach
                 </div>
             </div>
