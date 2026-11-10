@@ -20,7 +20,7 @@ class AppServiceProvider extends ServiceProvider
         \App\Support\Property::flush();
 
         // Любое сохранение контента сбрасывает кэш готовых страниц.
-        foreach ([Hotel::class, Page::class, \App\Models\RoomType::class, \App\Models\Venue::class, \App\Models\Experience::class, \App\Models\Event::class,
+        foreach ([Hotel::class, Page::class, \App\Models\RoomType::class, \App\Models\Venue::class, \App\Models\Transport::class, \App\Models\Experience::class, \App\Models\Event::class,
                   \App\Models\Story::class, \App\Models\Offer::class, \App\Models\Faq::class, \App\Models\Recognition::class, \App\Models\Redirect::class] as $model) {
             $model::saved(fn () => \App\Support\PageCache::flush());
             $model::deleted(fn () => \App\Support\PageCache::flush());

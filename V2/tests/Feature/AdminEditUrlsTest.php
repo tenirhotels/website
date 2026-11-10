@@ -19,6 +19,7 @@ class AdminEditUrlsTest extends TestCase
             \App\Filament\Resources\Hotels\HotelResource::class,
             \App\Filament\Resources\RoomTypes\RoomTypeResource::class,
             \App\Filament\Resources\Venues\VenueResource::class,
+            \App\Filament\Resources\Transports\TransportResource::class,
             \App\Filament\Resources\Offers\OfferResource::class,
             \App\Filament\Resources\Experiences\ExperienceResource::class,
             \App\Filament\Resources\Stories\StoryResource::class,

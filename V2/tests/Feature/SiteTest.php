@@ -57,10 +57,14 @@ class SiteTest extends TestCase
         $hotel = Hotel::where('slug', 'shymbulak')->first();
         $this->assertTrue($hotel->hasCable());
         $url = $hotel->sectionUrl('getting-here', [], 'ru');
-        $hotel->update(['cable' => ['enabled' => true, 'hours_medeu' => '08:30–19:00']]);
+        $hotel->transports()->where('code', 'M-1')->update(['hours' => '08:30–19:00']);
+        \App\Support\PageCache::flush();
+        \App\Support\Property::flush(); // в тесте всё живёт в одном процессе
         $this->get($url)->assertOk()->assertSee('08:30–19:00')->assertSee('M-1');
 
-        $hotel->update(['cable' => ['enabled' => false]]);
+        \App\Models\Transport::where('hotel_id', $hotel->id)->update(['is_published' => false]);
+        \App\Support\PageCache::flush();
+        \App\Support\Property::flush(); // в тесте всё живёт в одном процессе
         $this->get($url)->assertOk()->assertDontSee('M-1')->assertDontSee('08:30–19:00');
     }
 

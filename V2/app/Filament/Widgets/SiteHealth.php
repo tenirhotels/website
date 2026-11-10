@@ -62,10 +62,10 @@ class SiteHealth extends Widget
         }
 
         foreach (Hotel::open()->published()->get()->filter->hasCable() as $h) {
-            $missingPhotos = collect(['medeu' => 'Медеу', 'shymbulak' => 'Шымбулак', 'combi1' => 'Средняя'])
+            $missingPhotos = collect(['medeu' => 'M-1 (Медеу)', 'shymbulak' => 'K-1 (Шымбулак)', 'combi1' => 'K-2 (Средняя)'])
                 ->filter(fn ($name, $key) => ! $h->cableSetting("photo_$key"))->values();
             if ($missingPhotos->isNotEmpty()) {
-                $add('warn', "«{$h->t('name')}»: нет фото станций для карточек поездки — ".$missingPhotos->implode(', ').' (карточка отеля → Канатная дорога)', HotelResource::getUrl('edit', ['record' => $h]));
+                $add('warn', "«{$h->t('name')}»: нет фото станций для линий — ".$missingPhotos->implode(', ').' (Транспорт)', \App\Filament\Resources\Transports\TransportResource::getUrl());
             }
         }
         if (! Setting::get('contacts.phone') || ! Setting::get('contacts.email')) {
