@@ -66,8 +66,12 @@ class LocationMap
     {
         $stations = $this->stations()->keyBy('key');
 
-        return collect($this->d['pins'] ?? [])->map(function ($p) use ($stations) {
-            $label = $this->text($p['label'] ?? [], (string) ($p['id'] ?? ''));
+        $venues = \App\Models\Venue::with('hotel')
+            ->whereIn('id', collect($this->d['pins'] ?? [])->pluck('venue_id')->filter()->all())->get()->keyBy('id');
+
+        return collect($this->d['pins'] ?? [])->map(function ($p) use ($stations, $venues) {
+            $venue = filled($p['venue_id'] ?? null) ? $venues->get((int) $p['venue_id']) : null;
+            $label = $venue?->t('name') ?: $this->text($p['label'] ?? [], (string) ($p['id'] ?? ''));
             $tag = isset($p['cable']) && $stations->has($p['cable']) ? $stations[$p['cable']]['tag'] : $label;
             $p['label'] = $label;
             $p['tag'] = $tag;
@@ -75,6 +79,9 @@ class LocationMap
             $p['y'] = (int) $p['y'];
             $p['seasons'] = ($p['seasons'] ?? []) ?: null;
             $p['n'] = filled($p['n'] ?? null) ? (int) $p['n'] : null;
+            // Ресторан из базы: ссылка на его блок на странице ресторанов и часы работы.
+            $p['venue_url'] = $venue?->hotel ? $venue->hotel->sectionUrl('dining').'#venue-'.$venue->id : null;
+            $p['hours'] = $venue?->t('hours') ?: null;
 
             return $p;
         })->values();

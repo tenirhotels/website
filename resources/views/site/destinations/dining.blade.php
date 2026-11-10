@@ -3,7 +3,7 @@
     <x-site.hotel-nav :hotel="$hotel" />
 
     @forelse ($venues as $i => $venue)
-        <section class="container-site py-12 md:py-16 lg:py-20">
+        <section id="venue-{{ $venue->id }}" class="container-site scroll-mt-24 py-12 md:py-16 lg:py-20">
             <div @class(['flex flex-col gap-8 md:gap-12 lg:flex-row lg:items-start lg:gap-20', 'lg:flex-row-reverse' => $i % 2])>
                 <div class="flex flex-1 flex-col gap-6">
                     <h2 class="h-section">{{ $venue->t('name') }}</h2>
