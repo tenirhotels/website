@@ -54,8 +54,12 @@ class TransportResource extends Resource
                     ->helperText(fn (Get $get) => $get('kind') === 'guest_ride' ? 'Окно отправления, например 18:00–18:30.' : 'Расписание задаёт перевозчик; меняйте при смене сезона.'),
             ]),
             Fields::translatable(fn (string $l, bool $d) => [
-                TextInput::make("name.$l")->label('Название')->placeholder('Трансфер из аэропорта')
-                    ->helperText('Для линий канатной дороги не нужно: название берётся из станций.'),
+                TextInput::make("name.$l")->label('Название')->placeholder('Такси до Медеу')
+                    ->helperText('Для линий канатной дороги не нужно: название берётся из станций. У такси и трансфера можно оставить пустым — заголовком станет «Откуда — Куда».'),
+                TextInput::make("route_from.$l")->label('Откуда')->placeholder('Аэропорт Алматы')
+                    ->visible(fn (Get $get) => in_array($get('kind'), ['taxi', 'shuttle'], true)),
+                TextInput::make("route_to.$l")->label('Куда')->placeholder('Станция Медеу')
+                    ->visible(fn (Get $get) => in_array($get('kind'), ['taxi', 'shuttle'], true)),
                 Textarea::make("summary.$l")->label('Описание')->rows(2),
                 TextInput::make("note.$l")->label('Пояснение (сезон, дни)')->placeholder('ежедневно, будни и выходные'),
                 TextInput::make("price.$l")->label('Цена')->placeholder('от 8 000 ₸ за машину')
@@ -86,7 +90,7 @@ class TransportResource extends Resource
     {
         return Fields::table($table, [
             TextColumn::make('code')->label('Линия')->badge(),
-            Fields::column('name', 'Название'),
+            TextColumn::make('name')->label('Название')->getStateUsing(fn ($record) => $record->title()),
             TextColumn::make('kind')->label('Вид')->formatStateUsing(fn ($state) => Transport::KINDS[$state] ?? $state),
             TextColumn::make('location_id')->label('Локация')->getStateUsing(fn ($record) => $record->location?->t('name'))->badge()->color('gray'),
             TextColumn::make('hours')->label('Часы'),

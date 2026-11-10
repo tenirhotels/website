@@ -1,6 +1,11 @@
 <?php
 
 return [
+    'kind_taxi' => 'Такси',
+    'kind_shuttle' => 'Трансфер',
+    'route_from' => 'Қайдан',
+    'route_to' => 'Қайда',
+    'price' => 'Бағасы',
     'order' => 'Тапсырыс беру',
     'order_call' => 'Қоңырау шалу',
     'on_map' => 'Картада',

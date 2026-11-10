@@ -171,13 +171,14 @@ class SiteTest extends TestCase
         $hotel->update(['whatsapp' => '+7 701 123 45 67', 'phone' => '+7 727 000 00 00']);
         \App\Models\Transport::create([
             'location_id' => $hotel->location_id, 'kind' => 'shuttle', 'sort' => 9, 'orderable' => true,
+            'route_from' => ['ru' => 'Аэропорт Алматы'], 'route_to' => ['ru' => 'Станция Медеу'],
             'name' => ['ru' => 'Трансфер из аэропорта'], 'price' => ['ru' => 'от 8 000 ₸ за машину'],
             'map_pins' => ['dropoff-medeu'],
         ]);
         \App\Support\PageCache::flush();
         \App\Support\Property::flush();
         $html = $this->get($hotel->sectionUrl('getting-here', [], 'ru'))->assertOk()
-            ->assertSee('Трансфер из аэропорта')->assertSee('от 8 000 ₸ за машину')
+            ->assertSee('Трансфер из аэропорта')->assertSee('от 8 000 ₸ за машину')->assertSee('Аэропорт Алматы')->assertSee('Станция Медеу')->assertSee('Откуда')
             ->assertSee('https://wa.me/77011234567?text=', false)->assertSee('#point-dropoff-medeu', false)->assertSee('Зона высадки · Медеу')
             ->getContent();
         $this->assertStringContainsString('Заказать', $html);
