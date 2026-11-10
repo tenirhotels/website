@@ -11,21 +11,21 @@
                 <div class="flex flex-1 flex-col justify-center gap-6 p-8 lg:p-14">
                     <h3 class="font-display text-3xl leading-tight"><a href="{{ $room->url() }}" class="hover:text-ember">{{ $room->t('name') }}</a></h3>
                     <p class="lead">{{ $room->t('summary') }}</p>
-                    @php $facts = collect($room->highlightFacts()); @endphp
-                    @if ($facts->isNotEmpty())
-                        <ul class="grid grid-cols-2 gap-3 border-t border-mist pt-6">
-                            @foreach ($facts as [$icon, $label, $text])
-                                <li class="flex items-center gap-3 rounded-2xl border border-mist bg-white px-4 py-3.5">
-                                    <span class="flex h-7 w-7 shrink-0 items-center justify-center text-ember">{{ site_icon($icon, 'h-6 w-6') }}</span>
-                                    <span class="font-display text-lg leading-tight text-ink">{{ $text }}</span>
+                    @php $tiles = $room->tiles(); @endphp
+                    @if ($tiles)
+                        <ul class="grid {{ [1 => 'grid-cols-1', 2 => 'grid-cols-2', 3 => 'grid-cols-3'][min(3, max(1, count($tiles)))] }} gap-2.5 border-t border-mist pt-6">
+                            @foreach ($tiles as $tile)
+                                <li class="flex flex-col items-start gap-2.5 rounded-2xl border border-mist bg-white px-3.5 py-4">
+                                    <span class="text-ember">{{ site_icon($tile['icon'], 'h-7 w-7') }}</span>
+                                    <span class="font-display text-lg leading-tight text-ink">{{ $tile['text'] }}</span>
                                 </li>
                             @endforeach
                         </ul>
                     @endif
-                    @if ($amenities = array_slice($room->amenityList(), 0, 6))
+                    @if ($amenities = array_slice($room->listFeatures(), 0, 6))
                         <ul class="grid grid-cols-2 gap-x-5 gap-y-4 text-base leading-snug text-slate">
                             @foreach ($amenities as $a)
-                                <li class="flex items-start gap-3"><span class="flex h-6 w-6 shrink-0 items-center justify-center text-forest">{{ amenity_icon($a, 'h-5 w-5') }}</span><span>{{ $a }}</span></li>
+                                <li class="flex items-start gap-3"><span class="flex h-6 w-6 shrink-0 items-center justify-center text-forest">{{ site_icon($a['icon'], 'h-5 w-5') }}</span><span>{{ $a['text'] }}</span></li>
                             @endforeach
                         </ul>
                     @endif

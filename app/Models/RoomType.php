@@ -21,6 +21,7 @@ class RoomType extends Model
         'amenities' => 'array',
         'gallery' => 'array',
         'highlights' => 'array',
+        'features' => 'array',
     ];
 
     public function hotel(): BelongsTo
@@ -28,8 +29,8 @@ class RoomType extends Model
         return $this->belongsTo(Hotel::class);
     }
 
-    /** @return list<string> */
-    public function amenityList(): array
+    /** Старый формат (списки строк по языкам) — пока features не заполнены. @return list<string> */
+    private function legacyAmenities(): array
     {
         $all = $this->amenities ?? [];
         foreach (\App\Support\Locales::chain(app()->getLocale()) as $code) {
@@ -47,7 +48,7 @@ class RoomType extends Model
     /** @return list<array{0:string,1:string,2:string}> [ключ, подпись, значение] — только выбранные и заполненные. */
     public function highlightFacts(): array
     {
-        $chosen = $this->highlights ?? array_keys(self::FACTS);
+        $chosen = $this->highlights ?? ['size', 'guests', 'bed'];
         $values = [
             'size' => $this->size_m2 ? $this->size_m2.' м²' : null,
             'guests' => $this->max_guests ? __('site.hotel.up_to_guests', ['count' => $this->max_guests]) : null,
@@ -62,6 +63,78 @@ class RoomType extends Model
         }
 
         return $out;
+    }
+
+    /** Старые списки по языкам → features (по порядку, как были выровнены). */
+    public function featuresFromLegacy(): array
+    {
+        $old = (array) ($this->amenities ?? []);
+        $base = $old['ru'] ?? $old['en'] ?? [];
+        if (! is_array($base)) {
+            return [];
+        }
+        $items = [];
+        foreach (array_values($base) as $i => $ru) {
+            $text = [];
+            foreach ($old as $code => $list) {
+                if (is_array($list) && count($list) === count($base) && filled($list[$i] ?? null)) {
+                    $text[$code] = $list[$i];
+                }
+            }
+            $text['ru'] ??= $ru;
+            $items[] = ['icon' => amenity_icon_name((string) $ru), 'pin' => false, 'text' => $text];
+        }
+
+        return $items;
+    }
+
+    /** Максимум плиток-выделений (факты + закреплённые удобства). */
+    public const MAX_TILES = 3;
+
+    /** @return list<array{icon:string,pin:bool,text:string}> Все удобства по порядку, на языке посетителя. */
+    public function featureList(): array
+    {
+        $out = [];
+        if (is_array($this->features) && $this->features !== []) {
+            foreach ($this->features as $f) {
+                $text = \App\Support\Locales::pick((array) ($f['text'] ?? []));
+                if (filled($text)) {
+                    $out[] = ['icon' => $f['icon'] ?? amenity_icon_name($text), 'pin' => (bool) ($f['pin'] ?? false), 'text' => $text];
+                }
+            }
+
+            return $out;
+        }
+        foreach ($this->legacyAmenities() as $text) {
+            $out[] = ['icon' => amenity_icon_name($text), 'pin' => false, 'text' => $text];
+        }
+
+        return $out;
+    }
+
+    /** @return list<string> */
+    public function amenityList(): array
+    {
+        return array_column($this->featureList(), 'text');
+    }
+
+    /** Плитки: выбранные факты, затем закреплённые удобства; не больше MAX_TILES. @return list<array{icon:string,text:string}> */
+    public function tiles(): array
+    {
+        $tiles = array_map(fn ($f) => ['icon' => $f[0], 'text' => $f[2]], $this->highlightFacts());
+        foreach ($this->featureList() as $f) {
+            if ($f['pin']) {
+                $tiles[] = ['icon' => $f['icon'], 'text' => $f['text']];
+            }
+        }
+
+        return array_slice($tiles, 0, self::MAX_TILES);
+    }
+
+    /** Удобства списком: незакреплённые. @return list<array{icon:string,pin:bool,text:string}> */
+    public function listFeatures(): array
+    {
+        return array_values(array_filter($this->featureList(), fn ($f) => ! $f['pin']));
     }
 
     public function url(?string $locale = null): string

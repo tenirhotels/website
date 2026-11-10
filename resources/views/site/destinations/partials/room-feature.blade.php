@@ -1,8 +1,8 @@
 {{-- Единственный тип номера: не «карточка в пустой сетке», а полноценная витрина. --}}
 @php
-    $facts = collect($room->highlightFacts());
+    $tiles = $room->tiles();
     $gallery = collect($room->gallery ?? [])->filter()->values();
-    $amenities = $room->amenityList();
+    $amenities = $room->listFeatures();
 @endphp
 
 <section class="container-site py-12 md:py-16 lg:py-20">
@@ -17,15 +17,15 @@
                 <p class="text-lg leading-relaxed text-slate">{{ $room->t('summary') }}</p>
             </div>
 
-            @if ($facts->isNotEmpty())
-                <dl class="grid grid-cols-2 gap-x-6 gap-y-5 border-y border-mist py-6">
-                    @foreach ($facts as [$k, $label, $value])
-                        <div class="flex items-start gap-3">
-                            <span class="mt-0.5 text-ember">{{ site_icon($k) }}</span>
-                            <div><dt class="field-label mb-0.5">{{ $label }}</dt><dd class="text-base">{{ $value }}</dd></div>
-                        </div>
-                    @endforeach
-                </dl>
+            @if ($tiles)
+                <ul class="grid {{ [1 => 'grid-cols-1', 2 => 'grid-cols-2', 3 => 'grid-cols-3'][min(3, max(1, count($tiles)))] }} gap-2.5 border-y border-mist py-6">
+                            @foreach ($tiles as $tile)
+                                <li class="flex flex-col items-start gap-2.5 rounded-2xl border border-mist bg-white px-3.5 py-4">
+                                    <span class="text-ember">{{ site_icon($tile['icon'], 'h-7 w-7') }}</span>
+                                    <span class="font-display text-lg leading-tight text-ink">{{ $tile['text'] }}</span>
+                                </li>
+                            @endforeach
+                        </ul>
             @endif
 
             <div class="prose-tenir">{!! $room->t('description') !!}</div>
@@ -47,8 +47,8 @@
             <ul class="grid grid-cols-2 gap-4 md:grid-cols-4">
                 @foreach ($amenities as $a)
                     <li class="flex flex-col gap-3 rounded-2xl bg-sand/60 p-5 text-forest">
-                        {{ amenity_icon($a) }}
-                        <span class="text-base leading-snug text-ink">{{ $a }}</span>
+                        {{ site_icon($a['icon']) }}
+                        <span class="text-base leading-snug text-ink">{{ $a['text'] }}</span>
                     </li>
                 @endforeach
             </ul>
