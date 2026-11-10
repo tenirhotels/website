@@ -30,7 +30,7 @@ class RecognitionResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Награды и СМИ';
 
-    protected static ?int $navigationSort = 5;
+    protected static ?int $navigationSort = 1;
 
     public static function form(Schema $schema): Schema
     {

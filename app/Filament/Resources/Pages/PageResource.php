@@ -43,7 +43,7 @@ class PageResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Страницы бренда';
 
-    protected static ?int $navigationSort = 4;
+    protected static ?int $navigationSort = 6;
 
     public static function blocks(): array
     {

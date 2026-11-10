@@ -41,6 +41,18 @@ class OfferResource extends Resource
 
     protected static ?int $navigationSort = 1;
 
+    public static function getNavigationBadge(): ?string
+    {
+        $n = \App\Models\Offer::active()->count();
+
+        return $n > 0 ? (string) $n : null;
+    }
+
+    public static function getNavigationBadgeTooltip(): ?string
+    {
+        return 'Действуют сегодня';
+    }
+
     public static function form(Schema $schema): Schema
     {
         return $schema->components([
