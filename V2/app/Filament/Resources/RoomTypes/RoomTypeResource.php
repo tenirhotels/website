@@ -108,7 +108,9 @@ class RoomTypeResource extends Resource
             'guests' => 'Гости', 'heat' => 'Отопление', 'car' => 'Авто', 'leaf' => 'Эко / другое'];
         $out = [];
         foreach ($labels as $k => $label) {
-            $out[$k] = '<span style="display:inline-flex;align-items:center;gap:8px">'.site_icon($k, 'h-5 w-5').'<span>'.e($label).'</span></span>';
+            $out[$k] = '<span style="display:flex;align-items:center;gap:10px;white-space:nowrap">'
+                .'<span style="display:block;flex:none;width:20px;height:20px">'.str_replace('class="icon-x"', 'style="width:100%;height:100%"', (string) site_icon($k, 'icon-x')).'</span>'
+                .'<span style="white-space:nowrap">'.e($label).'</span></span>';
         }
 
         return $out;
