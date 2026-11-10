@@ -53,4 +53,14 @@ class MapVenueLinkTest extends TestCase
             $this->assertNull($p['venue_url']);
         }
     }
+
+    public function test_venue_contacts_are_shown_on_dining_page(): void
+    {
+        $this->seed();
+        $venue = Venue::query()->with('hotel')->firstOrFail();
+        $venue->update(['phone' => '+7 727 111-22-33', 'phone_ext' => '102', 'email' => 'dining@example.com']);
+
+        $this->get($venue->hotel->sectionUrl('dining'))->assertOk()
+            ->assertSee('tel:+77271112233', false)->assertSee('102')->assertSee('mailto:dining@example.com', false);
+    }
 }
