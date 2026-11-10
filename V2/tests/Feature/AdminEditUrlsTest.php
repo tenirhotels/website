@@ -16,6 +16,7 @@ class AdminEditUrlsTest extends TestCase
     {
         $this->actingAs(User::factory()->create());
         $resources = [
+            \App\Filament\Resources\Locations\LocationResource::class,
             \App\Filament\Resources\Hotels\HotelResource::class,
             \App\Filament\Resources\RoomTypes\RoomTypeResource::class,
             \App\Filament\Resources\Venues\VenueResource::class,

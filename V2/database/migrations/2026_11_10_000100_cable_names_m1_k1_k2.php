@@ -14,6 +14,7 @@ return new class extends Migration
         'pages' => ['title', 'summary', 'content'],
         'faqs' => ['question', 'answer'],
         'hotels' => ['name', 'tagline', 'summary', 'description', 'highlights', 'getting_here'],
+        'locations' => ['name', 'address', 'getting_here'],
         'offers' => ['title', 'summary', 'description', 'terms', 'included'],
         'experiences' => ['title', 'summary', 'description'],
         'events' => ['title', 'summary', 'description', 'place'],
@@ -30,6 +31,10 @@ return new class extends Migration
     public function up(): void
     {
         foreach (self::TABLES as $table => $columns) {
+            if (! \Illuminate\Support\Facades\Schema::hasTable($table)) {
+                continue;
+            }
+            $columns = array_values(array_filter($columns, fn ($c) => \Illuminate\Support\Facades\Schema::hasColumn($table, $c)));
             foreach (DB::table($table)->select(['id', ...$columns])->get() as $row) {
                 $changes = [];
                 foreach ($columns as $column) {

@@ -100,17 +100,11 @@ class HotelResource extends Resource
                 ]),
 
                 Tab::make('Локация и контакты')->schema([
-                    Fields::translatable(fn (string $l) => [
-                        TextInput::make("region.$l")->label('Регион')->placeholder('Заилийский Алатау'),
-                        TextInput::make("city.$l")->label('Город')->placeholder('Алматы'),
-                        TextInput::make("address.$l")->label('Адрес'),
-                        RichEditor::make("getting_here.$l")->label('Как добраться'),
-                    ], 'location'),
+                    Select::make('location_id')->label('Локация')->required()->native(false)->searchable()
+                        ->options(fn () => \App\Models\Location::orderBy('sort')->orderBy('id')->get()->mapWithKeys(fn ($l) => [$l->id => $l->t('name')]))
+                        ->default(fn () => \App\Models\Location::orderBy('sort')->orderBy('id')->value('id'))
+                        ->helperText('Адрес, координаты, высота, «как добраться» и транспорт задаются в разделе «Локации». Сначала создаётся локация, затем к ней привязывается отель.'),
                     Fields::twoColumns([
-                        TextInput::make('altitude_m')->label('Высота, м')->numeric(),
-                        TextInput::make('country_code')->label('Страна (ISO)')->default('KZ')->maxLength(2),
-                        TextInput::make('latitude')->label('Широта')->numeric(),
-                        TextInput::make('longitude')->label('Долгота')->numeric(),
                         TextInput::make('phone')->label('Телефон')->tel(),
                         TextInput::make('whatsapp')->label('WhatsApp')->tel(),
                         TextInput::make('email')->label('E-mail')->email(),
@@ -155,7 +149,6 @@ class HotelResource extends Resource
         return [
             RelationManagers\RoomsRelationManager::class,
             RelationManagers\VenuesRelationManager::class,
-            RelationManagers\TransportsRelationManager::class,
             RelationManagers\OffersRelationManager::class,
             RelationManagers\ExperiencesRelationManager::class,
         ];

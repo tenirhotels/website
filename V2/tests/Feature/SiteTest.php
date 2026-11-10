@@ -14,6 +14,7 @@ use App\Filament\Resources\Pages\Pages\CreatePage;
 use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Schema;
 use Livewire\Livewire;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -57,12 +58,12 @@ class SiteTest extends TestCase
         $hotel = Hotel::where('slug', 'shymbulak')->first();
         $this->assertTrue($hotel->hasCable());
         $url = $hotel->sectionUrl('getting-here', [], 'ru');
-        $hotel->transports()->where('code', 'M-1')->update(['hours' => '08:30–19:00']);
+        \App\Models\Transport::where('location_id', $hotel->location_id)->where('code', 'M-1')->update(['hours' => '08:30–19:00']);
         \App\Support\PageCache::flush();
         \App\Support\Property::flush(); // в тесте всё живёт в одном процессе
         $this->get($url)->assertOk()->assertSee('08:30–19:00')->assertSee('M-1');
 
-        \App\Models\Transport::where('hotel_id', $hotel->id)->update(['is_published' => false]);
+        \App\Models\Transport::where('location_id', $hotel->location_id)->update(['is_published' => false]);
         \App\Support\PageCache::flush();
         \App\Support\Property::flush(); // в тесте всё живёт в одном процессе
         $this->get($url)->assertOk()->assertDontSee('M-1')->assertDontSee('08:30–19:00');
@@ -73,7 +74,7 @@ class SiteTest extends TestCase
         (require database_path('migrations/2026_11_06_000300_import_legacy_site_content.php'))->up();
         $text = function (): string {
             $out = '';
-            foreach (['pages' => 'content', 'hotels' => 'getting_here', 'faqs' => 'answer'] as $table => $col) {
+            foreach (['pages' => 'content', 'locations' => 'getting_here', 'faqs' => 'answer'] as $table => $col) {
                 foreach (\Illuminate\Support\Facades\DB::table($table)->pluck($col) as $raw) {
                     $d = json_decode((string) $raw, true);
                     $out .= is_array($d) ? json_encode($d, JSON_UNESCAPED_UNICODE) : (string) $raw;
@@ -113,6 +114,23 @@ class SiteTest extends TestCase
         $hotel->update(['getting_here' => ['ru' => str_repeat('Свой длинный текст редактора. ', 30)]]);
         $migration->up();
         $this->assertStringContainsString('Свой длинный текст', $hotel->fresh()->getting_here['ru']);
+    }
+
+    public function test_location_owns_place_settings_and_hotel_reads_them(): void
+    {
+        $hotel = Hotel::where('slug', 'shymbulak')->first();
+        $loc = $hotel->location;
+        $this->assertNotNull($loc);
+        $this->assertSame($loc->t('address'), $hotel->t('address'));
+        $this->assertSame(3200, (int) $hotel->altitude_m);
+
+        $loc->update(['address' => ['ru' => 'Новый адрес локации']]);
+        \App\Support\PageCache::flush();
+        \App\Support\Property::flush();
+        $this->assertSame('Новый адрес локации', Hotel::find($hotel->id)->t('address'));
+        $this->get($hotel->sectionUrl('getting-here', [], 'ru'))->assertOk();
+        $this->assertTrue(Schema::hasColumn('hotels', 'location_id'));
+        $this->assertFalse(Schema::hasColumn('hotels', 'address'));
     }
 
     public function test_kazakh_is_the_first_language(): void

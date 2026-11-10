@@ -22,7 +22,27 @@ class TenirShymbulakSeeder extends Seeder
 
     public function run(): void
     {
+        $location = \App\Models\Location::updateOrCreate(['slug' => 'shymbulak'], [
+            'name' => ['ru' => 'Шымбулак', 'en' => 'Shymbulak', 'kk' => 'Шымбұлақ', 'zh' => 'Shymbulak'],
+            'region' => ['ru' => 'Заилийский Алатау', 'en' => 'Trans-Ili Alatau', 'kk' => 'Іле Алатауы'],
+            'city' => ['ru' => 'Алматы', 'en' => 'Almaty', 'kk' => 'Алматы'],
+            'address' => [
+                'ru' => 'Высота 3 200 м, курорт Шымбулак, Алматы, Казахстан',
+                'en' => 'Altitude 3,200 m, Shymbulak Mountain Resort, Almaty, Kazakhstan',
+            ],
+            'country_code' => 'KZ',
+            'altitude_m' => 3200,
+            'latitude' => 43.113991,
+            'longitude' => 77.111328,
+            'getting_here' => [
+                'ru' => '<p>Отель находится на высоте 3 200 м на курорте Шымбулак. Добраться можно по канатной дороге от Медеу через Шымбулак до верхних станций.</p><p>По запросу мы встретим вас на Шымбулаке и поможем с багажом до отеля (услуга «Шымбулак ⇌ Tenir»). Также доступен трансфер от Шымбулака до центра Алматы.</p><p>[Добавьте расписание канатной дороги, время в пути и рекомендации по одежде.]</p>',
+                'en' => '<p>The hotel is located at 3,200 m at Shymbulak Mountain Resort, reached by cable car from Medeu via Shymbulak to the upper stations.</p><p>On request we meet you at Shymbulak and help with your luggage to the hotel (Shymbulak ⇌ Tenir service). A transfer from Shymbulak to Almaty city centre is also available.</p><p>[Add the cable car timetable, travel time and clothing tips.]</p>',
+            ],
+            'sort' => 1,
+        ]);
+
         $hotel = Hotel::updateOrCreate(['slug' => 'shymbulak'], [
+            'location_id' => $location->id,
             'name' => ['ru' => 'Tenir Shymbulak', 'en' => 'Tenir Shymbulak', 'kk' => 'Tenir Shymbulak', 'zh' => 'Tenir Shymbulak'],
             'tagline' => [
                 'ru' => 'Тишина гор, звёзды и снег — у вас за окном',
@@ -38,16 +58,6 @@ class TenirShymbulakSeeder extends Seeder
                 'en' => '<p>Tenir is a unique eco hotel at 3,200 metres above sea level, surrounded by the ranges of the Trans-Ili Alatau. It is made for those who wish to live in mountain silence and enjoy pristine nature while staying in comfortable rooms in one of the finest eco locations in Central Asia.</p><p>A true ski-in / ski-out hotel far from the noise of the city. Guests stay in detached modules with all modern amenities. There are only ten rooms, each with everything needed for complete rest and comfort.</p>',
             ],
             'status' => Hotel::STATUS_OPEN,
-            'region' => ['ru' => 'Заилийский Алатау', 'en' => 'Trans-Ili Alatau', 'kk' => 'Іле Алатауы'],
-            'city' => ['ru' => 'Алматы', 'en' => 'Almaty', 'kk' => 'Алматы'],
-            'address' => [
-                'ru' => 'Высота 3 200 м, курорт Шымбулак, Алматы, Казахстан',
-                'en' => 'Altitude 3,200 m, Shymbulak Mountain Resort, Almaty, Kazakhstan',
-            ],
-            'country_code' => 'KZ',
-            'altitude_m' => 3200,
-            'latitude' => 43.113991,
-            'longitude' => 77.111328,
             'phone' => '+7 727 313 14 15',
             'whatsapp' => '+7 727 313 14 15',
             'email' => 'reservations@tenirhotels.com',
@@ -65,19 +75,15 @@ class TenirShymbulakSeeder extends Seeder
                 ['value' => '10', 'label' => ['ru' => 'отдельных модулей', 'en' => 'private modules', 'kk' => 'жеке модуль']],
                 ['value' => 'Ski-in', 'label' => ['ru' => 'прямо к трассам', 'en' => 'straight to the slopes', 'kk' => 'трассаларға тікелей']],
             ],
-            'getting_here' => [
-                'ru' => '<p>Отель находится на высоте 3 200 м на курорте Шымбулак. Добраться можно по канатной дороге от Медеу через Шымбулак до верхних станций.</p><p>По запросу мы встретим вас на Шымбулаке и поможем с багажом до отеля (услуга «Шымбулак ⇌ Tenir»). Также доступен трансфер от Шымбулака до центра Алматы.</p><p>[Добавьте расписание канатной дороги, время в пути и рекомендации по одежде.]</p>',
-                'en' => '<p>The hotel is located at 3,200 m at Shymbulak Mountain Resort, reached by cable car from Medeu via Shymbulak to the upper stations.</p><p>On request we meet you at Shymbulak and help with your luggage to the hotel (Shymbulak ⇌ Tenir service). A transfer from Shymbulak to Almaty city centre is also available.</p><p>[Add the cable car timetable, travel time and clothing tips.]</p>',
-            ],
             'is_featured' => true,
             'is_published' => true,
             'sort' => 1,
         ]);
         // Транспорт: линии канатной дороги курорта (часы — по умолчанию курорта; меняются в админке «Транспорт»).
         foreach ([['M-1', '09:00–18:00', 1], ['K-1', '09:00–17:00', 2], ['K-2', '09:00–16:30', 3]] as [$code, $hours, $sort]) {
-            \App\Models\Transport::firstOrCreate(['hotel_id' => $hotel->id, 'kind' => 'cable_line', 'code' => $code], ['hours' => $hours, 'sort' => $sort]);
+            \App\Models\Transport::firstOrCreate(['location_id' => $location->id, 'kind' => 'cable_line', 'code' => $code], ['hours' => $hours, 'sort' => $sort]);
         }
-        \App\Models\Transport::firstOrCreate(['hotel_id' => $hotel->id, 'kind' => 'guest_ride'], [
+        \App\Models\Transport::firstOrCreate(['location_id' => $location->id, 'kind' => 'guest_ride'], [
             'hours' => '18:00–18:30', 'sort' => 4,
             'name' => ['ru' => 'Особый подъём для гостей отеля', 'en' => 'Special ride for hotel guests'],
         ]);

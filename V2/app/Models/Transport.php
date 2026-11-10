@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-/** Транспорт к отелю (как номера и рестораны — запись локации): линия канатной дороги, трансфер, такси. */
+/** Транспорт локации (как номера и рестораны — запись): линия канатной дороги, трансфер, такси. */
 class Transport extends Model
 {
     use HasTranslations;
@@ -30,9 +30,9 @@ class Transport extends Model
 
     protected $casts = ['is_published' => 'boolean'];
 
-    public function hotel(): BelongsTo
+    public function location(): BelongsTo
     {
-        return $this->belongsTo(Hotel::class);
+        return $this->belongsTo(Location::class);
     }
 
     public function scopePublished(Builder $query): Builder
