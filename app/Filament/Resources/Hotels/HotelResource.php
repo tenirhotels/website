@@ -57,6 +57,9 @@ class HotelResource extends Resource
                     Fields::translatable(fn (string $l, bool $d) => [
                         Fields::titleInput('name', $l, $d, 'Название отеля'),
                         TextInput::make("tagline.$l")->label('Слоган')->placeholder('Ближе к небу'),
+                        TextInput::make("hero_line.$l")->label('Фраза над заголовком главной')
+                            ->placeholder('Ночь, которая начинается выше облаков')
+                            ->helperText('Необязательно. Пусто — строки над заголовком нет.'),
                         Textarea::make("summary.$l")->label('Краткое описание')->rows(3)
                             ->helperText('Для карточек, превью и SEO, 1–2 предложения.'),
                         RichEditor::make("description.$l")->label('Описание'),
