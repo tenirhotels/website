@@ -2,21 +2,24 @@
     use App\Support\ResortMap;
 
     $dining = $hotel?->sectionUrl('dining');
-    $stations = collect(ResortMap::CABLE);
-    $label = fn (array $p) => $p['kind'] === 'hotel' && $hotel ? $hotel->t('name') : __('map.names.'.$p['name']);
-    $stationName = fn (string $key) => __('map.names.station_'.$key);
-    $restaurants = collect($pins)->where('kind', 'restaurant')->sortBy('n');
-    $activities = fn (string $s) => collect($pins)->where('kind', 'activity')->filter(fn ($p) => in_array($s, $p['seasons'], true))->sortBy('n');
+    $W = $map->width();
+    $H = $map->height();
+    $stations = $map->stations();
+    $pins = $map->pins();
+    $label = fn (array $p) => $p['kind'] === 'hotel' && $hotel ? $hotel->t('name') : $p['label'];
+    $restaurants = $pins->where('kind', 'restaurant')->sortBy('n');
+    $activities = fn (string $s) => $pins->where('kind', 'activity')->filter(fn ($p) => in_array($s, $p['seasons'] ?? [], true))->sortBy('n');
     $i18n = collect(['locating', 'here', 'far', 'denied', 'unavailable'])->mapWithKeys(fn ($k) => [$k => __('map.'.$k)]);
-    $geo = ['points' => ResortMap::geoPoints(), 'width' => ResortMap::WIDTH, 'height' => ResortMap::HEIGHT];
+    $geo = ['points' => $map->geoPoints(), 'width' => $W, 'height' => $H];
+    $oneWay = $map->oneWay() ? __('map.one_way_at', ['min' => $map->oneWay(), 'unit' => __('map.min')]) : null;
 @endphp
 <x-layouts.site :seo="$seo" :hotel="$hotel">
     <x-slot:head>
-        <link rel="preload" as="image" href="/images/map/{{ $season }}-sm.webp" type="image/webp">
+        <link rel="preload" as="image" href="{{ $map->image($season, true) }}" type="image/webp">
         @vite('resources/js/map.js')
     </x-slot:head>
 
-    <section class="bg-snow pt-8 md:pt-12" data-map-root data-season="{{ $season }}" data-w="{{ ResortMap::WIDTH }}" data-h="{{ ResortMap::HEIGHT }}">
+    <section class="bg-snow pt-8 md:pt-12" data-map-root data-season="{{ $season }}" data-w="{{ $W }}" data-h="{{ $H }}">
         <div class="container-site">
             <div class="flex flex-wrap items-end justify-between gap-x-10 gap-y-5">
                 <div class="max-w-2xl">
@@ -36,59 +39,46 @@
         {{-- Карта: на телефоне во всю ширину экрана --}}
         <div class="mt-6 md:container-site md:mt-8">
             <div class="map-viewport relative h-[66svh] min-h-[420px] overflow-hidden bg-[#dce9f6] md:h-[72vh] md:max-h-[780px] md:rounded-[28px]" data-viewport tabindex="0" aria-label="{{ __('map.title') }}">
-                <div class="map-stage" data-stage style="width:{{ ResortMap::WIDTH }}px;height:{{ ResortMap::HEIGHT }}px">
+                <div class="map-stage" data-stage style="width:{{ $W }}px;height:{{ $H }}px">
                     @foreach (['winter', 'summer'] as $s)
-                        <img src="/images/map/{{ $s }}-sm.webp" data-full="/images/map/{{ $s }}.webp" data-layer="{{ $s }}" alt="" width="{{ ResortMap::WIDTH }}" height="{{ ResortMap::HEIGHT }}"
+                        <img src="{{ $map->image($s, true) }}" data-full="{{ $map->image($s) }}" data-layer="{{ $s }}" alt="" width="{{ $W }}" height="{{ $H }}"
                              class="map-layer" draggable="false" decoding="async" @if ($s !== $season) data-off @endif>
                     @endforeach
 
-                    {{-- Время в пути (как на исходной карте): шкала из 4 точек и подписи у стрелок --}}
-                    @php
-                        $legs = [
-                            ['m' => $stations[0]['next'], 'dot' => [138, 542], 'arrow' => [445, 815, -12]],
-                            ['m' => $stations[1]['next'], 'dot' => [286, 542], 'arrow' => [832, 514, -34]],
-                            ['m' => $stations[2]['next'], 'dot' => [374, 542], 'arrow' => [1110, 331, -24]],
-                        ];
-                        $dots = [[52, 'medeu'], [224, 'shymbulak'], [348, 'combi1'], [400, 'combi2']];
-                    @endphp
-                    <span class="map-time is-total" style="left:20px;top:490px" aria-hidden="true">{{ __('map.one_way') }}</span>
-                    <span class="map-time is-arrow" style="left:176px;top:788px;transform:translate(-50%,-50%) rotate(35deg)" aria-hidden="true">≈15 {{ __('map.min') }}</span>
-                    @foreach ($dots as $d)
-                        <span class="map-time is-name" style="left:{{ $d[0] }}px;top:520px" aria-hidden="true">{{ __('map.tags.station_'.$d[1]) }}</span>
-                    @endforeach
-                    @foreach ($legs as $l)
-                        <span class="map-time" style="left:{{ $l['dot'][0] }}px;top:552px" aria-hidden="true">≈{{ $l['m'] }} {{ __('map.min') }}</span>
-                        <span class="map-time is-arrow" style="left:{{ $l['arrow'][0] }}px;top:{{ $l['arrow'][1] }}px;transform:translate(-50%,-50%) rotate({{ $l['arrow'][2] }}deg)" aria-hidden="true">≈{{ $l['m'] }} {{ __('map.min') }}</span>
+                    {{-- Подписи поверх карты (время в пути и т.п.): задаются в локации --}}
+                    @foreach ($map->overlay() as $o)
+                        @php $arrow = in_array($o['kind'], ['arrow', 'arrow_time'], true); @endphp
+                        <span class="map-time {{ $o['kind'] === 'total' ? 'is-total' : '' }} {{ $o['kind'] === 'name' ? 'is-name' : '' }} {{ $arrow ? 'is-arrow' : '' }}"
+                              style="left:{{ $o['x'] }}px;top:{{ $o['y'] }}px{{ $arrow ? ';transform:translate(-50%,-50%) rotate('.$o['rot'].'deg)' : '' }}" aria-hidden="true">{{ $o['text'] }}</span>
                     @endforeach
 
                     @foreach ($pins as $p)
                         @php
                             $seasons = $p['seasons'] ?? null;
                             $note = null;
-                            if (isset($p['cable'])) {
-                                $idx = $stations->search(fn ($c) => $c['key'] === $p['cable']);
+                            $lines = [];
+                            if (isset($p['cable']) && ($idx = $stations->search(fn ($c) => $c['key'] === $p['cable'])) !== false) {
                                 $cur = $stations[$idx];
-                                $lines = [];
-                                if ($cur['next']) {
-                                    $lines[] = '↑ '.__('map.up').' ('.$cur['lift'].'): '.__('map.tags.station_'.$stations[$idx + 1]['key']).' · ≈'.$cur['next'].' '.__('map.min');
+                                if ($cur['next'] && isset($stations[$idx + 1])) {
+                                    $lines[] = '↑ '.__('map.up').($cur['lift'] ? ' ('.$cur['lift'].')' : '').': '.$stations[$idx + 1]['tag'].' · ≈'.$cur['next'].' '.__('map.min');
                                 }
                                 if ($idx > 0 && $stations[$idx - 1]['next']) {
-                                    $lines[] = '↓ '.__('map.down').' ('.$stations[$idx - 1]['lift'].'): '.__('map.tags.station_'.$stations[$idx - 1]['key']).' · ≈'.$stations[$idx - 1]['next'].' '.__('map.min');
+                                    $lines[] = '↓ '.__('map.down').($stations[$idx - 1]['lift'] ? ' ('.$stations[$idx - 1]['lift'].')' : '').': '.$stations[$idx - 1]['tag'].' · ≈'.$stations[$idx - 1]['next'].' '.__('map.min');
                                 }
-                                $note = $lines ? implode("\n", $lines) : null;
                             }
+                            $note = $lines ? implode("\n", $lines) : null;
                         @endphp
                         <button type="button" id="pin-{{ $p['id'] }}" data-pin="{{ $p['id'] }}" data-kind="{{ $p['kind'] }}"
                                 data-name="{{ $label($p) }}" data-kind-label="{{ __('map.kinds.'.$p['kind']) }}"
                                 @if ($seasons) data-seasons="{{ implode(' ', $seasons) }}" @endif
                                 @if ($p['detail'] ?? false) data-detail @endif
-                                @if ($p['id'] === 'r1' && $dining) data-href="{{ $dining }}" data-href-label="{{ __('map.dining_link') }}" @endif
+                                @if ($p['kind'] === 'restaurant' && $p['n'] === 1 && $dining) data-href="{{ $dining }}" data-href-label="{{ __('map.dining_link') }}" @endif
                                 @if ($note) data-note="{{ $note }}" @endif
-                                class="map-pin" style="left:{{ $p['x'] }}px;top:{{ $p['y'] }}px" aria-label="{{ isset($p['n']) ? $p['n'].'. ' : '' }}{{ $label($p) }}">
-                            @if (isset($p['n']))
+                                class="map-pin" style="left:{{ $p['x'] }}px;top:{{ $p['y'] }}px" aria-label="{{ $p['n'] ? $p['n'].'. ' : '' }}{{ $label($p) }}">
+                            @if ($p['n'])
                                 <span class="map-badge">{{ $p['n'] }}</span>
                             @else
-                                <span class="map-tag"><i></i>{{ $p['kind'] === 'station' ? __('map.tags.'.$p['name']) : $label($p) }}</span>
+                                <span class="map-tag"><i></i>{{ $p['kind'] === 'station' ? $p['tag'] : $label($p) }}</span>
                             @endif
                         </button>
                     @endforeach
@@ -121,20 +111,20 @@
         <div class="container-site grid gap-12 py-12 md:py-16 lg:grid-cols-12 lg:gap-16">
             <div class="lg:col-span-5">
                 <h2 class="h-section">{{ __('map.cable_title') }}</h2>
-                <p class="mt-2 font-display text-2xl text-ember">{{ __('map.one_way') }}</p>
+                @if ($oneWay)<p class="mt-2 font-display text-2xl text-ember">{{ $oneWay }}</p>@endif
                 <ol class="mt-8 space-y-0">
                     @foreach ($stations as $c)
                         <li class="relative flex gap-4 pb-7 last:pb-0">
                             @unless ($loop->last)<span class="absolute left-[7px] top-4 h-full w-px bg-mist" aria-hidden="true"></span>@endunless
                             <span class="relative mt-1.5 size-[15px] shrink-0 rounded-full border-2 border-forest bg-snow"></span>
                             <div>
-                                <button type="button" data-focus="st-{{ $c['key'] }}" class="text-left text-lg text-ink hover:text-ember">{{ $stationName($c['key']) }}</button>
+                                <button type="button" data-focus="st-{{ $c['key'] }}" class="text-left text-lg text-ink hover:text-ember">{{ $c['name'] }}</button>
                                 @if ($c['next'])<p class="text-[15px] text-stone">≈{{ $c['next'] }} {{ __('map.min') }} {{ __('map.next') }}</p>@endif
                             </div>
                         </li>
                     @endforeach
                 </ol>
-                <p class="mt-6 text-[15px] text-stone">{{ __('map.one_way_note') }}</p>
+                @if ($oneWay)<p class="mt-6 text-[15px] text-stone">{{ __('map.one_way_note') }}</p>@endif
                 @if ($hotel)
                     <a href="{{ $hotel->sectionUrl('getting-here') }}" class="link-line mt-8">{{ __('map.getting_here') }}</a>
                 @endif

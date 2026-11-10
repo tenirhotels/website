@@ -90,6 +90,18 @@ class Property
     }
 
     /** Отель показывается по коротким адресам (режим одного отеля, это его отель). */
+    /** Отель, чья карта открывается по общей ссылке «Карта курорта»: сначала распознаваемый, затем первый с картой. */
+    public static function mapHotel(): ?Hotel
+    {
+        try {
+            $hotels = Hotel::published()->open()->ordered()->with('location')->get()->filter->hasMap();
+        } catch (\Throwable) {
+            return null;
+        }
+
+        return $hotels->firstWhere('slug', config('tenir.recognition_hotel')) ?? $hotels->first();
+    }
+
     public static function isSingleHotel(?Hotel $hotel): bool
     {
         return $hotel && self::isSingle() && self::primary()?->is($hotel);

@@ -133,6 +133,38 @@ class SiteTest extends TestCase
         $this->assertFalse(Schema::hasColumn('hotels', 'address'));
     }
 
+    public function test_map_belongs_to_location(): void
+    {
+        $hotel = Hotel::where('slug', 'shymbulak')->first();
+        $loc = $hotel->location;
+        $this->assertTrue($hotel->hasMap());
+
+        // Меняем данные карты в локации — страница карты и «Как добраться» берут их оттуда.
+        $map = $loc->map;
+        $map['one_way_minutes'] = 75;
+        foreach ($map['stations'] as &$st) {
+            if ($st['key'] === 'medeu') {
+                $st['name']['ru'] = 'Нижняя Тест';
+                $st['tag']['ru'] = 'НижняяТест';
+            }
+        }
+        unset($st);
+        $loc->update(['map' => $map]);
+        \App\Support\PageCache::flush();
+        \App\Support\Property::flush();
+        $this->get('/ru/map')->assertOk()->assertSee('≈75 мин', false)->assertSee('Нижняя Тест');
+        $this->get($hotel->sectionUrl('getting-here', [], 'ru'))->assertOk()->assertSee('Нижняя Тест')->assertSee('≈ 75 мин', false);
+
+        // Локация без карты: страницы карты нет, ссылка и блок маршрута скрыты.
+        $loc->update(['map' => null]);
+        \App\Support\PageCache::flush();
+        \App\Support\Property::flush();
+        $this->assertFalse(Hotel::find($hotel->id)->hasMap());
+        $this->get('/ru/map')->assertNotFound();
+        $this->get($hotel->sectionUrl('getting-here', [], 'ru'))->assertOk()->assertDontSee('arrival-calc', false);
+        $this->get('/sitemap.xml')->assertDontSee('/ru/map', false);
+    }
+
     public function test_kazakh_is_the_first_language(): void
     {
         $this->assertSame('kk', array_key_first(\App\Support\Locales::all()));
@@ -322,7 +354,7 @@ class SiteTest extends TestCase
         $this->assertFileExists(public_path('images/map/winter.webp'));
         $this->assertFileExists(public_path('images/map/summer.webp'));
 
-        $this->assertCount(3, \App\Support\ResortMap::geoPoints());
+        $this->assertCount(3, \App\Models\Hotel::where('slug', 'shymbulak')->first()->resortMap()->geoPoints());
         $this->assertSame('winter', \App\Support\ResortMap::defaultSeason(new \DateTimeImmutable('2026-12-15')));
         $this->assertSame('summer', \App\Support\ResortMap::defaultSeason(new \DateTimeImmutable('2026-07-15')));
     }

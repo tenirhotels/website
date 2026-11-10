@@ -27,7 +27,9 @@ class SitemapController extends Controller
         $entries[] = ['events.index', [], null];
         $entries[] = ['offers.index', [], null];
         $entries[] = ['stories.index', [], null];
-        $entries[] = ['map', [], null];
+        if (\App\Support\Property::mapHotel()) {
+            $entries[] = ['map', [], null];
+        }
         if (\App\Support\Gifts::offers() !== []) {
             $entries[] = ['gifts', [], null];
         }
