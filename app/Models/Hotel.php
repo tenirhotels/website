@@ -20,8 +20,10 @@ class Hotel extends Model
 
     protected array $translatable = [
         'name', 'tagline', 'summary', 'description', 'opening_label',
-        'region', 'city', 'address', 'getting_here',
     ];
+
+    /** Настройки места живут в локации: отель читает (и пишет) их через неё — шаблоны и SEO работают как раньше. */
+    private const LOCATION_ATTRS = ['region', 'city', 'address', 'getting_here', 'altitude_m', 'country_code', 'latitude', 'longitude'];
 
     protected string $titleAttribute = 'name';
 
@@ -30,8 +32,6 @@ class Hotel extends Model
         'highlights' => 'array',
         'reviews_widget' => 'array',
         'is_featured' => 'boolean',
-        'latitude' => 'float',
-        'longitude' => 'float',
     ];
 
     protected static function booted(): void
@@ -66,49 +66,57 @@ class Hotel extends Model
         return $this->hasMany(Faq::class);
     }
 
-    public function transports(): HasMany
+    public function location(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->hasMany(Transport::class)->published()->ordered();
+        return $this->belongsTo(Location::class);
     }
 
-    /** К отелю ведёт канатная дорога курорта: есть опубликованная линия (запись «Транспорт» с видом «Линия канатной дороги»). */
-    public function hasCable(): bool
+    public function getAttribute($key)
     {
-        return $this->transports->contains('kind', 'cable_line');
+        return in_array($key, self::LOCATION_ATTRS, true) ? $this->location?->getAttribute($key) : parent::getAttribute($key);
     }
 
-    private function transportByCode(string $code): ?Transport
+    public function fill(array $attributes)
     {
-        return $this->transports->first(fn ($t) => $t->kind === 'cable_line' && $t->code === $code);
-    }
-
-    /**
-     * Данные канатной дороги из записей «Транспорт» (для страницы «Как добраться»).
-     * Ключи: hours_medeu (M-1), hours_combi1 (K-1), hours_combi2 (K-2), hours_note, guest_from/guest_to,
-     * photo_medeu (M-1), photo_shymbulak (K-1), photo_combi1 (K-2) — фото станции, откуда идёт линия.
-     */
-    public function cableSetting(string $key, mixed $default = null): mixed
-    {
-        $line = ['hours_medeu' => 'M-1', 'hours_combi1' => 'K-1', 'hours_combi2' => 'K-2',
-            'photo_medeu' => 'M-1', 'photo_shymbulak' => 'K-1', 'photo_combi1' => 'K-2'][$key] ?? null;
-        $v = null;
-        if ($line) {
-            $t = $this->transportByCode($line);
-            $v = str_starts_with($key, 'photo_') ? $t?->image : $t?->hours;
-        } elseif ($key === 'hours_note') {
-            foreach ($this->transports->where('kind', 'cable_line') as $t) {
-                if ($note = trim((string) $t->t('note'))) {
-                    $v = $note;
-                    break;
-                }
+        // Колонок региона/адреса/координат у отеля больше нет — защита от массового заполнения их бы отбросила.
+        foreach (self::LOCATION_ATTRS as $key) {
+            if (array_key_exists($key, $attributes)) {
+                $this->setAttribute($key, $attributes[$key]);
+                unset($attributes[$key]);
             }
-        } elseif ($key === 'guest_from' || $key === 'guest_to') {
-            $hours = $this->transports->firstWhere('kind', 'guest_ride')?->hours;
-            $parts = $hours ? preg_split('/\s*[–—-]\s*/u', $hours) : [];
-            $v = $parts[$key === 'guest_from' ? 0 : 1] ?? null;
         }
 
-        return $v === null || $v === '' ? $default : $v;
+        return parent::fill($attributes);
+    }
+
+    public function setAttribute($key, $value)
+    {
+        if (in_array($key, self::LOCATION_ATTRS, true)) {
+            if ($loc = $this->location) {
+                $loc->setAttribute($key, $value);
+                $loc->save();
+            }
+
+            return $this;
+        }
+
+        return parent::setAttribute($key, $value);
+    }
+
+    /** Транспорт локации отеля (для страницы «Как добраться»). */
+    public function getTransportsAttribute(): \Illuminate\Support\Collection
+    {
+        return $this->location?->transports ?? collect();
+    }
+
+    public function hasCable(): bool
+    {
+        return (bool) $this->location?->hasCable();
+    }
+
+    public function cableSetting(string $key, mixed $default = null): mixed
+    {
+        return $this->location ? $this->location->cableSetting($key, $default) : $default;
     }
 
     public function scopeOpen(Builder $query): Builder

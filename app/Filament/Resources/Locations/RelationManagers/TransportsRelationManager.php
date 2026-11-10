@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Filament\Resources\Hotels\RelationManagers;
+namespace App\Filament\Resources\Locations\RelationManagers;
 
 use App\Filament\Resources\Transports\TransportResource;
 use Filament\Actions\CreateAction;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Table;
 
-/** Вкладка «Транспорт» внутри карточки отеля: как добраться именно до этой локации. */
+/** Вкладка «Транспорт» в карточке локации: как добраться именно сюда. */
 class TransportsRelationManager extends RelationManager
 {
     protected static string $relationship = 'transports';

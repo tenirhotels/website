@@ -19,7 +19,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use UnitEnum;
 
-/** Транспорт локации: линии канатной дороги, особый подъём для гостей, трансфер, такси. У каждого отеля свой. */
+/** Транспорт локации: линии канатной дороги, особый подъём для гостей, трансфер, такси. Принадлежит локации: у каждого места свой. */
 class TransportResource extends Resource
 {
     use \App\Filament\Support\UsesIdInUrls;
@@ -42,7 +42,9 @@ class TransportResource extends Resource
     {
         return $schema->components([
             Fields::twoColumns([
-                Fields::hotel(required: true),
+                Select::make('location_id')->label('Локация')->required()->native(false)
+                    ->relationship('location', 'slug')->getOptionLabelFromRecordUsing(fn ($record) => $record->t('name'))
+                    ->default(fn () => \App\Models\Location::orderBy('sort')->orderBy('id')->value('id')),
                 Select::make('kind')->label('Вид')->required()->live()->default('cable_line')->options(Transport::KINDS)
                     ->helperText('Линии M-1, K-1, K-2 и особый подъём для гостей показываются на странице «Как добраться» с калькулятором. Остальное — списком.'),
                 Select::make('code')->label('Линия')->options(array_combine(array_keys(Transport::CABLE_CODES), array_map(fn ($c, $r) => "$c · $r", array_keys(Transport::CABLE_CODES), Transport::CABLE_CODES)))
@@ -68,11 +70,11 @@ class TransportResource extends Resource
             TextColumn::make('code')->label('Линия')->badge(),
             Fields::column('name', 'Название'),
             TextColumn::make('kind')->label('Вид')->formatStateUsing(fn ($state) => Transport::KINDS[$state] ?? $state),
-            Fields::hotelColumn(),
+            TextColumn::make('location_id')->label('Локация')->getStateUsing(fn ($record) => $record->location?->t('name'))->badge()->color('gray'),
             TextColumn::make('hours')->label('Часы'),
             Fields::publishedColumn(),
         ], [
-            Fields::hotelFilter(),
+            \Filament\Tables\Filters\SelectFilter::make('location_id')->label('Локация')->relationship('location', 'slug')->getOptionLabelFromRecordUsing(fn ($record) => $record->t('name')),
         ]);
     }
 
