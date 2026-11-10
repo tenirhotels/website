@@ -70,10 +70,10 @@
                                 $cur = $stations[$idx];
                                 $lines = [];
                                 if ($cur['next']) {
-                                    $lines[] = '↑ '.__('map.up').': '.__('map.tags.station_'.$stations[$idx + 1]['key']).' · ≈'.$cur['next'].' '.__('map.min');
+                                    $lines[] = '↑ '.__('map.up').' ('.$cur['lift'].'): '.__('map.tags.station_'.$stations[$idx + 1]['key']).' · ≈'.$cur['next'].' '.__('map.min');
                                 }
                                 if ($idx > 0 && $stations[$idx - 1]['next']) {
-                                    $lines[] = '↓ '.__('map.down').': '.__('map.tags.station_'.$stations[$idx - 1]['key']).' · ≈'.$stations[$idx - 1]['next'].' '.__('map.min');
+                                    $lines[] = '↓ '.__('map.down').' ('.$stations[$idx - 1]['lift'].'): '.__('map.tags.station_'.$stations[$idx - 1]['key']).' · ≈'.$stations[$idx - 1]['next'].' '.__('map.min');
                                 }
                                 $note = $lines ? implode("\n", $lines) : null;
                             }

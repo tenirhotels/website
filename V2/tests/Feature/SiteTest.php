@@ -52,6 +52,28 @@ class SiteTest extends TestCase
         $this->get('/en')->assertOk()->assertDontSee('One MICHELIN Key');
     }
 
+    public function test_cable_names_migration_renames_combi_to_k_lifts(): void
+    {
+        (require database_path('migrations/2026_11_06_000300_import_legacy_site_content.php'))->up();
+        $text = function (): string {
+            $out = '';
+            foreach (['pages' => 'content', 'hotels' => 'getting_here', 'faqs' => 'answer'] as $table => $col) {
+                foreach (\Illuminate\Support\Facades\DB::table($table)->pluck($col) as $raw) {
+                    $d = json_decode((string) $raw, true);
+                    $out .= is_array($d) ? json_encode($d, JSON_UNESCAPED_UNICODE) : (string) $raw;
+                }
+            }
+
+            return $out;
+        };
+        $this->assertMatchesRegularExpression('/Комби-\d|Combi-\d/u', $text());
+
+        (require database_path('migrations/2026_11_10_000100_cable_names_m1_k1_k2.php'))->up();
+
+        $this->assertDoesNotMatchRegularExpression('/Комби|Combi/u', $text());
+        $this->assertStringContainsString('K-1', $text());
+    }
+
     public function test_legacy_site_content_import_fills_placeholders_and_keeps_edits(): void
     {
         $hotel = Hotel::where('slug', 'shymbulak')->first();
@@ -258,7 +280,7 @@ class SiteTest extends TestCase
         foreach (['kk' => 'Курорт картасы', 'ru' => 'Карта курорта', 'en' => 'Resort map', 'zh' => '度假区地图'] as $locale => $title) {
             $this->get("/$locale/map")->assertOk()->assertSee($title)->assertSee('data-pin="r1"', false)->assertSee('data-pin="st-combi1"', false);
         }
-        $this->get('/ru/map')->assertSee('≈22 мин', false)->assertSee('↑ Вверх: Combi-1', false)->assertSee('↓ Вниз: Медеу', false)->assertSee('Верёвочный парк Медеу')->assertSee('Лестница здоровья');
+        $this->get('/ru/map')->assertSee('≈22 мин', false)->assertSee('↑ Вверх (K-1): Средняя', false)->assertSee('↓ Вниз (M-1): Медеу', false)->assertSee('Верёвочный парк Медеу')->assertSee('Лестница здоровья');
         $this->get('/en/map')->assertSee('Rope park Medeu')->assertSee('Cable cars');
         $this->get('/ru/map')->assertDontSee('z-30 bg-white px-4 pb-5', false);
         $this->get('/ru/contact')->assertSee('z-30 bg-white px-4 pb-5', false);

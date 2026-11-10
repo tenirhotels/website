@@ -44,9 +44,9 @@
     @php
         $cableNote = trim((string) \App\Models\Setting::get('cable.hours_note', ''));
         $lifts = [
-            [__('map.tags.station_medeu').' → '.__('map.tags.station_shymbulak'), \App\Models\Setting::get('cable.hours_medeu') ?: '09:00–18:00'],
-            ['Combi-1', \App\Models\Setting::get('cable.hours_combi1') ?: '09:00–17:00'],
-            ['Combi-2', \App\Models\Setting::get('cable.hours_combi2') ?: '09:00–16:30'],
+            ['M-1 · '.__('map.tags.station_medeu').' → '.__('map.tags.station_shymbulak'), \App\Models\Setting::get('cable.hours_medeu') ?: '09:00–18:00'],
+            ['K-1 · '.__('map.tags.station_shymbulak').' → '.__('map.tags.station_combi1'), \App\Models\Setting::get('cable.hours_combi1') ?: '09:00–17:00'],
+            ['K-2 · '.__('map.tags.station_combi1').' → '.__('map.tags.station_combi2'), \App\Models\Setting::get('cable.hours_combi2') ?: '09:00–16:30'],
         ];
         $endOf = fn (string $h, string $fallback) => preg_match('/(\d{1,2}[:.]\d{2})\s*$/u', $h, $m) ? str_replace('.', ':', $m[1]) : $fallback;
         $dayReserve = 0;      // запас днём, мин (в тексте не упоминается)
@@ -121,9 +121,9 @@
                     <div class="my-2 flex flex-1 items-center gap-4 overflow-hidden rounded-2xl bg-ember/10 px-4 py-3.5">
                         <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-ember">{{ site_icon('cable', 'h-6 w-6') }}</span>
                         <div class="flex min-w-0 flex-1 flex-col gap-0.5">
-                            <p class="text-[13px] uppercase tracking-[0.14em] text-stone">{{ __('access.ride_label') }}</p>
+                            <p class="text-[13px] uppercase tracking-[0.14em] text-stone">{{ $s['lift'] }} · {{ __('access.ride_label') }}</p>
                             <p class="font-display text-2xl leading-none text-ember">≈ {{ $s['next'] }} {{ __('map.min') }}</p>
-                            <p class="text-[15px] text-slate">{{ __('access.ride_to_name', ['name' => __('map.tags.station_'.$stations[$i + 1]['key'])]) }}</p>
+                            <p class="text-[15px] text-slate">{{ __('access.ride_to_name', ['name' => __('map.names.station_'.$stations[$i + 1]['key'])]) }}</p>
                         </div>
                         @php
                             $photoPath = \App\Models\Setting::get('cable.photo_'.$s['key']);
