@@ -9,7 +9,6 @@ use App\Filament\Support\Fields;
 use App\Models\RoomType;
 use App\Support\Property;
 use BackedEnum;
-use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Utilities\Get;
@@ -63,26 +62,33 @@ class RoomTypeResource extends Resource
             Section::make('Параметры')->columns(4)->columnSpanFull()->schema([
                 TextInput::make('size_m2')->label('Площадь, м²')->numeric(),
                 TextInput::make('max_guests')->label('Гостей макс.')->numeric(),
-                CheckboxList::make('highlights')->label('Крупно на карточке: параметры')->options(RoomType::FACTS)->columns(4)->columnSpanFull()
-                    ->helperText('Отмеченное выводится крупным шрифтом вверху карточки. Всего можно выделить до 3 — вместе с удобствами, отмеченными «Выделить крупно» в блоке «Удобства» ниже. Остальные удобства идут списком.')
-                    ->rules([fn (Get $get) => function (string $attribute, $value, \Closure $fail) use ($get) {
-                        $n = count((array) $value) + collect((array) $get('features'))->where('pin', true)->count();
-                        if ($n > RoomType::MAX_TILES) {
-                            $fail('Выделено '.$n.' — можно не больше '.RoomType::MAX_TILES.' (параметры + закреплённые удобства).');
-                        }
-                    }]),
                 TextInput::make('price_from')->label('Цена от, ₸')->numeric()
                     ->helperText('Пусто — «Проверить цены»'),
                 TextInput::make('exely_room_type_id')->label('ID типа номера в Exely')
                     ->helperText('Для кнопки бронирования, напр. 62361'),
             ]),
-            Section::make('Удобства')->columnSpanFull()->description('Порядок — перетаскиванием. Иконку выбираете сами. Отметка «Выделить крупно» выносит удобство наверх карточки крупным шрифтом (всего до 3 вместе с параметрами выше).')->schema([
-                Repeater::make('features')->hiddenLabel()->addActionLabel('Добавить удобство')->collapsed()->cloneable()->reorderable()
-                    ->itemLabel(fn (array $state) => trim(($state['pin'] ?? false ? '★ ' : '').(\App\Support\Locales::pick((array) ($state['text'] ?? [])) ?? 'Новое удобство')))
+            Section::make('Особенности номера')->columnSpanFull()->description('Один список для всего: параметры (площадь, гости, кровать, вид) и удобства. Порядок — перетаскиванием. «Выделить крупно» выносит пункт наверх карточки крупным шрифтом, выделить можно до 3; остальное идёт списком с иконками.')->schema([
+                Repeater::make('features')->hiddenLabel()->addActionLabel('Добавить пункт')->collapsed()->cloneable()->reorderable()
+                    ->rules([fn () => function (string $attribute, $value, \Closure $fail) {
+                        $n = collect((array) $value)->where('pin', true)->count();
+                        if ($n > RoomType::MAX_TILES) {
+                            $fail('Выделено крупно '.$n.' — можно не больше '.RoomType::MAX_TILES.'. Снимите лишние отметки.');
+                        }
+                    }])
+                    ->itemLabel(function (array $state) {
+                        $src = $state['source'] ?? 'custom';
+                        $name = RoomType::FACTS[$src] ?? (\App\Support\Locales::pick((array) ($state['text'] ?? [])) ?? 'Новый пункт');
+
+                        return trim((($state['pin'] ?? false) ? '★ ' : '').$name);
+                    })
                     ->schema([
+                        Select::make('source')->label('Что это')->native(false)->live()->default('custom')->required()
+                            ->options(['custom' => 'Своё удобство (свой текст)'] + RoomType::FACTS)
+                            ->helperText('Площадь, гости, кровать и вид берутся из полей номера и переводятся сами.'),
                         Select::make('icon')->label('Иконка')->options(self::iconOptions())->allowHtml()->native(false)->default('leaf')->required(),
                         Toggle::make('pin')->label('Выделить крупно')->inline(false),
-                        Fields::translatable(fn (string $l) => [TextInput::make("text.$l")->label('Название')], 'feat-text'),
+                        Fields::translatable(fn (string $l) => [TextInput::make("text.$l")->label('Название')], 'feat-text')
+                            ->visible(fn (Get $get) => ($get('source') ?? 'custom') === 'custom'),
                     ]),
             ]),
             Section::make('Фото')->columnSpanFull()->schema([

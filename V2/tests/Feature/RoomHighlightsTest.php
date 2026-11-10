@@ -7,39 +7,36 @@ use Tests\TestCase;
 
 class RoomHighlightsTest extends TestCase
 {
-    public function test_highlights_pick_only_chosen_filled_facts(): void
+    public function test_default_list_pins_size_guests_bed_and_keeps_the_rest_as_list(): void
     {
         $r = new RoomType(['size_m2' => 32, 'max_guests' => 2]);
-        $r->highlights = ['size', 'guests', 'view'];
-        $this->assertSame(['size', 'guests'], array_column($r->highlightFacts(), 0));
+        $r->amenities = ['ru' => ['Финская сауна', 'Бесплатный Wi-Fi']];
+        $r->setRelation('hotel', null);
 
-        $r->highlights = null;
-        $this->assertSame(['size', 'guests'], array_column($r->highlightFacts(), 0));
-
-        $r->highlights = ['guests'];
-        $this->assertSame(['guests'], array_column($r->highlightFacts(), 0));
+        $this->assertSame(['32 м²', 'до 2 гостей'], array_column($r->tiles(), 'text'));
+        $this->assertSame(['Финская сауна', 'Бесплатный Wi-Fi'], array_column($r->listFeatures(), 'text'));
+        $this->assertSame(['sauna', 'wifi'], array_column($r->listFeatures(), 'icon'));
     }
 
-    public function test_tiles_are_capped_at_three_and_pinned_features_leave_the_list(): void
+    public function test_any_three_items_can_be_pinned_and_tiles_are_capped(): void
     {
         $r = new RoomType(['size_m2' => 32, 'max_guests' => 2]);
-        $r->highlights = ['size', 'guests'];
         $r->features = [
-            ['icon' => 'sauna', 'pin' => true, 'text' => ['ru' => 'Финская сауна']],
-            ['icon' => 'wifi', 'pin' => true, 'text' => ['ru' => 'Wi-Fi']],
-            ['icon' => 'tv', 'pin' => false, 'text' => ['ru' => 'Телевизор']],
+            ['source' => 'size', 'icon' => 'size', 'pin' => true],
+            ['source' => 'custom', 'icon' => 'sauna', 'pin' => true, 'text' => ['ru' => 'Финская сауна']],
+            ['source' => 'guests', 'icon' => 'guests', 'pin' => true],
+            ['source' => 'custom', 'icon' => 'wifi', 'pin' => true, 'text' => ['ru' => 'Wi-Fi']],
+            ['source' => 'custom', 'icon' => 'tv', 'pin' => false, 'text' => ['ru' => 'Телевизор']],
         ];
-        $tiles = $r->tiles();
-        $this->assertCount(3, $tiles);
-        $this->assertSame('sauna', $tiles[2]['icon']);
+        $this->assertSame(['32 м²', 'Финская сауна', 'до 2 гостей'], array_column($r->tiles(), 'text'));
         $this->assertSame(['Телевизор'], array_column($r->listFeatures(), 'text'));
         $this->assertSame(['Финская сауна', 'Wi-Fi', 'Телевизор'], $r->amenityList());
     }
 
-    public function test_legacy_amenities_still_work_without_features(): void
+    public function test_empty_fact_is_skipped(): void
     {
-        $r = new RoomType;
-        $r->amenities = ['ru' => ['Финская сауна', 'Бесплатный Wi-Fi']];
-        $this->assertSame(['sauna', 'wifi'], array_column($r->featureList(), 'icon'));
+        $r = new RoomType(['size_m2' => 32]);
+        $r->features = [['source' => 'view', 'icon' => 'view', 'pin' => true], ['source' => 'size', 'icon' => 'size', 'pin' => true]];
+        $this->assertSame(['32 м²'], array_column($r->tiles(), 'text'));
     }
 }

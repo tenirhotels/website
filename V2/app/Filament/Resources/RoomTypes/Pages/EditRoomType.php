@@ -10,11 +10,11 @@ class EditRoomType extends EditRecord
 {
     protected static string $resource = RoomTypeResource::class;
 
-    /** Номер со старым списком удобств: подставляем его в новый конструктор, чтобы ничего не потерялось. */
+    /** Номер без нового списка: подставляем параметры и старые удобства, чтобы ничего не потерялось. */
     protected function mutateFormDataBeforeFill(array $data): array
     {
         if (empty($data['features'])) {
-            $data['features'] = $this->getRecord()->featuresFromLegacy();
+            $data['features'] = $this->getRecord()->defaultFeatures();
         }
 
         return $data;
