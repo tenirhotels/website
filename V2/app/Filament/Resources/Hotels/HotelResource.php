@@ -119,6 +119,26 @@ class HotelResource extends Resource
                     ]),
                 ]),
 
+                Tab::make('Канатная дорога')->schema([
+                    \Filament\Forms\Components\Toggle::make('cable.enabled')->label('К отелю ведёт канатная дорога курорта Шымбулак')->live()
+                        ->helperText('Включите только для отеля на курорте. Тогда на странице «Как добраться» появятся линии M-1/K-1/K-2, часы работы, калькулятор и панорамы. У отелей в других местах оставьте выключенным.'),
+                    Section::make('Расписание и фото')
+                        ->description('Расписание задаёт курорт (shymbulak.com/info). Пустые поля — значения по умолчанию; меняйте при смене сезона.')
+                        ->columns(2)
+                        ->visible(fn (Get $get) => (bool) $get('cable.enabled'))
+                        ->schema([
+                            TextInput::make('cable.hours_medeu')->label('M-1 (Медеу — Шымбулак)')->placeholder('09:00–18:00'),
+                            TextInput::make('cable.hours_combi1')->label('K-1 (Шымбулак — Средняя)')->placeholder('09:00–17:00'),
+                            TextInput::make('cable.hours_combi2')->label('K-2 (Средняя — Верхняя)')->placeholder('09:00–16:30'),
+                            TextInput::make('cable.hours_note')->label('Пояснение (сезон, дни)')->placeholder('ежедневно, будни и выходные'),
+                            TextInput::make('cable.guest_from')->label('Подъём для гостей отеля: с')->placeholder('18:00'),
+                            TextInput::make('cable.guest_to')->label('Подъём для гостей отеля: до')->placeholder('18:30'),
+                            Fields::image('cable.photo_medeu', 'Фото станции Медеу', 'cable')->helperText('Показывается справа в карточке «Канатная дорога» на странице «Как добраться»; по нажатию открывается крупно.'),
+                            Fields::image('cable.photo_shymbulak', 'Фото станции Шымбулак', 'cable'),
+                            Fields::image('cable.photo_combi1', 'Фото Средней станции', 'cable'),
+                        ]),
+                ]),
+
                 Tab::make('Бронирование')->schema([
                     Section::make('Exely / TravelLine')->schema([
                         TextInput::make('exely_context')->label('Контекст модуля')

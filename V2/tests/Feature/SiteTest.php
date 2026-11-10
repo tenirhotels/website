@@ -52,6 +52,18 @@ class SiteTest extends TestCase
         $this->get('/en')->assertOk()->assertDontSee('One MICHELIN Key');
     }
 
+    public function test_cable_block_follows_hotel_setting_not_site_setting(): void
+    {
+        $hotel = Hotel::where('slug', 'shymbulak')->first();
+        $this->assertTrue($hotel->hasCable());
+        $url = $hotel->sectionUrl('getting-here', [], 'ru');
+        $hotel->update(['cable' => ['enabled' => true, 'hours_medeu' => '08:30–19:00']]);
+        $this->get($url)->assertOk()->assertSee('08:30–19:00')->assertSee('M-1');
+
+        $hotel->update(['cable' => ['enabled' => false]]);
+        $this->get($url)->assertOk()->assertDontSee('M-1')->assertDontSee('08:30–19:00');
+    }
+
     public function test_cable_names_migration_renames_combi_to_k_lifts(): void
     {
         (require database_path('migrations/2026_11_06_000300_import_legacy_site_content.php'))->up();

@@ -61,10 +61,12 @@ class SiteHealth extends Widget
             $add('info', 'В афише нет предстоящих событий — блок «События» скрыт на сайте', EventResource::getUrl('create'));
         }
 
-        $missingPhotos = collect(['medeu' => 'Медеу', 'shymbulak' => 'Шымбулак', 'combi1' => 'Средняя'])
-            ->filter(fn ($name, $key) => ! Setting::get("cable.photo_$key"))->values();
-        if ($missingPhotos->isNotEmpty()) {
-            $add('warn', 'Нет фото станций для карточек поездки: '.$missingPhotos->implode(', ').' (Настройки → Канатная дорога)', SiteSettings::getUrl());
+        foreach (Hotel::open()->published()->get()->filter->hasCable() as $h) {
+            $missingPhotos = collect(['medeu' => 'Медеу', 'shymbulak' => 'Шымбулак', 'combi1' => 'Средняя'])
+                ->filter(fn ($name, $key) => ! $h->cableSetting("photo_$key"))->values();
+            if ($missingPhotos->isNotEmpty()) {
+                $add('warn', "«{$h->t('name')}»: нет фото станций для карточек поездки — ".$missingPhotos->implode(', ').' (карточка отеля → Канатная дорога)', HotelResource::getUrl('edit', ['record' => $h]));
+            }
         }
         if (! Setting::get('contacts.phone') || ! Setting::get('contacts.email')) {
             $add('warn', 'Не заполнены телефон или e-mail отдела бронирования (Настройки → Контакты)', SiteSettings::getUrl());

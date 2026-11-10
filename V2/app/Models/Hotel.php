@@ -27,6 +27,7 @@ class Hotel extends Model
 
     protected $casts = [
         'gallery' => 'array',
+        'cable' => 'array',
         'highlights' => 'array',
         'reviews_widget' => 'array',
         'is_featured' => 'boolean',
@@ -64,6 +65,20 @@ class Hotel extends Model
     public function faqs(): HasMany
     {
         return $this->hasMany(Faq::class);
+    }
+
+    /** К отелю ведёт канатная дорога (курорт Шымбулак): включается в карточке отеля. */
+    public function hasCable(): bool
+    {
+        return (bool) ($this->cable['enabled'] ?? false);
+    }
+
+    /** Настройка канатной дороги этого отеля (часы, фото станций…). */
+    public function cableSetting(string $key, mixed $default = null): mixed
+    {
+        $v = $this->cable[$key] ?? null;
+
+        return $v === null || $v === '' ? $default : $v;
     }
 
     public function scopeOpen(Builder $query): Builder
