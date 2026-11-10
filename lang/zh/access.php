@@ -29,7 +29,7 @@ return [
     'plan_until' => ':time 前',
     'plan_note' => '时间为大致估算。周末和旺季缆车可能排队，建议您提早抵达。',
     'line' => ':code 线',
-    'hours_lines' => 'M-1、K-1 和 K-2 是度假区缆车线路的名称，每条线路均可双向运行。',
+    'hours_lines' => 'M-1、K-1 和 K-2 是度假区缆车线路的名称。',
     'ride_label' => '缆车',
     'ride_to_name' => '前往:name',
     'ride_total' => '以上为每一段缆车的用时。不含各站之间的换乘。',

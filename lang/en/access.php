@@ -29,7 +29,7 @@ return [
     'plan_until' => 'by :time',
     'plan_note' => 'Times are approximate. At weekends and in high season there can be queues at the cable cars — we suggest arriving in good time.',
     'line' => 'Line :code',
-    'hours_lines' => 'M-1, K-1 and K-2 are the names of the resort\'s cable car lines. Each runs in both directions.',
+    'hours_lines' => 'M-1, K-1 and K-2 are the names of the resort\'s cable car lines.',
     'ride_label' => 'Cable car',
     'ride_to_name' => 'to :name',
     'ride_total' => 'Times are given for each cable car section, excluding changes between stations.',
