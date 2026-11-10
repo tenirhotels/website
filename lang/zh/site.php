@@ -103,6 +103,7 @@ return [
     ],
     'common' => [
         'learn_more' => '了解更多',
+        'all_experiences' => '全部体验',
         'view_all' => '查看全部',
         'book_now' => '立即预订',
         'back' => '返回',

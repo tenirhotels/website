@@ -31,7 +31,10 @@
     @if ($related->isNotEmpty())
         <section class="bg-sand">
             <div class="container-site flex flex-col gap-8 md:gap-12 py-12 md:py-16 lg:py-20">
-                <x-site.section-head :title="__('site.common.related')" />
+                <div class="flex flex-wrap items-end justify-between gap-4">
+                    <x-site.section-head :title="__('site.common.related')" />
+                    <a href="{{ $experience->hotel?->sectionUrl('experiences') ?? route('experiences.index') }}" class="link-line">{{ __('site.common.all_experiences') }}</a>
+                </div>
                 <div class="grid gap-8 md:grid-cols-3">
                     @foreach ($related as $e)
                         <x-site.card :href="$e->url()" :image="$e->image" :title="$e->t('title')" :text="$e->t('summary')" />
