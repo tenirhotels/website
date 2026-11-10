@@ -82,7 +82,7 @@
         </section>
     @endif
 
-    <section class="container-site flex flex-col gap-8 md:gap-14 pb-12 pt-0 md:py-16 lg:py-20 lg:flex-row lg:gap-20">
+    <section class="container-site flex flex-col gap-8 md:gap-14 pb-12 pt-8 md:py-16 lg:py-20 lg:flex-row lg:gap-20">
         <div class="flex flex-[1.5] flex-col gap-8">
             @if ($hotel->t('getting_here'))<div class="prose-tenir [&>*:first-child]:mt-0">{!! $hotel->t('getting_here') !!}</div>@endif
             <a href="{{ $hotel->sectionUrl('before-you-arrive') }}" class="group flex flex-col gap-2 rounded-3xl border border-mist bg-sand p-6 transition hover:border-ember md:p-8">
@@ -91,7 +91,7 @@
                 <span class="link-line mt-2 self-start">{{ __('site.hotel.before_more') }}</span>
             </a>
         </div>
-        <aside class="flex flex-1 flex-col gap-3 text-base text-slate">
+        <aside class="flex flex-1 flex-col items-start gap-3 text-base text-slate">
             @if ($hotel->hasMap())<a href="{{ route('map') }}" class="btn-primary self-start">{{ __('map.open_map') }}</a>@endif
             @if ($hotel->latitude)
                 <a href="https://www.google.com/maps/search/?api=1&query={{ $hotel->latitude }},{{ $hotel->longitude }}" class="btn-dark self-start" target="_blank" rel="noopener">Google Maps</a>
