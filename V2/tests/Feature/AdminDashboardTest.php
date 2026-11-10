@@ -24,7 +24,7 @@ class AdminDashboardTest extends TestCase
         // Виджеты подгружаются лениво — проверяем их отдельно.
         \Livewire\Livewire::test(\App\Filament\Widgets\SiteHealth::class)->assertSee('внимания');
         \Livewire\Livewire::test(\App\Filament\Widgets\SiteStats::class)->assertSee('Сейчас на сайте');
-        \Livewire\Livewire::test(\App\Filament\Widgets\QuickActions::class)->assertSee('Новое предложение');
+        \Livewire\Livewire::test(\App\Filament\Widgets\QuickActions::class)->assertSee('Создать')->assertSee('Предложение');
     }
 
     public function test_location_map_form_saves_without_losing_data(): void
