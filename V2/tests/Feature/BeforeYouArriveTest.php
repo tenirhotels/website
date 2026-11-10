@@ -21,6 +21,7 @@ class BeforeYouArriveTest extends TestCase
         (require database_path('migrations/2026_11_10_001100_location_arrival_info.php'))->up();
         (require database_path('migrations/2026_11_10_001200_faq_order.php'))->up();
         (require database_path('migrations/2026_11_10_001300_location_levels.php'))->up();
+        (require database_path('migrations/2026_11_10_001500_tickets_by_rate.php'))->up();
 
         return Hotel::where('slug', 'shymbulak')->firstOrFail();
     }
@@ -53,6 +54,40 @@ class BeforeYouArriveTest extends TestCase
         $this->importAndMove();
         $this->get('/ru/before-you-arrive')->assertOk()->assertSee('От города до вершины')->assertSee('Алматы')->assertSee('Медеу')->assertSee("2\u{00A0}300", false);
         $this->get('/en/before-you-arrive')->assertOk()->assertSee('Almaty')->assertSee('Mid station');
+    }
+
+    public function test_tickets_depend_on_rate_in_all_languages(): void
+    {
+        $hotel = $this->importAndMove();
+        $info = $hotel->fresh()->arrival_info;
+        foreach (['ru' => ['Тариф с билетами', 'Тариф без билетов', 'сезонный абонемент'], 'en' => ['Rate with tickets', 'Rate without tickets', 'seasonal pass'], 'kk' => ['Билеті бар тариф', 'Билетсіз тариф', 'маусымдық абонемент'], 'zh' => ['含票房价', '不含票房价', '季票']] as $l => $needles) {
+            foreach ($needles as $n) {
+                $this->assertStringContainsString($n, $info[$l], "$l: $n");
+            }
+            $this->get("/$l/before-you-arrive")->assertOk()->assertSee($needles[0]);
+        }
+        // Багаж и одежда на месте, список по-прежнему один.
+        $this->assertStringContainsString('Багаж', $info['ru']);
+        $this->assertSame(1, substr_count($info['ru'], 'Тариф с билетами'));
+        (require database_path('migrations/2026_11_10_001500_tickets_by_rate.php'))->up(); // повторный запуск
+        $this->assertSame(1, substr_count($hotel->fresh()->arrival_info['ru'], 'Тариф с билетами'));
+        $faq = Faq::where('hotel_id', $hotel->id)->get()->first(fn ($f) => ($f->question['ru'] ?? '') === 'Входит ли канатная дорога в стоимость проживания?');
+        $this->assertStringContainsString('Зависит от тарифа', $faq->answer['ru']);
+    }
+
+    public function test_live_markup_is_replaced_without_touching_luggage_and_clothing(): void
+    {
+        $hotel = $this->importAndMove();
+        $loc = $hotel->location;
+        $loc->arrival_info = ['ru' => '<h3>Что важно знать</h3><ul><li><p><strong>Билеты.</strong> Старый текст.</p></li><li><p>Если билеты включены, за сутки.</p></li><li><p><strong>Багаж.</strong> Свой багаж редактора.</p></li><li><p><strong>Одежда.</strong> Своя одежда.</p></li></ul><p>Дописано редактором.</p>'];
+        $loc->save();
+        (require database_path('migrations/2026_11_10_001500_tickets_by_rate.php'))->up();
+        $ru = $hotel->fresh()->arrival_info['ru'];
+        $this->assertStringContainsString('Тариф без билетов', $ru);
+        $this->assertStringNotContainsString('Старый текст', $ru);
+        $this->assertStringContainsString('Свой багаж редактора', $ru);
+        $this->assertStringContainsString('Своя одежда', $ru);
+        $this->assertStringContainsString('Дописано редактором', $ru);
     }
 
     public function test_faq_order_puts_cable_car_first_and_discount_last(): void
