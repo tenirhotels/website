@@ -13,6 +13,8 @@
         </section>
     @endif
 
+    <x-site.altitude-levels :hotel="$hotel" />
+
     @if ($faqs->isNotEmpty())
         <section class="container-site border-t border-mist py-12 md:py-16 lg:py-20">
             <h2 class="font-display text-2xl md:text-3xl">{{ __('site.hotel.faq_title') }}</h2>

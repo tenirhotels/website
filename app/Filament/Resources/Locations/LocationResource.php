@@ -79,6 +79,14 @@ class LocationResource extends Resource
                         RichEditor::make("arrival_info.$l")->label('Текст «Что важно знать»')
                             ->helperText('Страница «Перед приездом»: канатная дорога и билеты, багаж, одежда. Общий для всех отелей этой локации. Вопросы и ответы под ним — раздел «Частые вопросы» отеля.'),
                     ], 'arrival'),
+                    Section::make('От города до вершины')->description('Уровни высоты для наглядности: от города до отеля. Показываются на странице «Перед приездом» полосами по высоте.')->schema([
+                        Repeater::make('levels')->hiddenLabel()->addActionLabel('Добавить уровень')->collapsed()->cloneable()
+                            ->itemLabel(fn (array $state) => trim(($state['name']['ru'] ?? '').' · '.($state['altitude_m'] ?? '').' м', ' ·'))
+                            ->schema([
+                                TextInput::make('altitude_m')->label('Высота, м')->numeric()->required(),
+                                self::translated('name', 'Название', 'lv-name'),
+                            ]),
+                    ]),
                 ]),
                 Tab::make('Карта')->schema(self::mapFields()),
             ]),

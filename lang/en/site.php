@@ -44,6 +44,8 @@ return [
         'gallery' => 'Gallery',
         'getting_here' => 'Getting here',
         'before_arrive' => 'Before you arrive',
+        'levels_title' => 'From the city to the summit',
+        'levels_text' => 'The elevation gain from the city to the hotel is :m m. It is noticeably cooler up there than in the city.',
         'faq_title' => 'Frequently asked questions',
         'nature_1' => 'With each cable car station, the noise of the city fades below, giving way to silence, pure mountain air and the calm of high-altitude space.',
         'nature_2' => 'This is where true rest begins.',
