@@ -30,7 +30,7 @@ class RedirectsSeeder extends Seeder
         $exely = [
             '' => '',
             'about' => 'about',
-            'information' => 'getting-here',
+            'information' => 'before-you-arrive',
             'news' => 'stories',
             'photos' => 'gallery',
             'reviews' => '',

@@ -22,7 +22,7 @@ class PropertyModeTest extends TestCase
     protected bool $seed = true;
 
     private const SINGLE_PATHS = [
-        '', 'rooms', 'rooms/deluxe-mountain-view', 'dining', 'gallery', 'getting-here', 'reviews',
+        '', 'rooms', 'rooms/deluxe-mountain-view', 'dining', 'gallery', 'getting-here', 'before-you-arrive', 'reviews',
         'experiences', 'experiences/tenir-sky', 'offers', 'offers/long-stay',
         'stories', 'contact', 'about', 'sustainability', 'booking',
     ];
@@ -31,7 +31,7 @@ class PropertyModeTest extends TestCase
         '', 'destinations', 'destinations/shymbulak', 'destinations/shymbulak/rooms',
         'destinations/shymbulak/rooms/deluxe-mountain-view', 'destinations/shymbulak/dining',
         'destinations/shymbulak/experiences', 'destinations/shymbulak/offers',
-        'destinations/shymbulak/gallery', 'destinations/shymbulak/getting-here', 'destinations/shymbulak/reviews',
+        'destinations/shymbulak/gallery', 'destinations/shymbulak/getting-here', 'destinations/shymbulak/before-you-arrive', 'destinations/shymbulak/reviews',
         'destinations/almaty', 'experiences', 'experiences/tenir-sky', 'offers', 'offers/long-stay',
         'stories', 'contact', 'about', 'sustainability', 'booking',
     ];

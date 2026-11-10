@@ -86,6 +86,25 @@ trait RendersHotelPages
         ]);
     }
 
+    protected function renderBeforeYouArrive(Hotel $hotel)
+    {
+        $faqs = $hotel->faqs()->where('is_published', true)->orderBy('sort')->get();
+        $seo = Seo::make($this->title('before_arrive', $hotel), $hotel->t('summary'))->withKeywords($hotel->seoKeywords());
+        if ($faqs->isNotEmpty()) {
+            $seo->withSchema([
+                '@context' => 'https://schema.org',
+                '@type' => 'FAQPage',
+                'mainEntity' => $faqs->map(fn ($f) => [
+                    '@type' => 'Question',
+                    'name' => strip_tags((string) $f->t('question')),
+                    'acceptedAnswer' => ['@type' => 'Answer', 'text' => strip_tags((string) $f->t('answer'))],
+                ])->filter(fn ($q) => $q['name'] !== '' && $q['acceptedAnswer']['text'] !== '')->values()->all(),
+            ]);
+        }
+
+        return view('site.destinations.before-you-arrive', ['hotel' => $hotel, 'faqs' => $faqs, 'seo' => $seo]);
+    }
+
     protected function renderReviews(Hotel $hotel)
     {
         return view('site.destinations.reviews', [

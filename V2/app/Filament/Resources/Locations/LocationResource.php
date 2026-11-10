@@ -74,6 +74,12 @@ class LocationResource extends Resource
                             ->helperText('Общий для всех отелей этой локации. Линии канатной дороги, трансфер и такси добавляются во вкладке «Транспорт».'),
                     ], 'getting'),
                 ]),
+                Tab::make('Перед приездом')->schema([
+                    Fields::translatable(fn (string $l) => [
+                        RichEditor::make("arrival_info.$l")->label('Текст «Что важно знать»')
+                            ->helperText('Страница «Перед приездом»: канатная дорога и билеты, багаж, одежда. Общий для всех отелей этой локации. Вопросы и ответы под ним — раздел «Частые вопросы» отеля.'),
+                    ], 'arrival'),
+                ]),
                 Tab::make('Карта')->schema(self::mapFields()),
             ]),
         ]);

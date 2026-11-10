@@ -39,7 +39,7 @@ class SitemapController extends Controller
         foreach (Hotel::published()->with(['rooms' => fn ($q) => $q->published()])->get() as $hotel) {
             $mode = Property::isSingleHotel($hotel) ? Property::SINGLE : Property::MULTI;
             $base = $mode === Property::MULTI ? ['hotel' => $hotel->slug] : [];
-            $sections = $hotel->isOpen() ? ['overview', 'rooms', 'dining', 'experiences', 'offers', 'gallery', 'getting-here', 'reviews'] : ['overview'];
+            $sections = $hotel->isOpen() ? ['overview', 'rooms', 'dining', 'experiences', 'offers', 'gallery', 'getting-here', 'before-you-arrive', 'reviews'] : ['overview'];
 
             foreach ($sections as $section) {
                 $name = Property::routeName($section, $mode);
