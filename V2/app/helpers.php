@@ -85,13 +85,13 @@ if (! function_exists('site_icon')) {
     }
 }
 
-if (! function_exists('amenity_icon')) {
-    /** Подбирает иконку по тексту удобства. */
-    function amenity_icon(string $text, string $class = 'h-6 w-6'): \Illuminate\Support\HtmlString
+if (! function_exists('amenity_icon_name')) {
+    /** Имя иконки по тексту удобства (когда иконка не выбрана вручную). */
+    function amenity_icon_name(string $text): string
     {
         $t = mb_strtolower($text);
         $has = fn (array $words) => collect($words)->contains(fn ($w) => str_contains($t, $w));
-        $name = match (true) {
+        return match (true) {
             $has(['wi-fi', 'wifi', 'вай']) => 'wifi',
             $has(['телевиз', 'спутник', ' tv', 'tv ', 'теледидар']) => 'tv',
             $has(['саун', 'sauna']) => 'sauna',
@@ -107,8 +107,14 @@ if (! function_exists('amenity_icon')) {
             $has(['климат', 'отоплен', 'тёплый пол', 'heating', 'climate']) => 'heat',
             default => 'leaf',
         };
+    }
+}
 
-        return site_icon($name, $class);
+if (! function_exists('amenity_icon')) {
+    /** Иконка удобства: выбранная вручную или подобранная по тексту. */
+    function amenity_icon(string $text, string $class = 'h-6 w-6', ?string $icon = null): \Illuminate\Support\HtmlString
+    {
+        return site_icon($icon ?: amenity_icon_name($text), $class);
     }
 }
 
