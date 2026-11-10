@@ -72,8 +72,8 @@
                                 data-name="{{ $label($p) }}" data-kind-label="{{ __('map.kinds.'.$p['kind']) }}"
                                 @if ($seasons) data-seasons="{{ implode(' ', $seasons) }}" @endif
                                 @if ($p['detail'] ?? false) data-detail @endif
-                                @if ($p['kind'] === 'restaurant' && $p['n'] === 1 && $dining) data-href="{{ $dining }}" data-href-label="{{ __('map.dining_link') }}" @endif
-                                @if ($note) data-note="{{ $note }}" @endif
+                                @if (! empty($p['venue_url'])) data-href="{{ $p['venue_url'] }}" data-href-label="{{ __('map.dining_link') }}" @endif
+                                @if ($note) data-note="{{ $note }}" @elseif (! empty($p['hours'])) data-note="{{ __('site.hotel.hours') }}: {{ $p['hours'] }}" @endif
                                 class="map-pin" style="left:{{ $p['x'] }}px;top:{{ $p['y'] }}px" aria-label="{{ $p['n'] ? $p['n'].'. ' : '' }}{{ $label($p) }}">
                             @if ($p['n'])
                                 <span class="map-badge">{{ $p['n'] }}</span>

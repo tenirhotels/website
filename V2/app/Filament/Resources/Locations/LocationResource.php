@@ -165,10 +165,16 @@ class LocationResource extends Resource
                         Fields::twoColumns([
                             TextInput::make('id')->label('Идентификатор')->required()->alphaDash()
                                 ->helperText('Уникальный: r1, st-medeu, hotel…'),
-                            Select::make('kind')->label('Тип')->required()->options([
+                            Select::make('kind')->label('Тип')->required()->live()->options([
                                 'restaurant' => 'Ресторан или бар', 'activity' => 'Активный отдых', 'station' => 'Станция',
                                 'hotel' => 'Отель', 'place' => 'Место', 'trail' => 'Направление',
                             ]),
+                            Select::make('venue_id')->label('Ресторан из базы')->native(false)->searchable()->placeholder('Не связан')
+                                ->options(fn (?Location $record) => $record ? \App\Models\Venue::query()
+                                    ->whereHas('hotel', fn ($q) => $q->where('location_id', $record->id))->get()
+                                    ->mapWithKeys(fn ($v) => [$v->id => $v->t('name').' — '.$v->hotel->t('name')])->all() : [])
+                                ->visible(fn (Get $get) => $get('kind') === 'restaurant')
+                                ->helperText('Название, часы работы и ссылка на страницу ресторана берутся из записи ресторана. Название метки ниже можно не заполнять.'),
                             TextInput::make('n')->label('Номер в списке')->numeric()->helperText('Для ресторанов и активностей.'),
                             TextInput::make('x')->label('x, px')->numeric()->required()->helperText('Проще — кнопкой «Указать на карте» ниже.'),
                             TextInput::make('y')->label('y, px')->numeric()->required(),
