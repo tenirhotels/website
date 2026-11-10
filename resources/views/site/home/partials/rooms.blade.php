@@ -20,16 +20,16 @@
                         ])->filter(fn ($f) => $f[1]);
                     @endphp
                     @if ($facts->isNotEmpty())
-                        <ul class="flex flex-wrap gap-x-7 gap-y-3 border-t border-mist pt-6 text-base text-ink">
+                        <ul class="grid grid-cols-2 gap-x-5 gap-y-4 border-t border-mist pt-6 text-base leading-snug text-ink">
                             @foreach ($facts as [$icon, $text])
-                                <li class="flex items-center gap-2.5"><span class="text-ember">{{ site_icon($icon, 'h-5 w-5') }}</span>{{ $text }}</li>
+                                <li class="flex items-start gap-3"><span class="flex h-6 w-6 shrink-0 items-center justify-center text-ember">{{ site_icon($icon, 'h-5 w-5') }}</span><span>{{ $text }}</span></li>
                             @endforeach
                         </ul>
                     @endif
                     @if ($amenities = array_slice($room->amenityList(), 0, 6))
-                        <ul class="grid grid-cols-2 gap-x-6 gap-y-3 text-base text-slate">
+                        <ul class="grid grid-cols-2 gap-x-5 gap-y-4 text-base leading-snug text-slate">
                             @foreach ($amenities as $a)
-                                <li class="flex items-center gap-2.5"><span class="text-forest">{{ amenity_icon($a, 'h-5 w-5') }}</span>{{ $a }}</li>
+                                <li class="flex items-start gap-3"><span class="flex h-6 w-6 shrink-0 items-center justify-center text-forest">{{ amenity_icon($a, 'h-5 w-5') }}</span><span>{{ $a }}</span></li>
                             @endforeach
                         </ul>
                     @endif
