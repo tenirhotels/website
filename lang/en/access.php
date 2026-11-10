@@ -1,6 +1,10 @@
 <?php
 
 return [
+    'order' => 'Order',
+    'order_call' => 'Call us',
+    'on_map' => 'On the map',
+    'order_msg' => 'Hello! I would like to order: :name (:hotel). Date and time: ___, number of guests: ___.',
     'm' => 'm',
     'eyebrow' => 'The way to the hotel',
     'title' => 'Tenir sits at the top of the mountain — cable cars lead the way',

@@ -24,11 +24,11 @@ class Transport extends Model
 
     protected $guarded = ['id'];
 
-    protected array $translatable = ['name', 'summary', 'note'];
+    protected array $translatable = ['name', 'summary', 'note', 'price'];
 
     protected string $titleAttribute = 'name';
 
-    protected $casts = ['is_published' => 'boolean'];
+    protected $casts = ['is_published' => 'boolean', 'orderable' => 'boolean', 'map_pins' => 'array'];
 
     public function location(): BelongsTo
     {
