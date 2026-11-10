@@ -73,6 +73,9 @@ class TenirShymbulakSeeder extends Seeder
             'is_published' => true,
             'sort' => 1,
         ]);
+        if (! $hotel->cable) {
+            $hotel->update(['cable' => ['enabled' => true]]);
+        }
 
         RoomType::updateOrCreate(['hotel_id' => $hotel->id, 'slug' => 'deluxe-mountain-view'], [
             'name' => ['ru' => 'Deluxe с видом на горы', 'en' => 'Deluxe Room with Mountain View', 'kk' => 'Таулы көрінісі бар Deluxe'],

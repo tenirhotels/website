@@ -42,11 +42,11 @@
 
 <section class="container-site pb-0 pt-10 md:pt-16">
     @php
-        $cableNote = trim((string) \App\Models\Setting::get('cable.hours_note', ''));
+        $cableNote = trim((string) $hotel->cableSetting('hours_note', ''));
         $lifts = [
-            ['M-1', __('map.tags.station_medeu').' ↔ '.__('map.tags.station_shymbulak'), \App\Models\Setting::get('cable.hours_medeu') ?: '09:00–18:00'],
-            ['K-1', __('map.tags.station_shymbulak').' ↔ '.__('map.tags.station_combi1'), \App\Models\Setting::get('cable.hours_combi1') ?: '09:00–17:00'],
-            ['K-2', __('map.tags.station_combi1').' ↔ '.__('map.tags.station_combi2'), \App\Models\Setting::get('cable.hours_combi2') ?: '09:00–16:30'],
+            ['M-1', __('map.tags.station_medeu').' ↔ '.__('map.tags.station_shymbulak'), $hotel->cableSetting('hours_medeu') ?: '09:00–18:00'],
+            ['K-1', __('map.tags.station_shymbulak').' ↔ '.__('map.tags.station_combi1'), $hotel->cableSetting('hours_combi1') ?: '09:00–17:00'],
+            ['K-2', __('map.tags.station_combi1').' ↔ '.__('map.tags.station_combi2'), $hotel->cableSetting('hours_combi2') ?: '09:00–16:30'],
         ];
         $endOf = fn (string $h, string $fallback) => preg_match('/(\d{1,2}[:.]\d{2})\s*$/u', $h, $m) ? str_replace('.', ':', $m[1]) : $fallback;
         $dayReserve = 0;      // запас днём, мин (в тексте не упоминается)
@@ -54,8 +54,8 @@
         $medeuLast = \Illuminate\Support\Carbon::createFromFormat('H:i', $endOf((string) $lifts[0][1], '18:00'))->subMinutes(30 + $eveningReserve);
         $dayLast = \Illuminate\Support\Carbon::createFromFormat('H:i', $endOf((string) $lifts[2][1], '16:30'))->subMinutes(30 + 55 + $dayReserve);
         $dayLast->setTime($dayLast->hour, intdiv($dayLast->minute, 15) * 15);
-        $guestFrom = \App\Models\Setting::get('cable.guest_from') ?: '18:00';
-        $guestTo = \App\Models\Setting::get('cable.guest_to') ?: '18:30';
+        $guestFrom = $hotel->cableSetting('guest_from') ?: '18:00';
+        $guestTo = $hotel->cableSetting('guest_to') ?: '18:30';
     @endphp
     <h2 class="font-display text-2xl md:text-3xl">{{ __('access.hours_title') }}</h2>
     <p class="mt-3 max-w-4xl text-base leading-relaxed text-slate md:text-lg">{{ __('access.hours_text') }}</p>
@@ -127,7 +127,7 @@
                             <p class="text-[15px] text-slate">{{ __('access.ride_to_name', ['name' => __('map.names.station_'.$stations[$i + 1]['key'])]) }}</p>
                         </div>
                         @php
-                            $photoPath = \App\Models\Setting::get('cable.photo_'.$s['key']);
+                            $photoPath = $hotel->cableSetting('photo_'.$s['key']);
                             $photo = media($photoPath);
                         @endphp
                         @if ($photo)
