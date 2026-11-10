@@ -15,6 +15,8 @@ use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\ViewField;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Forms\Components\TextInput;
@@ -82,6 +84,26 @@ class LocationResource extends Resource
         return Fields::translatable(fn (string $l) => [TextInput::make("$path.$l")->label($label)], $id);
     }
 
+    /** Кнопка «Указать на карте»: нажатие на иллюстрацию заполняет соседние поля x и y. */
+    private static function mapPoint(): ViewField
+    {
+        return ViewField::make('pick')->hiddenLabel()->dehydrated(false)->columnSpanFull()
+            ->view('filament.forms.map-point')
+            ->viewData(function (?Location $record): array {
+                $map = (array) ($record?->map ?? []);
+                $path = $map['images']['winter'] ?? $map['images']['summer'] ?? null;
+
+                return [
+                    'image' => $path ? (str_starts_with($path, '/') || str_starts_with($path, 'http') ? $path : media($path)) : null,
+                    'width' => (int) ($map['width'] ?? 1667),
+                    'height' => (int) ($map['height'] ?? 1179),
+                    'others' => collect($map['pins'] ?? [])->map(fn ($p) => [
+                        'x' => (int) ($p['x'] ?? 0), 'y' => (int) ($p['y'] ?? 0), 'label' => $p['label']['ru'] ?? ($p['id'] ?? ''),
+                    ])->all(),
+                ];
+            });
+    }
+
     /** Карта локации: иллюстрация, станции, метки, GPS-привязка, подписи времени. */
     private static function mapFields(): array
     {
@@ -108,7 +130,7 @@ class LocationResource extends Resource
                 ])->columnSpanFull(),
             ]),
             Section::make('Станции (по порядку подъёма)')->collapsible()->collapsed()->schema([
-                Repeater::make('map.stations')->label('')->addActionLabel('Добавить станцию')->collapsed()->cloneable()
+                Repeater::make('map.stations')->hiddenLabel()->addActionLabel('Добавить станцию')->collapsed()->cloneable()
                     ->itemLabel(fn (array $state) => trim(($state['lift'] ?? '').' · '.($state['name']['ru'] ?? $state['key'] ?? ''), ' ·'))
                     ->schema([
                         Fields::twoColumns([
@@ -123,7 +145,7 @@ class LocationResource extends Resource
                     ]),
             ]),
             Section::make('Метки на карте')->description('Рестораны, активности, станции, отель, направления. x и y — пиксели на иллюстрации.')->collapsible()->collapsed()->schema([
-                Repeater::make('map.pins')->label('')->addActionLabel('Добавить метку')->collapsed()->cloneable()
+                Repeater::make('map.pins')->hiddenLabel()->addActionLabel('Добавить метку')->collapsed()->cloneable()
                     ->itemLabel(fn (array $state) => trim(($state['n'] ?? '').' '.($state['label']['ru'] ?? $state['id'] ?? '')))
                     ->schema([
                         Fields::twoColumns([
@@ -134,10 +156,11 @@ class LocationResource extends Resource
                                 'hotel' => 'Отель', 'place' => 'Место', 'trail' => 'Направление',
                             ]),
                             TextInput::make('n')->label('Номер в списке')->numeric()->helperText('Для ресторанов и активностей.'),
-                            TextInput::make('x')->label('x, px')->numeric()->required(),
+                            TextInput::make('x')->label('x, px')->numeric()->required()->helperText('Проще — кнопкой «Указать на карте» ниже.'),
                             TextInput::make('y')->label('y, px')->numeric()->required(),
                             TextInput::make('cable')->label('Ключ станции')->helperText('Для меток станций: покажет времена «вверх / вниз».'),
                         ]),
+                        self::mapPoint(),
                         CheckboxList::make('seasons')->label('Сезон')->options(['winter' => 'Зима', 'summer' => 'Лето'])->columns(2)
                             ->helperText('Пусто — круглый год.'),
                         Toggle::make('detail')->label('Показывать только при сильном приближении'),
@@ -145,35 +168,39 @@ class LocationResource extends Resource
                     ]),
             ]),
             Section::make('Подписи поверх карты')->description('Время в пути у стрелок и под шкалой, «В одну сторону…».')->collapsible()->collapsed()->schema([
-                Repeater::make('map.overlay')->label('')->addActionLabel('Добавить подпись')->collapsed()->cloneable()
+                Repeater::make('map.overlay')->hiddenLabel()->addActionLabel('Добавить подпись')->collapsed()->cloneable()
                     ->itemLabel(fn (array $state) => ($state['kind'] ?? '').' '.($state['station'] ?? ''))
                     ->schema([
                         Fields::twoColumns([
-                            Select::make('kind')->label('Что показать')->required()->options([
+                            Select::make('kind')->label('Что показать')->required()->live()->options([
                                 'total' => 'Всего в одну сторону', 'name' => 'Название станции', 'time' => 'Минуты до следующей станции',
                                 'arrow_time' => 'Минуты вдоль стрелки (с поворотом)', 'arrow' => 'Свой текст вдоль стрелки', 'text' => 'Свой текст',
                             ]),
-                            TextInput::make('station')->label('Ключ станции')->helperText('Для «название» и «минуты».'),
-                            TextInput::make('x')->label('x, px')->numeric()->required(),
+                            TextInput::make('station')->label('Ключ станции')->helperText('Ключ из раздела «Станции», например medeu.')
+                                ->visible(fn (Get $get) => in_array($get('kind'), ['name', 'time', 'arrow_time'], true)),
+                            TextInput::make('x')->label('x, px')->numeric()->required()->helperText('Проще — кнопкой «Указать на карте» ниже.'),
                             TextInput::make('y')->label('y, px')->numeric()->required(),
-                            TextInput::make('rot')->label('Поворот, °')->numeric()->default(0),
+                            TextInput::make('rot')->label('Поворот, градусы')->numeric()->default(0)
+                                ->visible(fn (Get $get) => in_array($get('kind'), ['arrow', 'arrow_time'], true)),
                         ]),
-                        self::translated('text', 'Свой текст', 'ov-text'),
+                        self::mapPoint(),
+                        self::translated('text', 'Свой текст', 'ov-text')->visible(fn (Get $get) => in_array($get('kind'), ['arrow', 'text'], true)),
                     ]),
             ]),
             Section::make('Привязка к GPS («Вы здесь»)')->description('Карта схематичная, поэтому чем больше точек — тем точнее. Нужно не меньше двух.')->collapsible()->collapsed()->schema([
-                Repeater::make('map.geo_points')->label('')->addActionLabel('Добавить точку')->collapsed()->cloneable()
+                Repeater::make('map.geo_points')->hiddenLabel()->addActionLabel('Добавить точку')->collapsed()->cloneable()
                     ->itemLabel(fn (array $state) => ($state['lat'] ?? '').', '.($state['lng'] ?? ''))
                     ->schema([
                         Fields::twoColumns([
                             TextInput::make('lat')->label('Широта')->numeric()->required(),
                             TextInput::make('lng')->label('Долгота')->numeric()->required(),
-                            TextInput::make('x')->label('x, px')->numeric()->required(),
+                            TextInput::make('x')->label('x, px')->numeric()->required()->helperText('Проще — кнопкой «Указать на карте» ниже.'),
                             TextInput::make('y')->label('y, px')->numeric()->required(),
                         ]),
+                        self::mapPoint(),
                     ]),
             ]),
-            Placeholder::make('map_note')->label('')->content('Не меняется отсюда: условные значки легенды (общие для всех карт) и файлы панорам (public/panoramas/{ключ}/).'),
+            Placeholder::make('map_note')->hiddenLabel()->content('Не меняется отсюда: условные значки легенды (общие для всех карт) и файлы панорам (public/panoramas/{ключ}/).'),
         ];
     }
 
