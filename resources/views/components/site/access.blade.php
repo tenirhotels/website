@@ -44,9 +44,9 @@
     @php
         $cableNote = trim((string) \App\Models\Setting::get('cable.hours_note', ''));
         $lifts = [
-            ['M-1 · '.__('map.tags.station_medeu').' ↔ '.__('map.tags.station_shymbulak'), \App\Models\Setting::get('cable.hours_medeu') ?: '09:00–18:00'],
-            ['K-1 · '.__('map.tags.station_shymbulak').' ↔ '.__('map.tags.station_combi1'), \App\Models\Setting::get('cable.hours_combi1') ?: '09:00–17:00'],
-            ['K-2 · '.__('map.tags.station_combi1').' ↔ '.__('map.tags.station_combi2'), \App\Models\Setting::get('cable.hours_combi2') ?: '09:00–16:30'],
+            ['M-1', __('map.tags.station_medeu').' ↔ '.__('map.tags.station_shymbulak'), \App\Models\Setting::get('cable.hours_medeu') ?: '09:00–18:00'],
+            ['K-1', __('map.tags.station_shymbulak').' ↔ '.__('map.tags.station_combi1'), \App\Models\Setting::get('cable.hours_combi1') ?: '09:00–17:00'],
+            ['K-2', __('map.tags.station_combi1').' ↔ '.__('map.tags.station_combi2'), \App\Models\Setting::get('cable.hours_combi2') ?: '09:00–16:30'],
         ];
         $endOf = fn (string $h, string $fallback) => preg_match('/(\d{1,2}[:.]\d{2})\s*$/u', $h, $m) ? str_replace('.', ':', $m[1]) : $fallback;
         $dayReserve = 0;      // запас днём, мин (в тексте не упоминается)
@@ -58,16 +58,17 @@
         $guestTo = \App\Models\Setting::get('cable.guest_to') ?: '18:30';
     @endphp
     <h2 class="font-display text-2xl md:text-3xl">{{ __('access.hours_title') }}</h2>
-    <p class="mt-3 max-w-2xl text-base leading-relaxed text-slate md:text-lg">{{ __('access.hours_text') }}</p>
+    <p class="mt-3 max-w-4xl text-base leading-relaxed text-slate md:text-lg">{{ __('access.hours_text') }}</p>
     {{-- На компьютере: слева режим работы, справа — когда быть на станции и ранний заезд (без пустого места). --}}
     <div class="mt-8 grid gap-4 lg:grid-cols-2">
     <div class="flex flex-col gap-4 rounded-3xl border border-mist p-6 md:p-10">
         <span class="flex h-11 w-11 items-center justify-center rounded-full bg-sand text-ember">{{ site_icon('cable', 'h-6 w-6') }}</span>
         <p class="eyebrow mt-2">{{ __('access.hours_standard') }}</p>
+        <p class="-mt-2 text-sm leading-relaxed text-stone">{{ __('access.hours_lines') }}</p>
         <ul class="divide-y divide-mist">
-            @foreach ($lifts as [$lname, $lhours])
+            @foreach ($lifts as [$lcode, $lname, $lhours])
                 <li class="flex items-baseline justify-between gap-4 py-3.5">
-                    <span class="text-base md:text-lg">{{ $lname }}</span>
+                    <span class="flex items-center gap-3 text-base md:text-lg"><span class="inline-flex min-w-[3.25rem] justify-center rounded-full bg-ember/10 px-2.5 py-1 text-sm font-semibold leading-none text-ember" title="{{ __('access.line', ['code' => $lcode]) }}">{{ $lcode }}</span>{{ $lname }}</span>
                     <span class="whitespace-nowrap font-display text-2xl">{{ $lhours }}</span>
                 </li>
             @endforeach
@@ -121,7 +122,7 @@
                     <div class="my-2 flex flex-1 items-center gap-4 overflow-hidden rounded-2xl bg-ember/10 px-4 py-3.5">
                         <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-ember">{{ site_icon('cable', 'h-6 w-6') }}</span>
                         <div class="flex min-w-0 flex-1 flex-col gap-0.5">
-                            <p class="text-[13px] uppercase tracking-[0.14em] text-stone">{{ $s['lift'] }} · {{ __('access.ride_label') }}</p>
+                            <p class="text-[13px] uppercase tracking-[0.14em] text-stone">{{ __('access.line', ['code' => $s['lift']]) }} · {{ __('access.ride_label') }}</p>
                             <p class="font-display text-2xl leading-none text-ember">≈ {{ $s['next'] }} {{ __('map.min') }}</p>
                             <p class="text-[15px] text-slate">{{ __('access.ride_to_name', ['name' => __('map.names.station_'.$stations[$i + 1]['key'])]) }}</p>
                         </div>
