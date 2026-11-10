@@ -20,6 +20,7 @@ class RoomType extends Model
     protected $casts = [
         'amenities' => 'array',
         'gallery' => 'array',
+        'highlights' => 'array',
     ];
 
     public function hotel(): BelongsTo
@@ -40,31 +41,27 @@ class RoomType extends Model
         return [];
     }
 
-    /**
-     * Удобства без повторов того, что уже вынесено в ключевые факты (кровать, вид, площадь, гости).
-     *
-     * @return list<string>
-     */
-    public function extraAmenities(): array
+    /** Ключи фактов, выделяемых плитками; null в базе — все четыре. */
+    public const FACTS = ['size' => 'Площадь', 'guests' => 'Гости', 'bed' => 'Кровать', 'view' => 'Вид'];
+
+    /** @return list<array{0:string,1:string,2:string}> [ключ, подпись, значение] — только выбранные и заполненные. */
+    public function highlightFacts(): array
     {
-        $skip = [];
-        if ($this->t('bed')) {
-            array_push($skip, 'кроват', 'king', 'queen', 'twin', 'bed', 'төсек');
-        }
-        if ($this->t('view')) {
-            array_push($skip, 'панорам', 'вид на', 'view', 'көрініс');
-        }
-
-        return array_values(array_filter($this->amenityList(), function ($a) use ($skip) {
-            $t = mb_strtolower($a);
-            foreach ($skip as $w) {
-                if (str_contains($t, $w)) {
-                    return false;
-                }
+        $chosen = $this->highlights ?? array_keys(self::FACTS);
+        $values = [
+            'size' => $this->size_m2 ? $this->size_m2.' м²' : null,
+            'guests' => $this->max_guests ? __('site.hotel.up_to_guests', ['count' => $this->max_guests]) : null,
+            'bed' => $this->t('bed'),
+            'view' => $this->t('view'),
+        ];
+        $out = [];
+        foreach (array_keys(self::FACTS) as $k) {
+            if (in_array($k, $chosen, true) && $values[$k]) {
+                $out[] = [$k, __('site.hotel.'.($k === 'guests' ? 'guests' : $k)), $values[$k]];
             }
+        }
 
-            return true;
-        }));
+        return $out;
     }
 
     public function url(?string $locale = null): string

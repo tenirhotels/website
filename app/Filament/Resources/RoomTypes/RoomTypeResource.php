@@ -9,6 +9,7 @@ use App\Filament\Support\Fields;
 use App\Models\RoomType;
 use App\Support\Property;
 use BackedEnum;
+use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TagsInput;
@@ -60,6 +61,8 @@ class RoomTypeResource extends Resource
             Section::make('Параметры')->columns(4)->columnSpanFull()->schema([
                 TextInput::make('size_m2')->label('Площадь, м²')->numeric(),
                 TextInput::make('max_guests')->label('Гостей макс.')->numeric(),
+                CheckboxList::make('highlights')->label('Выделять на карточке')->options(RoomType::FACTS)->columns(2)->columnSpanFull()
+                    ->helperText('Отмеченное показывается крупными плитками, остальное — списком удобств ниже. Пусто = все четыре.'),
                 TextInput::make('price_from')->label('Цена от, ₸')->numeric()
                     ->helperText('Пусто — «Проверить цены»'),
                 TextInput::make('exely_room_type_id')->label('ID типа номера в Exely')

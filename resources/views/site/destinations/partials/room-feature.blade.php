@@ -1,13 +1,8 @@
 {{-- Единственный тип номера: не «карточка в пустой сетке», а полноценная витрина. --}}
 @php
-    $facts = collect([
-        ['size', __('site.hotel.size'), $room->size_m2 ? $room->size_m2.' м²' : null],
-        ['guests', __('site.hotel.guests'), $room->max_guests ? __('site.hotel.up_to_guests', ['count' => $room->max_guests]) : null],
-        ['bed', __('site.hotel.bed'), $room->t('bed')],
-        ['view', __('site.hotel.view'), $room->t('view')],
-    ])->filter(fn ($f) => $f[2]);
+    $facts = collect($room->highlightFacts());
     $gallery = collect($room->gallery ?? [])->filter()->values();
-    $amenities = $room->extraAmenities();
+    $amenities = $room->amenityList();
 @endphp
 
 <section class="container-site py-12 md:py-16 lg:py-20">

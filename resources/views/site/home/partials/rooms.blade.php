@@ -11,17 +11,10 @@
                 <div class="flex flex-1 flex-col justify-center gap-6 p-8 lg:p-14">
                     <h3 class="font-display text-3xl leading-tight"><a href="{{ $room->url() }}" class="hover:text-ember">{{ $room->t('name') }}</a></h3>
                     <p class="lead">{{ $room->t('summary') }}</p>
-                    @php
-                        $facts = collect([
-                            ['size', $room->size_m2 ? $room->size_m2.' м²' : null],
-                            ['guests', $room->max_guests ? __('site.hotel.up_to_guests', ['count' => $room->max_guests]) : null],
-                            ['bed', $room->t('bed')],
-                            ['view', $room->t('view')],
-                        ])->filter(fn ($f) => $f[1]);
-                    @endphp
+                    @php $facts = collect($room->highlightFacts()); @endphp
                     @if ($facts->isNotEmpty())
                         <ul class="grid grid-cols-2 gap-3 border-t border-mist pt-6">
-                            @foreach ($facts as [$icon, $text])
+                            @foreach ($facts as [$icon, $label, $text])
                                 <li class="flex items-center gap-3 rounded-2xl border border-mist bg-white px-4 py-3.5">
                                     <span class="flex h-7 w-7 shrink-0 items-center justify-center text-ember">{{ site_icon($icon, 'h-6 w-6') }}</span>
                                     <span class="font-display text-lg leading-tight text-ink">{{ $text }}</span>
@@ -29,7 +22,7 @@
                             @endforeach
                         </ul>
                     @endif
-                    @if ($amenities = array_slice($room->extraAmenities(), 0, 6))
+                    @if ($amenities = array_slice($room->amenityList(), 0, 6))
                         <ul class="grid grid-cols-2 gap-x-5 gap-y-4 text-base leading-snug text-slate">
                             @foreach ($amenities as $a)
                                 <li class="flex items-start gap-3"><span class="flex h-6 w-6 shrink-0 items-center justify-center text-forest">{{ amenity_icon($a, 'h-5 w-5') }}</span><span>{{ $a }}</span></li>

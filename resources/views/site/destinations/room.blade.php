@@ -14,7 +14,7 @@
                 </div>
             @endif
 
-            @if ($amenities = $room->extraAmenities())
+            @if ($amenities = $room->amenityList())
                 <div>
                     <h2 class="mb-5 font-display text-2xl">{{ __('site.hotel.amenities') }}</h2>
                     <ul class="grid gap-x-8 gap-y-3 text-slate sm:grid-cols-2">
