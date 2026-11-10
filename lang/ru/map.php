@@ -63,8 +63,8 @@ return [
         'gorilla_zipline' => 'Gorilla Zipline',
         'station_medeu' => 'Станция Медеу',
         'station_shymbulak' => 'Станция Шымбулак',
-        'station_combi1' => 'Станция Combi-1',
-        'station_combi2' => 'Станция Combi-2',
+        'station_combi1' => 'Средняя станция',
+        'station_combi2' => 'Верхняя станция',
         'station_kkd4' => 'Станция ККД-4',
         'hotel' => 'Tenir Eco Hotel',
         'medeu_rink' => 'Каток «Медеу»',
@@ -76,8 +76,8 @@ return [
     'tags' => [
         'station_medeu' => 'Медеу',
         'station_shymbulak' => 'Шымбулак',
-        'station_combi1' => 'Combi-1',
-        'station_combi2' => 'Combi-2',
+        'station_combi1' => 'Средняя',
+        'station_combi2' => 'Верхняя',
         'station_kkd4' => 'ККД-4',
     ],
     'services' => [

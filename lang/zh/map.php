@@ -63,8 +63,8 @@ return [
         'gorilla_zipline' => 'Gorilla Zipline',
         'station_medeu' => 'Medeu 站',
         'station_shymbulak' => 'Shymbulak 站',
-        'station_combi1' => 'Combi-1 站',
-        'station_combi2' => 'Combi-2 站',
+        'station_combi1' => '中段站',
+        'station_combi2' => '上站',
         'station_kkd4' => 'KKD-4 站',
         'hotel' => 'Tenir Eco Hotel',
         'medeu_rink' => 'Medeu 滑冰场',
@@ -76,8 +76,8 @@ return [
     'tags' => [
         'station_medeu' => 'Medeu',
         'station_shymbulak' => 'Shymbulak',
-        'station_combi1' => 'Combi-1',
-        'station_combi2' => 'Combi-2',
+        'station_combi1' => '中段站',
+        'station_combi2' => '上站',
         'station_kkd4' => 'KKD-4',
     ],
     'services' => [
