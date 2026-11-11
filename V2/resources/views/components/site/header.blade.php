@@ -25,16 +25,24 @@
     foreach ($brandPages as $page) {
         $menu[] = [$page->t('title'), $page->url()];
     }
-    $mobileExtra = array_filter([
-        $single && $hotel ? [__('site.hotel.gallery'), $hotel->sectionUrl('gallery')] : null,
-        $single && $hotel ? [__('site.hotel.getting_here'), $hotel->sectionUrl('getting-here')] : null,
-        $single && $hotel ? [__('site.hotel.before_arrive'), $hotel->sectionUrl('before-you-arrive')] : null,
-        $single && $hotel ? [__('site.hotel.reviews'), $hotel->sectionUrl('reviews')] : null,
-        \App\Support\Property::mapHotel() ? [__('map.open_map'), route('map')] : null,
-        \App\Support\Gifts::offers() ? [__('gifts.open'), route('gifts')] : null,
-        [__('site.nav.stories'), route('stories.index')],
-        [__('site.nav.contact'), route('contact')],
-    ]);
+    // Дополнительные пункты мобильного меню, сгруппированы по смыслу:
+    // подготовка к поездке → вдохновение → подарки → контакты.
+    $mobileGroups = array_values(array_filter(array_map('array_values', array_map('array_filter', [
+        [
+            $single && $hotel ? [__('site.hotel.getting_here'), $hotel->sectionUrl('getting-here')] : null,
+            $single && $hotel ? [__('site.hotel.before_arrive'), $hotel->sectionUrl('before-you-arrive')] : null,
+            \App\Support\Property::mapHotel() ? [__('map.open_map'), route('map')] : null,
+        ],
+        [
+            $single && $hotel ? [__('site.hotel.gallery'), $hotel->sectionUrl('gallery')] : null,
+            [__('site.nav.stories'), route('stories.index')],
+            $single && $hotel ? [__('site.hotel.reviews'), $hotel->sectionUrl('reviews')] : null,
+        ],
+        [
+            \App\Support\Gifts::offers() ? [__('gifts.open'), route('gifts')] : null,
+            [__('site.nav.contact'), route('contact')],
+        ],
+    ]))));
 @endphp
 <header data-header @if (\App\Models\Setting::get('site.header_autohide', true) !== false) data-autohide @endif class="sticky top-0 z-40 bg-forest text-snow">
     <div class="container-site flex h-[72px] items-center justify-between gap-6 lg:h-[84px]">
@@ -88,13 +96,13 @@
             @endforeach
         </nav>
 
-        @if ($mobileExtra)
-            <nav aria-label="{{ __('site.nav.more') }}" class="mt-6 flex flex-col gap-1 text-[13px] uppercase tracking-[0.16em] text-snow/80">
-                @foreach ($mobileExtra as [$label, $href])
+        @foreach ($mobileGroups as $group)
+            <nav aria-label="{{ __('site.nav.more') }}" @class(['flex flex-col gap-1 text-[13px] uppercase tracking-[0.16em] text-snow/80', 'mt-6' => $loop->first, 'mt-4 border-t border-white/10 pt-3' => ! $loop->first])>
+                @foreach ($group as [$label, $href])
                     <a href="{{ $href }}" class="py-2.5">{{ $label }}</a>
                 @endforeach
             </nav>
-        @endif
+        @endforeach
 
         <a href="{{ route('booking') }}" class="btn-primary mt-auto w-full min-h-[52px]" style="margin-top: 2rem">{{ __('site.nav.book') }}</a>
     </div>
