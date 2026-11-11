@@ -70,6 +70,7 @@ class VenueResource extends Resource
                     ->acceptedFileTypes(['application/pdf']),
                 Fields::image('image', 'Обложка', 'venues'),
                 Fields::gallery('gallery', 'venues/gallery'),
+                Fields::galleryLayout('slider'),
             ]),
             Fields::seo(),
             Fields::publishing(),

@@ -166,6 +166,19 @@ class Fields
             ->columnSpanFull();
     }
 
+    /** Вид показа галереи на сайте. */
+    public static function galleryLayout(string $default = 'mosaic'): \Filament\Forms\Components\Select
+    {
+        return \Filament\Forms\Components\Select::make('gallery_layout')->label('Вид галереи на сайте')->native(false)
+            ->options([
+                'mosaic' => 'Мозаика: первое фото крупно, до пяти на экране (от 5 фото)',
+                'slider' => 'Слайдер: лента с прокруткой и стрелками',
+                'grid' => 'Сетка: одинаковые фото',
+                'masonry' => 'Колонки: фото в своих пропорциях',
+            ])->placeholder('По умолчанию ('.['mosaic' => 'мозаика', 'slider' => 'слайдер', 'masonry' => 'колонки'][$default].')')
+            ->helperText('Клик по фото открывает просмотр на весь экран: листание, увеличение, миниатюры.')->columnSpanFull();
+    }
+
     /** Колонка таблицы для переводимого поля. */
     public static function column(string $attribute, string $label): TextColumn
     {

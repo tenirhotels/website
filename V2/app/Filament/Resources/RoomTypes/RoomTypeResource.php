@@ -93,6 +93,7 @@ class RoomTypeResource extends Resource
             Section::make('Фото')->columnSpanFull()->schema([
                 Fields::image('image', 'Обложка', 'rooms'),
                 Fields::gallery('gallery', 'rooms/gallery'),
+                Fields::galleryLayout('mosaic'),
             ]),
             Fields::seo(),
             Fields::publishing(),

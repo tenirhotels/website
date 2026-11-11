@@ -88,6 +88,7 @@ class HotelResource extends Resource
                         ->disk('public')->directory('hotels/video')
                         ->acceptedFileTypes(['video/mp4'])->maxSize(15360),
                     Fields::gallery('gallery', 'hotels/gallery'),
+                    Fields::galleryLayout('masonry'),
                 ]),
 
                 Tab::make('Цифры')->schema([

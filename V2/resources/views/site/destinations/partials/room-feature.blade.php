@@ -58,10 +58,6 @@
 
 @if ($gallery->isNotEmpty())
     <section class="container-site py-12 md:py-16 lg:py-20">
-        <div class="grid gap-3 {{ $gallery->count() === 1 ? '' : 'grid-cols-2' }} {{ $gallery->count() >= 3 ? 'md:grid-cols-3' : '' }}">
-            @foreach ($gallery as $img)
-                <div class="aspect-[4/3] overflow-hidden rounded-2xl {{ $gallery->count() === 1 ? 'md:aspect-[21/9]' : '' }}"><x-site.media :src="$img" :alt="$room->t('name')" /></div>
-            @endforeach
-        </div>
+        <x-site.gallery :images="$gallery" :alt="$room->t('name')" :layout="$room->gallery_layout ?: 'mosaic'" />
     </section>
 @endif

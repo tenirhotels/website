@@ -5,11 +5,7 @@
         <div class="flex flex-[1.5] flex-col gap-10">
             <div class="prose-tenir">{!! $experience->t('description') !!}</div>
             @if ($experience->gallery)
-                <div class="grid grid-cols-2 gap-3">
-                    @foreach ($experience->gallery as $img)
-                        <div class="aspect-[4/3] overflow-hidden rounded-2xl"><x-site.media :src="$img" :alt="$experience->t('title')" /></div>
-                    @endforeach
-                </div>
+                <x-site.gallery :images="$experience->gallery" :alt="$experience->t('title')" :layout="$experience->gallery_layout ?: 'mosaic'" />
             @endif
         </div>
         <aside class="flex-1">
