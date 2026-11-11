@@ -81,11 +81,19 @@
     .prose-tenir ol { @apply list-decimal pl-5 mb-5 space-y-1; }
     .prose-tenir a { @apply text-forest underline underline-offset-4 hover:text-ember; }
     .prose-tenir strong { @apply text-ink; }
-    /* «Перед приездом»: пункты списка — строками с разделителями, жирное начало пункта — как заголовок строки. */
-    .prose-rows > ul { @apply list-none pl-0 mb-8 space-y-0 border-b border-mist; }
-    .prose-rows > ul > li { @apply border-t border-mist py-5; }
-    .prose-rows > ul > li > strong:first-child { @apply mr-1 inline-block font-display text-xl text-ink md:text-[22px]; }
-    .prose-rows > ul > li ul { @apply mt-3 list-disc pl-5 space-y-2 text-[17px]; }
+    /* «Перед приездом»: текст из админки (заголовок + список) раскладывается карточками.
+       Билеты (пункт с вложенным списком) — на всю ширину, три варианта тарифа — плитками; пункт без выделенного
+       начала — заметка-плашка; багаж и одежда — рядом. Разметка остаётся обычным HTML, правится в админке. */
+    .prose-info > h3 { @apply mb-6 mt-0 font-display text-3xl text-ink md:text-4xl; }
+    .prose-info > ul { @apply m-0 grid list-none gap-4 p-0 md:grid-cols-2; }
+    .prose-info > ul > li { @apply rounded-3xl border border-mist bg-white p-6 text-[17px] leading-[1.65] text-slate md:p-7; }
+    .prose-info > ul > li p { @apply m-0; }
+    .prose-info > ul > li:has(> ul) { @apply md:col-span-2; }
+    .prose-info > ul > li:has(> ul) + li:not(:has(strong)) { @apply border-ember/30 bg-[#FBF1E8] py-4 text-[16px] md:col-span-2 md:py-5; }
+    .prose-info > ul > li strong:first-child { @apply mb-2 block text-[13px] font-normal uppercase tracking-[0.16em] text-ember; }
+    .prose-info > ul > li > ul { @apply mb-0 mt-5 grid list-none gap-3 p-0 sm:grid-cols-3; }
+    .prose-info > ul > li > ul > li { @apply rounded-2xl bg-sand p-5 text-[16px] leading-[1.6]; }
+    .prose-info > ul > li > ul > li strong:first-child { @apply mb-2 text-[19px] normal-case leading-snug tracking-normal text-ink; font-family: var(--font-display); }
 }
 
 /* Паттерны из брендбука (петроглифы) — маски, цвет задаётся фоном; использовать как лёгкий акцент */

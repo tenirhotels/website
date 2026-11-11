@@ -3,7 +3,7 @@
         'name' => 'tenirhotels/website',
         'pretty_version' => 'dev-v2-skeleton',
         'version' => 'dev-v2-skeleton',
-        'reference' => '8abba794fc39b1f043cf80ce31d8bdc26ac1b6b6',
+        'reference' => 'b15b34dd10caed631dc30d79b0d4d382dee84174',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -1289,7 +1289,7 @@
         'tenirhotels/website' => array(
             'pretty_version' => 'dev-v2-skeleton',
             'version' => 'dev-v2-skeleton',
-            'reference' => '8abba794fc39b1f043cf80ce31d8bdc26ac1b6b6',
+            'reference' => 'b15b34dd10caed631dc30d79b0d4d382dee84174',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
