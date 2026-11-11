@@ -35,7 +35,7 @@
 
 .map-toast { position: absolute; left: 50%; bottom: 14px; z-index: 12; max-width: calc(100% - 32px); transform: translateX(-50%); padding: 10px 16px; border-radius: 999px; background: #1F3A2E; color: #fff; font-size: 14px; text-align: center; box-shadow: 0 4px 16px rgb(22 33 27 / .3); }
 
-.map-card { position: absolute; z-index: 11; left: 12px; right: 12px; bottom: 12px; padding: 20px 22px 22px; border-radius: 22px; background: #fff; box-shadow: 0 10px 40px rgb(22 33 27 / .28); }
+.map-card { position: absolute; z-index: 11; left: 12px; right: 12px; bottom: 12px; padding: 20px 22px 22px; border-radius: 12px; background: #fff; box-shadow: 0 10px 40px rgb(22 33 27 / .28); }
 .map-card-close { position: absolute; right: 12px; top: 6px; width: 36px; height: 36px; border: 0; background: none; font-size: 28px; line-height: 1; color: #5B6560; cursor: pointer; }
 @media (min-width: 768px) { .map-card { left: 20px; right: auto; bottom: 20px; width: 360px; } }
 

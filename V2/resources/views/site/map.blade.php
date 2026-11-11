@@ -38,7 +38,7 @@
 
         {{-- Карта: на телефоне во всю ширину экрана --}}
         <div class="mt-6 md:container-site md:mt-8">
-            <div class="map-viewport relative h-[66svh] min-h-[420px] overflow-hidden bg-[#dce9f6] md:h-[72vh] md:max-h-[780px] md:rounded-[28px]" data-viewport tabindex="0" aria-label="{{ __('map.title') }}">
+            <div class="map-viewport relative h-[66svh] min-h-[420px] overflow-hidden bg-[#dce9f6] md:h-[72vh] md:max-h-[780px] md:rounded-3xl" data-viewport tabindex="0" aria-label="{{ __('map.title') }}">
                 <div class="map-stage" data-stage style="width:{{ $W }}px;height:{{ $H }}px">
                     @foreach (['winter', 'summer'] as $s)
                         <img src="{{ $map->image($s, true) }}" data-full="{{ $map->image($s) }}" data-layer="{{ $s }}" alt="" width="{{ $W }}" height="{{ $H }}"

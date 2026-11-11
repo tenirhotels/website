@@ -41,6 +41,11 @@
     --color-exely: #F2F2F2;      /* фон страницы бронирования = фон модуля Exely */
     --color-exely-line: #DCE0E1; /* линии и плашки модуля */
     --color-exely-ink: #516468;  /* основной цвет модуля (прогресс, ссылки) */
+
+    /* Скругления: сдержанные, как у каталожных карточек. Полностью круглыми остаются только кнопки и теги (rounded-full). */
+    --radius-xl: 0.375rem;   /* 6 px */
+    --radius-2xl: 0.5rem;    /* 8 px — фото, малые плашки */
+    --radius-3xl: 0.75rem;   /* 12 px — крупные плашки и карточки */
 }
 
 @layer base {
@@ -162,7 +167,7 @@ body.overflow-hidden [class*=' tl-'] { visibility: hidden !important; }
 
 
 /* ===== Галерея: компоновки и полноэкранный просмотр ===== */
-.gallery-item { position: relative; display: block; overflow: hidden; border-radius: 1rem; cursor: zoom-in; background: var(--color-sand, #f5f4f0); padding: 0; border: 0; }
+.gallery-item { position: relative; display: block; overflow: hidden; border-radius: 0.5rem; cursor: zoom-in; background: var(--color-sand, #f5f4f0); padding: 0; border: 0; }
 .gallery-item[hidden], .gallery-item.hidden { display: none; }
 .gallery-item img { transition: transform .6s cubic-bezier(.2,.7,.2,1), opacity .3s; }
 @media (hover: hover) { .gallery-item:hover img { transform: scale(1.04); } }
