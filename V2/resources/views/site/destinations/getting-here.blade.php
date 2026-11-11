@@ -93,12 +93,6 @@
         </div>
         <aside class="flex flex-1 flex-col items-start gap-3 text-base text-slate">
             @if ($hotel->hasMap())<a href="{{ route('map') }}" class="btn-primary self-start">{{ __('map.open_map') }}</a>@endif
-            @if ($hotel->latitude)
-                <a href="https://www.google.com/maps/search/?api=1&query={{ $hotel->latitude }},{{ $hotel->longitude }}" class="btn-dark self-start" target="_blank" rel="noopener">Google Maps</a>
-                <a href="https://2gis.kz/geo/{{ $hotel->longitude }},{{ $hotel->latitude }}" class="link-line mt-2 self-start" target="_blank" rel="noopener">2GIS</a>
-            @endif
-            @if ($hotel->phone)<a href="tel:{{ preg_replace('/[^\d+]/', '', $hotel->phone) }}" class="mt-6 hover:text-ember">{{ $hotel->phone }}</a>@endif
-            @if ($hotel->whatsapp)<a href="{{ wa_url($hotel->whatsapp, 'stay', ['hotel' => $hotel->t('name')]) }}" class="hover:text-ember">WhatsApp</a>@endif
         </aside>
     </section>
 </x-layouts.site>

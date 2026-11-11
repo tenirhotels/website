@@ -22,7 +22,8 @@ class LocationPageImagesTest extends TestCase
 
         $this->assertSame('locations/pages/getting-test.jpg', $hotel->gettingImage());
         $this->assertSame('locations/pages/arrival-test.jpg', $hotel->arrivalImage());
-        $this->get($hotel->sectionUrl('getting-here'))->assertOk()->assertSee('getting-test', false)->assertSee('arrival-test', false);
+        $this->get($hotel->sectionUrl('getting-here'))->assertOk()->assertSee('getting-test', false);
+        $this->get($hotel->sectionUrl('before-you-arrive'))->assertOk()->assertSee('arrival-test', false);
     }
 
     public function test_images_differ_by_default_when_gallery_has_several(): void
