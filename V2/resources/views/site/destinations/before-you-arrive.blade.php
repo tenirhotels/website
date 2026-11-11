@@ -4,7 +4,7 @@
 
     @if ($hotel->t('arrival_info'))
         <section class="container-site flex flex-col gap-8 pb-12 pt-10 md:py-16 lg:py-20">
-            <div class="prose-tenir prose-rows [&>*:first-child]:mt-0">{!! $hotel->t('arrival_info') !!}</div>
+            <div class="prose-info">{!! preg_replace('~\.(\s*</strong>)~u', '$1', (string) $hotel->t('arrival_info')) !!}</div>
             <a href="{{ $hotel->sectionUrl('getting-here') }}" class="group flex flex-col gap-2.5 rounded-3xl border border-mist bg-white p-6 transition hover:border-ember md:p-8">
                 <span class="flex items-center justify-between gap-4 font-display text-xl md:text-2xl">{{ __('site.hotel.getting_here') }}<svg class="size-5 shrink-0 text-ember transition-transform group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span>
                 <span class="text-base leading-relaxed text-slate">{{ $hotel->t('getting_tease') ?: __('site.hotel.getting_tease') }}</span>
@@ -36,6 +36,7 @@
             <p class="eyebrow-light">{{ Setting::text('brand.tagline') ?? 'Back to Nature' }}</p>
             <p class="max-w-3xl font-display text-2xl leading-snug md:text-3xl">{{ __('site.hotel.nature_1') }}</p>
             <p class="font-display text-xl text-sand md:text-2xl">{{ __('site.hotel.nature_2') }}</p>
+            <a href="{{ route('booking') }}" class="btn-primary mt-4 self-start">{{ __('site.nav.book') }}</a>
         </div>
     </section>
 </x-layouts.site>
