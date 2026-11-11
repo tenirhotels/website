@@ -99,9 +99,6 @@
             </nav>
         </div>
 
-        </div>
-        @endif
-
         <div class="flex flex-wrap items-center justify-between gap-x-8 gap-y-3 border-t border-[#2E3A33] pt-6 text-[13px] text-[#9AA59F]">
             <span>© {{ now()->year }} {{ Setting::text('brand.name', 'Tenir Hotels') }}@if ($legal = Setting::get('brand.legal_name')) · {{ $legal }}@endif. {{ __('site.footer.rights') }}</span>
             @if ($legalPages->isNotEmpty())
