@@ -43,7 +43,7 @@ class RedirectsSeeder extends Seeder
             'excursions' => 'experiences',
             'contacts' => 'contact',
             'booking' => 'booking',
-            'guest-account' => 'booking',
+            'guest-account' => 'guest-account',
             'terms-of-use' => 'terms',
         ];
         foreach (['ru-ru' => 'ru', 'kk-kz' => 'kk', 'en-gb' => 'en', 'zh-cn' => 'zh'] as $old => $new) {
