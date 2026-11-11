@@ -32,7 +32,7 @@
     <section class="bg-white">
         <div class="container-site grid items-center gap-8 py-12 md:py-16 lg:grid-cols-2 lg:gap-16">
             <div class="relative mx-auto aspect-[13/8] w-full max-w-[560px] overflow-hidden rounded-3xl bg-forest-deep lg:mx-0">
-                <x-site.media :src="$hotel->gallery[0] ?? $hotel->hero_image" alt="" round="" class="absolute inset-0 opacity-40" />
+                <x-site.media :src="$hotel->gettingImage()" alt="" round="" class="absolute inset-0 opacity-40" />
                 <div class="absolute inset-0 bg-gradient-to-t from-forest-deep/85 via-forest/50 to-forest/20"></div>
                 <p class="absolute left-4 top-4 rounded-full bg-white/15 px-3 py-1 text-[13px] text-white backdrop-blur-sm">{{ __('access.altitude') }}</p>
                 <svg viewBox="0 0 {{ $W }} {{ $H }}" preserveAspectRatio="none" class="absolute inset-0 h-full w-full" aria-hidden="true">
