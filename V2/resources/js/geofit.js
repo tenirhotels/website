@@ -55,3 +55,54 @@ export function buildProjector(points, smoothing = 0.02) {
     project.local = local;
     return project;
 }
+
+/**
+ * Обратная привязка: пиксель иллюстрации → (lat, lng). Нужна странице привязки: наложение картинки на карту
+ * и ошибка в метрах (насколько далеко от настоящего места попадает точка, если её не использовать в подгонке).
+ * points — те же [[lat, lng, x, y], …]. Пиксели делим на 240 (≈ пикселей в километре), чтобы сглаживание
+ * вело себя так же, как в прямой привязке.
+ */
+export function buildInverse(points, smoothing = 0.001) {
+    if (!points || points.length < 3) return null;
+    const K = 240;
+    const src = points.map((p) => [p[2] / K, p[3] / K]);
+    const n = points.length;
+    const A = [];
+    for (let i = 0; i < n; i++) {
+        const row = [];
+        for (let j = 0; j < n; j++) row.push(U((src[i][0] - src[j][0]) ** 2 + (src[i][1] - src[j][1]) ** 2) + (i === j ? smoothing : 0));
+        row.push(1, src[i][0], src[i][1]);
+        A.push(row);
+    }
+    for (let k = 0; k < 3; k++) {
+        const row = new Array(n + 3).fill(0);
+        for (let j = 0; j < n; j++) row[j] = k === 0 ? 1 : src[j][k - 1];
+        A.push(row);
+    }
+    const c0 = gauss(A.map((r) => r.slice()), [...points.map((p) => p[0]), 0, 0, 0]);
+    const c1 = gauss(A.map((r) => r.slice()), [...points.map((p) => p[1]), 0, 0, 0]);
+    if (!c0 || !c1) return null;
+    const ev = (c, u, v) => {
+        let r = c[n] + c[n + 1] * u + c[n + 2] * v;
+        for (let j = 0; j < n; j++) r += c[j] * U((u - src[j][0]) ** 2 + (v - src[j][1]) ** 2);
+        return r;
+    };
+    return (x, y) => [ev(c0, x / K, y / K), ev(c1, x / K, y / K)];
+}
+
+/** Расстояние между двумя точками в метрах (плоское приближение). */
+export const meters = (a, b) => Math.hypot((a[1] - b[1]) * Math.cos(((a[0] + b[0]) / 2 * Math.PI) / 180) * 111320, (a[0] - b[0]) * 110570);
+
+/** Ошибка каждой опорной точки в метрах: «на самой точке» (residual) и «если точку убрать из подгонки» (leave-one-out). */
+export function fitReport(points, smoothing = 0.001) {
+    const full = buildInverse(points, smoothing);
+    if (!full) return null;
+    const rows = points.map((p, i) => {
+        const res = meters(full(p[2], p[3]), [p[0], p[1]]);
+        const rest = points.filter((_, j) => j !== i);
+        const g = rest.length >= 3 ? buildInverse(rest, smoothing) : null;
+        return { residual: res, loo: g ? meters(g(p[2], p[3]), [p[0], p[1]]) : null };
+    });
+    const loos = rows.map((r) => r.loo).filter((v) => v !== null).sort((a, b) => a - b);
+    return { rows, looMedian: loos.length ? loos[Math.floor(loos.length / 2)] : null, looMax: loos.length ? loos[loos.length - 1] : null, inverse: full };
+}

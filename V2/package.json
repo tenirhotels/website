@@ -15,6 +15,7 @@
         "vite": "^7.0.7"
     },
     "dependencies": {
-        "@fontsource/cormorant-garamond": "^5.3.0"
+        "@fontsource/cormorant-garamond": "^5.3.0",
+        "leaflet": "^1.9.4"
     }
 }

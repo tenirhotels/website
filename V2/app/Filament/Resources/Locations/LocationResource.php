@@ -222,6 +222,7 @@ class LocationResource extends Resource
                     ]),
             ]),
             Section::make('Привязка к GPS («Вы здесь»)')->description('Карта схематичная. Опорными точками служат метки с координатами (широта и долгота в метке) и точки ниже; нужно не меньше трёх, лучше 8–12 по всему маршруту.')->collapsible()->collapsed()->schema([
+                Placeholder::make('geo_link')->hiddenLabel()->content(fn () => new \Illuminate\Support\HtmlString('Точки удобнее ставить на странице <a href="'.e(\App\Filament\Pages\MapCalibration::getUrl()).'" class="underline" style="color:#b5561f">«Привязка карты»</a>: рисунок рядом со спутниковым снимком, с наложением и оценкой точности.')),
                 Placeholder::make('geo_check')->hiddenLabel()->content(function (?Location $record) {
                     $map = LocationMap::for($record);
                     $dev = $map ? array_slice($map->geoDeviations(), 0, 5) : [];
