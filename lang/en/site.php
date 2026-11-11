@@ -159,7 +159,7 @@ return [
         'promo' => 'Promo code: :code',
     ],
     'hero' => ['sound_on' => 'Turn sound on', 'sound_off' => 'Turn sound off'],
-    'footer' => ['info' => 'Information', 
+    'footer' => ['info' => 'Information', 'plan' => 'Plan your visit', 'about' => 'About us', 
         'guests' => 'For guests',
         'brand' => 'Brand',
         'follow' => 'Follow us',
