@@ -65,6 +65,7 @@ return [
         'view' => '景观',
         'amenities' => '客房设施',
         'book_room' => '预订此客房',
+        'room_details' => '客房详情与照片',
         'coming_soon' => '即将开业',
         'discover' => '了解酒店',
         'all_rooms' => '全部客房',

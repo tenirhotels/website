@@ -1,7 +1,6 @@
 {{-- Единственный тип номера: не «карточка в пустой сетке», а полноценная витрина. --}}
 @php
     $tiles = $room->tiles();
-    $gallery = collect($room->gallery ?? [])->filter()->values();
     $amenities = $room->listFeatures();
 @endphp
 
@@ -32,6 +31,7 @@
 
             <div class="flex flex-wrap items-center gap-x-8 gap-y-4">
                 <a href="{{ $room->bookingUrl() }}" class="btn-primary">{{ __('site.hotel.book_room') }}</a>
+                <a href="{{ $room->url() }}" class="inline-block border-b border-current pb-1.5 text-[13px] uppercase tracking-[0.2em] text-ember hover:text-forest">{{ __('site.hotel.room_details') }} →</a>
                 @if ($room->price_from)
                     <p class="text-slate">{{ __('site.hotel.from') }} <strong class="text-2xl font-normal text-ink">{{ price($room->price_from) }} ₸</strong> / {{ __('site.hotel.per_night') }}</p>
                 @endif
@@ -53,11 +53,5 @@
                 @endforeach
             </ul>
         </div>
-    </section>
-@endif
-
-@if ($gallery->isNotEmpty())
-    <section class="container-site py-12 md:py-16 lg:py-20">
-        <x-site.gallery :images="$gallery" :alt="$room->t('name')" :layout="$room->gallery_layout ?: 'mosaic'" />
     </section>
 @endif
