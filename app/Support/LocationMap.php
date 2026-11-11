@@ -61,8 +61,15 @@ class LocationMap
         ]);
     }
 
+    private ?Collection $pinsCache = null;
+
     /** Метки; подписи уже выбраны на текущем языке. */
     public function pins(): Collection
+    {
+        return $this->pinsCache ??= $this->buildPins();
+    }
+
+    private function buildPins(): Collection
     {
         $stations = $this->stations()->keyBy('key');
 
