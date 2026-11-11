@@ -7,10 +7,16 @@
             <div @class(['flex flex-col gap-8 md:gap-12 lg:flex-row lg:items-start lg:gap-20', 'lg:flex-row-reverse' => $i % 2])>
                 <div class="flex flex-1 flex-col gap-6">
                     <h2 class="h-section">{{ $venue->t('name') }}</h2>
-                    @if ($venue->t('hours') || $venue->phone || $venue->phone_ext || $venue->email)
+                    @if ($venue->t('hours') || $venue->t('break_hours') || $venue->t('breakfast_hours') || $venue->phone || $venue->phone_ext || $venue->email)
                         <dl class="grid grid-cols-1 gap-x-8 gap-y-5 rounded-2xl border border-mist bg-white p-6 sm:grid-cols-2">
                             @if ($venue->t('hours'))
                                 <div><dt class="field-label mb-1.5">{{ __('site.hotel.hours') }}</dt><dd class="text-[17px] leading-snug text-ink">{{ $venue->t('hours') }}</dd></div>
+                            @endif
+                            @if ($venue->t('break_hours'))
+                                <div><dt class="field-label mb-1.5">{{ __('site.hotel.break_hours') }}</dt><dd class="text-[17px] leading-snug text-ink">{{ $venue->t('break_hours') }}</dd></div>
+                            @endif
+                            @if ($venue->t('breakfast_hours'))
+                                <div><dt class="field-label mb-1.5">{{ __('site.hotel.breakfast_hours') }}</dt><dd class="text-[17px] leading-snug text-ink">{{ $venue->t('breakfast_hours') }}</dd></div>
                             @endif
                             @if ($venue->phone)
                                 <div><dt class="field-label mb-1.5">{{ __('site.hotel.venue_phone') }}</dt><dd class="text-[17px] leading-snug text-ink"><a href="tel:{{ preg_replace('/[^\d+]/', '', $venue->phone) }}" class="hover:text-ember">{{ $venue->phone }}</a></dd></div>

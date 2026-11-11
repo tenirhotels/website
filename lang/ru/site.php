@@ -74,6 +74,8 @@ return [
         'faq' => 'Частые вопросы',
         'hours' => 'Часы работы',
         'menu' => 'Меню (PDF)',
+        'break_hours' => 'Перерыв',
+        'breakfast_hours' => 'Завтрак для гостей отеля',
         'venue_phone' => 'Телефон',
         'venue_ext' => 'Из номера отеля',
         'venue_email' => 'Эл. почта',

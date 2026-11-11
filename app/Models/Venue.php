@@ -13,7 +13,7 @@ class Venue extends Model
 
     protected $guarded = ['id'];
 
-    protected array $translatable = ['name', 'summary', 'description', 'hours'];
+    protected array $translatable = ['name', 'summary', 'description', 'hours', 'break_hours', 'breakfast_hours'];
 
     protected string $titleAttribute = 'name';
 
