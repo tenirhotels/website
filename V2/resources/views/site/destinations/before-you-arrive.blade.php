@@ -7,8 +7,6 @@
             <div class="prose-tenir flex-[1.5] [&>*:first-child]:mt-0">{!! $hotel->t('arrival_info') !!}</div>
             <aside class="flex flex-1 flex-col gap-3 text-base text-slate">
                 <a href="{{ $hotel->sectionUrl('getting-here') }}" class="btn-primary self-start">{{ __('site.hotel.getting_here') }}</a>
-                @if ($hotel->phone)<a href="tel:{{ preg_replace('/[^\d+]/', '', $hotel->phone) }}" class="mt-6 hover:text-ember">{{ $hotel->phone }}</a>@endif
-                @if ($hotel->whatsapp)<a href="{{ wa_url($hotel->whatsapp, 'stay', ['hotel' => $hotel->t('name')]) }}" class="hover:text-ember" target="_blank" rel="noopener">WhatsApp</a>@endif
             </aside>
         </section>
     @endif
