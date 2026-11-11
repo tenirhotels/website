@@ -26,6 +26,7 @@ class MapGeoPointsTest extends TestCase
     public function test_map_page_renders_all_points(): void
     {
         $this->seed();
-        $this->get('/ru/map')->assertOk()->assertSee('data-map-geo', false);
+        $this->get('/ru/map')->assertOk()->assertSee('data-map-geo', false)
+            ->assertSee('data-acc', false)->assertSee('here_acc', false)->assertSee('approx', false);
     }
 }

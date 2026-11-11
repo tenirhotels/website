@@ -9,7 +9,7 @@
     $label = fn (array $p) => $p['kind'] === 'hotel' && $hotel ? $hotel->t('name') : $p['label'];
     $restaurants = $pins->where('kind', 'restaurant')->sortBy('n');
     $activities = fn (string $s) => $pins->where('kind', 'activity')->filter(fn ($p) => in_array($s, $p['seasons'] ?? [], true))->sortBy('n');
-    $i18n = collect(['locating', 'here', 'far', 'denied', 'unavailable'])->mapWithKeys(fn ($k) => [$k => __('map.'.$k)]);
+    $i18n = collect(['locating', 'here', 'here_acc', 'approx', 'far', 'denied', 'unavailable'])->mapWithKeys(fn ($k) => [$k => __('map.'.$k)]);
     $geo = ['points' => $map->geoPoints(), 'width' => $W, 'height' => $H];
     $oneWay = $map->oneWay() ? __('map.one_way_at', ['min' => $map->oneWay(), 'unit' => __('map.min')]) : null;
 @endphp
@@ -83,6 +83,7 @@
                         </button>
                     @endforeach
 
+                    <span class="map-acc" data-acc hidden aria-hidden="true"></span>
                     <span class="map-me" data-me hidden><i></i><b></b></span>
                 </div>
 
