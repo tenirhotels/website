@@ -37,15 +37,19 @@
             </div>
             <noscript><p class="py-10 text-center">{{ __('site.booking.noscript') }}</p></noscript>
 
-            <div class="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-exely-line pt-4 text-[15px] text-exely-ink">
-                <span>{{ __('site.booking.help') }}</span>
-                <a href="{{ route('guest-account') }}" class="hover:text-ember">{{ __('site.booking.account') }}</a>
-                @if ($phone = $hotel?->phone ?? Setting::get('contacts.phone'))
-                    <a href="tel:{{ preg_replace('/[^\d+]/', '', $phone) }}" class="hover:text-ember">{{ $phone }}</a>
-                @endif
-                @if ($wa = $hotel?->whatsapp ?? Setting::get('contacts.whatsapp'))
-                    <a href="{{ wa_url($wa, 'stay', ['hotel' => $hotel?->t('name') ?: 'Tenir Hotels']) }}" class="hover:text-ember">WhatsApp</a>
-                @endif
+            <div class="mt-8 flex flex-col gap-5 border-t border-exely-line pt-6 text-exely-ink md:flex-row md:items-end md:justify-between">
+                <div class="flex flex-col gap-2">
+                    <p class="text-[17px] text-ink">{{ __('site.booking.help') }}</p>
+                    <div class="flex flex-wrap gap-x-6 gap-y-1 text-[17px]">
+                        @if ($phone = $hotel?->phone ?? Setting::get('contacts.phone'))
+                            <a href="tel:{{ preg_replace('/[^\d+]/', '', $phone) }}" class="hover:text-ember">{{ $phone }}</a>
+                        @endif
+                        @if ($wa = $hotel?->whatsapp ?? Setting::get('contacts.whatsapp'))
+                            <a href="{{ wa_url($wa, 'stay', ['hotel' => $hotel?->t('name') ?: 'Tenir Hotels']) }}" class="hover:text-ember">WhatsApp</a>
+                        @endif
+                    </div>
+                </div>
+                <a href="{{ route('guest-account') }}" class="link-line self-start md:self-auto">{{ __('site.booking.account') }}</a>
             </div>
         </div>
     </div>
