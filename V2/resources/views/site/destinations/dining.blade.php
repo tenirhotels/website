@@ -7,19 +7,25 @@
             <div @class(['flex flex-col gap-8 md:gap-12 lg:flex-row lg:items-start lg:gap-20', 'lg:flex-row-reverse' => $i % 2])>
                 <div class="flex flex-1 flex-col gap-6">
                     <h2 class="h-section">{{ $venue->t('name') }}</h2>
-                    @if ($venue->t('hours'))
-                        <p><span class="field-label">{{ __('site.hotel.hours') }}</span> <span class="text-slate">{{ $venue->t('hours') }}</span></p>
+                    @if ($venue->t('hours') || $venue->phone || $venue->phone_ext || $venue->email)
+                        <dl class="grid grid-cols-1 gap-x-8 gap-y-5 rounded-2xl border border-mist bg-white p-6 sm:grid-cols-2">
+                            @if ($venue->t('hours'))
+                                <div><dt class="field-label mb-1.5">{{ __('site.hotel.hours') }}</dt><dd class="text-[17px] leading-snug text-ink">{{ $venue->t('hours') }}</dd></div>
+                            @endif
+                            @if ($venue->phone)
+                                <div><dt class="field-label mb-1.5">{{ __('site.hotel.venue_phone') }}</dt><dd class="text-[17px] leading-snug text-ink"><a href="tel:{{ preg_replace('/[^\d+]/', '', $venue->phone) }}" class="hover:text-ember">{{ $venue->phone }}</a></dd></div>
+                            @endif
+                            @if ($venue->phone_ext)
+                                <div><dt class="field-label mb-1.5">{{ __('site.hotel.venue_ext') }}</dt><dd class="text-[17px] leading-snug text-ink">{{ $venue->phone_ext }}</dd></div>
+                            @endif
+                            @if ($venue->email)
+                                <div><dt class="field-label mb-1.5">{{ __('site.hotel.venue_email') }}</dt><dd class="text-[17px] leading-snug text-ink"><a href="mailto:{{ $venue->email }}" class="hover:text-ember">{{ email_wrap($venue->email) }}</a></dd></div>
+                            @endif
+                        </dl>
                     @endif
-                    @if ($venue->phone || $venue->phone_ext || $venue->email)
-                        <ul class="flex flex-col gap-2 text-slate">
-                            @if ($venue->phone)<li><span class="field-label">{{ __('site.hotel.venue_phone') }}</span> <a href="tel:{{ preg_replace('/[^\d+]/', '', $venue->phone) }}" class="hover:text-ember">{{ $venue->phone }}</a></li>@endif
-                            @if ($venue->phone_ext)<li><span class="field-label">{{ __('site.hotel.venue_ext') }}</span> <span class="text-ink">{{ $venue->phone_ext }}</span></li>@endif
-                            @if ($venue->email)<li><span class="field-label">{{ __('site.hotel.venue_email') }}</span> <a href="mailto:{{ $venue->email }}" class="hover:text-ember">{{ email_wrap($venue->email) }}</a></li>@endif
-                        </ul>
-                    @endif
-                    <div class="prose-tenir">{!! $venue->t('description') !!}</div>
+                    <div class="prose-tenir !text-[17px] !leading-[1.7] [&_p:last-child]:mb-0">{!! $venue->t('description') !!}</div>
                     @if ($venue->menu_file)
-                        <a href="{{ media($venue->menu_file) }}" class="link-line self-start" target="_blank" rel="noopener">{{ __('site.hotel.menu') }}</a>
+                        <a href="{{ media($venue->menu_file) }}" class="btn-dark self-start" target="_blank" rel="noopener">{{ __('site.hotel.menu') }}</a>
                     @endif
                 </div>
                 <div class="flex-1">
