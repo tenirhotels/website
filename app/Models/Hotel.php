@@ -23,7 +23,7 @@ class Hotel extends Model
     ];
 
     /** Настройки места живут в локации: отель читает (и пишет) их через неё — шаблоны и SEO работают как раньше. */
-    private const LOCATION_ATTRS = ['region', 'city', 'address', 'getting_here', 'arrival_info', 'getting_tease', 'before_tease', 'levels', 'altitude_m', 'country_code', 'latitude', 'longitude'];
+    private const LOCATION_ATTRS = ['region', 'city', 'address', 'getting_here', 'arrival_info', 'getting_tease', 'before_tease', 'getting_image', 'arrival_image', 'levels', 'altitude_m', 'country_code', 'latitude', 'longitude'];
 
     protected string $titleAttribute = 'name';
 
@@ -165,5 +165,17 @@ class Hotel extends Model
     public function sectionUrl(string $section, array $params = [], ?string $locale = null): string
     {
         return Property::hotelUrl($this, $section, $params, $locale);
+    }
+
+    /** Фото страницы «Как добраться»: своё из локации, иначе первое фото галереи. */
+    public function gettingImage(): ?string
+    {
+        return $this->getting_image ?: ($this->gallery[0] ?? $this->hero_image);
+    }
+
+    /** Фото страницы «Перед приездом»: своё из локации, иначе другое фото галереи — чтобы страницы не повторяли друг друга. */
+    public function arrivalImage(): ?string
+    {
+        return $this->arrival_image ?: ($this->gallery[2] ?? $this->gallery[1] ?? $this->hero_image ?? $this->gallery[0] ?? null);
     }
 }
