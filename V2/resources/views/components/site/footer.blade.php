@@ -29,6 +29,23 @@
                 @if ($text = Setting::text('brand.footer_text'))
                     <p class="max-w-xs text-[15px] leading-relaxed text-[#B4BCB7]">{{ $text }}</p>
                 @endif
+                @if ($social->isNotEmpty())
+                    <ul class="mt-2 flex flex-wrap items-center gap-2.5" aria-label="{{ __('site.footer.follow') }}">
+                        @foreach ($social as $network => $url)
+                            @php([$label, $icon] = $networks[$network] ?? [ucfirst($network), null])
+                            <li>
+                                <a href="{{ $url }}" target="_blank" rel="noopener" aria-label="{{ $label }}" title="{{ $label }}"
+                                   class="flex size-10 items-center justify-center rounded-full border border-[#3A4A41] text-[#D8DCD8] transition-colors hover:border-ember-light hover:text-ember-light">
+                                    @if ($icon)
+                                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{!! $icon !!}</svg>
+                                    @else
+                                        <span class="text-xs">{{ mb_substr($label, 0, 2) }}</span>
+                                    @endif
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                @endif
             </div>
 
             {{-- Бронирование и связь --}}
@@ -82,26 +99,6 @@
             </nav>
         </div>
 
-        @if ($social->isNotEmpty())
-        <div class="flex flex-col gap-3">
-            <p class="text-xs uppercase tracking-[0.2em] text-[#9AA59F]">{{ __('site.footer.follow') }}</p>
-                @if ($social->isNotEmpty())
-                    <ul class="flex flex-wrap items-center gap-2.5">
-                        @foreach ($social as $network => $url)
-                            @php([$label, $icon] = $networks[$network] ?? [ucfirst($network), null])
-                            <li>
-                                <a href="{{ $url }}" target="_blank" rel="noopener" aria-label="{{ $label }}" title="{{ $label }}"
-                                   class="flex size-10 items-center justify-center rounded-full border border-[#3A4A41] text-[#D8DCD8] transition-colors hover:border-ember-light hover:text-ember-light">
-                                    @if ($icon)
-                                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{!! $icon !!}</svg>
-                                    @else
-                                        <span class="text-xs">{{ mb_substr($label, 0, 2) }}</span>
-                                    @endif
-                                </a>
-                            </li>
-                        @endforeach
-                    </ul>
-                @endif
         </div>
         @endif
 
