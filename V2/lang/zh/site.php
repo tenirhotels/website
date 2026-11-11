@@ -160,7 +160,7 @@ return [
         'promo' => '优惠码：:code',
     ],
     'hero' => ['sound_on' => '开启声音', 'sound_off' => '关闭声音'],
-    'footer' => ['info' => '信息', 
+    'footer' => ['info' => '信息', 'plan' => '行程准备', 'about' => '关于我们', 
         'guests' => '宾客服务',
         'brand' => '品牌',
         'follow' => '关注我们',
