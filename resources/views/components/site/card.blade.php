@@ -13,8 +13,8 @@
             </ul>
         @endif
         <div class="absolute inset-x-5 bottom-5 text-white">
-            <h3 class="flex h-[3.45rem] items-start justify-between gap-3 font-display text-[24px] leading-[1.15]">
-                <span class="line-clamp-2">{{ $title }}</span>
+            <h3 class="flex h-[1.75rem] items-start justify-between gap-3 font-display text-[24px] leading-[1.15]">
+                <span class="line-clamp-1">{{ $title }}</span>
                 <svg class="mt-1 size-5 shrink-0 transition-transform group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
             </h3>
             @if ($onPhoto && $text)
