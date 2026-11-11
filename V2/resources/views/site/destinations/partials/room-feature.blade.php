@@ -10,24 +10,24 @@
             <x-site.media :src="$room->image" :alt="$room->t('name')" round="" />
         </a>
 
-        <div class="flex flex-col gap-7">
-            <div class="flex flex-col gap-4">
+        <div class="flex flex-col gap-6">
+            <div class="flex flex-col gap-3">
                 <h2 class="font-display text-3xl leading-tight md:text-4xl">{{ $room->t('name') }}</h2>
-                <p class="text-lg leading-relaxed text-slate">{{ $room->t('summary') }}</p>
+                <p class="text-[17px] leading-relaxed text-slate">{{ $room->t('summary') }}</p>
             </div>
 
             @if ($tiles)
-                <ul class="divide-y divide-mist border-y border-mist">
-                            @foreach ($tiles as $tile)
-                                <li class="flex items-center gap-4 py-3.5">
-                                    <span class="flex h-7 w-7 shrink-0 items-center justify-center text-ember">{{ site_icon($tile['icon'], 'h-6 w-6') }}</span>
-                                    <span class="font-display text-2xl leading-tight text-ink md:text-3xl">{{ $tile['text'] }}</span>
-                                </li>
-                            @endforeach
-                        </ul>
+                <ul class="flex flex-wrap gap-x-6 gap-y-2 border-y border-mist py-3.5">
+                    @foreach ($tiles as $tile)
+                        <li class="flex items-center gap-2.5 text-[16px] leading-none text-ink">
+                            <span class="shrink-0 text-ember">{{ site_icon($tile['icon'], 'h-5 w-5') }}</span>
+                            <span>{{ $tile['text'] }}</span>
+                        </li>
+                    @endforeach
+                </ul>
             @endif
 
-            <div class="prose-tenir">{!! $room->t('description') !!}</div>
+            <div class="prose-tenir !text-[16px] !leading-[1.7] [&_p:last-child]:mb-0">{!! $room->t('description') !!}</div>
 
             @if ($amenities)
                 <div class="flex flex-col gap-4">
