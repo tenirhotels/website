@@ -55,7 +55,9 @@ class VenueResource extends Resource
                 Fields::titleInput('name', $l, $d),
                 Textarea::make("summary.$l")->label('Кратко')->rows(2),
                 RichEditor::make("description.$l")->label('Описание'),
-                TextInput::make("hours.$l")->label('Часы работы')->placeholder('Завтрак 08:30–11:30 · ужин 18:00–22:00'),
+                TextInput::make("hours.$l")->label('Часы работы')->placeholder('08:30–21:30'),
+                TextInput::make("break_hours.$l")->label('Перерыв')->placeholder('15:00–17:00'),
+                TextInput::make("breakfast_hours.$l")->label('Завтрак для гостей отеля')->placeholder('08:30–11:30'),
             ]),
             Section::make('Контакты ресторана')->columns(3)->columnSpanFull()
                 ->description('Если у ресторана свои контакты — они показываются на его блоке. Пусто — ничего не показывается (общие контакты отеля остаются в футере и на «Контактах»).')

@@ -74,6 +74,8 @@ return [
         'faq' => 'Frequently asked questions',
         'hours' => 'Opening hours',
         'menu' => 'Menu (PDF)',
+        'break_hours' => 'Break',
+        'breakfast_hours' => 'Breakfast for hotel guests',
         'venue_phone' => 'Phone',
         'venue_ext' => 'From your room phone',
         'venue_email' => 'Email',

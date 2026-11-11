@@ -75,6 +75,8 @@ return [
         'faq' => '常见问题',
         'hours' => '营业时间',
         'menu' => '菜单 (PDF)',
+        'break_hours' => '休息时间',
+        'breakfast_hours' => '酒店住客早餐',
         'venue_phone' => '电话',
         'venue_ext' => '客房内线',
         'venue_email' => '电子邮件',
