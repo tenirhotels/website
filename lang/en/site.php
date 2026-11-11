@@ -50,6 +50,8 @@ return [
         'nature_1' => 'With each cable car station, the noise of the city fades below, giving way to silence, pure mountain air and the calm of high-altitude space.',
         'nature_2' => 'This is where true rest begins.',
         'before_more' => 'More: “Before you arrive”',
+        'getting_tease' => 'The way to the hotel: by car from Almaty to Medeu, then by cable car. The route, resort map and journey time.',
+        'getting_more' => 'More: “Getting here”',
         'before_tease' => 'The cable car is not included in the stay, pack light, and it is cooler at altitude. Everything worth knowing in advance.',
         'reviews' => 'Reviews',
         'check_prices' => 'Check rates',
