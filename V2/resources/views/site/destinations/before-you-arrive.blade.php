@@ -3,15 +3,13 @@
     <x-site.page-hero :image="$hotel->arrivalImage()" :eyebrow="$hotel->t('name')" :title="__('site.hotel.before_arrive')" :text="$hotel->t('before_tease') ?: __('site.hotel.before_tease')" />
 
     @if ($hotel->t('arrival_info'))
-        <section class="container-site flex flex-col gap-8 pb-12 pt-10 md:gap-14 md:py-16 lg:flex-row lg:gap-20 lg:py-20">
-            <div class="flex flex-[1.5] flex-col gap-8">
-                <div class="prose-tenir [&>*:first-child]:mt-0">{!! $hotel->t('arrival_info') !!}</div>
-                <a href="{{ $hotel->sectionUrl('getting-here') }}" class="group flex flex-col gap-2 rounded-3xl border border-mist bg-sand p-6 transition hover:border-ember md:p-8">
-                    <span class="font-display text-xl md:text-2xl">{{ __('site.hotel.getting_here') }}</span>
-                    <span class="text-base leading-relaxed text-slate">{{ $hotel->t('getting_tease') ?: __('site.hotel.getting_tease') }}</span>
-                    <span class="link-line mt-2 self-start">{{ __('site.hotel.getting_more') }}</span>
-                </a>
-            </div>
+        <section class="container-site flex flex-col gap-8 pb-12 pt-10 md:py-16 lg:py-20">
+            <div class="prose-tenir [&>*:first-child]:mt-0">{!! $hotel->t('arrival_info') !!}</div>
+            <a href="{{ $hotel->sectionUrl('getting-here') }}" class="group flex flex-col gap-2 rounded-3xl border border-mist bg-sand p-6 transition hover:border-ember md:p-8">
+                <span class="font-display text-xl md:text-2xl">{{ __('site.hotel.getting_here') }}</span>
+                <span class="text-base leading-relaxed text-slate">{{ $hotel->t('getting_tease') ?: __('site.hotel.getting_tease') }}</span>
+                <span class="link-line mt-2 self-start">{{ __('site.hotel.getting_more') }}</span>
+            </a>
         </section>
     @endif
 
