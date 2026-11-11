@@ -40,7 +40,7 @@ class ResortMap
         $a = fn (string $season, int $n, string $name, int $x, int $y) => ['id' => 'a'.$season[0].$n, 'kind' => 'activity', 'n' => $n, 'name' => $name, 'x' => $x, 'y' => $y, 'seasons' => [$season]];
         $s = fn (string $key, int $x, int $y) => ['id' => 'st-'.$key, 'kind' => 'station', 'name' => 'station_'.$key, 'x' => $x, 'y' => $y, 'cable' => $key];
 
-        return [
+        return self::withCoords([
             $r(1, 'tenir_restaurant', 1080, 135),
             $r(2, 'la_skala', 1273, 438),
             $r(3, 'saray_bar', 562, 478),
@@ -74,7 +74,36 @@ class ResortMap
             ['id' => 'tr-tuyuksu', 'kind' => 'trail', 'name' => 'trail_tuyuksu', 'x' => 1195, 'y' => 845, 'detail' => true],
             ['id' => 'tr-walk', 'kind' => 'trail', 'name' => 'trail_walk', 'x' => 1100, 'y' => 470, 'detail' => true],
             ['id' => 'almaty', 'kind' => 'trail', 'name' => 'almaty', 'x' => 95, 'y' => 1105],
-        ];
+        ]);
+    }
+
+    /** Координаты (широта, долгота) меток, которые стоят в реальном месте. */
+    public const COORDS = [
+        'hotel' => [43.113893, 77.111801],
+        'r1' => [43.113801, 77.111274],        // ресторан Tenir
+        'st-combi2' => [43.113176, 77.110903], // верхняя станция
+        'st-combi1' => [43.119063, 77.100051], // средняя станция
+        'st-shymbulak' => [43.127983, 77.080916],
+        'st-medeu' => [43.162980, 77.051555],
+        'rink' => [43.157649, 77.058911],
+        'r6' => [43.162142, 77.059957],        // AUYL
+        'r7' => [43.162506, 77.049563],        // Gogra
+        'r5' => [43.126466, 77.080110],        // Refugio Del Monte
+        'r3' => [43.128470, 77.082432],        // Saray bar
+        'r2' => [43.117899, 77.095300],        // La Scala
+    ];
+
+    /** @param list<array<string, mixed>> $pins */
+    private static function withCoords(array $pins): array
+    {
+        return array_map(function (array $p) {
+            if ($c = self::COORDS[$p['id']] ?? null) {
+                $p['lat'] = $c[0];
+                $p['lng'] = $c[1];
+            }
+
+            return $p;
+        }, $pins);
     }
 
     /**

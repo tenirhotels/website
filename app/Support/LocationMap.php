@@ -14,7 +14,7 @@ use Illuminate\Support\Collection;
  *  images {winter, summer, winter_sm, summer_sm}  — путь на диске public или адрес от корня сайта (/images/…),
  *  stations [{key, lift, next, name{}, tag{}}]    — по порядку подъёма; key = папка панорамы public/panoramas/{key},
  *  hotel_panorama                                  — папка панорамы у отеля (public/panoramas/{…}),
- *  pins [{id, kind, n, x, y, seasons[], detail, cable, label{}}],
+ *  pins [{id, kind, n, x, y, lat, lng, seasons[], detail, cable, label{}}]  — lat/lng необязательны; с ними метка работает опорной точкой привязки к GPS,
  *  geo_points [{lat, lng, x, y}],
  *  overlay [{kind: total|name|time|arrow_time|arrow|text, x, y, rot, station, text{}}]  — подписи поверх картинки.
  */
@@ -100,12 +100,97 @@ class LocationMap
         return $this->pins()->firstWhere('id', $id);
     }
 
-    /** @return list<array{0: float, 1: float, 2: int, 3: int}> */
+    /** Опорные точки привязки к GPS из меток: те, у кого заданы координаты и положение на рисунке. */
+    private function pinGeoPoints(): array
+    {
+        return collect($this->d['pins'] ?? [])
+            ->filter(fn ($p) => filled($p['lat'] ?? null) && filled($p['lng'] ?? null) && filled($p['x'] ?? null) && filled($p['y'] ?? null))
+            ->map(fn ($p) => [(float) $p['lat'], (float) $p['lng'], (int) $p['x'], (int) $p['y'], (string) ($p['id'] ?? '')])->values()->all();
+    }
+
+    /** Километры между двумя точками (плоское приближение — на масштабе курорта достаточно). */
+    private static function km(float $lat1, float $lng1, float $lat2, float $lng2): float
+    {
+        return hypot(($lng1 - $lng2) * cos(deg2rad(($lat1 + $lat2) / 2)) * 111.32, ($lat1 - $lat2) * 110.57);
+    }
+
+    /**
+     * Все опорные точки: метки с координатами плюс отдельные точки привязки.
+     * Отдельная точка в пределах 100 м от метки считается дублем и отбрасывается — иначе одно место весило бы вдвое.
+     *
+     * @return list<array{0: float, 1: float, 2: int, 3: int}>
+     */
     public function geoPoints(): array
     {
-        return collect($this->d['geo_points'] ?? [])
+        $fromPins = $this->pinGeoPoints();
+        $extra = collect($this->d['geo_points'] ?? [])
             ->filter(fn ($g) => filled($g['lat'] ?? null) && filled($g['lng'] ?? null) && filled($g['x'] ?? null) && filled($g['y'] ?? null))
-            ->map(fn ($g) => [(float) $g['lat'], (float) $g['lng'], (int) $g['x'], (int) $g['y']])->values()->all();
+            ->map(fn ($g) => [(float) $g['lat'], (float) $g['lng'], (int) $g['x'], (int) $g['y']])
+            ->reject(fn ($g) => collect($fromPins)->contains(fn ($p) => self::km($g[0], $g[1], $p[0], $p[1]) < 0.1));
+
+        return collect($fromPins)->map(fn ($p) => array_slice($p, 0, 4))->concat($extra)->values()->all();
+    }
+
+    /**
+     * Насколько нарисованное положение метки расходится с тем, что дали бы одни координаты по общей плоской формуле.
+     * Большая цифра — рисунок в этом месте сильно искажён (или метка стоит не там). Для подсказки в админке.
+     *
+     * @return list<array{id: string, px: int}>
+     */
+    public function geoDeviations(): array
+    {
+        $pts = $this->pinGeoPoints();
+        if (count($pts) < 4) {
+            return [];
+        }
+        [$lat0, $lng0] = [$pts[0][0], $pts[0][1]];
+        $rows = array_map(fn ($p) => [($p[1] - $lng0) * cos(deg2rad($lat0)) * 111.32, ($p[0] - $lat0) * 110.57, 1.0], $pts);
+        $solve = function (int $k) use ($rows, $pts) {
+            $m = [];
+            for ($i = 0; $i < 3; $i++) {
+                $m[$i] = [];
+                for ($j = 0; $j < 3; $j++) {
+                    $m[$i][$j] = array_sum(array_map(fn ($r) => $r[$i] * $r[$j], $rows));
+                }
+                $m[$i][3] = array_sum(array_map(fn ($r, $p) => $r[$i] * $p[$k], $rows, $pts));
+            }
+            for ($i = 0; $i < 3; $i++) {
+                $piv = $i;
+                for ($r = $i + 1; $r < 3; $r++) {
+                    if (abs($m[$r][$i]) > abs($m[$piv][$i])) {
+                        $piv = $r;
+                    }
+                }
+                [$m[$i], $m[$piv]] = [$m[$piv], $m[$i]];
+                if (abs($m[$i][$i]) < 1e-9) {
+                    return null;
+                }
+                for ($r = 0; $r < 3; $r++) {
+                    if ($r === $i) {
+                        continue;
+                    }
+                    $f = $m[$r][$i] / $m[$i][$i];
+                    for ($c = $i; $c < 4; $c++) {
+                        $m[$r][$c] -= $f * $m[$i][$c];
+                    }
+                }
+            }
+
+            return [$m[0][3] / $m[0][0], $m[1][3] / $m[1][1], $m[2][3] / $m[2][2]];
+        };
+        $cx = $solve(2);
+        $cy = $solve(3);
+        if (! $cx || ! $cy) {
+            return [];
+        }
+
+        return collect($pts)->map(fn ($p, $i) => [
+            'id' => $p[4],
+            'px' => (int) round(hypot(
+                $rows[$i][0] * $cx[0] + $rows[$i][1] * $cx[1] + $cx[2] - $p[2],
+                $rows[$i][0] * $cy[0] + $rows[$i][1] * $cy[1] + $cy[2] - $p[3],
+            )),
+        ])->sortByDesc('px')->values()->all();
     }
 
     /** Подписи поверх картинки с текстом уже подставленным. */
@@ -199,7 +284,7 @@ class LocationMap
 
         $pins = array_map(function ($p) use ($tr) {
             $out = ['id' => $p['id'], 'kind' => $p['kind'], 'x' => $p['x'], 'y' => $p['y'], 'label' => $p['kind'] === 'hotel' ? [] : $tr('map.names.'.$p['name'])];
-            foreach (['n', 'seasons', 'cable'] as $k) {
+            foreach (['n', 'seasons', 'cable', 'lat', 'lng'] as $k) {
                 if (isset($p[$k])) {
                     $out[$k] = $p[$k];
                 }

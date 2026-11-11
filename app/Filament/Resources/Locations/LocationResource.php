@@ -23,6 +23,7 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Tabs;
+use App\Support\LocationMap;
 use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -189,6 +190,8 @@ class LocationResource extends Resource
                             TextInput::make('n')->label('Номер в списке')->numeric()->helperText('Для ресторанов и активностей.'),
                             TextInput::make('x')->label('x, px')->numeric()->required()->helperText('Проще — кнопкой «Указать на карте» ниже.'),
                             TextInput::make('y')->label('y, px')->numeric()->required(),
+                            TextInput::make('lat')->label('Широта')->numeric()->helperText('Необязательно. Копируется из Google Maps или 2GIS (нажать на точку).'),
+                            TextInput::make('lng')->label('Долгота')->numeric()->helperText('С координатами метка помогает кнопке «Вы здесь» точнее находить место.'),
                             TextInput::make('cable')->label('Ключ станции')->helperText('Для меток станций: покажет времена «вверх / вниз».'),
                         ]),
                         self::mapPoint(),
@@ -218,7 +221,18 @@ class LocationResource extends Resource
                         self::translated('text', 'Свой текст', 'ov-text')->visible(fn (Get $get) => in_array($get('kind'), ['arrow', 'text'], true)),
                     ]),
             ]),
-            Section::make('Привязка к GPS («Вы здесь»)')->description('Карта схематичная, поэтому чем больше точек — тем точнее. Нужно не меньше двух.')->collapsible()->collapsed()->schema([
+            Section::make('Привязка к GPS («Вы здесь»)')->description('Карта схематичная. Опорными точками служат метки с координатами (широта и долгота в метке) и точки ниже; нужно не меньше трёх, лучше 8–12 по всему маршруту.')->collapsible()->collapsed()->schema([
+                Placeholder::make('geo_check')->hiddenLabel()->content(function (?Location $record) {
+                    $map = LocationMap::for($record);
+                    $dev = $map ? array_slice($map->geoDeviations(), 0, 5) : [];
+                    $n = $map ? count($map->geoPoints()) : 0;
+                    $txt = "Опорных точек: {$n}.";
+                    if ($dev) {
+                        $txt .= ' Сильнее всего рисунок «уходит» от реального места у меток: '.implode(', ', array_map(fn ($d) => $d['id'].' ('.$d['px'].' px)', $dev)).'. Это нормально для нарисованной карты; если цифра очень большая — проверьте, что метка стоит на своём месте и координаты верные.';
+                    }
+
+                    return $txt;
+                }),
                 Repeater::make('map.geo_points')->hiddenLabel()->addActionLabel('Добавить точку')->collapsed()->cloneable()
                     ->itemLabel(fn (array $state) => ($state['lat'] ?? '').', '.($state['lng'] ?? ''))
                     ->schema([
