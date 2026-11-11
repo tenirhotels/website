@@ -29,6 +29,20 @@
 
             <div class="prose-tenir">{!! $room->t('description') !!}</div>
 
+            @if ($amenities)
+                <div class="flex flex-col gap-4">
+                    <h3 class="text-[12px] uppercase tracking-[0.2em] text-slate">{{ __('site.hotel.amenities') }}</h3>
+                    <ul class="grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-2">
+                        @foreach ($amenities as $a)
+                            <li class="flex items-center gap-3 text-[15px] leading-snug text-ink">
+                                <span class="shrink-0 text-forest">{{ site_icon($a['icon'], 'h-5 w-5') }}</span>
+                                <span>{{ $a['text'] }}</span>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
             <div class="flex flex-wrap items-center gap-x-8 gap-y-4">
                 <a href="{{ $room->bookingUrl() }}" class="btn-primary">{{ __('site.hotel.book_room') }}</a>
                 <a href="{{ $room->url() }}" class="inline-block border-b border-current pb-1.5 text-[13px] uppercase tracking-[0.2em] text-ember hover:text-forest">{{ __('site.hotel.room_details') }} →</a>
@@ -39,19 +53,3 @@
         </div>
     </div>
 </section>
-
-@if ($amenities)
-    <section class="bg-white">
-        <div class="container-site flex flex-col gap-10 py-12 md:py-16">
-            <h2 class="font-display text-2xl md:text-3xl">{{ __('site.hotel.amenities') }}</h2>
-            <ul class="grid grid-cols-2 gap-4 md:grid-cols-4">
-                @foreach ($amenities as $a)
-                    <li class="flex flex-col gap-3 rounded-2xl bg-sand/60 p-5 text-forest">
-                        {{ site_icon($a['icon']) }}
-                        <span class="text-base leading-snug text-ink">{{ $a['text'] }}</span>
-                    </li>
-                @endforeach
-            </ul>
-        </div>
-    </section>
-@endif
