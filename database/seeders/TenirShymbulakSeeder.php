@@ -32,8 +32,8 @@ class TenirShymbulakSeeder extends Seeder
             ],
             'country_code' => 'KZ',
             'altitude_m' => 3200,
-            'latitude' => 43.113991,
-            'longitude' => 77.111328,
+            'latitude' => 43.113893,
+            'longitude' => 77.111801,
             'getting_here' => [
                 'ru' => '<p>Отель находится на высоте 3 200 м на курорте Шымбулак. Добраться можно по канатной дороге от Медеу через Шымбулак до верхних станций.</p><p>По запросу мы встретим вас на Шымбулаке и поможем с багажом до отеля (услуга «Шымбулак ⇌ Tenir»). Также доступен трансфер от Шымбулака до центра Алматы.</p><p>[Добавьте расписание канатной дороги, время в пути и рекомендации по одежде.]</p>',
                 'en' => '<p>The hotel is located at 3,200 m at Shymbulak Mountain Resort, reached by cable car from Medeu via Shymbulak to the upper stations.</p><p>On request we meet you at Shymbulak and help with your luggage to the hotel (Shymbulak ⇌ Tenir service). A transfer from Shymbulak to Almaty city centre is also available.</p><p>[Add the cable car timetable, travel time and clothing tips.]</p>',
