@@ -704,6 +704,7 @@ class ComposerStaticInitbed664a3137a0af20c24a0f2c8436f70
         'App\\Console\\Commands\\SetAdminPassword' => __DIR__ . '/../..' . '/app/Console/Commands/SetAdminPassword.php',
         'App\\Console\\Commands\\SyncGifts' => __DIR__ . '/../..' . '/app/Console/Commands/SyncGifts.php',
         'App\\Filament\\Pages\\Dashboard' => __DIR__ . '/../..' . '/app/Filament/Pages/Dashboard.php',
+        'App\\Filament\\Pages\\MapCalibration' => __DIR__ . '/../..' . '/app/Filament/Pages/MapCalibration.php',
         'App\\Filament\\Pages\\SiteSettings' => __DIR__ . '/../..' . '/app/Filament/Pages/SiteSettings.php',
         'App\\Filament\\Resources\\Events\\EventResource' => __DIR__ . '/../..' . '/app/Filament/Resources/Events/EventResource.php',
         'App\\Filament\\Resources\\Events\\Pages\\CreateEvent' => __DIR__ . '/../..' . '/app/Filament/Resources/Events/Pages/CreateEvent.php',

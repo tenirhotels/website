@@ -15,7 +15,8 @@ use Illuminate\Support\Collection;
  *  stations [{key, lift, next, name{}, tag{}}]    — по порядку подъёма; key = папка панорамы public/panoramas/{key},
  *  hotel_panorama                                  — папка панорамы у отеля (public/panoramas/{…}),
  *  pins [{id, kind, n, x, y, lat, lng, seasons[], detail, cable, label{}}]  — lat/lng необязательны; с ними метка работает опорной точкой привязки к GPS,
- *  geo_points [{lat, lng, x, y}],
+ *  geo_points [{lat, lng, x, y}]  — отдельные точки привязки (ставятся на странице «Привязка карты»),
+ *  geo_ignore [pin id]            — метки, которые не используются как опорные (иконка стоит не в настоящем месте),
  *  overlay [{kind: total|name|time|arrow_time|arrow|text, x, y, rot, station, text{}}]  — подписи поверх картинки.
  */
 class LocationMap
@@ -103,7 +104,10 @@ class LocationMap
     /** Опорные точки привязки к GPS из меток: те, у кого заданы координаты и положение на рисунке. */
     private function pinGeoPoints(): array
     {
+        $ignore = array_map('strval', (array) ($this->d['geo_ignore'] ?? []));
+
         return collect($this->d['pins'] ?? [])
+            ->reject(fn ($p) => in_array((string) ($p['id'] ?? ''), $ignore, true))
             ->filter(fn ($p) => filled($p['lat'] ?? null) && filled($p['lng'] ?? null) && filled($p['x'] ?? null) && filled($p['y'] ?? null))
             ->map(fn ($p) => [(float) $p['lat'], (float) $p['lng'], (int) $p['x'], (int) $p['y'], (string) ($p['id'] ?? '')])->values()->all();
     }

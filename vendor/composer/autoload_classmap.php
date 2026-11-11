@@ -17,6 +17,7 @@ return array(
     'App\\Console\\Commands\\SetAdminPassword' => $baseDir . '/app/Console/Commands/SetAdminPassword.php',
     'App\\Console\\Commands\\SyncGifts' => $baseDir . '/app/Console/Commands/SyncGifts.php',
     'App\\Filament\\Pages\\Dashboard' => $baseDir . '/app/Filament/Pages/Dashboard.php',
+    'App\\Filament\\Pages\\MapCalibration' => $baseDir . '/app/Filament/Pages/MapCalibration.php',
     'App\\Filament\\Pages\\SiteSettings' => $baseDir . '/app/Filament/Pages/SiteSettings.php',
     'App\\Filament\\Resources\\Events\\EventResource' => $baseDir . '/app/Filament/Resources/Events/EventResource.php',
     'App\\Filament\\Resources\\Events\\Pages\\CreateEvent' => $baseDir . '/app/Filament/Resources/Events/Pages/CreateEvent.php',
