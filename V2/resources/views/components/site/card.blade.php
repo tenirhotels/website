@@ -4,18 +4,18 @@
     <a href="{{ $href }}" class="relative block overflow-hidden rounded-2xl {{ $ratio }}">
         <x-site.media :src="$image" :alt="''" class="transition-transform duration-700 group-hover:scale-[1.03]" />
         <span class="pointer-events-none absolute inset-0 bg-gradient-to-t from-forest-deep/80 via-forest-deep/20 to-transparent" aria-hidden="true"></span>
-        <h3 class="absolute inset-x-5 bottom-4 flex items-end justify-between gap-3 font-display text-[24px] leading-tight text-white">
-            <span>{{ $title }}</span>
-            <svg class="mb-1 size-5 shrink-0 transition-transform group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+        @if ($tags)
+            <ul class="absolute left-4 right-4 top-4 flex flex-wrap gap-1.5">
+                @foreach ($tags as $tag)
+                    <li class="rounded-full bg-white/90 px-3 py-1.5 text-[12px] leading-none text-ink backdrop-blur-sm">{{ $tag }}</li>
+                @endforeach
+            </ul>
+        @endif
+        <h3 class="absolute inset-x-5 bottom-4 flex min-h-[3.1rem] items-start justify-between gap-3 font-display text-[24px] leading-[1.15] text-white">
+            <span class="line-clamp-2">{{ $title }}</span>
+            <svg class="mt-1 size-5 shrink-0 transition-transform group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
         </h3>
     </a>
-    @if ($tags)
-        <ul class="flex flex-wrap gap-2">
-            @foreach ($tags as $tag)
-                <li class="rounded-full border border-mist bg-white px-3.5 py-1.5 text-[13px] leading-none text-slate">{{ $tag }}</li>
-            @endforeach
-        </ul>
-    @endif
     @if ($meta)<p class="text-xs uppercase tracking-[0.2em] text-stone">{{ $meta }}</p>@endif
     @if ($text)<p class="text-base leading-relaxed text-slate">{{ $text }}</p>@endif
     @if ($cta)
