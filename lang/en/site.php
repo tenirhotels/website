@@ -64,6 +64,7 @@ return [
         'view' => 'View',
         'amenities' => 'In the room',
         'book_room' => 'Book this room',
+        'room_details' => 'Room details and photos',
         'coming_soon' => 'Coming soon',
         'discover' => 'Discover the hotel',
         'all_rooms' => 'All rooms',

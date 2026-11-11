@@ -64,6 +64,7 @@ return [
         'view' => 'Вид',
         'amenities' => 'В номере',
         'book_room' => 'Забронировать номер',
+        'room_details' => 'Подробнее о номере',
         'coming_soon' => 'Скоро открытие',
         'discover' => 'Об отеле',
         'all_rooms' => 'Все номера',
