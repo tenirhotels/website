@@ -39,6 +39,7 @@
 
             <div class="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-exely-line pt-4 text-[15px] text-exely-ink">
                 <span>{{ __('site.booking.help') }}</span>
+                <a href="{{ route('guest-account') }}" class="hover:text-ember">{{ __('site.booking.account') }}</a>
                 @if ($phone = $hotel?->phone ?? Setting::get('contacts.phone'))
                     <a href="tel:{{ preg_replace('/[^\d+]/', '', $phone) }}" class="hover:text-ember">{{ $phone }}</a>
                 @endif

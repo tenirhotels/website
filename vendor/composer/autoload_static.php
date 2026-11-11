@@ -776,6 +776,7 @@ class ComposerStaticInitbed664a3137a0af20c24a0f2c8436f70
         'App\\Http\\Controllers\\EventController' => __DIR__ . '/../..' . '/app/Http/Controllers/EventController.php',
         'App\\Http\\Controllers\\ExperienceController' => __DIR__ . '/../..' . '/app/Http/Controllers/ExperienceController.php',
         'App\\Http\\Controllers\\GiftController' => __DIR__ . '/../..' . '/app/Http/Controllers/GiftController.php',
+        'App\\Http\\Controllers\\GuestAccountController' => __DIR__ . '/../..' . '/app/Http/Controllers/GuestAccountController.php',
         'App\\Http\\Controllers\\HomeController' => __DIR__ . '/../..' . '/app/Http/Controllers/HomeController.php',
         'App\\Http\\Controllers\\MapController' => __DIR__ . '/../..' . '/app/Http/Controllers/MapController.php',
         'App\\Http\\Controllers\\OfferController' => __DIR__ . '/../..' . '/app/Http/Controllers/OfferController.php',

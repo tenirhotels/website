@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\GuestAccountController;
 use App\Http\Controllers\DestinationController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\ExperienceController;
@@ -52,6 +53,7 @@ $publicWithoutSession = [
 | /{locale}/offers[/{slug}]                     спецпредложения
 | /{locale}/stories[/{slug}]                    истории и новости
 | /{locale}/booking                             модуль бронирования Exely
+| /{locale}/guest-account                       личный кабинет гостя (модуль Exely)
 | /{locale}/gifts                               подарочные сертификаты (список из gifter)
 | /{locale}/map                                 интерактивная карта курорта (зима/лето)
 | /{locale}/contact                             контакты
@@ -80,6 +82,7 @@ Route::get('robots.txt', fn () => response(implode("\n", [
     'User-agent: *',
     'Disallow: /admin',
     'Disallow: /*/booking',
+    'Disallow: /*/guest-account',
     'Sitemap: '.route('sitemap'),
 ]))->header('Content-Type', 'text/plain'));
 
@@ -128,6 +131,7 @@ Route::prefix('{locale}')
         Route::get('stories/{story}', [StoryController::class, 'show'])->name('stories.show');
 
         Route::get('booking', BookingController::class)->name('booking');
+        Route::get('guest-account', GuestAccountController::class)->name('guest-account');
         Route::get('map', MapController::class)->name('map');
         Route::get('gifts', GiftController::class)->name('gifts');
         Route::get('contact', [PageController::class, 'contact'])->name('contact');

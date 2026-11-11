@@ -89,6 +89,7 @@ return array(
     'App\\Http\\Controllers\\EventController' => $baseDir . '/app/Http/Controllers/EventController.php',
     'App\\Http\\Controllers\\ExperienceController' => $baseDir . '/app/Http/Controllers/ExperienceController.php',
     'App\\Http\\Controllers\\GiftController' => $baseDir . '/app/Http/Controllers/GiftController.php',
+    'App\\Http\\Controllers\\GuestAccountController' => $baseDir . '/app/Http/Controllers/GuestAccountController.php',
     'App\\Http\\Controllers\\HomeController' => $baseDir . '/app/Http/Controllers/HomeController.php',
     'App\\Http\\Controllers\\MapController' => $baseDir . '/app/Http/Controllers/MapController.php',
     'App\\Http\\Controllers\\OfferController' => $baseDir . '/app/Http/Controllers/OfferController.php',
