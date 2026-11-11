@@ -36,7 +36,7 @@
                         <a href="{{ $e->url() }}" class="group relative block aspect-[5/6] overflow-hidden rounded-2xl">
                             <x-site.media :src="$e->image" :alt="''" class="transition-transform duration-700 group-hover:scale-[1.04]" />
                             <span class="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,rgb(22_33_27/.9)_0%,rgb(22_33_27/.45)_30%,rgb(22_33_27/0)_60%)]" aria-hidden="true"></span>
-                            <span class="absolute inset-x-3.5 bottom-3.5 line-clamp-2 font-display text-[17px] leading-[1.2] text-white">{{ $e->t('title') }}</span>
+                            <span class="absolute inset-x-3.5 bottom-3.5 line-clamp-1 font-display text-[17px] leading-[1.2] text-white">{{ $e->t('title') }}</span>
                         </a>
                     @endforeach
                 </div>
