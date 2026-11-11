@@ -71,7 +71,7 @@ class LocationResource extends Resource
                 ]),
                 Tab::make('Как добраться')->schema([
                     Fields::image('getting_image', 'Фото страницы «Как добраться»', 'locations/pages')
-                        ->helperText('Большое фото вверху страницы и в плашке на «Перед приездом». Пусто — первое фото галереи отеля.'),
+                        ->helperText('Фото-подложка вверху страницы. Пусто — первое фото галереи отеля.'),
                     Fields::translatable(fn (string $l) => [
                         RichEditor::make("getting_here.$l")->label('Текст «Как добраться»')
                             ->helperText('Общий для всех отелей этой локации. Линии канатной дороги, трансфер и такси добавляются во вкладке «Транспорт».'),
@@ -82,7 +82,7 @@ class LocationResource extends Resource
                 ]),
                 Tab::make('Перед приездом')->schema([
                     Fields::image('arrival_image', 'Фото страницы «Перед приездом»', 'locations/pages')
-                        ->helperText('Большое фото вверху страницы и в плашке на «Как добраться». Пусто — другое фото из галереи отеля.'),
+                        ->helperText('Фото-подложка вверху страницы. Пусто — другое фото из галереи отеля.'),
                     Fields::translatable(fn (string $l) => [
                         RichEditor::make("arrival_info.$l")->label('Текст «Что важно знать»')
                             ->helperText('Страница «Перед приездом»: канатная дорога и билеты, багаж, одежда. Общий для всех отелей этой локации. Вопросы и ответы под ним — раздел «Частые вопросы» отеля.'),
