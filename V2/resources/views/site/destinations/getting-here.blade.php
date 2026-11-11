@@ -87,7 +87,7 @@
             @if ($hotel->t('getting_here'))<div class="prose-tenir [&>*:first-child]:mt-0">{!! $hotel->t('getting_here') !!}</div>@endif
             <a href="{{ $hotel->sectionUrl('before-you-arrive') }}" class="group flex flex-col gap-2 rounded-3xl border border-mist bg-sand p-6 transition hover:border-ember md:p-8">
                 <span class="font-display text-xl md:text-2xl">{{ __('site.hotel.before_arrive') }}</span>
-                <span class="text-base leading-relaxed text-slate">{{ __('site.hotel.before_tease') }}</span>
+                <span class="text-base leading-relaxed text-slate">{{ \App\Models\Setting::text('pages.before_tease') ?? __('site.hotel.before_tease') }}</span>
                 <span class="link-line mt-2 self-start">{{ __('site.hotel.before_more') }}</span>
             </a>
         </div>

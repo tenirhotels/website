@@ -1,6 +1,6 @@
 @php use App\Models\Setting; @endphp
 <x-layouts.site :seo="$seo">
-    <x-site.page-hero :image="$hotel->gallery[0] ?? $hotel->hero_image" :eyebrow="$hotel->t('name')" :title="__('site.hotel.before_arrive')" :text="__('site.hotel.before_tease')" />
+    <x-site.page-hero :image="$hotel->gallery[0] ?? $hotel->hero_image" :eyebrow="$hotel->t('name')" :title="__('site.hotel.before_arrive')" :text="Setting::text('pages.before_tease') ?? __('site.hotel.before_tease')" />
 
     @if ($hotel->t('arrival_info'))
         <section class="container-site flex flex-col gap-8 pb-12 pt-10 md:gap-14 md:py-16 lg:flex-row lg:gap-20 lg:py-20">
@@ -8,7 +8,7 @@
                 <div class="prose-tenir [&>*:first-child]:mt-0">{!! $hotel->t('arrival_info') !!}</div>
                 <a href="{{ $hotel->sectionUrl('getting-here') }}" class="group flex flex-col gap-2 rounded-3xl border border-mist bg-sand p-6 transition hover:border-ember md:p-8">
                     <span class="font-display text-xl md:text-2xl">{{ __('site.hotel.getting_here') }}</span>
-                    <span class="text-base leading-relaxed text-slate">{{ __('site.hotel.getting_tease') }}</span>
+                    <span class="text-base leading-relaxed text-slate">{{ Setting::text('pages.getting_tease') ?? __('site.hotel.getting_tease') }}</span>
                     <span class="link-line mt-2 self-start">{{ __('site.hotel.getting_more') }}</span>
                 </a>
             </div>
