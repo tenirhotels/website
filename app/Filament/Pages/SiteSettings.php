@@ -38,7 +38,7 @@ class SiteSettings extends Page
 
     protected static ?int $navigationSort = 0;
 
-    private const GROUPS = ['site', 'brand', 'contacts', 'social', 'analytics', 'perf', 'seo'];
+    private const GROUPS = ['site', 'brand', 'contacts', 'social', 'analytics', 'perf', 'seo', 'pages'];
 
     public ?array $data = [];
 
@@ -78,6 +78,14 @@ class SiteSettings extends Page
                 ], 'brand'),
                 TextInput::make('brand.legal_name')->label('Юр. лицо')->placeholder('ТОО «Alpine Hotel»'),
             ]),
+            Section::make('Тексты страниц')->collapsible()->collapsed()
+                ->description('Короткие описания в плашках-ссылках между страницами «Как добраться» и «Перед приездом». Пусто — стандартный текст.')
+                ->schema([
+                    Fields::translatable(fn (string $l) => [
+                        Textarea::make("pages.getting_tease.$l")->label('Плашка «Как добраться» (показывается на странице «Перед приездом»)')->rows(3)->placeholder(__('site.hotel.getting_tease', [], $l)),
+                        Textarea::make("pages.before_tease.$l")->label('Плашка «Перед приездом» (на странице «Как добраться» и в шапке самой страницы)')->rows(3)->placeholder(__('site.hotel.before_tease', [], $l)),
+                    ], 'pages'),
+                ]),
             Section::make('Контакты отдела бронирования')->columns(2)->schema([
                 TextInput::make('contacts.phone')->label('Телефон')->tel(),
                 TextInput::make('contacts.whatsapp')->label('WhatsApp')->tel(),
