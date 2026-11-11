@@ -26,7 +26,7 @@
         </script>
     </x-slot:head>
 
-    <div class="bg-exely">
+    <div class="bg-exely-account">
         <div class="container-site pb-10 pt-6 md:pt-8">
             <div class="mb-4 flex flex-wrap items-end justify-between gap-x-8 gap-y-1">
                 <h1 class="h-display mt-1 text-3xl text-forest md:text-4xl">{{ __('site.booking.account') }}</h1>
