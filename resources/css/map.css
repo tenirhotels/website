@@ -44,6 +44,7 @@ button.map-row { cursor: pointer; }
 button.map-row:hover { color: #B5561F; }
 
 /* «Вы здесь» */
+.map-acc { position: absolute; z-index: 6; border-radius: 50%; transform: translate(-50%, -50%); background: rgb(26 115 232 / .12); border: 1px solid rgb(26 115 232 / .5); pointer-events: none; }
 .map-me { position: absolute; z-index: 7; width: 0; height: 0; transform: scale(calc(1 / var(--s, 1))); pointer-events: none; }
 .map-me i { position: absolute; left: -9px; top: -9px; width: 18px; height: 18px; border-radius: 50%; background: #1A73E8; border: 3px solid #fff; box-shadow: 0 1px 6px rgb(0 0 0 / .4); }
 .map-me b { position: absolute; left: -24px; top: -24px; width: 48px; height: 48px; border-radius: 50%; background: rgb(26 115 232 / .25); animation: map-pulse 2s ease-out infinite; }

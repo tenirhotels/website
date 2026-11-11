@@ -29,6 +29,8 @@ return [
     'locate' => 'Where am I',
     'locating' => 'Finding your location…',
     'here' => 'You are here (approximately)',
+    'here_acc' => 'You are here (approximately, ±:m m)',
+    'approx' => 'Very approximate position: few reference points nearby (±:m m)',
     'far' => 'You are far from the resort — the map only covers the resort area.',
     'denied' => 'Location access is blocked. Allow it in your browser settings.',
     'unavailable' => 'Location is not available on this device.',

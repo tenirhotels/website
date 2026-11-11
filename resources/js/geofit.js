@@ -106,3 +106,19 @@ export function fitReport(points, smoothing = 0.001) {
     const loos = rows.map((r) => r.loo).filter((v) => v !== null).sort((a, b) => a - b);
     return { rows, looMedian: loos.length ? loos[Math.floor(loos.length / 2)] : null, looMax: loos.length ? loos[loos.length - 1] : null, inverse: full };
 }
+
+/**
+ * Оценка погрешности «Вы здесь», м. Складывается из двух частей: точность GPS телефона и точность самой карты в этом месте.
+ * Карта точна рядом с опорными точками и хуже вдали от них: по страницы привязки в админке — около 40–150 м при соседней
+ * точке в 300–500 м и 500 м и больше в пустотах. Берём 30 м + 0,4 от расстояния до ближайшей опорной точки.
+ */
+export const mapErrorMeters = (nearestM) => 30 + 0.4 * nearestM;
+export const accuracyMeters = (gpsM, nearestM) => Math.hypot(Math.max(gpsM || 0, 5), mapErrorMeters(nearestM));
+
+/** Сколько пикселей иллюстрации в m метрах вокруг точки (среднее по двум направлениям: у схемы масштаб по осям разный). */
+export function metersToPx(project, lat, lon, m) {
+    const a = project(lat, lon);
+    const b = project(lat + m / 110570, lon);
+    const c = project(lat, lon + m / (111320 * Math.cos((lat * Math.PI) / 180)));
+    return (Math.hypot(b[0] - a[0], b[1] - a[1]) + Math.hypot(c[0] - a[0], c[1] - a[1])) / 2;
+}

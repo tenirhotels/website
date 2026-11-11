@@ -1,5 +1,5 @@
 import '../css/map.css';
-import { buildProjector } from './geofit';
+import { buildProjector, accuracyMeters, metersToPx } from './geofit';
 
 /*
  * Интерактивная карта курорта: зум и перемещение (мышь, колесо, касания, щипок),
@@ -16,6 +16,7 @@ if (root) {
     const card = root.querySelector('[data-card]');
     const toastEl = root.querySelector('[data-toast]');
     const me = root.querySelector('[data-me]');
+    const acc = root.querySelector('[data-acc]');
     const i18n = JSON.parse(root.querySelector('[data-map-i18n]')?.textContent || '{}');
     const geoPoints = JSON.parse(root.querySelector('[data-map-geo]')?.textContent || '{}').points || [];
 
@@ -217,15 +218,25 @@ if (root) {
             const [x, y] = project(lat, lon);
             if (nearest > 6 || x < -120 || y < -120 || x > W + 120 || y > H + 120) {
                 me.hidden = true;
+                if (acc) acc.hidden = true;
                 return toast(i18n.far);
+            }
+            // Круг погрешности: GPS телефона + точность карты в этом месте (зависит от расстояния до опорных точек)
+            const err = Math.round(accuracyMeters(pos.coords.accuracy, nearest * 1000) / 10) * 10;
+            if (acc) {
+                const r = Math.max(8, metersToPx(project, lat, lon, err));
+                acc.style.left = clamp(x, 0, W) + 'px';
+                acc.style.top = clamp(y, 0, H) + 'px';
+                acc.style.width = acc.style.height = r * 2 + 'px';
+                acc.hidden = false;
             }
             me.style.left = clamp(x, 0, W) + 'px';
             me.style.top = clamp(y, 0, H) + 'px';
             me.hidden = false;
             vp.scrollIntoView({ behavior: 'smooth', block: 'center' });
             animate(() => centerOn(clamp(x, 0, W), clamp(y, 0, H), Math.max(s, 0.9)));
-            toast(i18n.here);
-        }, (err) => toast(err.code === 1 ? i18n.denied : i18n.unavailable), { enableHighAccuracy: true, timeout: 15000, maximumAge: 30000 });
+            toast((err > 500 ? i18n.approx : i18n.here_acc).replace(':m', err));
+        }, (e) => toast(e.code === 1 ? i18n.denied : i18n.unavailable), { enableHighAccuracy: true, timeout: 15000, maximumAge: 30000 });
     });
 
     // ——— старт ———
