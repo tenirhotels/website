@@ -19,6 +19,7 @@ use Filament\Forms\Components\ViewField;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Set;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Tabs;
@@ -72,12 +73,18 @@ class LocationResource extends Resource
                     Fields::translatable(fn (string $l) => [
                         RichEditor::make("getting_here.$l")->label('Текст «Как добраться»')
                             ->helperText('Общий для всех отелей этой локации. Линии канатной дороги, трансфер и такси добавляются во вкладке «Транспорт».'),
+                        Textarea::make("before_tease.$l")->label('Плашка со ссылкой на «Перед приездом»')->rows(3)
+                            ->placeholder(__('site.hotel.before_tease', [], $l))
+                            ->helperText('Короткое описание в плашке внизу страницы «Как добраться». Пусто — стандартный текст.'),
                     ], 'getting'),
                 ]),
                 Tab::make('Перед приездом')->schema([
                     Fields::translatable(fn (string $l) => [
                         RichEditor::make("arrival_info.$l")->label('Текст «Что важно знать»')
                             ->helperText('Страница «Перед приездом»: канатная дорога и билеты, багаж, одежда. Общий для всех отелей этой локации. Вопросы и ответы под ним — раздел «Частые вопросы» отеля.'),
+                        Textarea::make("getting_tease.$l")->label('Плашка со ссылкой на «Как добраться»')->rows(3)
+                            ->placeholder(__('site.hotel.getting_tease', [], $l))
+                            ->helperText('Короткое описание в плашке на странице «Перед приездом». Пусто — стандартный текст.'),
                     ], 'arrival'),
                     Section::make('От города до вершины')->description('Уровни высоты для наглядности: от города до отеля. Показываются на странице «Перед приездом» линией профиля. Порядок по высоте: первый — город, второй — нижняя станция канатки, последний — отель.')->schema([
                         Repeater::make('levels')->hiddenLabel()->addActionLabel('Добавить уровень')->collapsed()->cloneable()

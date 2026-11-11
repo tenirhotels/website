@@ -23,7 +23,7 @@ class Hotel extends Model
     ];
 
     /** Настройки места живут в локации: отель читает (и пишет) их через неё — шаблоны и SEO работают как раньше. */
-    private const LOCATION_ATTRS = ['region', 'city', 'address', 'getting_here', 'arrival_info', 'levels', 'altitude_m', 'country_code', 'latitude', 'longitude'];
+    private const LOCATION_ATTRS = ['region', 'city', 'address', 'getting_here', 'arrival_info', 'getting_tease', 'before_tease', 'levels', 'altitude_m', 'country_code', 'latitude', 'longitude'];
 
     protected string $titleAttribute = 'name';
 
