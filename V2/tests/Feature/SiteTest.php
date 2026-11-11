@@ -374,7 +374,7 @@ class SiteTest extends TestCase
         $this->assertFileExists(public_path('images/map/winter.webp'));
         $this->assertFileExists(public_path('images/map/summer.webp'));
 
-        $this->assertCount(3, \App\Models\Hotel::where('slug', 'shymbulak')->first()->resortMap()->geoPoints());
+        $this->assertGreaterThanOrEqual(10, count(\App\Models\Hotel::where('slug', 'shymbulak')->first()->resortMap()->geoPoints()));
         $this->assertSame('winter', \App\Support\ResortMap::defaultSeason(new \DateTimeImmutable('2026-12-15')));
         $this->assertSame('summer', \App\Support\ResortMap::defaultSeason(new \DateTimeImmutable('2026-07-15')));
     }

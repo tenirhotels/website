@@ -1,4 +1,5 @@
 import '../css/map.css';
+import { buildProjector } from './geofit';
 
 /*
  * Интерактивная карта курорта: зум и перемещение (мышь, колесо, касания, щипок),
@@ -201,44 +202,19 @@ if (root) {
         clearTimeout(toastTimer);
         toastTimer = setTimeout(() => { toastEl.hidden = true; }, 4500);
     };
-    // Привязка: аффинное преобразование по методу наименьших квадратов (3 точки — точное, больше — усреднение)
-    const lat0 = geoPoints.length ? geoPoints[0][0] : 0, lon0 = geoPoints.length ? geoPoints[0][1] : 0;
-    const local = (lat, lon) => [(lon - lon0) * Math.cos((lat0 * Math.PI) / 180) * 111.32, (lat - lat0) * 110.57]; // км
-    const solve = (A, b) => { // метод Гаусса 3×3
-        const m = A.map((r, i) => [...r, b[i]]);
-        for (let i = 0; i < 3; i++) {
-            let p = i;
-            for (let r = i + 1; r < 3; r++) if (Math.abs(m[r][i]) > Math.abs(m[p][i])) p = r;
-            [m[i], m[p]] = [m[p], m[i]];
-            if (Math.abs(m[i][i]) < 1e-9) return null;
-            for (let r = 0; r < 3; r++) {
-                if (r === i) continue;
-                const f = m[r][i] / m[i][i];
-                for (let c = i; c < 4; c++) m[r][c] -= f * m[i][c];
-            }
-        }
-        return m.map((r, i) => r[3] / r[i]);
-    };
-    let affine = null;
-    if (geoPoints.length >= 3) {
-        const rows = geoPoints.map((p) => [...local(p[0], p[1]), 1]);
-        const ata = [0, 1, 2].map((i) => [0, 1, 2].map((j) => rows.reduce((a, r) => a + r[i] * r[j], 0)));
-        const atb = (k) => [0, 1, 2].map((i) => rows.reduce((a, r, n) => a + r[i] * geoPoints[n][k], 0));
-        const cx = solve(ata, atb(2)), cy = solve(ata, atb(3));
-        if (cx && cy) affine = { cx, cy };
-    }
+    // Привязка GPS → иллюстрация по всем опорным точкам (метки с координатами + точки привязки)
+    const project = buildProjector(geoPoints, 0.001);
+    const local = project ? project.local : (lat, lon) => [lon * 111.32, lat * 110.57];
     const km = (lat1, lon1, lat2, lon2) => { const a = local(lat1, lon1), b = local(lat2, lon2); return Math.hypot(a[0] - b[0], a[1] - b[1]); };
 
     const locate = root.querySelector('[data-locate]');
     locate?.addEventListener('click', () => {
-        if (!navigator.geolocation || !affine) return toast(i18n.unavailable);
+        if (!navigator.geolocation || !project) return toast(i18n.unavailable);
         toast(i18n.locating);
         navigator.geolocation.getCurrentPosition((pos) => {
             const { latitude: lat, longitude: lon } = pos.coords;
             const nearest = Math.min(...geoPoints.map((p) => km(lat, lon, p[0], p[1])));
-            const [e, n] = local(lat, lon);
-            const x = affine.cx[0] * e + affine.cx[1] * n + affine.cx[2];
-            const y = affine.cy[0] * e + affine.cy[1] * n + affine.cy[2];
+            const [x, y] = project(lat, lon);
             if (nearest > 6 || x < -120 || y < -120 || x > W + 120 || y > H + 120) {
                 me.hidden = true;
                 return toast(i18n.far);
