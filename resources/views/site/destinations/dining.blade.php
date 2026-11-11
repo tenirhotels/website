@@ -22,15 +22,8 @@
                         <a href="{{ media($venue->menu_file) }}" class="link-line self-start" target="_blank" rel="noopener">{{ __('site.hotel.menu') }}</a>
                     @endif
                 </div>
-                <div class="flex flex-1 flex-col gap-3">
-                    <div class="aspect-[4/3]"><x-site.media :src="$venue->image" :alt="$venue->t('name')" /></div>
-                    @if ($venue->gallery)
-                        <div class="grid grid-cols-3 gap-3">
-                            @foreach (array_slice($venue->gallery, 0, 3) as $img)
-                                <div class="aspect-square"><x-site.media :src="$img" alt="" /></div>
-                            @endforeach
-                        </div>
-                    @endif
+                <div class="flex-1">
+                    <x-site.gallery :images="array_merge([$venue->image], $venue->gallery ?? [])" :alt="$venue->t('name')" :layout="$venue->gallery_layout ?: 'slider'" />
                 </div>
             </div>
         </section>

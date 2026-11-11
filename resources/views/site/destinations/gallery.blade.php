@@ -4,13 +4,7 @@
 
     <section class="container-site py-12 md:py-16 lg:py-20">
         @if ($hotel->gallery)
-            <div class="columns-1 gap-4 sm:columns-2 lg:columns-3">
-                @foreach ($hotel->gallery as $img)
-                    <a href="{{ media($img) }}" class="mb-4 block break-inside-avoid overflow-hidden rounded-2xl" target="_blank" rel="noopener">
-                        <x-site.media :src="$img" :alt="$hotel->t('name')" class="h-auto w-full" />
-                    </a>
-                @endforeach
-            </div>
+            <x-site.gallery :images="$hotel->gallery" :alt="$hotel->t('name')" :layout="$hotel->gallery_layout ?: 'masonry'" />
         @else
             <p class="text-slate">{{ __('site.common.empty') }}</p>
         @endif

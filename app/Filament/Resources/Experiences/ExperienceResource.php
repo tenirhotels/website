@@ -74,6 +74,7 @@ class ExperienceResource extends Resource
             Section::make('Фото')->columnSpanFull()->schema([
                 Fields::image('image', 'Обложка', 'experiences'),
                 Fields::gallery('gallery', 'experiences/gallery'),
+                Fields::galleryLayout('mosaic'),
             ]),
             Fields::seo(),
             Fields::publishing(featured: true),

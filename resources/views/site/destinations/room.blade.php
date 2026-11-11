@@ -7,11 +7,7 @@
             <div class="prose-tenir">{!! $room->t('description') !!}</div>
 
             @if ($room->gallery)
-                <div class="grid grid-cols-2 gap-3">
-                    @foreach ($room->gallery as $img)
-                        <div class="aspect-[4/3] overflow-hidden rounded-2xl"><x-site.media :src="$img" :alt="$room->t('name')" /></div>
-                    @endforeach
-                </div>
+                <x-site.gallery :images="$room->gallery" :alt="$room->t('name')" :layout="$room->gallery_layout ?: 'mosaic'" />
             @endif
 
             @if ($amenities = $room->featureList())
