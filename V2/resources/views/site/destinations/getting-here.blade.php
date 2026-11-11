@@ -22,14 +22,15 @@
                         $waDigits = preg_replace('/\D/', '', (string) $hotel->whatsapp);
                         $msg = __('access.order_msg', ['name' => $t->title(), 'hotel' => $hotel->t('name')]);
                     @endphp
-                    <article class="flex flex-col gap-3 overflow-hidden rounded-3xl border border-mist p-6">
-                        @if ($t->image)<div class="-mx-6 -mt-6 aspect-[16/9]"><x-site.media :src="$t->image" :alt="$t->title()" /></div>@endif
+                    <article class="flex flex-col overflow-hidden rounded-3xl border border-mist bg-white">
+                        @if ($t->image)<div class="aspect-[16/9]"><x-site.media :src="$t->image" :alt="$t->title()" round="" /></div>@endif
                         @if ($ride)
-                            <p class="flex items-center gap-2 text-[13px] uppercase tracking-[0.14em] text-stone">
-                                <span class="flex h-8 w-8 items-center justify-center rounded-full bg-sand text-ember">{{ site_icon($t->kind === 'taxi' ? 'car' : 'bus', 'h-5 w-5') }}</span>
+                            <p class="flex items-center gap-2.5 bg-sand px-5 py-3.5 text-[13px] font-semibold uppercase tracking-[0.18em] text-forest md:px-6">
+                                <span class="flex h-6 w-6 items-center justify-center text-ember">{{ site_icon($t->kind === 'taxi' ? 'car' : 'bus', 'h-5 w-5') }}</span>
                                 {{ __('access.kind_'.$t->kind) }}
                             </p>
                         @endif
+                        <div class="flex flex-1 flex-col gap-3 p-5 md:p-6">
                         @if (! ($ride && $from !== '' && $to !== '' && trim((string) $t->t('name')) === ''))
                             <h3 class="font-display text-xl">{{ $t->title() }}</h3>
                         @endif
@@ -76,6 +77,7 @@
                                 @if ($waDigits && $hotel->phone)<a href="tel:{{ preg_replace('/[^\d+]/', '', $hotel->phone) }}" class="link-line text-[15px]">{{ __('access.order_call') }}</a>@endif
                             </div>
                         @endif
+                    </div>
                     </article>
                 @endforeach
             </div>
@@ -84,10 +86,9 @@
 
     <section class="container-site flex flex-col gap-8 pb-12 pt-8 md:py-16 lg:py-20">
         @if ($hotel->t('getting_here'))<div class="prose-tenir [&>*:first-child]:mt-0">{!! $hotel->t('getting_here') !!}</div>@endif
-        <a href="{{ $hotel->sectionUrl('before-you-arrive') }}" class="group flex flex-col gap-2 rounded-3xl border border-mist bg-sand p-6 transition hover:border-ember md:p-8">
-            <span class="font-display text-xl md:text-2xl">{{ __('site.hotel.before_arrive') }}</span>
+        <a href="{{ $hotel->sectionUrl('before-you-arrive') }}" class="group flex flex-col gap-2.5 rounded-3xl border border-mist bg-white p-6 transition hover:border-ember md:p-8">
+            <span class="flex items-center justify-between gap-4 font-display text-xl md:text-2xl">{{ __('site.hotel.before_arrive') }}<svg class="size-5 shrink-0 text-ember transition-transform group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span>
             <span class="text-base leading-relaxed text-slate">{{ $hotel->t('before_tease') ?: __('site.hotel.before_tease') }}</span>
-            <span class="link-line mt-2 self-start">{{ __('site.hotel.before_more') }}</span>
         </a>
     </section>
 </x-layouts.site>

@@ -80,6 +80,11 @@
     .prose-tenir ol { @apply list-decimal pl-5 mb-5 space-y-1; }
     .prose-tenir a { @apply text-forest underline underline-offset-4 hover:text-ember; }
     .prose-tenir strong { @apply text-ink; }
+    /* «Перед приездом»: пункты списка — строками с разделителями, жирное начало пункта — как заголовок строки. */
+    .prose-rows > ul { @apply list-none pl-0 mb-8 space-y-0 border-b border-mist; }
+    .prose-rows > ul > li { @apply border-t border-mist py-5; }
+    .prose-rows > ul > li > strong:first-child { @apply mr-1 inline-block font-display text-xl text-ink md:text-[22px]; }
+    .prose-rows > ul > li ul { @apply mt-3 list-disc pl-5 space-y-2 text-[17px]; }
 }
 
 /* Паттерны из брендбука (петроглифы) — маски, цвет задаётся фоном; использовать как лёгкий акцент */

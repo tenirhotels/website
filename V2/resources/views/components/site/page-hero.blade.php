@@ -52,7 +52,7 @@
                 })(window);
             </script>
         @endif
-        <div class="absolute inset-0 bg-forest-deep/45" aria-hidden="true"></div>
+        <div @class(['absolute inset-0', 'bg-forest-deep/45' => $tall, 'bg-[linear-gradient(to_top,rgba(22,33,27,.86)_0%,rgba(22,33,27,.58)_42%,rgba(22,33,27,0)_82%)]' => ! $tall]) aria-hidden="true"></div>
     @else
         <svg aria-hidden="true" viewBox="0 0 1440 760" preserveAspectRatio="none" class="absolute inset-0 h-full w-full">
             <polygon points="0,560 140,430 230,480 380,300 470,360 610,210 700,270 820,150 930,250 1040,190 1150,300 1260,240 1440,380 1440,760 0,760" fill="#2E4237"/>
