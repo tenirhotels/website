@@ -4,11 +4,10 @@
 
     @if ($hotel->t('arrival_info'))
         <section class="container-site flex flex-col gap-8 pb-12 pt-10 md:py-16 lg:py-20">
-            <div class="prose-tenir [&>*:first-child]:mt-0">{!! $hotel->t('arrival_info') !!}</div>
-            <a href="{{ $hotel->sectionUrl('getting-here') }}" class="group flex flex-col gap-2 rounded-3xl border border-mist bg-sand p-6 transition hover:border-ember md:p-8">
-                <span class="font-display text-xl md:text-2xl">{{ __('site.hotel.getting_here') }}</span>
+            <div class="prose-tenir prose-rows [&>*:first-child]:mt-0">{!! $hotel->t('arrival_info') !!}</div>
+            <a href="{{ $hotel->sectionUrl('getting-here') }}" class="group flex flex-col gap-2.5 rounded-3xl border border-mist bg-white p-6 transition hover:border-ember md:p-8">
+                <span class="flex items-center justify-between gap-4 font-display text-xl md:text-2xl">{{ __('site.hotel.getting_here') }}<svg class="size-5 shrink-0 text-ember transition-transform group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span>
                 <span class="text-base leading-relaxed text-slate">{{ $hotel->t('getting_tease') ?: __('site.hotel.getting_tease') }}</span>
-                <span class="link-line mt-2 self-start">{{ __('site.hotel.getting_more') }}</span>
             </a>
         </section>
     @endif

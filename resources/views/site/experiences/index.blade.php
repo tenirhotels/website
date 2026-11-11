@@ -18,7 +18,7 @@
         <div class="grid gap-x-8 gap-y-16 sm:grid-cols-2 lg:grid-cols-3">
             @forelse ($experiences as $e)
                 <x-site.card :href="$e->url()" :image="$e->image" :title="$e->t('title')"
-                    :meta="collect([\App\Support\Property::isMulti() ? $e->hotel?->t('name') : null, $e->seasonLabels()])->filter()->implode(' · ')" :text="$e->t('summary')" />
+                    :tags="collect([\App\Support\Property::isMulti() ? $e->hotel?->t('name') : null, $e->categoryLabel(), $e->seasonLabels()])->filter()->values()->all()" :text="$e->t('summary')" />
             @empty
                 <p class="text-slate">{{ __('site.common.empty') }}</p>
             @endforelse

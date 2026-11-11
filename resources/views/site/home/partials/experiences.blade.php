@@ -4,7 +4,7 @@
         <div class="rail sm:grid-cols-2 lg:grid-cols-3">
             @foreach ($experiences as $e)
                 <x-site.card :href="$e->url()" :image="$e->image" :title="$e->t('title')"
-                    :meta="collect([\App\Support\Property::isMulti() ? $e->hotel?->t('name') : null, $e->seasonLabels() ?: $e->categoryLabel()])->filter()->implode(' · ')"
+                    :tags="collect([\App\Support\Property::isMulti() ? $e->hotel?->t('name') : null, $e->categoryLabel(), $e->seasonLabels()])->filter()->values()->all()"
                     :text="$e->t('summary')" />
             @endforeach
         </div>

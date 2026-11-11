@@ -75,7 +75,7 @@
                 <x-site.section-head :eyebrow="__('site.hotel.experiences')" :title="__('site.home.experiences_title')" :link="$hotel->sectionUrl('experiences')" />
                 <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
                     @foreach ($experiences->take(3) as $e)
-                        <x-site.card :href="$e->url()" :image="$e->image" :title="$e->t('title')" :meta="$e->seasonLabels() ?: $e->categoryLabel()" :text="$e->t('summary')" />
+                        <x-site.card :href="$e->url()" :image="$e->image" :title="$e->t('title')" :tags="collect([$e->categoryLabel(), $e->seasonLabels()])->filter()->values()->all()" :text="$e->t('summary')" />
                     @endforeach
                 </div>
             </div>
