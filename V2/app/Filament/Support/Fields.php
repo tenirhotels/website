@@ -59,7 +59,7 @@ class Fields
 
         if ($isDefault) {
             $input->live(onBlur: true)
-                ->afterStateUpdated(function (Get $get, Set $set, ?string $state, string $operation) {
+                ->afterStateUpdated(function (Get $get, Set $set, ?string $state, string $operation) use ($slugSuffix) {
                     if ($operation === 'create' && blank($get('slug'))) {
                         $set('slug', Str::slug((string) $state).($slugSuffix ? (string) $slugSuffix($get) : ''));
                     }

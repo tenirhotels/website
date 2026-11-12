@@ -68,7 +68,7 @@ class EventResource extends Resource
                         // При создании: слаг — «название-ГГГГ-ММ»; пересобирается, пока он пустой или собран автоматически.
                         $title = (string) $get('title.'.\App\Support\Locales::source());
                         $slug = (string) $get('slug');
-                        if ($operation === 'create' && $state && $title !== '' && ($slug === '' || preg_match('/-\d{4}-\d{2}$/', $slug))) {
+                        if ($operation === 'create' && $state && $title !== '' && ($slug === '' || $slug === \Illuminate\Support\Str::slug($title) || preg_match('/-\d{4}-\d{2}$/', $slug))) {
                             $set('slug', \Illuminate\Support\Str::slug($title).'-'.\Illuminate\Support\Carbon::parse($state)->format('Y-m'));
                         }
                     }),
