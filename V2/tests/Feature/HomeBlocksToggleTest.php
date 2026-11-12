@@ -23,4 +23,15 @@ class HomeBlocksToggleTest extends TestCase
             ->assertDontSee(__('site.home.experiences_title', [], 'ru'))
             ->assertDontSee(__('site.home.events_title', [], 'ru'));
     }
+
+    public function test_recognition_switch(): void
+    {
+        \App\Models\Recognition::query()->update(['is_published' => true, 'show_on_home' => true]);
+        if (\App\Models\Recognition::forHome()->isEmpty()) {
+            $this->markTestSkipped('Нет подтверждённых наград в сидах.');
+        }
+        $this->get('/ru')->assertSee('recognition-title', false);
+        Setting::put('home', ['recognition' => false]);
+        $this->get('/ru')->assertDontSee('recognition-title', false);
+    }
 }
