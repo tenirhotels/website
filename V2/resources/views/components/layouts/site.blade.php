@@ -34,7 +34,7 @@
     @endif
 
     <meta property="og:type" content="{{ $seo->type }}">
-    <meta property="og:site_name" content="{{ \App\Models\Setting::text('brand.name', 'Tenir Hotels') }}">
+    <meta property="og:site_name" content="{{ \App\Support\Seo::siteName() }}">
     <meta property="og:title" content="{{ $seo->fullTitle() }}">
     @if ($description)<meta property="og:description" content="{{ $description }}">@endif
     <meta property="og:url" content="{{ url()->current() }}">
@@ -64,7 +64,7 @@
     @php
         $crumbs = null;
         if (! request()->routeIs('home') && ! $seo->noindex) {
-            $trail = [[Setting::text('brand.name', 'Tenir Hotels'), route('home', ['locale' => $locale])]];
+            $trail = [[\App\Support\Seo::siteName(), route('home', ['locale' => $locale])]];
             if ($hotel && \App\Support\Property::isMulti()) {
                 $trail[] = [$hotel->t('name'), $hotel->url()];
             }

@@ -38,7 +38,7 @@ class EventController extends Controller
         return view('site.events.show', [
             'event' => $event,
             'others' => Event::upcoming()->whereKeyNot($event->id)->limit(3)->get(),
-            'seo' => Seo::for($event)->withSchema(Seo::eventSchema($event)),
+            'seo' => Seo::for($event, $event->hotel?->t('name'))->withSchema(Seo::eventSchema($event)),
         ]);
     }
 }

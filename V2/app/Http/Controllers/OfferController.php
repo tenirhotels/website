@@ -32,7 +32,7 @@ class OfferController extends Controller
             'offer' => $offer,
             'expired' => $offer->valid_to && $offer->valid_to->isPast(),
             'others' => Offer::active()->whereKeyNot($offer->id)->ordered()->limit(3)->get(),
-            'seo' => Seo::for($offer),
+            'seo' => Seo::for($offer, $offer->hotel?->t('name')),
         ]);
     }
 }

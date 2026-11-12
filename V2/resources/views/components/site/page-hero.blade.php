@@ -1,4 +1,10 @@
 @props(['image' => null, 'video' => null, 'eyebrow' => null, 'title', 'text' => null, 'tall' => false])
+@php
+    // Один отель: название отеля над заголовком — лишнее повторение.
+    if ($eyebrow && \App\Support\Property::isSingle() && ($single = \App\Support\Property::primary()?->t('name'))) {
+        $eyebrow = collect(explode(' · ', $eyebrow))->reject(fn ($part) => trim($part) === $single)->implode(' · ') ?: null;
+    }
+@endphp
 <section @class(['relative overflow-hidden bg-[#24332B] text-snow', 'h-[78vh] min-h-[560px] max-h-[820px]' => $tall, 'h-[52vh] min-h-[380px] max-h-[560px]' => ! $tall])>
     @if ($image)
         <x-site.media :src="$image" :alt="$title" eager round="" class="absolute inset-0" />
