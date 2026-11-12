@@ -20,7 +20,11 @@ class EventController extends Controller
             ->get();
 
         return view('site.events.index', [
-            'months' => $events->groupBy(fn (Event $e) => $e->starts_on->isPast() ? now()->format('Y-m') : $e->starts_on->format('Y-m')),
+            'months' => $events->groupBy(function (Event $e) {
+                $d = $e->isRecurring() ? $e->nextDay() : $e->starts_on;
+
+                return $d->isPast() ? now()->format('Y-m') : $d->format('Y-m');
+            }),
             'hotels' => Property::isMulti() ? Hotel::published()->open()->ordered()->get() : collect(),
             'activeHotel' => $hotel,
             'seo' => Seo::make(__('site.nav.events'), __('site.events.intro')),

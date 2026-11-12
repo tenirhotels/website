@@ -21,8 +21,24 @@ class Event extends Model
     protected $casts = [
         'starts_on' => 'date',
         'ends_on' => 'date',
+        'extra_dates' => 'array',
         'is_featured' => 'boolean',
     ];
+
+    protected static function booted(): void
+    {
+        // Есть другие даты — список приводится в порядок, а «окончание» = последняя дата (по нему событие уходит с сайта).
+        static::saving(function (self $event) {
+            $extra = collect($event->extra_dates ?? [])->filter()
+                ->map(fn ($d) => \Illuminate\Support\Carbon::parse($d)->toDateString())
+                ->reject(fn ($d) => $event->starts_on && $d === $event->starts_on->toDateString())
+                ->unique()->sort()->values();
+            $event->extra_dates = $extra->isEmpty() ? null : $extra->all();
+            if ($extra->isNotEmpty()) {
+                $event->ends_on = $extra->last();
+            }
+        });
+    }
 
     public function hotel(): BelongsTo
     {
@@ -50,9 +66,43 @@ class Event extends Model
         return $this->lastDay()->endOfDay()->isPast();
     }
 
+    /** Событие в несколько отдельных дат (не подряд). */
+    public function isRecurring(): bool
+    {
+        return ! empty($this->extra_dates);
+    }
+
+    /** Все дни проведения по порядку: основная дата и другие. @return \Illuminate\Support\Collection<int, \Carbon\CarbonInterface> */
+    public function days(): \Illuminate\Support\Collection
+    {
+        return collect([$this->starts_on])
+            ->merge(collect($this->extra_dates ?? [])->map(fn ($d) => \Illuminate\Support\Carbon::parse($d)))
+            ->sortBy(fn ($d) => $d->timestamp)->values();
+    }
+
+    /** Ближайший день проведения (или последний, если все прошли). */
+    public function nextDay(): \Carbon\CarbonInterface
+    {
+        $days = $this->days();
+
+        return $days->first(fn ($d) => $d->copy()->endOfDay()->isFuture()) ?? $days->last();
+    }
+
+    /** «14, 21, 28 ноября» или «28 ноября, 5 декабря». */
+    public function daysLabel(): string
+    {
+        return $this->days()->map(fn ($d) => $d->copy()->locale(app()->getLocale()))
+            ->groupBy(fn ($d) => $d->format('Y-m'))
+            ->map(fn ($g) => $g->slice(0, -1)->map->format('j')->push($g->last()->translatedFormat('j F'))->implode(', ')) // «j F» — месяц в нужном падеже
+            ->implode(', ');
+    }
+
     /** «14 декабря» или «14–16 декабря» / «30 декабря – 2 января». */
     public function dateLabel(): string
     {
+        if ($this->isRecurring()) {
+            return $this->daysLabel();
+        }
         $a = $this->starts_on->copy()->locale(app()->getLocale());
         $b = $this->ends_on?->copy()->locale(app()->getLocale());
         if (! $b || $b->isSameDay($a)) {
@@ -68,6 +118,9 @@ class Event extends Model
     /** Крупная часть плашки даты: «15» или «15–28» (если месяцы разные — «30 – 2»). */
     public function dayBadge(): string
     {
+        if ($this->isRecurring()) {
+            return $this->nextDay()->copy()->format('j');
+        }
         $a = $this->starts_on->copy()->locale(app()->getLocale());
         $b = $this->ends_on?->copy()->locale(app()->getLocale());
 
@@ -77,6 +130,9 @@ class Event extends Model
     /** Подпись месяца на плашке: «ноябрь» или «ноябрь – декабрь». */
     public function monthBadge(): string
     {
+        if ($this->isRecurring()) {
+            return $this->nextDay()->copy()->locale(app()->getLocale())->translatedFormat('F');
+        }
         $a = $this->starts_on->copy()->locale(app()->getLocale());
         $b = $this->ends_on?->copy()->locale(app()->getLocale());
         if (! $b || $a->isSameMonth($b)) {

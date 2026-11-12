@@ -75,8 +75,12 @@ class EventResource extends Resource
                         }
                     }),
                 DatePicker::make('ends_on')->label('Дата окончания')->afterOrEqual('starts_on')
-                    ->helperText('Оставьте пустым для события одного дня'),
+                    ->helperText('Оставьте пустым для события одного дня. Если заполнены «Другие даты», подставится последняя из них.'),
                 TextInput::make('time_text')->label('Время')->placeholder('12:30–16:30'),
+                \Filament\Forms\Components\Repeater::make('extra_dates')->label('Другие даты')->columnSpanFull()
+                    ->simple(DatePicker::make('date')->required())
+                    ->addActionLabel('Добавить дату')->defaultItems(0)
+                    ->helperText('Если событие повторяется (например, 14, 21 и 28 ноября): в «Дате начала» — первая, здесь — остальные. Окончание проставится само, на сайте покажется «14, 21, 28 ноября».'),
             ]),
             Fields::translatable(fn (string $l, bool $d) => [
                 Fields::titleInput('title', $l, $d, 'Название', fn ($get) => $get('starts_on') ? '-'.\Illuminate\Support\Carbon::parse($get('starts_on'))->format('Y-m') : ''),
