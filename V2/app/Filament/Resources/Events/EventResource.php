@@ -79,8 +79,8 @@ class EventResource extends Resource
                 TextInput::make('time_text')->label('Время')->placeholder('12:30–16:30'),
                 \Filament\Forms\Components\Repeater::make('extra_dates')->label('Другие даты')->columnSpanFull()
                     ->simple(DatePicker::make('date')->required())
-                    ->addActionLabel('Добавить дату')->defaultItems(0)
-                    ->helperText('Если событие повторяется (например, 14, 21 и 28 ноября): в «Дате начала» — первая, здесь — остальные. Окончание проставится само, на сайте покажется «14, 21, 28 ноября».'),
+                    ->grid(['default' => 1, 'sm' => 2, 'lg' => 4])->addActionLabel('Добавить дату')->defaultItems(0)
+                    ->helperText('Для повторяющегося события: в «Дате начала» — первая, здесь — остальные. На сайте: «14, 21, 28 ноября».'),
             ]),
             Fields::translatable(fn (string $l, bool $d) => [
                 Fields::titleInput('title', $l, $d, 'Название', fn ($get) => $get('starts_on') ? '-'.\Illuminate\Support\Carbon::parse($get('starts_on'))->format('Y-m') : ''),
