@@ -58,16 +58,26 @@ class EventResource extends Resource
         return $schema->components([
             Fields::twoColumns([
                 Fields::hotel(),
-                Fields::slug()->prefix('/events/'),
+                Fields::slug()->prefix('/events/')
+                    ->helperText('Название и год-месяц, например tenir-mountain-days-2026-11. Подставляется само, после публикации не меняйте: по этому адресу уже могут ссылаться.'),
             ]),
             Section::make('Когда')->columns(3)->columnSpanFull()->schema([
-                DatePicker::make('starts_on')->label('Дата начала')->required(),
+                DatePicker::make('starts_on')->label('Дата начала')->required()
+                    ->live()
+                    ->afterStateUpdated(function (\Filament\Schemas\Components\Utilities\Get $get, \Filament\Schemas\Components\Utilities\Set $set, ?string $state, string $operation) {
+                        // При создании: слаг — «название-ГГГГ-ММ»; пересобирается, пока он пустой или собран автоматически.
+                        $title = (string) $get('title.'.\App\Support\Locales::source());
+                        $slug = (string) $get('slug');
+                        if ($operation === 'create' && $state && $title !== '' && ($slug === '' || preg_match('/-\d{4}-\d{2}$/', $slug))) {
+                            $set('slug', \Illuminate\Support\Str::slug($title).'-'.\Illuminate\Support\Carbon::parse($state)->format('Y-m'));
+                        }
+                    }),
                 DatePicker::make('ends_on')->label('Дата окончания')->afterOrEqual('starts_on')
                     ->helperText('Оставьте пустым для события одного дня'),
                 TextInput::make('time_text')->label('Время')->placeholder('12:30–16:30'),
             ]),
             Fields::translatable(fn (string $l, bool $d) => [
-                Fields::titleInput('title', $l, $d),
+                Fields::titleInput('title', $l, $d, 'Название', fn ($get) => $get('starts_on') ? '-'.\Illuminate\Support\Carbon::parse($get('starts_on'))->format('Y-m') : ''),
                 Textarea::make("summary.$l")->label('Кратко')->rows(2),
                 TextInput::make("place.$l")->label('Место')->placeholder('Терраса Tenir, 3 200 м'),
                 RichEditor::make("description.$l")->label('Описание'),
