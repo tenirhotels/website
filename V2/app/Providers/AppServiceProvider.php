@@ -16,6 +16,10 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        // Админка: везде один и тот же календарь вместо браузерного dd/mm/yyyy — дд.мм.гггг, неделя с понедельника.
+        \Filament\Forms\Components\DateTimePicker::configureUsing(fn ($c) => $c->native(false)->firstDayOfWeek(1)->seconds(false)->displayFormat('d.m.Y H:i'));
+        \Filament\Forms\Components\DatePicker::configureUsing(fn ($c) => $c->native(false)->firstDayOfWeek(1)->displayFormat('d.m.Y')->closeOnDateSelection());
+
         // Режим сайта (один отель / сеть) вычисляется заново для каждого запуска приложения.
         \App\Support\Property::flush();
 

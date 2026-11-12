@@ -56,4 +56,12 @@ class RecurringEventTest extends TestCase
         $this->assertFalse($e->isRecurring());
         $this->assertNull($e->ends_on);
     }
+
+    public function test_admin_uses_custom_calendar_not_browser_date_input(): void
+    {
+        $this->actingAs(\App\Models\User::factory()->create());
+        $this->get('/admin/events/create')->assertOk()->assertDontSee('type="date"', false)->assertSee('Другие даты');
+        $this->get('/admin/offers/create')->assertOk()->assertDontSee('type="date"', false);
+        $this->get('/admin/stories/create')->assertOk()->assertDontSee('type="datetime-local"', false);
+    }
 }
