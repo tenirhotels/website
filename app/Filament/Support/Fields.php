@@ -81,6 +81,7 @@ class Fields
             ->getOptionLabelFromRecordUsing(fn ($record) => $record->t('name'))
             ->default(fn () => Property::primary()?->id)
             ->native(false)
+            ->hidden(fn () => (bool) auth()->user()?->isEditor()) // у редактора локация подставляется сама
             ->required($required);
 
         return $required

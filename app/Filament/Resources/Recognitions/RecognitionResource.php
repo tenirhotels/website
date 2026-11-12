@@ -20,6 +20,8 @@ use UnitEnum;
 
 class RecognitionResource extends Resource
 {
+    use \App\Filament\Support\AdminOnly;
+
     protected static ?string $model = Recognition::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedTrophy;

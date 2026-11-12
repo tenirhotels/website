@@ -23,6 +23,8 @@ use UnitEnum;
 /** Транспорт локации: линии канатной дороги, особый подъём для гостей, трансфер, такси. Принадлежит локации: у каждого места свой. */
 class TransportResource extends Resource
 {
+    use \App\Filament\Support\AdminOnly;
+
     use \App\Filament\Support\UsesIdInUrls;
 
     protected static ?string $recordRouteKeyName = 'id';

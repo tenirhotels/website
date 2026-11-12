@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Experience extends Model
 {
+    use \App\Models\Concerns\ForcesEditorHotel;
     use HasSeo, HasTranslations;
 
     /** Как гость оформляет впечатление: бронирование номера, запрос в отдел продаж или звонок/сообщение. */

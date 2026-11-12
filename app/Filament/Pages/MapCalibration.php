@@ -16,6 +16,8 @@ use UnitEnum;
  */
 class MapCalibration extends Page
 {
+    use \App\Filament\Support\AdminOnly;
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedMapPin;
 
     protected static string|UnitEnum|null $navigationGroup = 'Отели';

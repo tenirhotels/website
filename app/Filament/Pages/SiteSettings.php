@@ -28,6 +28,8 @@ use UnitEnum;
  */
 class SiteSettings extends Page
 {
+    use \App\Filament\Support\AdminOnly;
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCog6Tooth;
 
     protected static string|UnitEnum|null $navigationGroup = 'Сайт';

@@ -17,6 +17,11 @@ use Filament\Widgets\Widget;
 
 class QuickActions extends Widget
 {
+    public static function canView(): bool
+    {
+        return auth()->user()?->isAdmin() ?? false;
+    }
+
     protected static ?int $sort = 0;
 
     protected string $view = 'filament.widgets.quick-actions';

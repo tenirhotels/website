@@ -23,6 +23,8 @@ use UnitEnum;
 
 class RedirectResource extends Resource
 {
+    use \App\Filament\Support\AdminOnly;
+
     protected static ?string $model = Redirect::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedArrowUturnRight;

@@ -21,6 +21,11 @@ use Filament\Widgets\Widget;
 /** Чек-лист «что требует внимания»: пустые места, истёкшие предложения, непереведённое. */
 class SiteHealth extends Widget
 {
+    public static function canView(): bool
+    {
+        return auth()->user()?->isAdmin() ?? false;
+    }
+
     protected static ?int $sort = 2;
 
     protected string $view = 'filament.widgets.site-health';
