@@ -19,6 +19,9 @@
         <h3 class="font-display text-[24px] leading-tight transition-colors group-hover:text-ember">{{ $event->t('title') }}</h3>
         @if ($event->t('summary'))<p class="line-clamp-3 text-[15px] leading-relaxed text-slate">{{ $event->t('summary') }}</p>@endif
         <div class="mt-auto flex flex-col gap-1.5 border-t border-mist pt-4 text-[12px] uppercase tracking-[0.16em] text-stone">
+            @if ($event->isRecurring())
+                <p class="flex items-center gap-2"><svg class="size-4 shrink-0 text-ember" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/></svg>{{ $event->daysLabel() }}</p>
+            @endif
             @if ($event->time_text)
                 <p class="flex items-center gap-2"><svg class="size-4 shrink-0 text-ember" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>{{ $event->time_text }}</p>
             @endif
