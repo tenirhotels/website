@@ -52,8 +52,8 @@ class Event extends Model
     /** «14 декабря» или «14–16 декабря» / «30 декабря – 2 января». */
     public function dateLabel(): string
     {
-        $a = $this->starts_on;
-        $b = $this->ends_on;
+        $a = $this->starts_on->copy()->locale(app()->getLocale());
+        $b = $this->ends_on?->copy()->locale(app()->getLocale());
         if (! $b || $b->isSameDay($a)) {
             return $a->translatedFormat('j F');
         }
@@ -62,6 +62,27 @@ class Event extends Model
         }
 
         return $a->translatedFormat('j F').' – '.$b->translatedFormat('j F');
+    }
+
+    /** Крупная часть плашки даты: «15» или «15–28» (если месяцы разные — «30 – 2»). */
+    public function dayBadge(): string
+    {
+        $a = $this->starts_on->copy()->locale(app()->getLocale());
+        $b = $this->ends_on?->copy()->locale(app()->getLocale());
+
+        return ($b && ! $b->isSameDay($a)) ? $a->format('j').'–'.$b->format('j') : $a->format('j');
+    }
+
+    /** Подпись месяца на плашке: «ноябрь» или «ноябрь – декабрь». */
+    public function monthBadge(): string
+    {
+        $a = $this->starts_on->copy()->locale(app()->getLocale());
+        $b = $this->ends_on?->copy()->locale(app()->getLocale());
+        if (! $b || $a->isSameMonth($b)) {
+            return $a->translatedFormat('F');
+        }
+
+        return $a->translatedFormat('F').' – '.$b->translatedFormat('F');
     }
 
     public function whenLabel(): string
