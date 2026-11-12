@@ -6,10 +6,10 @@
             @include('site.partials.hotel-filter', ['route' => 'events.index'])
             @forelse ($months as $ym => $events)
                 <div>
-                    <h2 class="eyebrow mb-4">{{ \Illuminate\Support\Carbon::createFromFormat('Y-m-d', $ym.'-01')->translatedFormat('F Y') }}</h2>
-                    <div class="border-b border-mist">
+                    <h2 class="eyebrow mb-4">{{ \Illuminate\Support\Carbon::createFromFormat('Y-m-d', $ym.'-01')->locale(app()->getLocale())->translatedFormat(app()->getLocale() === 'zh' ? 'Y年n月' : 'F Y') }}</h2>
+                    <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
                         @foreach ($events as $e)
-                            @include('site.events.partials.row', ['event' => $e])
+                            @include('site.events.partials.card', ['event' => $e])
                         @endforeach
                     </div>
                 </div>

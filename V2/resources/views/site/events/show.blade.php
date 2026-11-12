@@ -27,8 +27,8 @@
         <section class="bg-sand">
             <div class="container-site py-12 md:py-16">
                 <x-site.section-head :title="__('site.events.also')" :link="route('events.index')" :link-label="__('site.common.view_all')" />
-                <div class="mt-6 border-b border-mist">
-                    @foreach ($others as $o)@include('site.events.partials.row', ['event' => $o])@endforeach
+                <div class="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                    @foreach ($others as $o)@include('site.events.partials.card', ['event' => $o])@endforeach
                 </div>
             </div>
         </section>

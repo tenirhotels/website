@@ -31,4 +31,15 @@ class EventSlugTest extends TestCase
             ->fillForm(['starts_on' => '2026-12-03'])
             ->assertFormSet(['slug' => 'mountain-days-2026-12']);
     }
+
+    public function test_event_month_labels_follow_site_language(): void
+    {
+        $e = new \App\Models\Event(['starts_on' => '2026-12-31', 'ends_on' => '2027-01-02']);
+        foreach (['en' => 'December – January', 'ru' => 'декабрь – январь'] as $loc => $expected) {
+            app()->setLocale($loc);
+            \Carbon\Carbon::setLocale($loc);
+            $this->assertSame($expected, $e->monthBadge());
+            $this->assertSame('31–2', $e->dayBadge());
+        }
+    }
 }
