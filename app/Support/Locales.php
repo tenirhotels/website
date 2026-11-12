@@ -45,7 +45,9 @@ class Locales
 
     public static function source(): string
     {
-        return config('tenir.source_locale', self::default());
+        $chosen = \App\Models\Setting::get('site.source_locale');
+
+        return self::isSupported($chosen) ? $chosen : config('tenir.source_locale', self::default());
     }
 
     /**

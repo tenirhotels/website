@@ -73,6 +73,11 @@ class SiteSettings extends Page
                     Toggle::make('site.header_autohide')->label('Скрывать шапку при прокрутке вниз')->default(true)
                         ->helperText('Шапка уходит вместе с текстом при прокрутке вниз и сразу возвращается при прокрутке вверх — на экране помещается больше текста.'),
                 ]),
+            Section::make('Язык заполнения')->schema([
+                Select::make('site.source_locale')->label('Основной язык контента')->default('ru')->selectablePlaceholder(false)
+                    ->options(collect(\App\Support\Locales::all())->map(fn ($m) => $m['name'])->all())
+                    ->helperText('Помечен звёздочкой на вкладках языков: только он обязателен, с него собираются адреса (слаги). Если перевода нет, на сайте показывается этот текст. Порядок языков на сайте не меняется: казахский всегда первый.'),
+            ]),
             Section::make('Блоки главной страницы')->description('Скрывает блок только на главной. Страницы, пункты меню и записи остаются.')->columns(3)->schema([
                 Toggle::make('home.experiences')->label('Впечатления (Things to do)')->default(true),
                 Toggle::make('home.offers')->label('Предложения (Offers)')->default(true),
