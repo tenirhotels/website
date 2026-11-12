@@ -162,6 +162,7 @@ return [
         'expired' => '此优惠已过期。',
         'min_nights' => ':count 晚起',
         'promo' => '优惠码：:code',
+        'others' => '其他优惠',
         'facts' => '优惠概览',
         'fact_stay' => '入住',
         'fact_until' => '有效期至',

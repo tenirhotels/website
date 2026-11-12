@@ -161,6 +161,7 @@ return [
         'expired' => 'This offer has expired.',
         'min_nights' => 'from :count nights',
         'promo' => 'Promo code: :code',
+        'others' => 'Other offers',
         'facts' => 'Offer at a glance',
         'fact_stay' => 'Stay',
         'fact_until' => 'Valid until',
