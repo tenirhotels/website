@@ -50,7 +50,7 @@ class Fields
     }
 
     /** Поле названия на основном языке, которое заполняет слаг при создании. */
-    public static function titleInput(string $attribute, string $locale, bool $isDefault, string $label = 'Название'): TextInput
+    public static function titleInput(string $attribute, string $locale, bool $isDefault, string $label = 'Название', ?\Closure $slugSuffix = null): TextInput
     {
         $input = TextInput::make("$attribute.$locale")
             ->label($label)
@@ -61,7 +61,7 @@ class Fields
             $input->live(onBlur: true)
                 ->afterStateUpdated(function (Get $get, Set $set, ?string $state, string $operation) {
                     if ($operation === 'create' && blank($get('slug'))) {
-                        $set('slug', Str::slug((string) $state));
+                        $set('slug', Str::slug((string) $state).($slugSuffix ? (string) $slugSuffix($get) : ''));
                     }
                 });
         }
