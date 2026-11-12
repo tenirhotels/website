@@ -62,7 +62,7 @@
         <section class="bg-sand">
             <div class="container-site flex flex-col gap-8 md:gap-12 py-12 md:py-16 lg:py-20">
                 <x-site.section-head :title="__('site.offers.others')" :link="route('offers.index')" />
-                <div @class(['grid gap-5 sm:grid-cols-2', 'lg:grid-cols-3' => $others->count() > 2])>
+                <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
                     @foreach ($others as $o)
                         @include('site.offers.partials.card', ['offer' => $o])
                     @endforeach
