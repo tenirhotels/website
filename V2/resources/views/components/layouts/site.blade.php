@@ -7,9 +7,7 @@
     $seo ??= Seo::make();
     $alternates = Seo::alternates();
     $locale = app()->getLocale();
-    $ga4 = Setting::get('analytics.ga4');
-    $metrika = Setting::get('analytics.yandex_metrika');
-    $gtm = Setting::get('analytics.gtm');
+    $ogLocale = fn (string $c) => ['ru' => 'ru_RU', 'kk' => 'kk_KZ', 'en' => 'en_US', 'zh' => 'zh_CN'][$c] ?? str_replace('-', '_', Locales::all()[$c]['hreflang']);
 @endphp
 <!DOCTYPE html>
 <html lang="{{ $locale }}">
@@ -19,6 +17,9 @@
     <title>{{ $seo->fullTitle() }}</title>
     @if ($description = $seo->metaDescription())
         <meta name="description" content="{{ $description }}">
+    @endif
+    @if ($keywords = $seo->metaKeywords())
+        <meta name="keywords" content="{{ $keywords }}">
     @endif
     @if ($seo->noindex)
         <meta name="robots" content="noindex, follow">
@@ -32,41 +33,60 @@
         @endisset
     @endif
 
-    <meta property="og:type" content="website">
+    <meta property="og:type" content="{{ $seo->type }}">
+    <meta property="og:site_name" content="{{ \App\Models\Setting::text('brand.name', 'Tenir Hotels') }}">
     <meta property="og:title" content="{{ $seo->fullTitle() }}">
     @if ($description)<meta property="og:description" content="{{ $description }}">@endif
     <meta property="og:url" content="{{ url()->current() }}">
-    <meta property="og:locale" content="{{ str_replace('-', '_', Locales::all()[$locale]['hreflang']) }}">
+    <meta property="og:locale" content="{{ $ogLocale($locale) }}">
+    @foreach (Locales::codes() as $alt)
+        @continue($alt === $locale)
+        <meta property="og:locale:alternate" content="{{ $ogLocale($alt) }}">
+    @endforeach
     @if ($image = $seo->imageUrl())
         <meta property="og:image" content="{{ $image }}">
+        <meta property="og:image:alt" content="{{ $seo->imageAlt ?: $seo->fullTitle() }}">
         <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:image" content="{{ $image }}">
+    @else
+        <meta name="twitter:card" content="summary">
     @endif
+    <meta name="twitter:title" content="{{ $seo->fullTitle() }}">
+    @if ($description)<meta name="twitter:description" content="{{ $description }}">@endif
 
-    <link rel="icon" href="/favicon.ico">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <meta name="theme-color" content="#1F3A2E">
+    {{-- Шрифты грузим заранее и показываем текст сразу нужным шрифтом (без «прыжка» с запасного) --}}
     <link rel="preload" href="/fonts/GillSansProCyrillic-Medium.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/fonts/GillSansProCyrillic-Bold.woff2" as="font" type="font/woff2" crossorigin>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    @foreach ($seo->schema as $schema)
+    @php
+        $crumbs = null;
+        if (! request()->routeIs('home') && ! $seo->noindex) {
+            $trail = [[Setting::text('brand.name', 'Tenir Hotels'), route('home', ['locale' => $locale])]];
+            if ($hotel && \App\Support\Property::isMulti()) {
+                $trail[] = [$hotel->t('name'), $hotel->url()];
+            }
+            $trail[] = [$seo->title ?: $seo->fullTitle(), url()->current()];
+            $crumbs = $seo->breadcrumbs($trail);
+        }
+    @endphp
+    @foreach (array_filter([...$seo->schema, $crumbs]) as $schema)
         <script type="application/ld+json">{!! json_encode($schema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG) !!}</script>
     @endforeach
 
     {{ $head ?? '' }}
 
-    @if ($gtm)
-        <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','{{ $gtm }}');</script>
-    @endif
-    @if ($ga4)
-        <script async src="https://www.googletagmanager.com/gtag/js?id={{ $ga4 }}"></script>
-        <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','{{ $ga4 }}');</script>
-    @endif
-    @if ($metrika)
-        <script>(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,"script","https://mc.yandex.ru/metrika/tag.js","ym");ym({{ (int) $metrika }},"init",{clickmap:true,trackLinks:true,accurateTrackBounce:true,webvisor:true});</script>
-    @endif
+    @foreach (['google' => 'google-site-verification', 'yandex' => 'yandex-verification', 'meta' => 'facebook-domain-verification'] as $key => $metaName)
+        @if ($v = trim((string) Setting::get('analytics.verify_'.$key)))
+            <meta name="{{ $metaName }}" content="{{ $v }}">
+        @endif
+    @endforeach
+    <x-site.analytics />
+    @if ($custom = Setting::get('analytics.custom_head')){!! $custom !!}@endif
 </head>
-<body class="min-h-screen pb-[88px] lg:pb-0">
+<body @class(['min-h-screen', 'pb-[88px] lg:pb-0' => ! request()->attributes->get('tenir.exely_widget') && ! request()->routeIs('map')])>
     <a href="#content" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:bg-white focus:px-4 focus:py-2">{{ __('site.nav.skip') }}</a>
 
     <x-site.header :alternates="$alternates" />
@@ -77,14 +97,13 @@
 
     <x-site.footer />
 
-    {{-- Бронирование: окно (открывается из шапки) и нижняя панель на телефоне --}}
-    <x-site.booking-dialog :hotel="$hotel" />
-    <div class="fixed inset-x-0 bottom-0 z-30 flex items-center gap-3 bg-white px-4 pb-6 pt-3 shadow-[0_-8px_24px_rgba(22,33,27,0.12)] lg:hidden">
-        <a href="{{ route('booking') }}" data-open-booking class="flex min-h-[52px] flex-1 flex-col justify-center border border-[#C9C6BD] px-4">
-            <span class="field-label">{{ __('site.booking.check_in') }} — {{ __('site.booking.check_out') }}</span>
-            <span class="text-[15px]">{{ $hotel?->t('name') ?? \App\Models\Setting::text('brand.name', 'Tenir Hotels') }}</span>
-        </a>
-        <a href="{{ route('booking') }}" data-open-booking class="btn-primary min-h-[52px] px-5">{{ __('site.nav.book') }}</a>
-    </div>
+    {{-- Телефон: на страницах без виджета Exely — одна кнопка внизу, ведёт на страницу бронирования
+         (там календарь с ценами). На главной и странице отеля есть плавающая кнопка Exely «Узнать цены». --}}
+    @if (! request()->routeIs('booking', 'map', 'guest-account') && ! request()->attributes->get('tenir.exely_widget'))
+        <div class="fixed inset-x-0 bottom-0 z-30 bg-white px-4 pb-5 pt-3 shadow-[0_-8px_24px_rgba(22,33,27,0.12)] lg:hidden">
+            <a href="{{ request()->attributes->get('tenir.book_url') ?: route('booking') }}" class="btn-primary w-full min-h-[52px]">{{ __('site.nav.book') }}</a>
+        </div>
+    @endif
+    @if ($customBody = Setting::get('analytics.custom_body')){!! $customBody !!}@endif
 </body>
 </html>

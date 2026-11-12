@@ -24,6 +24,10 @@ use UnitEnum;
 
 class VenueResource extends Resource
 {
+    use \App\Filament\Support\ScopedToEditorHotel;
+
+    use \App\Filament\Support\UsesIdInUrls;
+
     // В админке адреса записей по id, на сайте — по слагу.
     protected static ?string $recordRouteKeyName = 'id';
 
@@ -53,13 +57,24 @@ class VenueResource extends Resource
                 Fields::titleInput('name', $l, $d),
                 Textarea::make("summary.$l")->label('Кратко')->rows(2),
                 RichEditor::make("description.$l")->label('Описание'),
-                TextInput::make("hours.$l")->label('Часы работы')->placeholder('Завтрак 08:30–11:30 · ужин 18:00–22:00'),
+                TextInput::make("hours.$l")->label('Часы работы')->placeholder('08:30–21:30'),
+                TextInput::make("break_hours.$l")->label('Перерыв')->placeholder('15:00–17:00'),
+                TextInput::make("breakfast_hours.$l")->label('Завтрак для гостей отеля')->placeholder('08:30–11:30'),
             ]),
+            Section::make('Контакты ресторана')->columns(3)->columnSpanFull()
+                ->description('Если у ресторана свои контакты — они показываются на его блоке. Пусто — ничего не показывается (общие контакты отеля остаются в футере и на «Контактах»).')
+                ->schema([
+                    TextInput::make('phone')->label('Телефон')->tel()->placeholder('+7 727 000-00-00'),
+                    TextInput::make('phone_ext')->label('Внутренний номер (с телефона в номере)')->placeholder('102')
+                        ->helperText('Показывается как «Из номера отеля: 102».'),
+                    TextInput::make('email')->label('Эл. почта')->email(),
+                ]),
             Section::make('Меню и фото')->columnSpanFull()->schema([
                 FileUpload::make('menu_file')->label('Меню (PDF)')->disk('public')->directory('menus')
                     ->acceptedFileTypes(['application/pdf']),
                 Fields::image('image', 'Обложка', 'venues'),
                 Fields::gallery('gallery', 'venues/gallery'),
+                Fields::galleryLayout('slider'),
             ]),
             Fields::seo(),
             Fields::publishing(),
@@ -70,9 +85,11 @@ class VenueResource extends Resource
     {
         return Fields::table($table, [
             Fields::column('name', 'Название'),
-            TextColumn::make('hotel.slug')->label('Отель')->visible(fn () => Property::isMulti()),
+            Fields::hotelColumn(),
             TextColumn::make('type')->label('Тип'),
             Fields::publishedColumn(),
+        ], [
+            Fields::hotelFilter(),
         ]);
     }
 

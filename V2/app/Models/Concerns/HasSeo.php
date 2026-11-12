@@ -15,6 +15,7 @@ trait HasSeo
         $this->mergeCasts([
             'seo_title' => 'array',
             'seo_description' => 'array',
+            'seo_keywords' => 'array',
             'is_published' => 'boolean',
         ]);
     }
@@ -37,6 +38,11 @@ trait HasSeo
     public function seoTitle(): ?string
     {
         return $this->t('seo_title') ?: $this->t($this->titleAttribute ?? 'title');
+    }
+
+    public function seoKeywords(): ?string
+    {
+        return $this->t('seo_keywords');
     }
 
     public function seoDescription(): ?string

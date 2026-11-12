@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Faq extends Model
 {
+    use \App\Models\Concerns\ForcesEditorHotel;
     use HasTranslations;
 
     protected $guarded = ['id'];

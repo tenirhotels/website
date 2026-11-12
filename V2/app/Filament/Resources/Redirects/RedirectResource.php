@@ -23,11 +23,15 @@ use UnitEnum;
 
 class RedirectResource extends Resource
 {
+    use \App\Filament\Support\AdminOnly;
+
     protected static ?string $model = Redirect::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedArrowUturnRight;
 
     protected static string|UnitEnum|null $navigationGroup = 'Сайт';
+
+    protected static ?int $navigationSort = 2;
 
     protected static ?string $modelLabel = 'редирект';
 

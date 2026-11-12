@@ -10,7 +10,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Experience extends Model
 {
+    use \App\Models\Concerns\ForcesEditorHotel;
     use HasSeo, HasTranslations;
+
+    /** Как гость оформляет впечатление: бронирование номера, запрос в отдел продаж или звонок/сообщение. */
+    public const CTA = [
+        'booking' => 'Бронирование номера',
+        'sales' => 'Запрос в отдел продаж (корп. телефон и e-mail)',
+        'contact' => 'Позвонить или написать (телефон, WhatsApp, e-mail бронирования)',
+        'none' => 'Без кнопки (только информация)',
+    ];
 
     protected $guarded = ['id'];
 
@@ -36,7 +45,13 @@ class Experience extends Model
 
     public function seasonLabels(): string
     {
-        return collect($this->seasons ?? [])
+        $selected = collect($this->seasons ?? []);
+        // Отмечены все сезоны — значит круглый год.
+        if ($selected->isNotEmpty() && collect(array_keys(config('tenir.seasons', [])))->diff($selected)->isEmpty()) {
+            return __('site.common.all_year');
+        }
+
+        return $selected
             ->map(fn ($s) => Locales::pick(config("tenir.seasons.$s", [])))
             ->filter()
             ->implode(' · ');

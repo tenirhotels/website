@@ -22,17 +22,19 @@ use UnitEnum;
 
 class FaqResource extends Resource
 {
+    use \App\Filament\Support\ScopedToEditorHotel;
+
     protected static ?string $model = Faq::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedQuestionMarkCircle;
 
-    protected static string|UnitEnum|null $navigationGroup = 'Отели';
+    protected static string|UnitEnum|null $navigationGroup = 'Контент';
 
     protected static ?string $modelLabel = 'вопрос';
 
     protected static ?string $pluralModelLabel = 'Частые вопросы';
 
-    protected static ?int $navigationSort = 4;
+    protected static ?int $navigationSort = 5;
 
     public static function form(Schema $schema): Schema
     {
@@ -53,7 +55,7 @@ class FaqResource extends Resource
     {
         return Fields::table($table, [
             Fields::column('question', 'Вопрос'),
-            TextColumn::make('hotel.slug')->label('Отель')->placeholder('Вся сеть')->visible(fn () => Property::isMulti()),
+            Fields::hotelColumn(),
             Fields::publishedColumn(),
         ]);
     }

@@ -9,11 +9,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Venue extends Model
 {
+    use \App\Models\Concerns\ForcesEditorHotel;
     use HasSeo, HasTranslations;
 
     protected $guarded = ['id'];
 
-    protected array $translatable = ['name', 'summary', 'description', 'hours'];
+    protected array $translatable = ['name', 'summary', 'description', 'hours', 'break_hours', 'breakfast_hours'];
 
     protected string $titleAttribute = 'name';
 

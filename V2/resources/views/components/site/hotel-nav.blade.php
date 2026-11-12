@@ -11,6 +11,8 @@
         'offers' => __('site.hotel.offers'),
         'gallery' => __('site.hotel.gallery'),
         'getting-here' => __('site.hotel.getting_here'),
+        'before-you-arrive' => __('site.hotel.before_arrive'),
+        'reviews' => __('site.hotel.reviews'),
     ];
     $routeName = request()->route()?->getName();
     $current = collect(array_keys($sections))->first(fn ($s) => Property::routeName($s, Property::MULTI) === $routeName)
@@ -29,7 +31,7 @@
                 @endforeach
             </ul>
             @if ($hotel->isOpen())
-                <a href="{{ route('booking', ['hotel' => $hotel->slug]) }}" data-open-booking class="btn-primary hidden shrink-0 lg:inline-flex">{{ __('site.nav.book') }}</a>
+                <a href="{{ route('booking', ['hotel' => $hotel->slug]) }}" class="btn-primary hidden shrink-0 lg:inline-flex">{{ __('site.nav.book') }}</a>
             @endif
         </div>
     </nav>

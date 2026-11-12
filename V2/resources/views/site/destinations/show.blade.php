@@ -1,5 +1,5 @@
 <x-layouts.site :seo="$seo" :hotel="$hotel">
-    <x-site.page-hero tall :image="$hotel->hero_image"
+    <x-site.page-hero tall :image="$hotel->seasonHero()" :video="media($hotel->hero_video)"
         :eyebrow="collect([$hotel->altitude_m ? __('site.hotel.altitude', ['value' => number_format($hotel->altitude_m, 0, ',', ' ')]) : null, $hotel->t('region')])->filter()->implode(' · ')"
         :title="$hotel->t('name')" :text="$hotel->t('tagline')">
         @unless ($hotel->isOpen())
@@ -7,15 +7,15 @@
         @endunless
     </x-site.page-hero>
 
-    <x-site.hotel-nav :hotel="$hotel" />
-
     @if ($hotel->isOpen())
-        <div class="container-site relative z-10 mt-10 hidden max-w-[1280px] lg:block">
+        <div class="container-site relative z-10 mt-8 -mb-6 md:-mb-12 lg:mb-0 lg:-mt-14">
             <x-site.booking-bar :hotel="$hotel" id="hotel" />
         </div>
     @endif
 
-    <section class="container-site flex flex-col gap-12 py-20 md:py-28 lg:flex-row lg:gap-20">
+    <x-site.hotel-nav :hotel="$hotel" />
+
+    <section class="container-site flex flex-col gap-8 md:gap-12 py-12 md:py-16 lg:py-24 lg:flex-row lg:gap-20">
         <div class="flex flex-[1.3] flex-col gap-6">
             <h2 class="h-section">{{ $hotel->t('summary') }}</h2>
             <div class="prose-tenir">{!! $hotel->t('description') !!}</div>
@@ -26,12 +26,12 @@
                     @foreach ($hotel->highlights as $hl)
                         <div class="flex flex-col-reverse gap-1">
                             <dt class="text-xs uppercase tracking-[0.12em] text-stone">{{ \App\Support\Locales::pick($hl['label'] ?? []) }}</dt>
-                            <dd class="font-display text-4xl text-forest">{{ $hl['value'] }}</dd>
+                            <dd class="font-display text-3xl text-forest">{{ $hl['value'] }}</dd>
                         </div>
                     @endforeach
                 </dl>
             @endif
-            <div class="flex flex-col gap-2 text-[15px] text-slate">
+            <div class="flex flex-col gap-2 text-base text-slate">
                 <p class="field-label mb-1">{{ __('site.hotel.contacts') }}</p>
                 @if ($hotel->t('address'))<p>{{ $hotel->t('address') }}</p>@endif
                 @if ($hotel->phone)<a href="tel:{{ preg_replace('/[^\d+]/', '', $hotel->phone) }}" class="hover:text-ember">{{ $hotel->phone }}</a>@endif
@@ -44,7 +44,7 @@
 
     @if ($rooms->isNotEmpty())
         <section class="bg-white">
-            <div class="container-site flex flex-col gap-12 py-24">
+            <div class="container-site flex flex-col gap-8 md:gap-12 py-14 md:py-20 lg:py-24">
                 <x-site.section-head :eyebrow="__('site.hotel.rooms')" :title="__('site.home.rooms_title')" :link="$hotel->sectionUrl('rooms')" :link-label="__('site.hotel.all_rooms')" />
                 <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
                     @foreach ($rooms as $room)
@@ -57,12 +57,12 @@
 
     @if ($venues->isNotEmpty())
         @php($venue = $venues->first())
-        <section class="container-site flex flex-col gap-12 py-24 lg:flex-row-reverse lg:items-center lg:gap-20">
+        <section class="container-site flex flex-col gap-8 md:gap-12 py-14 md:py-20 lg:py-24 lg:flex-row-reverse lg:items-center lg:gap-20">
             <div class="flex flex-1 flex-col gap-6">
                 <p class="eyebrow">{{ __('site.hotel.dining') }}</p>
                 <h2 class="h-section">{{ $venue->t('name') }}</h2>
                 <p class="lead">{{ $venue->t('summary') }}</p>
-                @if ($venue->t('hours'))<p class="text-sm text-stone">{{ $venue->t('hours') }}</p>@endif
+                @if ($venue->t('hours'))<p class="text-[15px] text-stone">{{ $venue->t('hours') }}</p>@endif
                 <a href="{{ $hotel->sectionUrl('dining') }}" class="link-line self-start">{{ __('site.common.learn_more') }}</a>
             </div>
             <div class="aspect-[4/3] w-full flex-1"><x-site.media :src="$venue->image" :alt="$venue->t('name')" /></div>
@@ -71,11 +71,11 @@
 
     @if ($experiences->isNotEmpty())
         <section class="bg-sand">
-            <div class="container-site flex flex-col gap-12 py-24">
+            <div class="container-site flex flex-col gap-8 md:gap-12 py-14 md:py-20 lg:py-24">
                 <x-site.section-head :eyebrow="__('site.hotel.experiences')" :title="__('site.home.experiences_title')" :link="$hotel->sectionUrl('experiences')" />
                 <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
                     @foreach ($experiences->take(3) as $e)
-                        <x-site.card :href="$e->url()" :image="$e->image" :title="$e->t('title')" :meta="$e->seasonLabels() ?: $e->categoryLabel()" :text="$e->t('summary')" />
+                        <x-site.card :href="$e->url()" :image="$e->image" :title="$e->t('title')" :tags="collect([$e->categoryLabel(), $e->seasonLabels()])->filter()->values()->all()" :text="$e->t('summary')" />
                     @endforeach
                 </div>
             </div>
@@ -83,7 +83,7 @@
     @endif
 
     @if ($offers->isNotEmpty())
-        <section class="container-site flex flex-col gap-12 py-24">
+        <section class="container-site flex flex-col gap-8 md:gap-12 py-14 md:py-20 lg:py-24">
             <x-site.section-head :eyebrow="__('site.hotel.offers')" :title="__('site.home.offers_title')" :link="$hotel->sectionUrl('offers')" />
             <div class="grid gap-8 md:grid-cols-3">
                 @foreach ($offers as $o)
@@ -93,8 +93,4 @@
         </section>
     @endif
 
-    @if ($widget = \App\Support\Locales::pick($hotel->reviews_widget ?? []))
-        {{-- Виджет отзывов Exely (код вставляется в админке) --}}
-        <section id="reviews" class="bg-white"><div class="container-site py-24">{!! $widget !!}</div></section>
-    @endif
 </x-layouts.site>

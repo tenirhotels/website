@@ -27,6 +27,10 @@ use UnitEnum;
 
 class HotelResource extends Resource
 {
+    use \App\Filament\Support\AdminOnly;
+
+    use \App\Filament\Support\UsesIdInUrls;
+
     // В админке адреса записей по id, на сайте — по слагу.
     protected static ?string $recordRouteKeyName = 'id';
 
@@ -55,6 +59,9 @@ class HotelResource extends Resource
                     Fields::translatable(fn (string $l, bool $d) => [
                         Fields::titleInput('name', $l, $d, 'Название отеля'),
                         TextInput::make("tagline.$l")->label('Слоган')->placeholder('Ближе к небу'),
+                        TextInput::make("hero_line.$l")->label('Фраза над заголовком главной')
+                            ->placeholder('Ночь, которая начинается выше облаков')
+                            ->helperText('Необязательно. Пусто — строки над заголовком нет.'),
                         Textarea::make("summary.$l")->label('Краткое описание')->rows(3)
                             ->helperText('Для карточек, превью и SEO, 1–2 предложения.'),
                         RichEditor::make("description.$l")->label('Описание'),
@@ -72,9 +79,18 @@ class HotelResource extends Resource
                 ]),
 
                 Tab::make('Фото и видео')->schema([
-                    Fields::image('hero_image', 'Главное фото (герой)', 'hotels'),
-                    TextInput::make('hero_video')->label('Видео для героя (URL mp4)')->url(),
+                    Fields::image('hero_image', 'Главное фото (герой) — зима, с ноября по апрель', 'hotels'),
+                    Fields::image('hero_image_summer', 'Главное фото — лето, с мая по октябрь (необязательно)', 'hotels')
+                        ->helperText('Если не загружено, круглый год показывается основное фото.'),
+                    Fields::image('intro_image', 'Фото в блоке «О отеле» на главной (вертикальное, 5:6)', 'hotels')
+                        ->helperText('Большое фото справа от текста «Тишина гор, звёзды и снег…». Если не загружено, берётся первое фото галереи, а если и его нет — главное фото.'),
+                    \Filament\Forms\Components\FileUpload::make('hero_video')
+                        ->label('Видео для героя (mp4, только компьютер)')
+                        ->helperText('10–15 секунд, 1920×1080, до 15 МБ. Показывается только на компьютере поверх главного фото; на телефоне остаётся фото. Начинается без звука; если в файле есть звуковая дорожка, в углу появится кнопка «Включить звук». Нет звука в файле — кнопки не будет. Чтобы убрать видео — удалите файл.')
+                        ->disk('public')->directory('hotels/video')
+                        ->acceptedFileTypes(['video/mp4'])->maxSize(15360),
                     Fields::gallery('gallery', 'hotels/gallery'),
+                    Fields::galleryLayout('masonry'),
                 ]),
 
                 Tab::make('Цифры')->schema([
@@ -90,17 +106,11 @@ class HotelResource extends Resource
                 ]),
 
                 Tab::make('Локация и контакты')->schema([
-                    Fields::translatable(fn (string $l) => [
-                        TextInput::make("region.$l")->label('Регион')->placeholder('Заилийский Алатау'),
-                        TextInput::make("city.$l")->label('Город')->placeholder('Алматы'),
-                        TextInput::make("address.$l")->label('Адрес'),
-                        RichEditor::make("getting_here.$l")->label('Как добраться'),
-                    ], 'location'),
+                    Select::make('location_id')->label('Локация')->required()->native(false)->searchable()
+                        ->options(fn () => \App\Models\Location::orderBy('sort')->orderBy('id')->get()->mapWithKeys(fn ($l) => [$l->id => $l->t('name')]))
+                        ->default(fn () => \App\Models\Location::orderBy('sort')->orderBy('id')->value('id'))
+                        ->helperText('Адрес, координаты, высота, «как добраться» и транспорт задаются в разделе «Локации». Сначала создаётся локация, затем к ней привязывается отель.'),
                     Fields::twoColumns([
-                        TextInput::make('altitude_m')->label('Высота, м')->numeric(),
-                        TextInput::make('country_code')->label('Страна (ISO)')->default('KZ')->maxLength(2),
-                        TextInput::make('latitude')->label('Широта')->numeric(),
-                        TextInput::make('longitude')->label('Долгота')->numeric(),
                         TextInput::make('phone')->label('Телефон')->tel(),
                         TextInput::make('whatsapp')->label('WhatsApp')->tel(),
                         TextInput::make('email')->label('E-mail')->email(),
@@ -131,13 +141,23 @@ class HotelResource extends Resource
     {
         return Fields::table($table, [
             Fields::column('name', 'Отель'),
-            TextColumn::make('slug')->label('Адрес')->prefix('/destinations/'),
+            TextColumn::make('slug')->label('Адрес')->getStateUsing(fn ($record) => parse_url($record->url('ru'), PHP_URL_PATH) ?: '/'),
             TextColumn::make('status')->label('Статус')->badge()
                 ->formatStateUsing(fn (string $state) => $state === Hotel::STATUS_OPEN ? 'Открыт' : 'Скоро')
                 ->color(fn (string $state) => $state === Hotel::STATUS_OPEN ? 'success' : 'warning'),
             TextColumn::make('rooms_count')->label('Номера')->counts('rooms'),
             Fields::publishedColumn(),
         ]);
+    }
+
+    public static function getRelations(): array
+    {
+        return [
+            RelationManagers\RoomsRelationManager::class,
+            RelationManagers\VenuesRelationManager::class,
+            RelationManagers\OffersRelationManager::class,
+            RelationManagers\ExperiencesRelationManager::class,
+        ];
     }
 
     public static function getPages(): array

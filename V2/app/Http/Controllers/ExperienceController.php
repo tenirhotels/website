@@ -39,8 +39,9 @@ class ExperienceController extends Controller
 
         return view('site.experiences.show', [
             'experience' => $experience,
-            'related' => Experience::published()->whereKeyNot($experience->id)
-                ->where('category', $experience->category)->ordered()->limit(3)->get(),
+            // Все остальные впечатления; сначала той же категории (до 6 карточек), остальные — по полному списку.
+            'related' => Experience::published()->whereKeyNot($experience->id)->ordered()->get()
+                ->sortBy(fn ($e) => $e->category === $experience->category ? 0 : 1)->values()->take(6),
             'seo' => Seo::for($experience),
         ]);
     }

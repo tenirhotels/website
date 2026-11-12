@@ -22,7 +22,7 @@ class PropertyModeTest extends TestCase
     protected bool $seed = true;
 
     private const SINGLE_PATHS = [
-        '', 'rooms', 'rooms/deluxe-mountain-view', 'dining', 'gallery', 'getting-here',
+        '', 'rooms', 'rooms/deluxe-mountain-view', 'dining', 'gallery', 'getting-here', 'before-you-arrive', 'reviews',
         'experiences', 'experiences/tenir-sky', 'offers', 'offers/long-stay',
         'stories', 'contact', 'about', 'sustainability', 'booking',
     ];
@@ -31,7 +31,7 @@ class PropertyModeTest extends TestCase
         '', 'destinations', 'destinations/shymbulak', 'destinations/shymbulak/rooms',
         'destinations/shymbulak/rooms/deluxe-mountain-view', 'destinations/shymbulak/dining',
         'destinations/shymbulak/experiences', 'destinations/shymbulak/offers',
-        'destinations/shymbulak/gallery', 'destinations/shymbulak/getting-here',
+        'destinations/shymbulak/gallery', 'destinations/shymbulak/getting-here', 'destinations/shymbulak/before-you-arrive', 'destinations/shymbulak/reviews',
         'destinations/almaty', 'experiences', 'experiences/tenir-sky', 'offers', 'offers/long-stay',
         'stories', 'contact', 'about', 'sustainability', 'booking',
     ];
@@ -104,18 +104,33 @@ class PropertyModeTest extends TestCase
         $this->get('/hotel')->assertRedirect('/ru');
     }
 
-    public function test_admin_hides_hotel_choice_and_assigns_the_hotel(): void
+    public function test_admin_shows_location_and_defaults_to_the_primary_hotel(): void
     {
         $this->actingAs(User::factory()->create());
 
-        $this->get('/admin/offers/create')->assertOk()->assertDontSee('Вся сеть');
+        $this->get('/admin/offers/create')->assertOk()->assertSee('Локация (отель)');
+        $this->get('/admin/room-types/create')->assertOk()->assertSee('Локация (отель)');
 
+        \Illuminate\Support\Facades\Storage::fake('public');
         Livewire::test(CreateOffer::class)
-            ->fillForm(['slug' => 'ski-week', 'title.ru' => 'Лыжная неделя'])
+            ->fillForm(['slug' => 'ski-week', 'title.ru' => 'Лыжная неделя', 'summary.ru' => 'Кратко', 'description.ru' => '<p>Полное описание</p>', 'image' => [\Illuminate\Http\UploadedFile::fake()->image('offer.jpg')]])
             ->call('create')
             ->assertHasNoFormErrors();
 
         $this->assertSame(Hotel::first()->id, Offer::where('slug', 'ski-week')->first()->hotel_id);
+    }
+
+    public function test_hotel_card_has_tabs_for_its_rooms_venues_offers_and_experiences(): void
+    {
+        $this->actingAs(User::factory()->create());
+        $hotel = Hotel::first();
+
+        Livewire::test(\App\Filament\Resources\Hotels\RelationManagers\RoomsRelationManager::class, [
+            'ownerRecord' => $hotel, 'pageClass' => \App\Filament\Resources\Hotels\Pages\EditHotel::class,
+        ])->assertSuccessful()->assertCanSeeTableRecords($hotel->rooms);
+
+        $this->get('/admin/hotels/'.$hotel->id.'/edit')->assertOk()
+            ->assertSee('Номера')->assertSee('Рестораны и бары')->assertSee('Предложения')->assertSee('Впечатления');
     }
 
     // ---------------------------------------------------------------- сеть
@@ -133,7 +148,7 @@ class PropertyModeTest extends TestCase
         $this->addSecondHotel(Hotel::STATUS_COMING_SOON);
 
         $this->assertTrue(Property::isMulti());
-        $this->get('/ru')->assertOk()->assertSee('Tenir Almaty')->assertSee('Открытие в 2028');
+        $this->get('/ru/destinations')->assertOk()->assertSee('Tenir Almaty')->assertSee('Открытие в 2028');
     }
 
     public function test_unpublished_second_hotel_keeps_single_mode(): void
@@ -164,7 +179,7 @@ class PropertyModeTest extends TestCase
             ->assertSee('Tenir Shymbulak')
             ->assertSee('Tenir Almaty')
             ->assertSee('href="'.url('/ru/destinations').'"', false)
-            ->assertSee('name="hotel"', false)       // выбор отеля в плашке бронирования
+            ->assertSee('tl-search-form', false)     // плашка бронирования — виджет Exely
             ->assertDontSee('"@type":"Hotel"', false);
 
         $this->get('/ru/destinations/shymbulak')

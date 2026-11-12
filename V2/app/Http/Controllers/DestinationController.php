@@ -70,6 +70,16 @@ class DestinationController extends Controller
         return $this->toShort($hotel, 'getting-here') ?? $this->renderGettingHere($hotel);
     }
 
+    public function beforeYouArrive(Hotel $hotel)
+    {
+        return $this->toShort($hotel, 'before-you-arrive') ?? $this->renderBeforeYouArrive($hotel);
+    }
+
+    public function reviews(Hotel $hotel)
+    {
+        return $this->toShort($hotel, 'reviews') ?? $this->renderReviews($hotel);
+    }
+
     /** Режим одного отеля: длинный адрес → короткий (301). */
     private function toShort(Hotel $hotel, string $section, array $params = [])
     {

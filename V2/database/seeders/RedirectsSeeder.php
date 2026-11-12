@@ -30,11 +30,11 @@ class RedirectsSeeder extends Seeder
         $exely = [
             '' => '',
             'about' => 'about',
-            'information' => 'getting-here',
+            'information' => 'before-you-arrive',
             'news' => 'stories',
             'photos' => 'gallery',
-            'reviews' => '',
-            'events' => 'experiences?category=celebrations',
+            'reviews' => 'reviews',
+            'events' => 'events',
             'restaurants' => 'dining',
             'rooms' => 'rooms',
             'special-offers' => 'offers',
@@ -43,7 +43,7 @@ class RedirectsSeeder extends Seeder
             'excursions' => 'experiences',
             'contacts' => 'contact',
             'booking' => 'booking',
-            'guest-account' => 'booking',
+            'guest-account' => 'guest-account',
             'terms-of-use' => 'terms',
         ];
         foreach (['ru-ru' => 'ru', 'kk-kz' => 'kk', 'en-gb' => 'en', 'zh-cn' => 'zh'] as $old => $new) {

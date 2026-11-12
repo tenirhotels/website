@@ -21,6 +21,10 @@ use UnitEnum;
 
 class StoryResource extends Resource
 {
+    use \App\Filament\Support\ScopedToEditorHotel;
+
+    use \App\Filament\Support\UsesIdInUrls;
+
     // В админке адреса записей по id, на сайте — по слагу.
     protected static ?string $recordRouteKeyName = 'id';
 
@@ -34,7 +38,7 @@ class StoryResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Истории и новости';
 
-    protected static ?int $navigationSort = 3;
+    protected static ?int $navigationSort = 4;
 
     public static function form(Schema $schema): Schema
     {

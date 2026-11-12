@@ -21,28 +21,36 @@
         </script>
     </x-slot:head>
 
-    <section class="bg-forest text-snow">
-        <div class="container-site flex flex-col gap-4 py-14">
-            <p class="eyebrow-light">{{ $hotel?->t('name') }}</p>
-            <h1 class="h-display text-5xl md:text-6xl">{{ __('site.booking.title') }}</h1>
-            <p class="max-w-xl text-snow/85">{{ __('site.booking.intro') }}</p>
-        </div>
-    </section>
+    {{-- Фон и цвета страницы совпадают с модулем Exely, чтобы он не выделялся. --}}
+    <div class="bg-exely">
+        <div class="container-site pb-10 pt-6 md:pt-8">
+            <div class="mb-4 flex flex-wrap items-end justify-between gap-x-8 gap-y-1">
+                <div>
+                    <p class="eyebrow">{{ $hotel?->t('name') }}</p>
+                    <h1 class="h-display mt-1 text-3xl text-forest md:text-4xl">{{ __('site.booking.title') }}</h1>
+                </div>
+                <p class="max-w-md text-[15px] text-exely-ink">{{ __('site.booking.intro') }}</p>
+            </div>
 
-    <section class="container-site py-12">
-        <div id="tl-booking-form" class="min-h-[480px]">
-            <p class="py-20 text-center text-stone">{{ __('site.booking.loading') }}</p>
-        </div>
-        <noscript><p class="py-10 text-center">{{ __('site.booking.noscript') }}</p></noscript>
+            <div id="tl-booking-form" class="min-h-[420px]">
+                <p class="py-10 md:py-14 text-center text-exely-ink">{{ __('site.booking.loading') }}</p>
+            </div>
+            <noscript><p class="py-10 text-center">{{ __('site.booking.noscript') }}</p></noscript>
 
-        <div class="mt-12 flex flex-wrap items-center gap-6 border-t border-mist pt-8 text-[15px] text-slate">
-            <span>{{ __('site.booking.help') }}</span>
-            @if ($phone = $hotel?->phone ?? Setting::get('contacts.phone'))
-                <a href="tel:{{ preg_replace('/[^\d+]/', '', $phone) }}" class="hover:text-ember">{{ $phone }}</a>
-            @endif
-            @if ($wa = $hotel?->whatsapp ?? Setting::get('contacts.whatsapp'))
-                <a href="https://wa.me/{{ preg_replace('/\D/', '', $wa) }}" class="hover:text-ember">WhatsApp</a>
-            @endif
+            <div class="mt-8 flex flex-col gap-5 border-t border-exely-line pt-6 text-exely-ink md:flex-row md:items-end md:justify-between">
+                <div class="flex flex-col gap-2">
+                    <p class="text-[17px] text-ink">{{ __('site.booking.help') }}</p>
+                    <div class="flex flex-wrap gap-x-6 gap-y-1 text-[17px]">
+                        @if ($phone = $hotel?->phone ?? Setting::get('contacts.phone'))
+                            <a href="tel:{{ preg_replace('/[^\d+]/', '', $phone) }}" class="hover:text-ember">{{ $phone }}</a>
+                        @endif
+                        @if ($wa = $hotel?->whatsapp ?? Setting::get('contacts.whatsapp'))
+                            <a href="{{ wa_url($wa, 'stay', ['hotel' => $hotel?->t('name') ?: 'Tenir Hotels']) }}" class="hover:text-ember">WhatsApp</a>
+                        @endif
+                    </div>
+                </div>
+                <a href="{{ route('guest-account') }}" class="link-line self-start md:self-auto">{{ __('site.booking.account') }}</a>
+            </div>
         </div>
-    </section>
+    </div>
 </x-layouts.site>
