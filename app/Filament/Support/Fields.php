@@ -40,10 +40,8 @@ class Fields
         $tabs = [];
         foreach (Locales::all() as $code => $meta) {
             $isDefault = $code === Locales::source();
-            $tabs[] = Tab::make($meta['name'])
+            $tabs[] = Tab::make($isDefault ? $meta['name'].' *' : $meta['name'])
                 ->id("$id-$code")
-                ->badge($isDefault ? 'заполнить первым' : null)
-                ->badgeTooltip($isDefault ? 'Обязательно только этот язык. Если других переводов нет, сайт покажет этот текст.' : null)
                 ->schema($fields($code, $isDefault));
         }
 
