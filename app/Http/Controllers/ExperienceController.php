@@ -42,7 +42,7 @@ class ExperienceController extends Controller
             // Все остальные впечатления; сначала той же категории (до 6 карточек), остальные — по полному списку.
             'related' => Experience::published()->whereKeyNot($experience->id)->ordered()->get()
                 ->sortBy(fn ($e) => $e->category === $experience->category ? 0 : 1)->values()->take(6),
-            'seo' => Seo::for($experience),
+            'seo' => Seo::for($experience, $experience->hotel?->t('name')),
         ]);
     }
 }

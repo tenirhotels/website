@@ -22,7 +22,7 @@ class StoryController extends Controller
         return view('site.stories.show', [
             'story' => $story,
             'more' => Story::live()->whereKeyNot($story->id)->latest('published_at')->limit(3)->get(),
-            'seo' => Seo::for($story)->ofType('article')->withSchema([
+            'seo' => Seo::for($story, $story->hotel?->t('name'))->ofType('article')->withSchema([
                 '@context' => 'https://schema.org',
                 '@type' => 'Article',
                 'headline' => $story->t('title'),

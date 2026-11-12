@@ -88,8 +88,28 @@ class Seo
         return $this;
     }
 
+    /** Название сайта: в режиме «один отель» — название отеля, в режиме сети — бренд сети. */
+    public static function siteName(): string
+    {
+        $hotel = Property::isSingle() ? Property::primary() : null;
+
+        return $hotel?->t('name') ?: Setting::text('brand.name', 'Tenir Hotels');
+    }
+
+    /**
+     * Единый формат: «Страница — Отель» (один отель) и «Страница — Отель | Бренд» / «Страница | Бренд» (сеть).
+     */
     public function fullTitle(): string
     {
+        $hotel = Property::isSingle() ? Property::primary() : null;
+
+        if ($hotel) {
+            $site = (string) $hotel->t('name');
+            $title = $this->title ?: ($hotel->t('seo_title') ?: trim($site.($hotel->t('tagline') ? ' — '.$hotel->t('tagline') : '')));
+
+            return str_contains($title, $site) ? $title : "$title — $site";
+        }
+
         $brand = Setting::text('brand.name', 'Tenir Hotels');
         $title = $this->title ?: Setting::text('seo.default_title', $brand);
 
@@ -171,7 +191,7 @@ class Seo
         return [
             '@context' => 'https://schema.org',
             '@type' => 'WebSite',
-            'name' => Setting::text('brand.name', 'Tenir Hotels'),
+            'name' => self::siteName(),
             'url' => url('/'),
             'inLanguage' => Locales::codes(),
         ];
