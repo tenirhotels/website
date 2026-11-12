@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Venue extends Model
 {
+    use \App\Models\Concerns\ForcesEditorHotel;
     use HasSeo, HasTranslations;
 
     protected $guarded = ['id'];

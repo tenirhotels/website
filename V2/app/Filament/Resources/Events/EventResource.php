@@ -25,6 +25,8 @@ use UnitEnum;
 /** События: календарь того, что планируется на курорте и в отелях. Прошедшие скрываются с сайта сами. */
 class EventResource extends Resource
 {
+    use \App\Filament\Support\ScopedToEditorHotel;
+
     use \App\Filament\Support\UsesIdInUrls;
 
     protected static ?string $recordRouteKeyName = 'id';

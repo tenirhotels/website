@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /** Событие афиши: дата (или период), время, место. Прошедшие скрываются автоматически. */
 class Event extends Model
 {
+    use \App\Models\Concerns\ForcesEditorHotel;
     use HasSeo, HasTranslations;
 
     protected $guarded = ['id'];

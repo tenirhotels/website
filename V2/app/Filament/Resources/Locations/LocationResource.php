@@ -34,6 +34,8 @@ use UnitEnum;
 /** Локация: сначала создаётся место со всеми его настройками, затем к нему привязываются отели. */
 class LocationResource extends Resource
 {
+    use \App\Filament\Support\AdminOnly;
+
     use \App\Filament\Support\UsesIdInUrls;
 
     protected static ?string $recordRouteKeyName = 'id';

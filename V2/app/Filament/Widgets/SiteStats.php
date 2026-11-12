@@ -18,6 +18,11 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
 /** Что сейчас видят гости: только опубликованное и действующее. */
 class SiteStats extends StatsOverviewWidget
 {
+    public static function canView(): bool
+    {
+        return auth()->user()?->isAdmin() ?? false;
+    }
+
     protected static ?int $sort = 1;
 
     protected ?string $heading = 'Сейчас на сайте';

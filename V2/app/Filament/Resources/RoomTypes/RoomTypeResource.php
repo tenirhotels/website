@@ -27,6 +27,8 @@ use UnitEnum;
 
 class RoomTypeResource extends Resource
 {
+    use \App\Filament\Support\ScopedToEditorHotel;
+
     use \App\Filament\Support\UsesIdInUrls;
 
     // В админке адреса записей по id, на сайте — по слагу.
