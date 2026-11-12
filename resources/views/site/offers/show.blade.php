@@ -23,14 +23,36 @@
                 </div>
             @endif
         </div>
-        <aside class="flex-1">
-            <div class="sticky top-32 flex flex-col gap-4 bg-white p-8 rounded-3xl">
-                @if ($offer->min_nights)<p>{{ __('site.offers.min_nights', ['count' => $offer->min_nights]) }}</p>@endif
-                @if ($offer->valid_to)<p class="text-slate">{{ __('site.common.valid_until', ['date' => $offer->valid_to->translatedFormat('j F Y')]) }}</p>@endif
-                @if ($offer->promo_code)<p class="text-slate">{{ __('site.offers.promo', ['code' => $offer->promo_code]) }}</p>@endif
+        @php($facts = array_filter([
+                    __('site.offers.fact_stay') => $offer->min_nights ? __('site.offers.min_nights', ['count' => $offer->min_nights]) : null,
+                    __('site.offers.fact_until') => $offer->valid_to?->translatedFormat('j F Y'),
+        ]))
+        <aside @class(['flex-1', 'max-lg:hidden' => ! $facts && ! $offer->promo_code])>
+            <div class="sticky top-32 flex flex-col gap-6 rounded-3xl bg-white p-6 md:p-8">
+                @if ($facts || $offer->promo_code)
+                    <div class="flex flex-col gap-4">
+                        <p class="eyebrow">{{ __('site.offers.facts') }}</p>
+                        <dl class="flex flex-col divide-y divide-forest/10">
+                            @foreach ($facts as $label => $value)
+                                <div class="flex items-baseline justify-between gap-6 py-3 first:pt-0">
+                                    <dt class="text-sm text-stone">{{ $label }}</dt>
+                                    <dd class="text-right font-medium text-forest">{{ $value }}</dd>
+                                </div>
+                            @endforeach
+                        </dl>
+                        @if ($offer->promo_code)
+                            <div class="flex items-center justify-between gap-4 rounded-2xl border border-dashed border-ember/50 bg-ember/5 px-5 py-4">
+                                <span class="text-sm text-stone">{{ __('site.offers.fact_promo') }}</span>
+                                <span class="font-mono text-lg font-semibold tracking-wider text-ember">{{ $offer->promo_code }}</span>
+                            </div>
+                        @endif
+                    </div>
+                @endif
                 @unless ($expired)
-                    <a href="{{ $offer->bookingUrl() }}" class="btn-primary mt-2 w-full max-lg:hidden">{{ __('site.common.book_now') }}</a>
-                    <p class="text-center text-[13px] text-stone">{{ __('site.booking.best_rate') }}</p>
+                    <div class="flex flex-col gap-3 max-lg:hidden">
+                        <a href="{{ $offer->bookingUrl() }}" class="btn-primary w-full">{{ __('site.common.book_now') }}</a>
+                        <p class="text-center text-[13px] text-stone">{{ __('site.booking.best_rate') }}</p>
+                    </div>
                 @endunless
             </div>
         </aside>
@@ -40,7 +62,7 @@
         <section class="bg-sand">
             <div class="container-site flex flex-col gap-8 md:gap-12 py-12 md:py-16 lg:py-20">
                 <x-site.section-head :title="__('site.common.related')" :link="route('offers.index')" />
-                <div class="grid gap-8 md:grid-cols-3">
+                <div @class(['grid gap-5 sm:grid-cols-2', 'lg:grid-cols-3' => $others->count() > 2])>
                     @foreach ($others as $o)
                         @include('site.offers.partials.card', ['offer' => $o])
                     @endforeach
