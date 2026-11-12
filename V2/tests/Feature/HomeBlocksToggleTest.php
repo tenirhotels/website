@@ -34,4 +34,21 @@ class HomeBlocksToggleTest extends TestCase
         Setting::put('home', ['recognition' => false]);
         $this->get('/ru')->assertDontSee('recognition-title', false);
     }
+
+    public function test_settings_form_shows_defaults_and_saves_gifts(): void
+    {
+        $this->actingAs(\App\Models\User::factory()->create());
+
+        \Livewire\Livewire::test(\App\Filament\Pages\SiteSettings::class)
+            ->assertFormSet(['home.experiences' => true, 'home.offers' => true, 'home.events' => true, 'home.recognition' => true, 'gifts.on_home' => false, 'gifts.enabled' => true])
+            ->fillForm(['gifts.on_home' => true, 'gifts.url' => 'https://gifts.example.test', 'home.offers' => false])
+            ->call('save');
+
+        $this->assertTrue(Setting::get('gifts.on_home'));
+        $this->assertSame('https://gifts.example.test', Setting::get('gifts.url'));
+        $this->assertFalse(Setting::get('home.offers'));
+
+        \Livewire\Livewire::test(\App\Filament\Pages\SiteSettings::class)
+            ->assertFormSet(['home.offers' => false, 'home.events' => true, 'gifts.on_home' => true]);
+    }
 }
