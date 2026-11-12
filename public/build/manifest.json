@@ -1,0 +1,62 @@
+{
+  "_geofit-B8v8cpau.js": {
+    "file": "assets/geofit-B8v8cpau.js",
+    "name": "geofit"
+  },
+  "node_modules/leaflet/dist/images/layers-2x.png": {
+    "file": "assets/layers-2x-Bpkbi35X.png",
+    "src": "node_modules/leaflet/dist/images/layers-2x.png"
+  },
+  "node_modules/leaflet/dist/images/layers.png": {
+    "file": "assets/layers-BWBAp2CZ.png",
+    "src": "node_modules/leaflet/dist/images/layers.png"
+  },
+  "node_modules/leaflet/dist/images/marker-icon.png": {
+    "file": "assets/marker-icon-hN30_KVU.png",
+    "src": "node_modules/leaflet/dist/images/marker-icon.png"
+  },
+  "resources/css/app.css": {
+    "file": "assets/app-Cf9QQoBp.css",
+    "src": "resources/css/app.css",
+    "isEntry": true,
+    "name": "app",
+    "names": [
+      "app.css"
+    ]
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-MKjSMcBU.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true
+  },
+  "resources/js/calibrate.js": {
+    "file": "assets/calibrate-ujbkRNJB.js",
+    "name": "calibrate",
+    "src": "resources/js/calibrate.js",
+    "isEntry": true,
+    "imports": [
+      "_geofit-B8v8cpau.js"
+    ],
+    "css": [
+      "assets/calibrate-DFqLSGRc.css"
+    ],
+    "assets": [
+      "assets/layers-BWBAp2CZ.png",
+      "assets/layers-2x-Bpkbi35X.png",
+      "assets/marker-icon-hN30_KVU.png"
+    ]
+  },
+  "resources/js/map.js": {
+    "file": "assets/map-D1vnEhVO.js",
+    "name": "map",
+    "src": "resources/js/map.js",
+    "isEntry": true,
+    "imports": [
+      "_geofit-B8v8cpau.js"
+    ],
+    "css": [
+      "assets/map-CWbc46vr.css"
+    ]
+  }
+}

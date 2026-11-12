@@ -1,0 +1,29 @@
+/* Страница «Привязка карты» в админке */
+.cal { display: flex; flex-direction: column; gap: 1rem; }
+.cal-panes { display: grid; gap: .75rem; grid-template-columns: 1fr; }
+@media (min-width: 1024px) { .cal-panes { grid-template-columns: 1fr 1fr; } }
+.cal-pane { position: relative; height: 68vh; min-height: 420px; border-radius: .5rem; overflow: hidden; border: 1px solid #d6d3cc; background: #1b1f1c; }
+.cal-pane > div { position: absolute; inset: 0; }
+.cal-title { position: absolute; z-index: 600; left: 3.4rem; top: .6rem; padding: .25rem .6rem; border-radius: 9999px; background: rgb(255 255 255 / .92); font-size: 12px; color: #16211b; pointer-events: none; }
+.cal-bar { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem 1.25rem; font-size: 14px; }
+.cal-bar button { cursor: pointer; border-radius: .375rem; padding: .45rem .9rem; border: 1px solid #1f3a2e; background: #fff; color: #1f3a2e; }
+.cal-bar button.is-primary { background: #1f3a2e; color: #fff; }
+.cal-bar button:disabled { opacity: .45; cursor: default; }
+.cal-hint { padding: .6rem .9rem; border-radius: .5rem; background: #f4efe6; font-size: 14px; }
+.cal-hint.is-pending { background: #fde9d8; }
+.cal-sum { font-size: 14px; }
+.cal-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.cal-table th { text-align: left; font-weight: 500; font-size: 12px; color: #6b6a63; padding: .35rem .5rem; border-bottom: 1px solid #d6d3cc; }
+.cal-table td { padding: .4rem .5rem; border-bottom: 1px solid #ece9e2; }
+.cal-table tr[data-row] { cursor: pointer; }
+.cal-table tr[data-row]:hover td { background: #f7f4ee; }
+.cal-table tr.is-off td { color: #9a978d; }
+.cal-good { color: #1f7a45; } .cal-mid { color: #b57a10; } .cal-bad { color: #b3261e; font-weight: 600; }
+.cal-pin span { display: flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 9999px; font-size: 11px; font-weight: 600; color: #fff; border: 2px solid #fff; box-shadow: 0 1px 4px rgb(0 0 0 / .5); }
+.cal-pin--anchor span { background: #b5561f; }
+.cal-pin--fixed span { background: #2563a8; }
+.cal-pin--off span { background: #8a8a8a; }
+.cal-pin--pending span { background: #e11d48; animation: cal-pulse 1s infinite; }
+.cal-pin--sel span { outline: 3px solid #facc15; }
+@keyframes cal-pulse { 50% { transform: scale(1.25); } }
+.cal-warp { position: absolute; left: 0; top: 0; pointer-events: none; z-index: 450; }
