@@ -42,7 +42,8 @@ class Fields
             $isDefault = $code === Locales::source();
             $tabs[] = Tab::make($meta['name'])
                 ->id("$id-$code")
-                ->badge($isDefault ? 'исходный' : null)
+                ->badge($isDefault ? 'заполнить первым' : null)
+                ->badgeTooltip($isDefault ? 'Обязательно только этот язык. Если других переводов нет, сайт покажет этот текст.' : null)
                 ->schema($fields($code, $isDefault));
         }
 
