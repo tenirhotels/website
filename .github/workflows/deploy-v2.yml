@@ -1,10 +1,12 @@
 name: Build V2 for hosting
 
-# Собирает V2 (composer + vite) и выкладывает готовый результат в ветку v2-deploy.
-# Хостинг (Plesk → Git) тянет именно v2-deploy: ему не нужны ни Composer, ни Node.
+# Собирает V2 (composer + vite) и выкладывает готовый результат в ветку для хостинга:
+#   v2-skeleton → v2-deploy   (стенд v2.tenirhotels.com)
+#   release     → prod-deploy (боевой tenirhotels.com)
+# Хостинг (Plesk → Git) тянет только ветки *-deploy: ему не нужны ни Composer, ни Node.
 on:
   push:
-    branches: [v2-skeleton]
+    branches: [v2-skeleton, release]
     paths: ['V2/**', '.github/workflows/deploy-v2.yml']
   workflow_dispatch:
 
@@ -12,7 +14,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: deploy-v2
+  group: deploy-${{ github.ref_name }}
   cancel-in-progress: true
 
 jobs:
@@ -41,15 +43,16 @@ jobs:
         working-directory: V2
         run: npm ci && npm run build
 
-      - name: Подготовить содержимое ветки v2-deploy
+      - name: Подготовить содержимое ветки для хостинга
         env:
+          DEPLOY_BRANCH: ${{ github.ref_name == 'release' && 'prod-deploy' || 'v2-deploy' }}
           REPO_URL: https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git
         run: |
           set -e
-          if git ls-remote --exit-code --heads "$REPO_URL" v2-deploy >/dev/null 2>&1; then
-            git clone --quiet --branch v2-deploy --single-branch "$REPO_URL" ../deploy
+          if git ls-remote --exit-code --heads "$REPO_URL" "$DEPLOY_BRANCH" >/dev/null 2>&1; then
+            git clone --quiet --branch "$DEPLOY_BRANCH" --single-branch "$REPO_URL" ../deploy
           else
-            mkdir ../deploy && git -C ../deploy init --quiet -b v2-deploy
+            mkdir ../deploy && git -C ../deploy init --quiet -b "$DEPLOY_BRANCH"
             git -C ../deploy remote add origin "$REPO_URL"
           fi
 
@@ -74,6 +77,8 @@ jobs:
           cp V2/deploy/env.stage.example ../deploy/env.stage.example
 
       - name: Закоммитить и отправить
+        env:
+          DEPLOY_BRANCH: ${{ github.ref_name == 'release' && 'prod-deploy' || 'v2-deploy' }}
         run: |
           cd ../deploy
           git config user.name  "tenir-deploy-bot"
@@ -81,4 +86,4 @@ jobs:
           git add -A
           if git diff --cached --quiet; then echo "Без изменений"; exit 0; fi
           git commit --quiet -m "Build ${GITHUB_SHA::7} из ${GITHUB_REF_NAME}"
-          git push origin v2-deploy
+          git push origin "$DEPLOY_BRANCH"
