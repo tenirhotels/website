@@ -1,5 +1,5 @@
 @php($items = \App\Models\Recognition::forHome())
-@if ($items->isNotEmpty())
+@if (\App\Models\Setting::get('home.recognition', true) !== false && $items->isNotEmpty())
     {{-- Награды и публикации: ведутся в админке «Сайт → Награды и СМИ»; только подтверждённые факты со ссылкой на источник. --}}
     <section class="band band-sand bg-sand" aria-labelledby="recognition-title">
         <div class="container-site flex flex-col gap-8 md:gap-12 py-14 md:py-20 lg:py-24">

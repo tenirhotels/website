@@ -73,6 +73,8 @@ class SiteSettings extends Page
                 Toggle::make('home.experiences')->label('Впечатления (Things to do)')->default(true),
                 Toggle::make('home.offers')->label('Предложения (Offers)')->default(true),
                 Toggle::make('home.events')->label('События (Events)')->default(true),
+                Toggle::make('home.recognition')->label('Награды и СМИ (Recognition)')->default(true),
+                Toggle::make('gifts.on_home')->label('Подарочные сертификаты (Gift cards)')->helperText('По умолчанию выключено. Страница и пункт меню сертификатов не зависят от этой настройки.')->default(false),
             ]),
             Section::make('Бренд')->schema([
                 Fields::translatable(fn (string $l) => [
@@ -93,7 +95,6 @@ class SiteSettings extends Page
             ]),
             Section::make('Подарочные сертификаты')->description('Список и цены берутся из gifter (gifts.tenirhotels.com), заказ и оплата — на его странице.')->columns(2)->schema([
                 Toggle::make('gifts.enabled')->label('Показывать сертификаты на сайте')->default(true),
-                Toggle::make('gifts.on_home')->label('Показывать блок сертификатов на главной')->helperText('Страница сертификатов и пункт меню не зависят от этой настройки.')->default(false),
                 TextInput::make('gifts.url')->label('Адрес витрины gifter')->url()->placeholder('https://gifts.tenirhotels.com'),
             ]),
             Section::make('Соцсети')->columns(2)->schema([
