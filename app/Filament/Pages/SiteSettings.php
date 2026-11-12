@@ -38,7 +38,7 @@ class SiteSettings extends Page
 
     protected static ?int $navigationSort = 0;
 
-    private const GROUPS = ['site', 'brand', 'contacts', 'social', 'analytics', 'perf', 'seo'];
+    private const GROUPS = ['site', 'home', 'brand', 'contacts', 'social', 'analytics', 'perf', 'seo'];
 
     public ?array $data = [];
 
@@ -69,6 +69,11 @@ class SiteSettings extends Page
                     Toggle::make('site.header_autohide')->label('Скрывать шапку при прокрутке вниз')->default(true)
                         ->helperText('Шапка уходит вместе с текстом при прокрутке вниз и сразу возвращается при прокрутке вверх — на экране помещается больше текста.'),
                 ]),
+            Section::make('Блоки главной страницы')->description('Скрывает блок только на главной. Страницы, пункты меню и записи остаются.')->columns(3)->schema([
+                Toggle::make('home.experiences')->label('Впечатления (Things to do)')->default(true),
+                Toggle::make('home.offers')->label('Предложения (Offers)')->default(true),
+                Toggle::make('home.events')->label('События (Events)')->default(true),
+            ]),
             Section::make('Бренд')->schema([
                 Fields::translatable(fn (string $l) => [
                     TextInput::make("brand.name.$l")->label('Название бренда')->placeholder('Tenir Hotels'),
