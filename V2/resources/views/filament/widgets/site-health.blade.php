@@ -1,15 +1,16 @@
 <x-filament-widgets::widget>
     <x-filament::section :heading="$problems ? 'Требует внимания: '.$problems : 'Что требует внимания'" icon="heroicon-o-clipboard-document-check" :icon-color="$problems ? 'warning' : 'success'">
         @if (! count($items))
-            <p class="text-sm text-gray-600 dark:text-gray-300">Всё в порядке: фото, контакты, номера и переводы заполнены, истёкших предложений нет.</p>
+            <p style="font-size:14px;margin:0">Всё в порядке: фото, контакты, номера и переводы заполнены, истёкших предложений нет.</p>
         @else
-            <ul class="divide-y divide-gray-100 dark:divide-white/10">
+            <ul style="list-style:none;margin:0;padding:0">
                 @foreach ($items as $i)
-                    <li class="flex items-start gap-3 py-3">
-                        <x-filament::icon :icon="$i['level'] === 'warn' ? 'heroicon-o-exclamation-triangle' : 'heroicon-o-information-circle'" @class(['mt-0.5 h-5 w-5 shrink-0', 'text-warning-500' => $i['level'] === 'warn', 'text-gray-400' => $i['level'] !== 'warn']) />
-                        <span class="flex-1 text-sm text-gray-800 dark:text-gray-100">{{ $i['text'] }}</span>
+                    <li style="display:flex;align-items:flex-start;gap:12px;padding:12px 0;{{ ! $loop->first ? 'border-top:1px solid rgba(128,128,128,.2);' : '' }}">
+                        <x-filament::icon :icon="$i['level'] === 'warn' ? 'heroicon-o-exclamation-triangle' : 'heroicon-o-information-circle'"
+                            style="width:20px;height:20px;flex-shrink:0;margin-top:1px;color:{{ $i['level'] === 'warn' ? 'var(--warning-500, #f59e0b)' : 'var(--gray-400, #9ca3af)' }}" />
+                        <span style="flex:1;min-width:0;font-size:14px;line-height:1.5">{{ $i['text'] }}</span>
                         @if ($i['url'])
-                            <a href="{{ $i['url'] }}" class="shrink-0 text-sm font-medium text-primary-600 hover:underline dark:text-primary-400">Открыть →</a>
+                            <a href="{{ $i['url'] }}" style="flex-shrink:0;font-size:14px;font-weight:500;white-space:nowrap;color:var(--primary-600, #059669)">Открыть →</a>
                         @endif
                     </li>
                 @endforeach
