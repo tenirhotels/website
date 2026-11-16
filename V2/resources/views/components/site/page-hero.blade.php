@@ -58,14 +58,20 @@
                 })(window);
             </script>
         @endif
-        <div @class(['absolute inset-0', 'bg-forest-deep/45' => $tall, 'bg-[linear-gradient(to_top,rgba(22,33,27,.86)_0%,rgba(22,33,27,.58)_42%,rgba(22,33,27,0)_82%)]' => ! $tall]) aria-hidden="true"></div>
+        @if ($tall)
+            {{-- Главная: фото остаётся ярким, затемнены только низ и левый край — там, где текст. --}}
+            <div class="absolute inset-0 bg-[linear-gradient(to_top,rgba(22,33,27,.8)_0%,rgba(22,33,27,.5)_30%,rgba(22,33,27,0)_62%)]" aria-hidden="true"></div>
+            <div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(22,33,27,.42)_0%,rgba(22,33,27,.12)_45%,rgba(22,33,27,0)_70%)]" aria-hidden="true"></div>
+        @else
+            <div class="absolute inset-0 bg-[linear-gradient(to_top,rgba(22,33,27,.86)_0%,rgba(22,33,27,.58)_42%,rgba(22,33,27,0)_82%)]" aria-hidden="true"></div>
+        @endif
     @else
         <svg aria-hidden="true" viewBox="0 0 1440 760" preserveAspectRatio="none" class="absolute inset-0 h-full w-full">
             <polygon points="0,560 140,430 230,480 380,300 470,360 610,210 700,270 820,150 930,250 1040,190 1150,300 1260,240 1440,380 1440,760 0,760" fill="#2E4237"/>
             <polygon points="0,640 200,540 330,590 520,470 690,560 880,450 1060,540 1240,470 1440,560 1440,760 0,760" fill="#1F3A2E"/>
         </svg>
     @endif
-    <div class="container-site relative flex h-full flex-col justify-end gap-5 pb-20 lg:pb-28">
+    <div @class(['container-site relative flex h-full flex-col justify-end gap-5 pb-20 lg:pb-28', '[text-shadow:0_2px_22px_rgba(0,0,0,.45)]' => $tall])>
         @if ($eyebrow)<p class="eyebrow-light">{{ $eyebrow }}</p>@endif
         <h1 @class(['h-display max-w-4xl', 'text-5xl md:text-7xl' => $tall, 'text-4xl md:text-6xl' => ! $tall])>{{ $title }}</h1>
         @if ($text)<p class="max-w-xl text-lg leading-relaxed text-snow/90 md:text-xl">{{ $text }}</p>@endif
