@@ -1,5 +1,5 @@
 <article class="group flex h-full flex-col overflow-hidden rounded-2xl border border-mist bg-white">
-    @php $tags = collect([$room->size_m2 ? $room->size_m2.' м²' : null, $room->max_guests ? __('site.hotel.up_to_guests', ['count' => $room->max_guests]) : null, $room->t('view')])->filter(); @endphp
+    @php $tags = collect([$room->size_m2 ? $room->size_m2.' м²' : null, $room->guestsLabel(false), $room->t('view')])->filter(); @endphp
     <a href="{{ $room->url() }}" class="relative block aspect-[4/3] shrink-0 overflow-hidden">
         <x-site.media :src="$room->image" alt="" class="transition-transform duration-700 group-hover:scale-[1.03]" />
         <span class="pointer-events-none absolute inset-0 bg-gradient-to-t from-forest-deep/80 via-forest-deep/20 to-transparent" aria-hidden="true"></span>

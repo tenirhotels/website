@@ -60,9 +60,11 @@ class RoomTypeResource extends Resource
                 TextInput::make("bed.$l")->label('Кровать')->placeholder('King-size'),
                 TextInput::make("view.$l")->label('Вид')->placeholder('Панорама на горы'),
             ]),
-            Section::make('Параметры')->columns(4)->columnSpanFull()->schema([
+            Section::make('Параметры')->columns(3)->columnSpanFull()->schema([
                 TextInput::make('size_m2')->label('Площадь, м²')->numeric(),
                 TextInput::make('max_guests')->label('Гостей макс.')->numeric(),
+                TextInput::make('max_children')->label('Из них детей')->numeric()->minValue(0)
+                    ->helperText('3 гостя и 1 ребёнок → «до 3 гостей: 2 взрослых + 1 ребёнок»'),
                 TextInput::make('price_from')->label('Цена от, ₸')->numeric()
                     ->helperText('Пусто — «Проверить цены»'),
                 TextInput::make('exely_room_type_id')->label('ID типа номера в Exely')

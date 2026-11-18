@@ -7,7 +7,7 @@
         $all = collect($room->featureList());
         $facts = collect([
             ['icon' => 'size', 'label' => __('site.hotel.size'), 'value' => $room->size_m2 ? $room->size_m2.' м²' : null],
-            ['icon' => 'guests', 'label' => __('site.hotel.guests'), 'value' => $room->max_guests ? __('site.hotel.up_to_guests', ['count' => $room->max_guests]) : null],
+            ['icon' => 'guests', 'label' => __('site.hotel.guests'), 'value' => $room->guestsLabel()],
             ['icon' => 'bed', 'label' => __('site.hotel.bed'), 'value' => $room->t('bed')],
             ['icon' => 'view', 'label' => __('site.hotel.view'), 'value' => $room->t('view')],
         ])->filter(fn ($f) => filled($f['value']));

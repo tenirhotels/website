@@ -39,4 +39,15 @@ class RoomHighlightsTest extends TestCase
         $r->features = [['source' => 'view', 'icon' => 'view', 'pin' => true], ['source' => 'size', 'icon' => 'size', 'pin' => true]];
         $this->assertSame(['32 м²'], array_column($r->tiles(), 'text'));
     }
+
+    public function test_guests_label_splits_adults_and_children(): void
+    {
+        $r = new \App\Models\RoomType(['max_guests' => 3, 'max_children' => 1]);
+        app()->setLocale('ru');
+        $this->assertSame('до 3 гостей: 2 взрослых + 1 ребёнок', $r->guestsLabel());
+        $this->assertSame('до 3 гостей', $r->guestsLabel(false));
+        app()->setLocale('en');
+        $this->assertSame('up to 3 guests: 2 adults + 1 child', $r->guestsLabel());
+        $this->assertSame('up to 2 guests', (new \App\Models\RoomType(['max_guests' => 2]))->guestsLabel());
+    }
 }
