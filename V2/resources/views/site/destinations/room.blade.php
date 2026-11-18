@@ -22,13 +22,13 @@
         <div class="container-site relative z-10 -mt-8 md:-mt-14">
             <dl class="grid grid-cols-2 gap-px [&>*:last-child:nth-child(odd)]:col-span-2 md:[&>*:last-child:nth-child(odd)]:col-span-1 overflow-hidden rounded-3xl bg-mist shadow-[0_20px_50px_-24px_rgba(22,33,27,.35)] {{ ['', 'md:grid-cols-1', 'md:grid-cols-2', 'md:grid-cols-3', 'md:grid-cols-4'][min($facts->count(), 4)] }}">
                 @foreach ($facts as $f)
-                    <div class="flex flex-col-reverse justify-end gap-2 bg-white px-6 py-6 md:px-8 md:py-8">
+                    <div class="flex flex-col gap-3 bg-white px-6 py-6 md:px-8 md:py-7">
                         <dt class="flex items-center gap-2 text-[12px] uppercase tracking-[0.16em] text-stone">
                             <span class="text-ember">{{ site_icon($f['icon'], 'h-5 w-5') }}</span>{{ $f['label'] }}
                         </dt>
                         <dd class="flex flex-col gap-1">
-                            <span class="font-display text-[26px] leading-tight text-forest md:text-[30px]">{{ $f['value'] }}</span>
-                            @if ($f['sub'])<span class="text-[14px] text-stone">{{ $f['sub'] }}</span>@endif
+                            <span class="font-display text-[24px] leading-tight text-forest md:text-[28px]">{{ $f['value'] }}</span>
+                            @if ($f['sub'])<span class="text-[14px] leading-snug text-stone">{{ $f['sub'] }}</span>@endif
                         </dd>
                     </div>
                 @endforeach
@@ -85,7 +85,7 @@
                         <span><strong class="font-display text-[40px] font-normal leading-none text-forest">{{ price($room->price_from) }} ₸</strong> <span class="text-[15px]">/ {{ __('site.hotel.per_night') }}</span></span>
                     </p>
                 @else
-                    <p class="font-display text-2xl text-forest">{{ $room->t('name') }}</p>
+                    <p class="font-display text-2xl text-forest">{{ __('site.hotel.check_prices') }}</p>
                 @endif
                 <a href="{{ $room->bookingUrl() }}" class="btn-primary w-full">{{ __('site.hotel.book_room') }}</a>
                 <p class="text-center text-[13px] text-stone">{{ __('site.booking.best_rate') }}</p>
