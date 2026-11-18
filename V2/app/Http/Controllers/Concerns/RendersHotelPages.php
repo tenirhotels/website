@@ -23,6 +23,11 @@ trait RendersHotelPages
 
     protected function renderRooms(Hotel $hotel)
     {
+        // Один тип номера — промежуточная страница не нужна: сразу на номер. Временный редирект: типов может стать больше.
+        if ($hotel->soleRoom()) {
+            return redirect()->to($hotel->roomsUrl());
+        }
+
         return view('site.destinations.rooms', [
             'hotel' => $hotel,
             'rooms' => $hotel->rooms()->published()->ordered()->get(),

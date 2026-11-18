@@ -61,7 +61,7 @@
                 <p class="mb-1 text-xs uppercase tracking-[0.2em] text-[#9AA59F]">{{ __('site.footer.guests') }}</p>
                 @if (\App\Support\Property::isSingle() && ($single = \App\Support\Property::primary()))
                     {{-- Один отель: ссылка на главную бессмысленна — ведём в разделы отеля. --}}
-                    <a href="{{ $single->sectionUrl('rooms') }}" class="hover:text-white">{{ __('site.hotel.rooms') }}</a>
+                    <a href="{{ $single->roomsUrl() }}" class="hover:text-white">{{ __('site.hotel.rooms') }}</a>
                     <a href="{{ $single->sectionUrl('dining') }}" class="hover:text-white">{{ __('site.hotel.dining') }}</a>
                     <a href="{{ route('experiences.index') }}" class="hover:text-white">{{ __('site.nav.experiences') }}</a>
                 @else

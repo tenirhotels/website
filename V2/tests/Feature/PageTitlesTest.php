@@ -14,6 +14,14 @@ class PageTitlesTest extends TestCase
 
     protected bool $seed = true;
 
+    private function addSecondRoom(): void
+    {
+        \App\Models\RoomType::create([
+            'hotel_id' => Hotel::where('slug', 'shymbulak')->value('id'), 'slug' => 'standard',
+            'name' => ['ru' => 'Стандарт', 'en' => 'Standard'], 'is_published' => true, 'sort' => 2,
+        ]);
+    }
+
     private function title(string $url): string
     {
         preg_match('~<title>(.*?)</title>~s', $this->get($url)->assertOk()->getContent(), $m);
@@ -23,6 +31,7 @@ class PageTitlesTest extends TestCase
 
     public function test_single_hotel_titles_name_only_the_hotel(): void
     {
+        $this->addSecondRoom();
         $hotel = Hotel::where('slug', 'shymbulak')->first();
         $name = $hotel->t('name');
         $offer = Offer::published()->first();
@@ -38,6 +47,7 @@ class PageTitlesTest extends TestCase
 
     public function test_single_hotel_hero_has_no_repeated_hotel_name(): void
     {
+        $this->addSecondRoom();
         $name = Hotel::where('slug', 'shymbulak')->first()->t('name');
         $html = $this->get('/ru/rooms')->getContent();
         $this->assertDoesNotMatchRegularExpression('~<p class="eyebrow-light">\s*'.preg_quote(e($name), '~').'\s*</p>~', $html);
@@ -45,6 +55,7 @@ class PageTitlesTest extends TestCase
 
     public function test_multi_mode_keeps_brand_suffix(): void
     {
+        $this->addSecondRoom();
         Hotel::create([
             'slug' => 'almaty', 'name' => ['ru' => 'Tenir Almaty'], 'status' => Hotel::STATUS_OPEN,
             'is_published' => true, 'sort' => 2,

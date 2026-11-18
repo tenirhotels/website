@@ -2,9 +2,6 @@
     <x-site.page-hero :image="$hotel->gallery[1] ?? $hotel->hero_image" :eyebrow="$hotel->t('name')" :title="__('site.hotel.rooms')" :text="__('site.home.rooms_title')" />
     <x-site.hotel-nav :hotel="$hotel" />
 
-    @if ($rooms->count() === 1)
-        @include('site.destinations.partials.room-feature', ['room' => $rooms->first()])
-    @else
     <section class="container-site py-12 md:py-16 lg:py-20">
         <div class="grid gap-x-8 gap-y-16 md:grid-cols-2 lg:grid-cols-3">
             @forelse ($rooms as $room)
@@ -14,5 +11,4 @@
             @endforelse
         </div>
     </section>
-    @endif
 </x-layouts.site>

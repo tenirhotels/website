@@ -21,6 +21,14 @@ class PropertyModeTest extends TestCase
 
     protected bool $seed = true;
 
+    private function addSecondRoom(): void
+    {
+        \App\Models\RoomType::create([
+            'hotel_id' => Hotel::where('slug', 'shymbulak')->value('id'), 'slug' => 'standard',
+            'name' => ['ru' => 'Стандарт', 'en' => 'Standard'], 'is_published' => true, 'sort' => 2,
+        ]);
+    }
+
     private const SINGLE_PATHS = [
         '', 'rooms', 'rooms/deluxe-mountain-view', 'dining', 'gallery', 'getting-here', 'before-you-arrive', 'reviews',
         'experiences', 'experiences/tenir-sky', 'offers', 'offers/long-stay',
@@ -58,6 +66,7 @@ class PropertyModeTest extends TestCase
 
     public function test_single_mode_pages_render_in_every_language(): void
     {
+        $this->addSecondRoom();
         foreach (['ru', 'kk', 'en', 'zh'] as $locale) {
             foreach (self::SINGLE_PATHS as $path) {
                 $this->get("/$locale/$path")->assertOk();
@@ -67,6 +76,7 @@ class PropertyModeTest extends TestCase
 
     public function test_single_mode_home_is_the_hotel(): void
     {
+        $this->addSecondRoom();
         $this->get('/ru')
             ->assertOk()
             ->assertSee('"@type":"Hotel"', false)
@@ -153,6 +163,7 @@ class PropertyModeTest extends TestCase
 
     public function test_unpublished_second_hotel_keeps_single_mode(): void
     {
+        $this->addSecondRoom();
         $this->addSecondHotel()->update(['is_published' => false]);
 
         $this->assertTrue(Property::isSingle());
@@ -161,6 +172,7 @@ class PropertyModeTest extends TestCase
 
     public function test_multi_mode_pages_render_in_every_language(): void
     {
+        $this->addSecondRoom();
         $this->addSecondHotel();
 
         foreach (['ru', 'kk', 'en', 'zh'] as $locale) {
@@ -172,6 +184,7 @@ class PropertyModeTest extends TestCase
 
     public function test_multi_mode_home_is_the_brand_showcase(): void
     {
+        $this->addSecondRoom();
         $this->addSecondHotel();
 
         $this->get('/ru')
@@ -222,6 +235,7 @@ class PropertyModeTest extends TestCase
 
     public function test_mode_can_be_forced_in_settings(): void
     {
+        $this->addSecondRoom();
         $this->addSecondHotel();
         Setting::put('site', ['mode' => 'single']);
 
@@ -236,5 +250,17 @@ class PropertyModeTest extends TestCase
 
         $this->assertTrue(Property::isMulti());
         $this->get('/ru/destinations/shymbulak/rooms')->assertOk();
+    }
+
+    public function test_rooms_goes_straight_to_the_only_room_and_lists_when_several(): void
+    {
+        $this->get('/ru/rooms')->assertRedirect('/ru/rooms/deluxe-mountain-view');
+        $this->get('/ru')->assertSee('href="'.url('/ru/rooms/deluxe-mountain-view').'"', false);
+        $this->get('/sitemap.xml')->assertOk()->assertDontSee('<loc>'.url('/ru/rooms').'</loc>', false);
+
+        $this->addSecondRoom();
+        Property::flush();
+        $this->get('/ru/rooms')->assertOk()->assertSee('Стандарт');
+        $this->get('/ru')->assertSee('href="'.url('/ru/rooms').'"', false);
     }
 }
