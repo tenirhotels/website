@@ -26,7 +26,7 @@
                             <span class="text-ember">{{ site_icon($f['icon'], 'h-5 w-5') }}</span>{{ $f['label'] }}
                         </dt>
                         <dd class="flex flex-col gap-1">
-                            <span class="font-display text-[24px] leading-tight text-forest md:text-[28px]">{{ $f['value'] }}</span>
+                            <span class="font-display text-[20px] leading-tight text-forest sm:text-[24px] md:text-[28px]">{{ $f['value'] }}</span>
                             @if ($f['sub'])<span class="text-[14px] leading-snug text-stone">{{ $f['sub'] }}</span>@endif
                         </dd>
                     </div>
