@@ -83,7 +83,7 @@ class RoomType extends Model
     {
         return match ($key) {
             'size' => $this->size_m2 ? $this->size_m2.' м²' : null,
-            'guests' => $this->guestsLabel(),
+            'guests' => $this->guestsLabel(false),
             'bed' => $this->t('bed') ?: null,
             'view' => $this->t('view') ?: null,
             default => null,
