@@ -62,6 +62,7 @@ return [
         'guests' => '入住人数',
         'up_to_guests' => '最多 :count 人',
         'guests_split' => '最多 :total 人：:adults + :children',
+        'amenity_groups' => ['rest' => '休息与睡眠', 'bath' => '浴室', 'tech' => '网络与设备', 'food' => '餐饮', 'active' => '山地与存放', 'other' => '其他'],
         'adults' => ':count 位成人|:count 位成人',
         'children' => ':count 位儿童|:count 位儿童',
         'size' => '面积',

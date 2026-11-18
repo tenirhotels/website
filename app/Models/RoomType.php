@@ -48,6 +48,18 @@ class RoomType extends Model
     /** Максимум крупных выделений. */
     public const MAX_TILES = 3;
 
+    /** «2 взрослых + 1 ребёнок» (если указано число детей) или null. */
+    public function guestsSplit(): ?string
+    {
+        $kids = (int) $this->max_children;
+        if (! $this->max_guests || $kids < 1 || $kids >= $this->max_guests) {
+            return null;
+        }
+        $adults = $this->max_guests - $kids;
+
+        return trans_choice('site.hotel.adults', $adults, ['count' => $adults]).' + '.trans_choice('site.hotel.children', $kids, ['count' => $kids]);
+    }
+
     /** «до 3 гостей» или «до 3 гостей: 2 взрослых + 1 ребёнок», если указано число детей. */
     public function guestsLabel(bool $full = true): ?string
     {
