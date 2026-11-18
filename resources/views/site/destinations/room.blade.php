@@ -13,6 +13,8 @@
         ])->filter(fn ($f) => filled($f['value']))->values();
         $highlights = $all->filter(fn ($f) => $f['pin'] && ! in_array($f['source'], $factSources, true))->values();
         $amenities = $all->reject(fn ($f) => $f['pin'] || in_array($f['source'], $factSources, true));
+        $groups = $amenities->groupBy(fn ($a) => amenity_group($a['icon']))
+            ->sortBy(fn ($g, $k) => array_search($k, ['rest', 'bath', 'tech', 'food', 'active', 'other'], true));
     @endphp
 
     {{-- Полоса параметров: парит на стыке шапки и страницы --}}
@@ -58,15 +60,20 @@
         <aside class="flex-1 lg:max-w-[400px]">
             <div class="sticky top-40 flex flex-col gap-6 rounded-3xl border border-mist bg-white p-7 md:p-8">
                 @if ($amenities->isNotEmpty())
-                    <div>
-                        <h2 class="mb-4 font-display text-2xl text-forest">{{ __('site.hotel.amenities') }}</h2>
-                        <ul class="flex flex-col divide-y divide-mist">
-                            @foreach ($amenities as $a)
-                                <li class="flex items-center gap-3.5 py-3 text-[16px] text-ink first:pt-0">
-                                    <span class="shrink-0 text-ember">{{ site_icon($a['icon'], 'h-5 w-5') }}</span>{{ $a['text'] }}
-                                </li>
-                            @endforeach
-                        </ul>
+                    <div class="flex flex-col gap-6">
+                        <h2 class="font-display text-2xl text-forest">{{ __('site.hotel.amenities') }}</h2>
+                        @foreach ($groups as $key => $items)
+                            <section class="flex flex-col gap-3">
+                                <h3 class="text-[12px] uppercase tracking-[0.16em] text-stone">{{ __('site.hotel.amenity_groups.'.$key) }}</h3>
+                                <ul class="flex flex-wrap gap-2">
+                                    @foreach ($items as $a)
+                                        <li class="inline-flex items-center gap-2 rounded-full bg-sand px-3.5 py-2 text-[14px] leading-none text-ink">
+                                            <span class="shrink-0 text-ember">{{ site_icon($a['icon'], 'h-4 w-4') }}</span>{{ $a['text'] }}
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </section>
+                        @endforeach
                     </div>
                 @endif
                 <div class="flex flex-col gap-5 {{ $amenities->isNotEmpty() ? 'border-t border-mist pt-6' : '' }}">
