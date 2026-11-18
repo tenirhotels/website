@@ -45,6 +45,9 @@ class SitemapController extends Controller
             $sections = $hotel->isOpen() ? ['overview', 'rooms', 'dining', 'experiences', 'offers', 'gallery', 'getting-here', 'before-you-arrive', 'reviews'] : ['overview'];
 
             foreach ($sections as $section) {
+                if ($section === 'rooms' && $hotel->rooms->count() === 1) {
+                    continue; // единственный номер: страница списка делает редирект
+                }
                 $name = Property::routeName($section, $mode);
                 if (! in_array($name, ['home', 'experiences.index', 'offers.index'], true)) {
                     $entries[] = [$name, $base, $hotel->updated_at];

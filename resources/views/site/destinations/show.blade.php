@@ -45,7 +45,7 @@
     @if ($rooms->isNotEmpty())
         <section class="bg-white">
             <div class="container-site flex flex-col gap-8 md:gap-12 py-14 md:py-20 lg:py-24">
-                <x-site.section-head :eyebrow="__('site.hotel.rooms')" :title="__('site.home.rooms_title')" :link="$hotel->sectionUrl('rooms')" :link-label="__('site.hotel.all_rooms')" />
+                <x-site.section-head :eyebrow="__('site.hotel.rooms')" :title="__('site.home.rooms_title')" :link="$rooms->count() > 1 ? $hotel->sectionUrl('rooms') : null" :link-label="__('site.hotel.all_rooms')" />
                 <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
                     @foreach ($rooms as $room)
                         @include('site.destinations.partials.room-card', ['room' => $room])

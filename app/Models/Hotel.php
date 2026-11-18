@@ -167,6 +167,25 @@ class Hotel extends Model
         return Property::hotelUrl($this, $section, $params, $locale);
     }
 
+    /** Единственный опубликованный тип номера (если типов больше одного или нет — null). */
+    public function soleRoom(): ?RoomType
+    {
+        if (! array_key_exists('soleRoom', $this->relations)) {
+            $rooms = $this->rooms()->published()->ordered()->limit(2)->get();
+            $this->setRelation('soleRoom', $rooms->count() === 1 ? $rooms->first() : null);
+        }
+
+        return $this->getRelation('soleRoom');
+    }
+
+    /** Куда ведёт «Номера»: при одном типе номера — прямо на него, иначе на список типов. */
+    public function roomsUrl(?string $locale = null): string
+    {
+        $room = $this->soleRoom();
+
+        return $room ? $this->sectionUrl('room', ['room' => $room->slug], $locale) : $this->sectionUrl('rooms', [], $locale);
+    }
+
     /** Фото страницы «Как добраться»: своё из локации, иначе первое фото галереи. */
     public function gettingImage(): ?string
     {

@@ -24,7 +24,7 @@
             <ul class="-mb-px flex gap-7 overflow-x-auto whitespace-nowrap text-[13px] uppercase tracking-[0.14em]">
                 @foreach ($sections as $section => $label)
                     <li>
-                        <a href="{{ $hotel->sectionUrl($section) }}"
+                        <a href="{{ $section === 'rooms' ? $hotel->roomsUrl() : $hotel->sectionUrl($section) }}"
                            @class(['inline-block border-b-2 py-4', 'border-ember text-ink' => $current === $section, 'border-transparent text-stone hover:text-ink' => $current !== $section])
                            @if ($current === $section) aria-current="page" @endif>{{ $label }}</a>
                     </li>

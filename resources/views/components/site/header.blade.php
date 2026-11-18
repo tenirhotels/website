@@ -10,7 +10,7 @@
     // Главное меню. Один отель — разделы отеля; сеть — разделы бренда.
     $menu = $single && $hotel
         ? [
-            [__('site.hotel.rooms'), $hotel->sectionUrl('rooms')],
+            [__('site.hotel.rooms'), $hotel->roomsUrl()],
             [__('site.hotel.dining'), $hotel->sectionUrl('dining')],
             [__('site.nav.experiences'), route('experiences.index')],
             [__('site.nav.offers'), route('offers.index')],
