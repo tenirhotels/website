@@ -6,64 +6,89 @@
         $factSources = ['size', 'guests', 'bed', 'view'];
         $all = collect($room->featureList());
         $facts = collect([
-            ['icon' => 'size', 'label' => __('site.hotel.size'), 'value' => $room->size_m2 ? $room->size_m2.' м²' : null],
-            ['icon' => 'guests', 'label' => __('site.hotel.guests'), 'value' => $room->guestsLabel()],
-            ['icon' => 'bed', 'label' => __('site.hotel.bed'), 'value' => $room->t('bed')],
-            ['icon' => 'view', 'label' => __('site.hotel.view'), 'value' => $room->t('view')],
-        ])->filter(fn ($f) => filled($f['value']));
-        $highlights = $all->filter(fn ($f) => $f['pin'] && ! in_array($f['source'], $factSources, true));
+            ['icon' => 'size', 'label' => __('site.hotel.size'), 'value' => $room->size_m2 ? $room->size_m2.' м²' : null, 'sub' => null],
+            ['icon' => 'guests', 'label' => __('site.hotel.guests'), 'value' => $room->guestsLabel(false), 'sub' => $room->guestsSplit()],
+            ['icon' => 'bed', 'label' => __('site.hotel.bed'), 'value' => $room->t('bed'), 'sub' => null],
+            ['icon' => 'view', 'label' => __('site.hotel.view'), 'value' => $room->t('view'), 'sub' => null],
+        ])->filter(fn ($f) => filled($f['value']))->values();
+        $highlights = $all->filter(fn ($f) => $f['pin'] && ! in_array($f['source'], $factSources, true))->values();
         $amenities = $all->reject(fn ($f) => $f['pin'] || in_array($f['source'], $factSources, true));
+        $groups = $amenities->groupBy(fn ($a) => amenity_group($a['icon']))
+            ->sortBy(fn ($g, $k) => array_search($k, ['rest', 'bath', 'tech', 'food', 'active', 'other'], true));
     @endphp
 
-    <section class="container-site flex flex-col gap-10 py-12 md:py-16 lg:flex-row lg:gap-16 lg:py-20">
-        <div class="flex flex-[1.5] flex-col gap-10">
+    {{-- Полоса параметров: парит на стыке шапки и страницы --}}
+    @if ($facts->isNotEmpty())
+        <div class="container-site relative z-10 -mt-8 md:-mt-14">
+            <dl class="grid grid-cols-2 gap-px [&>*:last-child:nth-child(odd)]:col-span-2 md:[&>*:last-child:nth-child(odd)]:col-span-1 overflow-hidden rounded-3xl bg-mist shadow-[0_20px_50px_-24px_rgba(22,33,27,.35)] {{ ['', 'md:grid-cols-1', 'md:grid-cols-2', 'md:grid-cols-3', 'md:grid-cols-4'][min($facts->count(), 4)] }}">
+                @foreach ($facts as $f)
+                    <div class="flex flex-col-reverse justify-end gap-2 bg-white px-6 py-6 md:px-8 md:py-8">
+                        <dt class="flex items-center gap-2 text-[12px] uppercase tracking-[0.16em] text-stone">
+                            <span class="text-ember">{{ site_icon($f['icon'], 'h-5 w-5') }}</span>{{ $f['label'] }}
+                        </dt>
+                        <dd class="flex flex-col gap-1">
+                            <span class="font-display text-[26px] leading-tight text-forest md:text-[30px]">{{ $f['value'] }}</span>
+                            @if ($f['sub'])<span class="text-[14px] text-stone">{{ $f['sub'] }}</span>@endif
+                        </dd>
+                    </div>
+                @endforeach
+            </dl>
+        </div>
+    @endif
+
+    <section class="container-site flex flex-col gap-12 py-12 md:py-16 lg:flex-row lg:gap-16 lg:py-20">
+        <div class="flex min-w-0 flex-[1.7] flex-col gap-14">
             <div class="prose-tenir !text-[18px] [&_p:last-child]:mb-0">{!! $room->t('description') !!}</div>
 
             @if ($room->gallery)
                 <x-site.gallery :images="$room->gallery" :alt="$room->t('name')" :layout="$room->gallery_layout ?: 'mosaic'" />
             @endif
 
-            @if ($amenities->isNotEmpty())
+            @if ($highlights->isNotEmpty())
+                <ul class="grid gap-4 {{ ['', 'sm:grid-cols-1', 'sm:grid-cols-2', 'sm:grid-cols-3'][min($highlights->count(), 3)] }}">
+                    @foreach ($highlights as $h)
+                        <li class="flex flex-col gap-4 rounded-3xl bg-forest-deep p-6 text-white">
+                            <span class="text-ember-light">{{ site_icon($h['icon'], 'h-8 w-8') }}</span>
+                            <span class="font-display text-[22px] leading-tight">{{ $h['text'] }}</span>
+                        </li>
+                    @endforeach
+                </ul>
+            @endif
+
+            @if ($groups->isNotEmpty())
                 <div>
-                    <h2 class="mb-5 font-display text-2xl">{{ __('site.hotel.amenities') }}</h2>
-                    <ul class="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                        @foreach ($amenities as $a)
-                            <li class="flex items-center gap-4 rounded-2xl bg-white px-4 py-3.5 leading-snug text-ink">
-                                <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-sand text-ember">{{ site_icon($a['icon'], 'h-5 w-5') }}</span>
-                                <span class="text-[16px]">{{ $a['text'] }}</span>
-                            </li>
+                    <h2 class="mb-8 font-display text-3xl text-forest">{{ __('site.hotel.amenities') }}</h2>
+                    <div class="grid gap-x-12 gap-y-9 sm:grid-cols-2">
+                        @foreach ($groups as $key => $items)
+                            <section>
+                                <h3 class="mb-3 border-b border-mist pb-3 text-[12px] uppercase tracking-[0.18em] text-stone">{{ __('site.hotel.amenity_groups.'.$key) }}</h3>
+                                <ul class="flex flex-col">
+                                    @foreach ($items as $a)
+                                        <li class="flex items-center gap-3.5 py-2.5 text-[16px] text-ink">
+                                            <span class="shrink-0 text-ember">{{ site_icon($a['icon'], 'h-5 w-5') }}</span>{{ $a['text'] }}
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </section>
                         @endforeach
-                    </ul>
+                    </div>
                 </div>
             @endif
         </div>
 
-        {{-- Карточка номера: факты, цена, бронь. Закреплена при прокрутке на десктопе --}}
-        <aside class="flex-1">
-            <div class="sticky top-40 flex flex-col gap-6 rounded-3xl bg-forest-deep p-7 text-white md:p-8">
-                <ul class="flex flex-col divide-y divide-white/15">
-                    @foreach ($facts as $f)
-                        <li class="flex items-center gap-4 py-3.5 first:pt-0">
-                            <span class="shrink-0 text-ember-light">{{ site_icon($f['icon'], 'h-6 w-6') }}</span>
-                            <span class="flex flex-1 items-baseline justify-between gap-4">
-                                <span class="text-[12px] uppercase tracking-[0.18em] text-white/60">{{ $f['label'] }}</span>
-                                <span class="text-right font-display text-xl leading-tight">{{ $f['value'] }}</span>
-                            </span>
-                        </li>
-                    @endforeach
-                    @foreach ($highlights as $h)
-                        <li class="flex items-center gap-4 py-3.5">
-                            <span class="shrink-0 text-ember-light">{{ site_icon($h['icon'], 'h-6 w-6') }}</span>
-                            <span class="font-display text-xl leading-tight">{{ $h['text'] }}</span>
-                        </li>
-                    @endforeach
-                </ul>
-
+        {{-- Бронь: закреплена при прокрутке на десктопе --}}
+        <aside class="flex-1 lg:max-w-[400px]">
+            <div class="sticky top-40 flex flex-col gap-5 rounded-3xl border border-mist bg-white p-7 md:p-8">
                 @if ($room->price_from)
-                    <p class="text-white/70">{{ __('site.hotel.from') }} <strong class="font-display text-4xl font-normal text-white">{{ price($room->price_from) }} ₸</strong> / {{ __('site.hotel.per_night') }}</p>
+                    <p class="flex flex-col gap-1 text-stone">
+                        <span class="text-[12px] uppercase tracking-[0.16em]">{{ __('site.hotel.from') }}</span>
+                        <span><strong class="font-display text-[40px] font-normal leading-none text-forest">{{ price($room->price_from) }} ₸</strong> <span class="text-[15px]">/ {{ __('site.hotel.per_night') }}</span></span>
+                    </p>
+                @else
+                    <p class="font-display text-2xl text-forest">{{ $room->t('name') }}</p>
                 @endif
                 <a href="{{ $room->bookingUrl() }}" class="btn-primary w-full">{{ __('site.hotel.book_room') }}</a>
-                <p class="text-center text-[13px] text-white/60">{{ __('site.booking.best_rate') }}</p>
+                <p class="text-center text-[13px] text-stone">{{ __('site.booking.best_rate') }}</p>
             </div>
         </aside>
     </section>

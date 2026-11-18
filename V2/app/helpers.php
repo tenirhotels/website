@@ -110,6 +110,21 @@ if (! function_exists('amenity_icon_name')) {
     }
 }
 
+if (! function_exists('amenity_group')) {
+    /** Группа удобства по иконке: для разбивки списка на смысловые блоки. */
+    function amenity_group(string $icon): string
+    {
+        return match ($icon) {
+            'bed', 'sauna', 'heat', 'window' => 'rest',
+            'bath', 'robe' => 'bath',
+            'tv', 'wifi' => 'tech',
+            'coffee', 'minibar' => 'food',
+            'ski', 'locker', 'module' => 'active',
+            default => 'other',
+        };
+    }
+}
+
 if (! function_exists('amenity_icon')) {
     /** Иконка удобства: выбранная вручную или подобранная по тексту. */
     function amenity_icon(string $text, string $class = 'h-6 w-6', ?string $icon = null): \Illuminate\Support\HtmlString
