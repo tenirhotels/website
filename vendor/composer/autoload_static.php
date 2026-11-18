@@ -997,6 +997,7 @@ class ComposerStaticInitbed664a3137a0af20c24a0f2c8436f70
         'Database\\Seeders\\DatabaseSeeder' => __DIR__ . '/../..' . '/database/seeders/DatabaseSeeder.php',
         'Database\\Seeders\\LocationPlacePageSeeder' => __DIR__ . '/../..' . '/database/seeders/LocationPlacePageSeeder.php',
         'Database\\Seeders\\RedirectsSeeder' => __DIR__ . '/../..' . '/database/seeders/RedirectsSeeder.php',
+        'Database\\Seeders\\RoomNotesSeeder' => __DIR__ . '/../..' . '/database/seeders/RoomNotesSeeder.php',
         'Database\\Seeders\\SettingsSeeder' => __DIR__ . '/../..' . '/database/seeders/SettingsSeeder.php',
         'Database\\Seeders\\TenirShymbulakSeeder' => __DIR__ . '/../..' . '/database/seeders/TenirShymbulakSeeder.php',
         'DateError' => __DIR__ . '/..' . '/symfony/polyfill-php83/Resources/stubs/DateError.php',

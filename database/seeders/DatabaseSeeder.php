@@ -12,6 +12,7 @@ class DatabaseSeeder extends Seeder
             SettingsSeeder::class,
             TenirShymbulakSeeder::class,
             LocationPlacePageSeeder::class,
+            RoomNotesSeeder::class,
             BrandPagesSeeder::class,
             RedirectsSeeder::class,
         ]);

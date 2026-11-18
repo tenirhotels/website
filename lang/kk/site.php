@@ -62,6 +62,7 @@ return [
         'guests' => 'Қонақтар',
         'up_to_guests' => ':count қонаққа дейін',
         'guests_split' => ':total қонаққа дейін: :adults + :children',
+        'good_to_know' => 'Білу маңызды',
         'amenity_groups' => ['rest' => 'Демалыс және ұйқы', 'bath' => 'Жуынатын бөлме', 'tech' => 'Байланыс және техника', 'food' => 'Тамақ және сусын', 'active' => 'Тау және сақтау', 'other' => 'Тағы'],
         'adults' => ':count ересек|:count ересек',
         'children' => ':count бала|:count бала',

@@ -1,7 +1,6 @@
 {{-- Единственный тип номера: не «карточка в пустой сетке», а полноценная витрина. --}}
 @php
     $tiles = $room->tiles();
-    $amenities = $room->listFeatures();
 @endphp
 
 <section class="container-site py-12 md:py-16 lg:py-20">
@@ -25,22 +24,6 @@
                         </li>
                     @endforeach
                 </ul>
-            @endif
-
-            <div class="prose-tenir !text-[16px] !leading-[1.7] [&_p:last-child]:mb-0">{!! $room->t('description') !!}</div>
-
-            @if ($amenities)
-                <div class="flex flex-col gap-4">
-                    <h3 class="text-[12px] uppercase tracking-[0.2em] text-slate">{{ __('site.hotel.amenities') }}</h3>
-                    <ul class="grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-2">
-                        @foreach ($amenities as $a)
-                            <li class="flex items-center gap-3 text-[15px] leading-snug text-ink">
-                                <span class="shrink-0 text-forest">{{ site_icon($a['icon'], 'h-5 w-5') }}</span>
-                                <span>{{ $a['text'] }}</span>
-                            </li>
-                        @endforeach
-                    </ul>
-                </div>
             @endif
 
             <div class="flex flex-wrap items-center gap-x-8 gap-y-4">

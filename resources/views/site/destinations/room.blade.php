@@ -42,6 +42,13 @@
             @endif
 
             <div class="prose-tenir !text-[18px] [&_p:last-child]:mb-0">{!! $room->t('description') !!}</div>
+
+            @if (filled($room->t('notes')))
+                <div class="rounded-3xl bg-sand p-6 md:p-8">
+                    <h2 class="mb-3 font-display text-2xl text-forest">{{ __('site.hotel.good_to_know') }}</h2>
+                    <div class="prose-tenir !text-[16px] [&_p:last-child]:mb-0 [&_ul]:mb-0">{!! $room->t('notes') !!}</div>
+                </div>
+            @endif
         </div>
 
         {{-- Бронь: закреплена при прокрутке на десктопе --}}
