@@ -15,8 +15,8 @@ class RoomNotesSeeder extends Seeder
             return;
         }
         $room->notes = [
-            'ru' => '<ul><li>Отель расположен высоко в горах (3 200 м над уровнем моря): чтобы избежать неблагоприятного воздействия на организм, дети младше 6 лет не размещаются.</li><li>Курение запрещено.</li><li>Размещение с животными невозможно.</li></ul>',
-            'en' => '<ul><li>The hotel stands at 3,200 metres above sea level. To avoid undesirable effects on the body, children under 6 years of age are not allowed.</li><li>No smoking.</li><li>No pets.</li></ul>',
+            'ru' => '<ul><li>Дополнительное место — для ребёнка от 6 до 14 лет (2 взрослых + 1 ребёнок).</li><li>Отель расположен высоко в горах (3 200 м над уровнем моря): чтобы избежать неблагоприятного воздействия на организм, дети младше 6 лет не размещаются.</li><li>Курение запрещено.</li><li>Размещение с животными невозможно.</li></ul>',
+            'en' => '<ul><li>The extra bed is for a child aged 6 to 14 (2 adults + 1 child).</li><li>The hotel stands at 3,200 metres above sea level. To avoid undesirable effects on the body, children under 6 years of age are not allowed.</li><li>No smoking.</li><li>No pets.</li></ul>',
         ];
         $room->save();
     }

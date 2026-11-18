@@ -28,8 +28,8 @@ class RoomContent
     public static function description(string $locale): string
     {
         return match ($locale) {
-            'en' => '<p>Stylish, comfortable two-person modular houses with room for an extra bed for children from 8 years old. The room opens onto magnificent views of the Trans-Ili Alatau mountains.</p>',
-            default => '<p>Стильные комфортабельные двухместные модульные дома с возможностью размещения дополнительной кровати для детей с 8 лет. Из номера открывается великолепный вид на горы Заилийского Алатау.</p>',
+            'en' => '<p>Stylish, comfortable two-person modular houses with room for an extra bed for children aged 6 to 14. The room opens onto magnificent views of the Trans-Ili Alatau mountains.</p>',
+            default => '<p>Стильные комфортабельные двухместные модульные дома с возможностью размещения дополнительной кровати для детей от 6 до 14 лет. Из номера открывается великолепный вид на горы Заилийского Алатау.</p>',
         };
     }
 }
