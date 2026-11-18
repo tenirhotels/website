@@ -61,6 +61,7 @@ return [
         'guests' => 'Guests',
         'up_to_guests' => 'up to :count guests',
         'guests_split' => 'up to :total guests: :adults + :children',
+        'good_to_know' => 'Good to know',
         'amenity_groups' => ['rest' => 'Rest and sleep', 'bath' => 'Bathroom', 'tech' => 'Tech and connectivity', 'food' => 'Food and drink', 'active' => 'Mountains and storage', 'other' => 'Also'],
         'adults' => ':count adult|:count adults',
         'children' => ':count child|:count children',

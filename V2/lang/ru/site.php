@@ -61,6 +61,7 @@ return [
         'guests' => 'Гостей',
         'up_to_guests' => 'до :count гостей',
         'guests_split' => 'до :total гостей: :adults + :children',
+        'good_to_know' => 'Важно знать',
         'amenity_groups' => ['rest' => 'Отдых и сон', 'bath' => 'Ванная', 'tech' => 'Связь и техника', 'food' => 'Еда и напитки', 'active' => 'Горы и хранение', 'other' => 'Ещё'],
         'adults' => ':count взрослый|:count взрослых|:count взрослых',
         'children' => ':count ребёнок|:count ребёнка|:count детей',

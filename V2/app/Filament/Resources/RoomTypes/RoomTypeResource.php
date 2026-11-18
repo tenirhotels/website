@@ -57,6 +57,7 @@ class RoomTypeResource extends Resource
                 Fields::titleInput('name', $l, $d, 'Название номера'),
                 Textarea::make("summary.$l")->label('Краткое описание')->rows(2),
                 RichEditor::make("description.$l")->label('Описание'),
+                RichEditor::make("notes.$l")->label('Важно знать')->helperText('Условия размещения: дети, курение, животные, высота. Только на странице номера.'),
                 TextInput::make("bed.$l")->label('Кровать')->placeholder('King-size'),
                 TextInput::make("view.$l")->label('Вид')->placeholder('Панорама на горы'),
             ]),

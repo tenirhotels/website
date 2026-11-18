@@ -14,7 +14,7 @@ class RoomType extends Model
 
     protected $guarded = ['id'];
 
-    protected array $translatable = ['name', 'summary', 'description', 'bed', 'view'];
+    protected array $translatable = ['name', 'summary', 'description', 'notes', 'bed', 'view'];
 
     protected string $titleAttribute = 'name';
 
