@@ -86,6 +86,9 @@
 
     <section class="container-site flex flex-col gap-8 pb-12 pt-8 md:py-16 lg:py-20">
         @if ($hotel->t('getting_here'))<div class="prose-tenir [&>*:first-child]:mt-0">{!! $hotel->t('getting_here') !!}</div>@endif
+@if (($pl = $hotel->location) && $pl->hasPlacePage())
+            <a href="{{ $pl->placeUrl() }}" class="link-line self-start text-lg">{{ __('site.place.explore', ['name' => $pl->t('name')]) }}</a>
+        @endif
         <a href="{{ $hotel->sectionUrl('before-you-arrive') }}" class="group flex flex-col gap-2.5 rounded-3xl border border-mist bg-white p-6 transition hover:border-ember md:p-8">
             <span class="flex items-center justify-between gap-4 font-display text-xl md:text-2xl">{{ __('site.hotel.before_arrive') }}<svg class="size-5 shrink-0 text-ember transition-transform group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span>
             <span class="text-base leading-relaxed text-slate">{{ $hotel->t('before_tease') ?: __('site.hotel.before_tease') }}</span>

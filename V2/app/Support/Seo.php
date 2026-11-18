@@ -151,6 +151,26 @@ class Seo
         return url()->current();
     }
 
+    /** schema.org/TouristDestination — страница локации. */
+    public static function placeSchema(\App\Models\Location $location): array
+    {
+        return array_filter([
+            '@context' => 'https://schema.org',
+            '@type' => 'TouristDestination',
+            'name' => $location->t('name'),
+            'description' => $location->t('lead') ?: strip_tags((string) $location->t('about')),
+            'url' => $location->placeUrl(),
+            'image' => $location->place_image ? url(Storage::disk('public')->url($location->place_image)) : null,
+            'geo' => $location->latitude ? [
+                '@type' => 'GeoCoordinates',
+                'latitude' => $location->latitude,
+                'longitude' => $location->longitude,
+                'elevation' => $location->altitude_m,
+            ] : null,
+            'containedInPlace' => $location->t('region') ? ['@type' => 'Place', 'name' => $location->t('region')] : null,
+        ]);
+    }
+
     /** schema.org/Hotel */
     public static function hotelSchema(Hotel $hotel): array
     {

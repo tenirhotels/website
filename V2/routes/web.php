@@ -57,6 +57,7 @@ $publicWithoutSession = [
 | /{locale}/gifts                               подарочные сертификаты (список из gifter)
 | /{locale}/map                                 интерактивная карта курорта (зима/лето)
 | /{locale}/contact                             контакты
+| /{locale}/place/{location}                    страница локации: о месте, погода, камеры, трассы
 | /{locale}/{page}                              страницы бренда: about, sustainability, ...
 */
 
@@ -85,6 +86,10 @@ Route::get('robots.txt', fn () => response(implode("\n", [
     'Disallow: /*/guest-account',
     'Sitemap: '.route('sitemap'),
 ]))->header('Content-Type', 'text/plain'));
+
+// Погода для блока на странице локации: вне кэша страниц, ответ кэшируется на стороне сервера.
+Route::get('api/weather/{location:slug}/{alt}', [\App\Http\Controllers\PlaceController::class, 'weather'])
+    ->whereNumber('alt')->middleware('throttle:60,1')->withoutMiddleware($publicWithoutSession)->name('weather');
 
 Route::prefix('{locale}')
     ->where(['locale' => implode('|', Locales::codes())])
@@ -133,6 +138,7 @@ Route::prefix('{locale}')
         Route::get('booking', BookingController::class)->name('booking');
         Route::get('guest-account', GuestAccountController::class)->name('guest-account');
         Route::get('map', MapController::class)->name('map');
+        Route::get('place/{location:slug}', [\App\Http\Controllers\PlaceController::class, 'show'])->name('place');
         Route::get('gifts', GiftController::class)->name('gifts');
         Route::get('contact', [PageController::class, 'contact'])->name('contact');
 

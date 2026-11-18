@@ -36,6 +36,9 @@
             <p class="eyebrow-light">{{ Setting::text('brand.tagline') ?? 'Back to Nature' }}</p>
             <p class="max-w-3xl font-display text-2xl leading-snug md:text-3xl">{{ __('site.hotel.nature_1') }}</p>
             <p class="font-display text-xl text-sand md:text-2xl">{{ __('site.hotel.nature_2') }}</p>
+            @if (($pl = $hotel->location) && $pl->hasPlacePage())
+                <a href="{{ $pl->placeUrl() }}" class="link-line self-start text-sand">{{ __('site.place.explore', ['name' => $pl->t('name')]) }}</a>
+            @endif
             <a href="{{ route('booking') }}" class="btn-primary mt-4 self-start">{{ __('site.nav.book') }}</a>
         </div>
     </section>

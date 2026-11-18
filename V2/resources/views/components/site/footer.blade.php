@@ -77,6 +77,7 @@
             {{-- Планирование поездки: практическая информация. --}}
             <nav aria-label="{{ __('site.footer.plan') }}" class="flex flex-col gap-2.5 text-[15px]">
                 <p class="mb-1 text-xs uppercase tracking-[0.2em] text-[#9AA59F]">{{ __('site.footer.plan') }}</p>
+                @if ($pl = \App\Models\Location::withPlacePage())<a href="{{ $pl->placeUrl() }}" class="hover:text-white">{{ $pl->t('name') }}</a>@endif
                 @if ($ph = (\App\Support\Property::isSingle() ? \App\Support\Property::primary() : null))
                     <a href="{{ $ph->sectionUrl('getting-here') }}" class="hover:text-white">{{ __('site.hotel.getting_here') }}</a>
                     <a href="{{ $ph->sectionUrl('before-you-arrive') }}" class="hover:text-white">{{ __('site.hotel.before_arrive') }}</a>
