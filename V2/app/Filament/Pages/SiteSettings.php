@@ -83,6 +83,7 @@ class SiteSettings extends Page
                 Toggle::make('home.offers')->label('Предложения (Offers)')->default(true),
                 Toggle::make('home.events')->label('События (Events)')->default(true),
                 Toggle::make('home.recognition')->label('Награды и СМИ (Recognition)')->default(true),
+                Toggle::make('home.place_now')->label('Локация сейчас (погода и камера)')->helperText('Нужна включённая страница локации. По умолчанию выключен.')->default(false),
                 Toggle::make('gifts.on_home')->label('Подарочные сертификаты (Gift cards)')->helperText('Блок на главной. По умолчанию выключен.')->default(false),
             ]),
             Section::make('Бренд')->schema([

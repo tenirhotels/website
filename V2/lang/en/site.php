@@ -178,6 +178,8 @@ return [
     ],
 
     'place' => [
+        'now_title' => ':name right now',
+        'more' => 'More: weather, webcams, ski runs',
         'explore' => 'Weather, webcams and ski runs: :name',
         'altitude' => 'Altitude',
         'm' => 'm',

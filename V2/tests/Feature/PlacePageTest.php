@@ -99,4 +99,22 @@ class PlacePageTest extends TestCase
         $this->actingAs(\App\Models\User::factory()->create());
         $this->get('/admin/locations/'.$this->loc()->id.'/edit')->assertOk()->assertSee('Страница локации');
     }
+
+    public function test_home_place_now_block_is_optional(): void
+    {
+        $this->enable(['cameras' => [['title' => ['ru' => 'База'], 'image_url' => 'https://cam.example/a.jpg']]]);
+        \App\Support\PageCache::flush();
+
+        $this->get('/ru')->assertOk()->assertDontSee('data-compact', false);
+
+        \App\Models\Setting::put('home', ['place_now' => true]);
+        \App\Support\PageCache::flush();
+        $this->get('/ru')->assertOk()->assertSee('data-compact', false)->assertSee('cam.example/a.jpg', false)->assertSee('/place/shymbulak', false);
+
+        // страница локации выключена — блок пропадает даже при включённой настройке
+        $loc = $this->loc();
+        $loc->update(['place' => array_merge((array) $loc->place, ['enabled' => false])]);
+        \App\Support\PageCache::flush();
+        $this->get('/ru')->assertOk()->assertDontSee('data-compact', false);
+    }
 }

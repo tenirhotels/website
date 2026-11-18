@@ -179,6 +179,8 @@ return [
     ],
 
     'place' => [
+        'now_title' => '此刻的:name',
+        'more' => '更多：天气、摄像头、雪道',
         'explore' => '天气、摄像头与雪道：:name',
         'altitude' => '海拔',
         'm' => '米',

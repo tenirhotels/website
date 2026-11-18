@@ -30,6 +30,20 @@ const sign = (n) => (n > 0 ? `+${n}` : `${n}`.replace('-', '−'));
 
 function renderWeather(el, d, t, locale) {
     const wx = (code) => t.wx[kind(code)] || '';
+    if (el.closest('[data-place]').hasAttribute('data-compact')) {
+        const today = d.days[0];
+        el.innerHTML = `<div class="flex items-center gap-5">
+            ${icon(d.now.code, 'size-16 shrink-0 text-ember')}
+            <div class="flex flex-col gap-1">
+                <span class="font-display text-5xl leading-none text-forest">${sign(d.now.temp)}°</span>
+                <span class="text-base text-slate">${wx(d.now.code)}${today ? ` · ${sign(today.min)}…${sign(today.max)}°` : ''}</span>
+                <span class="text-[13px] text-stone">${t.feels} ${sign(d.now.feels)}° · ${t.wind} ${d.now.wind} ${t.ms}</span>
+            </div>
+        </div>`;
+        const st = el.parentElement.querySelector('[data-weather-stamp]');
+        if (st) st.textContent = t.note.replace(':alt', el.dataset.alt || '').replace(':time', d.updated);
+        return;
+    }
     const days = d.days.map((day, i) => {
         const name = i === 0 ? t.today : new Date(day.date + 'T12:00:00').toLocaleDateString(locale, { weekday: 'short' });
         return `<li class="flex flex-col items-center gap-1.5 rounded-2xl bg-snow px-2 py-3 text-center">
