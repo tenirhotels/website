@@ -13,8 +13,6 @@
         ])->filter(fn ($f) => filled($f['value']))->values();
         $highlights = $all->filter(fn ($f) => $f['pin'] && ! in_array($f['source'], $factSources, true))->values();
         $amenities = $all->reject(fn ($f) => $f['pin'] || in_array($f['source'], $factSources, true));
-        $groups = $amenities->groupBy(fn ($a) => amenity_group($a['icon']))
-            ->sortBy(fn ($g, $k) => array_search($k, ['rest', 'bath', 'tech', 'food', 'active', 'other'], true));
     @endphp
 
     {{-- Полоса параметров: парит на стыке шапки и страницы --}}
@@ -54,41 +52,33 @@
                     @endforeach
                 </ul>
             @endif
-
-            @if ($groups->isNotEmpty())
-                <div>
-                    <h2 class="mb-8 font-display text-3xl text-forest">{{ __('site.hotel.amenities') }}</h2>
-                    <div class="grid gap-x-12 gap-y-9 sm:grid-cols-2">
-                        @foreach ($groups as $key => $items)
-                            <section>
-                                <h3 class="mb-3 border-b border-mist pb-3 text-[12px] uppercase tracking-[0.18em] text-stone">{{ __('site.hotel.amenity_groups.'.$key) }}</h3>
-                                <ul class="flex flex-col">
-                                    @foreach ($items as $a)
-                                        <li class="flex items-center gap-3.5 py-2.5 text-[16px] text-ink">
-                                            <span class="shrink-0 text-ember">{{ site_icon($a['icon'], 'h-5 w-5') }}</span>{{ $a['text'] }}
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            </section>
-                        @endforeach
-                    </div>
-                </div>
-            @endif
         </div>
 
         {{-- Бронь: закреплена при прокрутке на десктопе --}}
         <aside class="flex-1 lg:max-w-[400px]">
-            <div class="sticky top-40 flex flex-col gap-5 rounded-3xl border border-mist bg-white p-7 md:p-8">
-                @if ($room->price_from)
-                    <p class="flex flex-col gap-1 text-stone">
-                        <span class="text-[12px] uppercase tracking-[0.16em]">{{ __('site.hotel.from') }}</span>
-                        <span><strong class="font-display text-[40px] font-normal leading-none text-forest">{{ price($room->price_from) }} ₸</strong> <span class="text-[15px]">/ {{ __('site.hotel.per_night') }}</span></span>
-                    </p>
-                @else
-                    <p class="font-display text-2xl text-forest">{{ __('site.hotel.check_prices') }}</p>
+            <div class="sticky top-40 flex flex-col gap-6 rounded-3xl border border-mist bg-white p-7 md:p-8">
+                @if ($amenities->isNotEmpty())
+                    <div>
+                        <h2 class="mb-4 font-display text-2xl text-forest">{{ __('site.hotel.amenities') }}</h2>
+                        <ul class="flex flex-col divide-y divide-mist">
+                            @foreach ($amenities as $a)
+                                <li class="flex items-center gap-3.5 py-3 text-[16px] text-ink first:pt-0">
+                                    <span class="shrink-0 text-ember">{{ site_icon($a['icon'], 'h-5 w-5') }}</span>{{ $a['text'] }}
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
                 @endif
-                <a href="{{ $room->bookingUrl() }}" class="btn-primary w-full">{{ __('site.hotel.book_room') }}</a>
-                <p class="text-center text-[13px] text-stone">{{ __('site.booking.best_rate') }}</p>
+                <div class="flex flex-col gap-5 {{ $amenities->isNotEmpty() ? 'border-t border-mist pt-6' : '' }}">
+                    @if ($room->price_from)
+                        <p class="flex flex-col gap-1 text-stone">
+                            <span class="text-[12px] uppercase tracking-[0.16em]">{{ __('site.hotel.from') }}</span>
+                            <span><strong class="font-display text-[40px] font-normal leading-none text-forest">{{ price($room->price_from) }} ₸</strong> <span class="text-[15px]">/ {{ __('site.hotel.per_night') }}</span></span>
+                        </p>
+                    @endif
+                    <a href="{{ $room->bookingUrl() }}" class="btn-primary w-full">{{ __('site.hotel.book_room') }}</a>
+                    <p class="text-center text-[13px] text-stone">{{ __('site.booking.best_rate') }}</p>
+                </div>
             </div>
         </aside>
     </section>
