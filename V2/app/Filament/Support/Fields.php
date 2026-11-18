@@ -4,7 +4,6 @@ namespace App\Filament\Support;
 
 use App\Support\Locales;
 use App\Support\Property;
-use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Closure;
 use Filament\Actions\BulkActionGroup;
@@ -40,10 +39,9 @@ class Fields
     {
         $tabs = [];
         foreach (Locales::all() as $code => $meta) {
-            $isDefault = $code === Locales::default();
-            $tabs[] = Tab::make($meta['name'])
+            $isDefault = $code === Locales::source();
+            $tabs[] = Tab::make($isDefault ? $meta['name'].' *' : $meta['name'])
                 ->id("$id-$code")
-                ->badge($isDefault ? 'основной' : null)
                 ->schema($fields($code, $isDefault));
         }
 
@@ -51,7 +49,7 @@ class Fields
     }
 
     /** Поле названия на основном языке, которое заполняет слаг при создании. */
-    public static function titleInput(string $attribute, string $locale, bool $isDefault, string $label = 'Название'): TextInput
+    public static function titleInput(string $attribute, string $locale, bool $isDefault, string $label = 'Название', ?\Closure $slugSuffix = null): TextInput
     {
         $input = TextInput::make("$attribute.$locale")
             ->label($label)
@@ -60,9 +58,9 @@ class Fields
 
         if ($isDefault) {
             $input->live(onBlur: true)
-                ->afterStateUpdated(function (Get $get, Set $set, ?string $state, string $operation) {
+                ->afterStateUpdated(function (Get $get, Set $set, ?string $state, string $operation) use ($slugSuffix) {
                     if ($operation === 'create' && blank($get('slug'))) {
-                        $set('slug', Str::slug((string) $state));
+                        $set('slug', Str::slug((string) $state).($slugSuffix ? (string) $slugSuffix($get) : ''));
                     }
                 });
         }
@@ -71,22 +69,40 @@ class Fields
     }
 
     /**
-     * Привязка к отелю. В режиме одного отеля поле скрыто и заполняется этим отелем;
-     * в режиме сети — выбор отеля (для необязательных — «Вся сеть»).
+     * Привязка к локации (отелю). Поле видно всегда, в том числе при одном отеле:
+     * номера и рестораны обязаны принадлежать конкретной локации, предложения и впечатления
+     * можно оставить общими для всех локаций. По умолчанию подставляется главный отель.
      */
-    public static function hotel(bool $required = false): Select|Hidden
+    public static function hotel(bool $required = false): Select
     {
-        if (Property::isSingle()) {
-            return Hidden::make('hotel_id')->default(fn () => Property::primary()?->id);
-        }
-
-        $select = Select::make('hotel_id')->label('Отель')
+        $select = Select::make('hotel_id')->label('Локация (отель)')
             ->relationship('hotel', 'slug')
             ->getOptionLabelFromRecordUsing(fn ($record) => $record->t('name'))
             ->default(fn () => Property::primary()?->id)
+            ->native(false)
+            ->hidden(fn () => (bool) auth()->user()?->isEditor()) // у редактора локация подставляется сама
             ->required($required);
 
-        return $required ? $select : $select->placeholder('Вся сеть');
+        return $required
+            ? $select->helperText('К какой локации относится запись.')
+            : $select->placeholder('Все локации')->helperText('Оставьте пустым, если запись относится ко всем локациям сети.');
+    }
+
+    /** Колонка «Локация» в таблицах. */
+    public static function hotelColumn(): TextColumn
+    {
+        return TextColumn::make('hotel_id')->label('Локация')
+            ->getStateUsing(fn ($record) => $record->hotel?->t('name'))
+            ->placeholder('Все локации')
+            ->badge()->color('gray');
+    }
+
+    /** Фильтр таблицы по локации. */
+    public static function hotelFilter(): \Filament\Tables\Filters\SelectFilter
+    {
+        return \Filament\Tables\Filters\SelectFilter::make('hotel_id')->label('Локация')
+            ->relationship('hotel', 'slug')
+            ->getOptionLabelFromRecordUsing(fn ($record) => $record->t('name'));
     }
 
     public static function slug(array $reserved = []): TextInput
@@ -110,6 +126,7 @@ class Fields
                 self::translatable(fn (string $l) => [
                     TextInput::make("seo_title.$l")->label('Title')->maxLength(70),
                     Textarea::make("seo_description.$l")->label('Description')->rows(2)->maxLength(170),
+                    TextInput::make("seo_keywords.$l")->label('Ключевые слова (через запятую)')->helperText('3–8 фраз, которые ищут гости. Не нужно повторять одно и то же.')->maxLength(250),
                 ], 'seo'),
                 self::image('og_image', 'Картинка для соцсетей (1200×630)', 'og'),
             ]);
@@ -133,7 +150,8 @@ class Fields
             ->imageEditor()
             ->disk('public')
             ->directory($directory)
-            ->maxSize(8192);
+            ->maxSize(8192)
+            ->saveUploadedFileUsing(fn ($file) => \App\Support\ImageVariants::store($file, $directory));
     }
 
     public static function gallery(string $name, string $directory): FileUpload
@@ -142,7 +160,23 @@ class Fields
             ->multiple()
             ->reorderable()
             ->panelLayout('grid')
+            ->imagePreviewHeight('160')
+            ->openable()
+            ->downloadable(false)
             ->columnSpanFull();
+    }
+
+    /** Вид показа галереи на сайте. */
+    public static function galleryLayout(string $default = 'mosaic'): \Filament\Forms\Components\Select
+    {
+        return \Filament\Forms\Components\Select::make('gallery_layout')->label('Вид галереи на сайте')->native(false)
+            ->options([
+                'mosaic' => 'Мозаика: первое фото крупно, до пяти на экране (от 5 фото)',
+                'slider' => 'Слайдер: лента с прокруткой и стрелками',
+                'grid' => 'Сетка: одинаковые фото',
+                'masonry' => 'Колонки: фото в своих пропорциях',
+            ])->placeholder('По умолчанию ('.['mosaic' => 'мозаика', 'slider' => 'слайдер', 'masonry' => 'колонки'][$default].')')
+            ->helperText('Клик по фото открывает просмотр на весь экран: листание, увеличение, миниатюры.')->columnSpanFull();
     }
 
     /** Колонка таблицы для переводимого поля. */

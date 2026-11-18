@@ -10,11 +10,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Offer extends Model
 {
+    use \App\Models\Concerns\ForcesEditorHotel;
     use HasSeo, HasTranslations;
 
     protected $guarded = ['id'];
 
-    protected array $translatable = ['title', 'summary', 'description', 'terms'];
+    protected array $translatable = ['title', 'summary', 'description', 'included', 'terms'];
 
     protected $casts = [
         'valid_from' => 'date',

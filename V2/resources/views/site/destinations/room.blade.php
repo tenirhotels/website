@@ -2,57 +2,97 @@
     <x-site.page-hero :image="$room->image" :eyebrow="$hotel->t('name')" :title="$room->t('name')" :text="$room->t('summary')" />
     <x-site.hotel-nav :hotel="$hotel" />
 
-    <section class="container-site flex flex-col gap-14 py-20 lg:flex-row lg:gap-20">
-        <div class="flex flex-[1.5] flex-col gap-10">
-            <div class="prose-tenir">{!! $room->t('description') !!}</div>
+    @php
+        $factSources = ['size', 'guests', 'bed', 'view'];
+        $all = collect($room->featureList());
+        $facts = collect([
+            ['icon' => 'size', 'label' => __('site.hotel.size'), 'value' => $room->size_m2 ? $room->size_m2.' м²' : null, 'sub' => null],
+            ['icon' => 'guests', 'label' => __('site.hotel.guests'), 'value' => $room->guestsLabel(false), 'sub' => $room->guestsSplit()],
+            ['icon' => 'bed', 'label' => __('site.hotel.bed'), 'value' => $room->t('bed'), 'sub' => null],
+            ['icon' => 'view', 'label' => __('site.hotel.view'), 'value' => $room->t('view'), 'sub' => null],
+        ])->filter(fn ($f) => filled($f['value']))->values();
+        $amenities = $all->reject(fn ($f) => in_array($f['source'], $factSources, true));
+        $groups = $amenities->groupBy(fn ($a) => amenity_group($a['icon'], $a['group'] ?? null))
+            ->sortBy(fn ($g, $k) => array_search($k, amenity_groups(), true));
+    @endphp
 
+    {{-- Полоса параметров: парит на стыке шапки и страницы --}}
+    @if ($facts->isNotEmpty())
+        <div class="container-site relative z-10 -mt-8 md:-mt-14">
+            <dl class="grid grid-cols-2 gap-px [&>*:last-child:nth-child(odd)]:col-span-2 md:[&>*:last-child:nth-child(odd)]:col-span-1 overflow-hidden rounded-3xl bg-mist shadow-[0_20px_50px_-24px_rgba(22,33,27,.35)] {{ ['', 'md:grid-cols-1', 'md:grid-cols-2', 'md:grid-cols-3', 'md:grid-cols-4'][min($facts->count(), 4)] }}">
+                @foreach ($facts as $f)
+                    <div class="flex flex-col gap-3 bg-white px-6 py-6 md:px-8 md:py-7">
+                        <dt class="flex items-center gap-2 text-[12px] uppercase tracking-[0.16em] text-stone">
+                            <span class="text-ember">{{ site_icon($f['icon'], 'h-5 w-5') }}</span>{{ $f['label'] }}
+                        </dt>
+                        <dd class="flex flex-col gap-1">
+                            <span class="font-display text-[20px] leading-tight text-forest sm:text-[24px] md:text-[28px]">{{ $f['value'] }}</span>
+                            @if ($f['sub'])<span class="text-[14px] leading-snug text-stone">{{ $f['sub'] }}</span>@endif
+                        </dd>
+                    </div>
+                @endforeach
+            </dl>
+        </div>
+    @endif
+
+    <section class="container-site flex flex-col gap-12 py-12 md:py-16 lg:flex-row lg:gap-16 lg:py-20">
+        <div class="flex min-w-0 flex-[1.7] flex-col gap-14">
             @if ($room->gallery)
-                <div class="grid grid-cols-2 gap-3">
-                    @foreach ($room->gallery as $img)
-                        <div class="aspect-[4/3] overflow-hidden"><x-site.media :src="$img" :alt="$room->t('name')" /></div>
-                    @endforeach
-                </div>
+                <x-site.gallery :images="$room->gallery" :alt="$room->t('name')" :layout="$room->gallery_layout ?: 'mosaic'" />
             @endif
 
-            @if ($amenities = $room->amenityList())
-                <div>
-                    <h2 class="mb-5 font-display text-3xl">{{ __('site.hotel.amenities') }}</h2>
-                    <ul class="grid gap-x-8 gap-y-3 text-slate sm:grid-cols-2">
-                        @foreach ($amenities as $a)
-                            <li class="border-b border-mist pb-3">{{ $a }}</li>
-                        @endforeach
-                    </ul>
+            <div class="prose-tenir !text-[18px] [&_p:last-child]:mb-0">{!! $room->t('description') !!}</div>
+
+            @if (filled($room->t('notes')))
+                <div class="rounded-3xl bg-sand p-6 md:p-8">
+                    <h2 class="mb-3 font-display text-2xl text-forest">{{ __('site.hotel.good_to_know') }}</h2>
+                    <div class="prose-tenir !text-[16px] [&_p:last-child]:mb-0 [&_ul]:mb-0">{!! $room->t('notes') !!}</div>
                 </div>
             @endif
         </div>
 
-        {{-- Карточка бронирования: закреплена при прокрутке на десктопе --}}
-        <aside class="flex-1">
-            <div class="sticky top-40 flex flex-col gap-6 bg-white p-8">
-                <dl class="grid grid-cols-2 gap-5 text-[15px]">
-                    @foreach ([
-                        __('site.hotel.size') => $room->size_m2 ? $room->size_m2.' м²' : null,
-                        __('site.hotel.guests') => $room->max_guests,
-                        __('site.hotel.bed') => $room->t('bed'),
-                        __('site.hotel.view') => $room->t('view'),
-                    ] as $label => $value)
-                        @if ($value)
-                            <div><dt class="field-label mb-1">{{ $label }}</dt><dd>{{ $value }}</dd></div>
-                        @endif
-                    @endforeach
-                </dl>
-                @if ($room->price_from)
-                    <p class="border-t border-mist pt-5 text-slate">{{ __('site.hotel.from') }} <strong class="text-3xl font-normal text-ink">{{ price($room->price_from) }} ₸</strong> / {{ __('site.hotel.per_night') }}</p>
-                @endif
-                <a href="{{ $room->bookingUrl() }}" class="btn-primary w-full">{{ __('site.hotel.book_room') }}</a>
-                <p class="text-center text-[13px] text-stone">{{ __('site.booking.best_rate') }}</p>
+        {{-- Бронь: закреплена при прокрутке на десктопе --}}
+        <aside class="flex-1 lg:max-w-[400px]">
+            <div class="sticky top-40 flex flex-col gap-6 rounded-3xl border border-mist bg-white p-7 md:p-8">
+                <div class="flex flex-col gap-5">
+                    @if ($room->price_from)
+                        <p class="flex flex-col gap-1 text-stone">
+                            <span class="text-[12px] uppercase tracking-[0.16em]">{{ __('site.hotel.from') }}</span>
+                            <span><strong class="font-display text-[40px] font-normal leading-none text-forest">{{ price($room->price_from) }} ₸</strong> <span class="text-[15px]">/ {{ __('site.hotel.per_night') }}</span></span>
+                        </p>
+                    @endif
+                    <a href="{{ $room->bookingUrl() }}" class="btn-primary w-full">{{ __('site.hotel.book_room') }}</a>
+                    <p class="text-center text-[13px] text-stone">{{ __('site.booking.best_rate') }}</p>
+                </div>
             </div>
         </aside>
     </section>
 
+    @if ($groups->isNotEmpty())
+        <section class="border-t border-mist bg-white">
+            <div class="container-site py-12 md:py-16 lg:py-20">
+                <h2 class="mb-10 font-display text-3xl text-forest md:text-4xl">{{ __('site.hotel.amenities') }}</h2>
+                <div class="columns-1 gap-x-12 sm:columns-2 lg:columns-3 [column-fill:_balance]">
+                    @foreach ($groups as $key => $items)
+                        <section class="mb-9 break-inside-avoid">
+                            <h3 class="mb-3 border-b border-mist pb-3 text-[12px] uppercase tracking-[0.16em] text-stone">{{ __('site.hotel.amenity_groups.'.$key) }}</h3>
+                            <ul class="flex flex-col">
+                                @foreach ($items as $a)
+                                    <li class="flex items-center gap-3 py-1.5 text-[16px] leading-snug text-ink">
+                                        <span class="size-1.5 shrink-0 rounded-full bg-ember/70" aria-hidden="true"></span>{{ $a['text'] }}
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </section>
+                    @endforeach
+                </div>
+            </div>
+        </section>
+    @endif
+
     @if ($others->isNotEmpty())
-        <section class="bg-white">
-            <div class="container-site flex flex-col gap-12 py-20">
+        <section class="bg-sand">
+            <div class="container-site flex flex-col gap-8 md:gap-12 py-12 md:py-16 lg:py-20">
                 <x-site.section-head :title="__('site.hotel.other_rooms')" level="h2" />
                 <div class="grid gap-8 md:grid-cols-3">
                     @foreach ($others as $r)

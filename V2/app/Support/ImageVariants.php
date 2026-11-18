@@ -1,0 +1,112 @@
+<?php
+
+namespace App\Support;
+
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+
+/** Загруженные фото → WebP (до 2400px) + уменьшенные копии -800 и -1400 для srcset. */
+class ImageVariants
+{
+    public const WIDTHS = [800, 1400];
+
+    public static function supported(): bool
+    {
+        return function_exists('imagewebp') && function_exists('imagecreatefromstring');
+    }
+
+    /** Сохраняет загруженный файл; возвращает путь на диске public. */
+    public static function store($file, string $directory): string
+    {
+        $raw = @file_get_contents($file->getRealPath());
+        $mime = (string) $file->getMimeType();
+
+        if (! self::supported() || ! $raw || ! str_starts_with($mime, 'image/') || in_array($mime, ['image/svg+xml', 'image/gif'], true)) {
+            return $file->storePublicly($directory, 'public');
+        }
+
+        $img = @imagecreatefromstring($raw);
+        if (! $img) {
+            return $file->storePublicly($directory, 'public');
+        }
+
+        $base = trim($directory, '/').'/'.Str::random(24);
+        imagepalettetotruecolor($img);
+        imagealphablending($img, true);
+        imagesavealpha($img, true);
+
+        // Главный файл обязателен; если его не удалось записать — сохраняем исходник как есть (без 500).
+        if (! self::write($img, "$base.webp", 2400)) {
+            imagedestroy($img);
+
+            return $file->storePublicly($directory, 'public');
+        }
+        foreach (self::WIDTHS as $w) {
+            self::write($img, "$base-$w.webp", $w); // копии для srcset — необязательны
+        }
+        imagedestroy($img);
+
+        return "$base.webp";
+    }
+
+    /** Создаёт недостающие копии для уже лежащего на диске файла. */
+    public static function backfill(string $path): int
+    {
+        $disk = Storage::disk('public');
+        if (! self::supported() || ! preg_match('/^(.*)\.(webp|jpe?g|png)$/i', $path, $m) || preg_match('/-(800|1400)$/', $m[1])) {
+            return 0;
+        }
+        $made = 0;
+        $img = null;
+        foreach (self::WIDTHS as $w) {
+            if ($disk->exists("{$m[1]}-$w.webp")) {
+                continue;
+            }
+            $img ??= @imagecreatefromstring($disk->get($path));
+            if (! $img) {
+                return $made;
+            }
+            if (self::write($img, "{$m[1]}-$w.webp", $w)) {
+                $made++;
+            }
+        }
+
+        return $made;
+    }
+
+    /** Пишет копию в WebP; false — если GD не справился (тогда вызывающий сохранит файл как есть). */
+    private static function write($img, string $target, int $maxWidth): bool
+    {
+        $w = imagesx($img);
+        $h = imagesy($img);
+        $out = $img;
+        if ($w > $maxWidth) {
+            // imagecopyresampled надёжнее imagescale: тот на части сборок GD возвращает false.
+            $nh = max(1, (int) round($h * $maxWidth / $w));
+            $out = imagecreatetruecolor($maxWidth, $nh);
+            if (! $out) {
+                return false;
+            }
+            imagealphablending($out, false);
+            imagesavealpha($out, true);
+            imagefill($out, 0, 0, imagecolorallocatealpha($out, 0, 0, 0, 127));
+            if (! imagecopyresampled($out, $img, 0, 0, 0, 0, $maxWidth, $nh, $w, $h)) {
+                imagedestroy($out);
+
+                return false;
+            }
+        }
+        ob_start();
+        $ok = imagewebp($out, null, 78);
+        $data = ob_get_clean();
+        if ($out !== $img) {
+            imagedestroy($out);
+        }
+        if (! $ok || $data === '' || $data === false) {
+            return false;
+        }
+        Storage::disk('public')->put($target, $data);
+
+        return true;
+    }
+}

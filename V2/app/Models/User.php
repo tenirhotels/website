@@ -24,6 +24,8 @@ class User extends Authenticatable implements FilamentUser
         'name',
         'email',
         'password',
+        'role',
+        'hotel_id',
     ];
 
     /**
@@ -49,13 +51,35 @@ class User extends Authenticatable implements FilamentUser
         ];
     }
 
+    public function hotel(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Hotel::class);
+    }
+
+    /** Редактор локации: правит контент только своего отеля. Без привязанного отеля прав не имеет. */
+    public function isEditor(): bool
+    {
+        return $this->role === 'editor' && $this->hotel_id !== null;
+    }
+
+    /** Администратор: всё. Роль по умолчанию — admin (так было до появления ролей). */
+    public function isAdmin(): bool
+    {
+        return $this->role !== 'editor';
+    }
+
     /**
-     * Доступ в админку. Публичной регистрации нет — пользователей создаёт
-     * администратор командой `php artisan make:filament-user`.
-     * Если задан ADMIN_EMAILS (через запятую), пускаем только их.
+     * Доступ в админку. Публичной регистрации нет — пользователей создаёт администратор
+     * в разделе «Пользователи» (или командой `php artisan make:filament-user`).
+     * Если задан ADMIN_EMAILS (через запятую), администраторов пускаем только из списка;
+     * редактор локации входит, если ему назначен отель.
      */
     public function canAccessPanel(Panel $panel): bool
     {
+        if ($this->role === 'editor') {
+            return $this->hotel_id !== null;
+        }
+
         $allowed = array_filter(array_map('trim', explode(',', (string) env('ADMIN_EMAILS', ''))));
 
         return $allowed === [] || in_array(strtolower($this->email), array_map('strtolower', $allowed), true);

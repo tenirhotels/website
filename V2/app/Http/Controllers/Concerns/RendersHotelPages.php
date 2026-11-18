@@ -23,10 +23,15 @@ trait RendersHotelPages
 
     protected function renderRooms(Hotel $hotel)
     {
+        // Один тип номера — промежуточная страница не нужна: сразу на номер. Временный редирект: типов может стать больше.
+        if ($hotel->soleRoom()) {
+            return redirect()->to($hotel->roomsUrl());
+        }
+
         return view('site.destinations.rooms', [
             'hotel' => $hotel,
             'rooms' => $hotel->rooms()->published()->ordered()->get(),
-            'seo' => Seo::make($this->title('rooms', $hotel), $hotel->t('summary'), $hotel->hero_image),
+            'seo' => Seo::make($this->title('rooms', $hotel), $hotel->t('summary'), $hotel->hero_image)->withKeywords($hotel->seoKeywords()),
         ]);
     }
 
@@ -38,7 +43,7 @@ trait RendersHotelPages
             'hotel' => $hotel,
             'room' => $room,
             'others' => $hotel->rooms()->published()->whereKeyNot($room->id)->ordered()->get(),
-            'seo' => Seo::for($room, $hotel->t('name')),
+            'seo' => Seo::for($room, $hotel->t('name'))->withSchema(Seo::roomSchema($room, $hotel)),
         ]);
     }
 
@@ -47,7 +52,7 @@ trait RendersHotelPages
         return view('site.destinations.dining', [
             'hotel' => $hotel,
             'venues' => $hotel->venues()->published()->ordered()->get(),
-            'seo' => Seo::make($this->title('dining', $hotel), $hotel->t('summary')),
+            'seo' => Seo::make($this->title('dining', $hotel), $hotel->t('summary'))->withKeywords($hotel->seoKeywords()),
         ]);
     }
 
@@ -56,7 +61,7 @@ trait RendersHotelPages
         return view('site.destinations.experiences', [
             'hotel' => $hotel,
             'experiences' => $hotel->experiences()->published()->ordered()->get(),
-            'seo' => Seo::make($this->title('experiences', $hotel), $hotel->t('summary')),
+            'seo' => Seo::make($this->title('experiences', $hotel), $hotel->t('summary'))->withKeywords($hotel->seoKeywords()),
         ]);
     }
 
@@ -65,7 +70,7 @@ trait RendersHotelPages
         return view('site.destinations.offers', [
             'hotel' => $hotel,
             'offers' => $hotel->offers()->active()->ordered()->get(),
-            'seo' => Seo::make($this->title('offers', $hotel), $hotel->t('summary')),
+            'seo' => Seo::make($this->title('offers', $hotel), $hotel->t('summary'))->withKeywords($hotel->seoKeywords()),
         ]);
     }
 
@@ -73,7 +78,7 @@ trait RendersHotelPages
     {
         return view('site.destinations.gallery', [
             'hotel' => $hotel,
-            'seo' => Seo::make($this->title('gallery', $hotel), $hotel->t('summary')),
+            'seo' => Seo::make($this->title('gallery', $hotel), $hotel->t('summary'))->withKeywords($hotel->seoKeywords()),
         ]);
     }
 
@@ -82,7 +87,34 @@ trait RendersHotelPages
         return view('site.destinations.getting-here', [
             'hotel' => $hotel,
             'faqs' => $hotel->faqs()->where('is_published', true)->orderBy('sort')->get(),
-            'seo' => Seo::make($this->title('getting_here', $hotel), $hotel->t('summary')),
+            'seo' => Seo::make($this->title('getting_here', $hotel), $hotel->t('summary'))->withKeywords($hotel->seoKeywords()),
+        ]);
+    }
+
+    protected function renderBeforeYouArrive(Hotel $hotel)
+    {
+        $faqs = $hotel->faqs()->where('is_published', true)->orderBy('sort')->get();
+        $seo = Seo::make($this->title('before_arrive', $hotel), $hotel->t('summary'))->withKeywords($hotel->seoKeywords());
+        if ($faqs->isNotEmpty()) {
+            $seo->withSchema([
+                '@context' => 'https://schema.org',
+                '@type' => 'FAQPage',
+                'mainEntity' => $faqs->map(fn ($f) => [
+                    '@type' => 'Question',
+                    'name' => strip_tags((string) $f->t('question')),
+                    'acceptedAnswer' => ['@type' => 'Answer', 'text' => strip_tags((string) $f->t('answer'))],
+                ])->filter(fn ($q) => $q['name'] !== '' && $q['acceptedAnswer']['text'] !== '')->values()->all(),
+            ]);
+        }
+
+        return view('site.destinations.before-you-arrive', ['hotel' => $hotel, 'faqs' => $faqs, 'seo' => $seo]);
+    }
+
+    protected function renderReviews(Hotel $hotel)
+    {
+        return view('site.destinations.reviews', [
+            'hotel' => $hotel,
+            'seo' => Seo::make($this->title('reviews', $hotel), $hotel->t('summary'))->withKeywords($hotel->seoKeywords()),
         ]);
     }
 

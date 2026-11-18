@@ -11,6 +11,9 @@ class DatabaseSeeder extends Seeder
         $this->call([
             SettingsSeeder::class,
             TenirShymbulakSeeder::class,
+            LocationPlacePageSeeder::class,
+            RoomNotesSeeder::class,
+            RoomFullAmenitiesSeeder::class,
             BrandPagesSeeder::class,
             RedirectsSeeder::class,
         ]);

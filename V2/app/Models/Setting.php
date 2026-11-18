@@ -23,6 +23,7 @@ class Setting extends Model
         static::saved(function () {
             Cache::forget(self::CACHE_KEY);
             \App\Support\Property::flush();
+            \App\Support\PageCache::flush();
         });
         static::deleted(function () {
             Cache::forget(self::CACHE_KEY);

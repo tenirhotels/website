@@ -19,6 +19,15 @@ trait CopiesMedia
             Storage::disk('public')->put($path, file_get_contents($source));
         }
 
+        // уменьшенные копии для srcset
+        foreach ([800, 1400] as $w) {
+            $variant = preg_replace('/\.webp$/', "-$w.webp", $file);
+            $vs = database_path("seeders/media/$variant");
+            if (is_file($vs) && ! Storage::disk('public')->exists("seed/$variant")) {
+                Storage::disk('public')->put("seed/$variant", file_get_contents($vs));
+            }
+        }
+
         return $path;
     }
 }

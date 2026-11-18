@@ -9,9 +9,11 @@ use App\Filament\Support\Fields;
 use App\Models\RoomType;
 use App\Support\Property;
 use BackedEnum;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Toggle;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
@@ -25,6 +27,10 @@ use UnitEnum;
 
 class RoomTypeResource extends Resource
 {
+    use \App\Filament\Support\ScopedToEditorHotel;
+
+    use \App\Filament\Support\UsesIdInUrls;
+
     // В админке адреса записей по id, на сайте — по слагу.
     protected static ?string $recordRouteKeyName = 'id';
 
@@ -51,37 +57,89 @@ class RoomTypeResource extends Resource
                 Fields::titleInput('name', $l, $d, 'Название номера'),
                 Textarea::make("summary.$l")->label('Краткое описание')->rows(2),
                 RichEditor::make("description.$l")->label('Описание'),
+                RichEditor::make("notes.$l")->label('Важно знать')->helperText('Условия размещения: дети, курение, животные, высота. Только на странице номера.'),
                 TextInput::make("bed.$l")->label('Кровать')->placeholder('King-size'),
                 TextInput::make("view.$l")->label('Вид')->placeholder('Панорама на горы'),
-                TagsInput::make("amenities.$l")->label('Удобства')->placeholder('Финская сауна'),
             ]),
-            Section::make('Параметры')->columns(4)->columnSpanFull()->schema([
+            Section::make('Параметры')->columns(3)->columnSpanFull()->schema([
                 TextInput::make('size_m2')->label('Площадь, м²')->numeric(),
                 TextInput::make('max_guests')->label('Гостей макс.')->numeric(),
+                TextInput::make('max_children')->label('Из них детей')->numeric()->minValue(0)
+                    ->helperText('3 гостя и 1 ребёнок → «до 3 гостей: 2 взрослых + 1 ребёнок»'),
                 TextInput::make('price_from')->label('Цена от, ₸')->numeric()
                     ->helperText('Пусто — «Проверить цены»'),
                 TextInput::make('exely_room_type_id')->label('ID типа номера в Exely')
                     ->helperText('Для кнопки бронирования, напр. 62361'),
             ]),
+            Section::make('Особенности номера')->columnSpanFull()->description('Один список для всего: параметры (площадь, гости, кровать, вид) и удобства. Порядок — перетаскиванием. Отмеченные «Выделить» показываются на странице «Номера» (до 3), а полный список по группам — на странице самого номера.')->schema([
+                Repeater::make('features')->hiddenLabel()->addActionLabel('Добавить пункт')->collapsed()->cloneable()->reorderable()
+                    ->rules([fn () => function (string $attribute, $value, \Closure $fail) {
+                        $n = collect((array) $value)->where('pin', true)->count();
+                        if ($n > RoomType::MAX_TILES) {
+                            $fail('Выделено крупно '.$n.' — можно не больше '.RoomType::MAX_TILES.'. Снимите лишние отметки.');
+                        }
+                    }])
+                    ->itemLabel(function (array $state) {
+                        $src = $state['source'] ?? 'custom';
+                        $name = RoomType::FACTS[$src] ?? (\App\Support\Locales::pick((array) ($state['text'] ?? [])) ?? 'Новый пункт');
+
+                        return trim((($state['pin'] ?? false) ? '★ ' : '').$name);
+                    })
+                    ->schema([
+                        Select::make('source')->label('Что это')->native(false)->live()->default('custom')->required()
+                            ->options(['custom' => 'Своё удобство (свой текст)'] + RoomType::FACTS)
+                            ->helperText('Площадь, гости, кровать и вид берутся из полей номера и переводятся сами.'),
+                        Select::make('icon')->label('Иконка')->options(self::iconOptions())->allowHtml()->native(false)->default('leaf')->required(),
+                        Select::make('group')->label('Группа на странице номера')->native(false)->placeholder('Автоматически (по иконке)')
+                            ->options(self::groupOptions())
+                            ->visible(fn (Get $get) => ($get('source') ?? 'custom') === 'custom'),
+                        Toggle::make('pin')->label('Выделить (на странице «Номера»)')->inline(false),
+                        Fields::translatable(fn (string $l) => [TextInput::make("text.$l")->label('Название')], 'feat-text')
+                            ->visible(fn (Get $get) => ($get('source') ?? 'custom') === 'custom'),
+                    ]),
+            ]),
             Section::make('Фото')->columnSpanFull()->schema([
                 Fields::image('image', 'Обложка', 'rooms'),
                 Fields::gallery('gallery', 'rooms/gallery'),
+                Fields::galleryLayout('mosaic'),
             ]),
             Fields::seo(),
             Fields::publishing(),
         ]);
     }
 
+    /** @return array<string,string> имя иконки => подпись с картинкой */
+    public static function groupOptions(): array
+    {
+        return ['video' => 'Видео и аудио', 'internet' => 'Интернет и связь', 'devices' => 'Техника', 'bathroom' => 'Ванная комната',
+            'outdoor' => 'Вид и территория', 'beds' => 'Кровати', 'furniture' => 'Мебель', 'other' => 'Другое'];
+    }
+
+    public static function iconOptions(): array
+    {
+        $labels = ['sauna' => 'Сауна', 'window' => 'Окно', 'module' => 'Модуль', 'ski' => 'Ski-in / ski-out', 'bed' => 'Кровать', 'wifi' => 'Wi-Fi', 'tv' => 'Телевизор',
+            'minibar' => 'Мини-бар', 'coffee' => 'Кофе, завтрак', 'robe' => 'Халат', 'bath' => 'Душ, ванная', 'locker' => 'Локер', 'view' => 'Вид, горы', 'size' => 'Площадь',
+            'guests' => 'Гости', 'heat' => 'Отопление', 'car' => 'Авто', 'leaf' => 'Эко / другое'];
+        $out = [];
+        foreach ($labels as $k => $label) {
+            $out[$k] = '<span style="display:flex;align-items:center;gap:10px;white-space:nowrap">'
+                .'<span style="display:block;flex:none;width:20px;height:20px">'.str_replace('class="icon-x"', 'style="width:100%;height:100%"', (string) site_icon($k, 'icon-x')).'</span>'
+                .'<span style="white-space:nowrap">'.e($label).'</span></span>';
+        }
+
+        return $out;
+    }
+
     public static function table(Table $table): Table
     {
         return Fields::table($table, [
             Fields::column('name', 'Номер'),
-            TextColumn::make('hotel.slug')->label('Отель')->visible(fn () => Property::isMulti()),
+            Fields::hotelColumn(),
             TextColumn::make('exely_room_type_id')->label('Exely ID'),
             TextColumn::make('price_from')->label('От, ₸')->numeric(thousandsSeparator: ' '),
             Fields::publishedColumn(),
         ], [
-            SelectFilter::make('hotel_id')->label('Отель')->relationship('hotel', 'slug')->visible(fn () => Property::isMulti()),
+            Fields::hotelFilter(),
         ]);
     }
 
