@@ -63,7 +63,7 @@ return [
         'up_to_guests' => ':count қонаққа дейін',
         'guests_split' => ':total қонаққа дейін: :adults + :children',
         'good_to_know' => 'Білу маңызды',
-        'amenity_groups' => ['rest' => 'Демалыс және ұйқы', 'bath' => 'Жуынатын бөлме', 'tech' => 'Байланыс және техника', 'food' => 'Тамақ және сусын', 'active' => 'Тау және сақтау', 'other' => 'Тағы'],
+        'amenity_groups' => ['video' => 'Бейне және аудио', 'internet' => 'Интернет және байланыс', 'devices' => 'Техника', 'bathroom' => 'Жуынатын бөлме', 'outdoor' => 'Көрініс және аумақ', 'beds' => 'Төсектер', 'furniture' => 'Жиһаз', 'other' => 'Басқа'],
         'adults' => ':count ересек|:count ересек',
         'children' => ':count бала|:count бала',
         'size' => 'Ауданы',

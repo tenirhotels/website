@@ -139,7 +139,7 @@ class RoomType extends Model
             $source = $f['source'] ?? 'custom';
             $text = isset(self::FACTS[$source]) ? $this->factValue($source) : \App\Support\Locales::pick((array) ($f['text'] ?? []));
             if (filled($text)) {
-                $out[] = ['source' => $source, 'icon' => $f['icon'] ?? (isset(self::FACTS[$source]) ? $source : amenity_icon_name($text)), 'pin' => (bool) ($f['pin'] ?? false), 'text' => $text];
+                $out[] = ['source' => $source, 'icon' => $f['icon'] ?? (isset(self::FACTS[$source]) ? $source : amenity_icon_name($text)), 'pin' => (bool) ($f['pin'] ?? false), 'text' => $text, 'group' => $f['group'] ?? null];
             }
         }
 

@@ -62,7 +62,7 @@ return [
         'up_to_guests' => 'up to :count guests',
         'guests_split' => 'up to :total guests: :adults + :children',
         'good_to_know' => 'Good to know',
-        'amenity_groups' => ['rest' => 'Rest and sleep', 'bath' => 'Bathroom', 'tech' => 'Tech and connectivity', 'food' => 'Food and drink', 'active' => 'Mountains and storage', 'other' => 'Also'],
+        'amenity_groups' => ['video' => 'Video and audio', 'internet' => 'Internet and telephony', 'devices' => 'Electronic devices', 'bathroom' => 'Bathroom', 'outdoor' => 'Outdoor area and view', 'beds' => 'Beds', 'furniture' => 'Furniture', 'other' => 'Other'],
         'adults' => ':count adult|:count adults',
         'children' => ':count child|:count children',
         'size' => 'Size',

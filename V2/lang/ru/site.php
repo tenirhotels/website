@@ -62,7 +62,7 @@ return [
         'up_to_guests' => 'до :count гостей',
         'guests_split' => 'до :total гостей: :adults + :children',
         'good_to_know' => 'Важно знать',
-        'amenity_groups' => ['rest' => 'Отдых и сон', 'bath' => 'Ванная', 'tech' => 'Связь и техника', 'food' => 'Еда и напитки', 'active' => 'Горы и хранение', 'other' => 'Ещё'],
+        'amenity_groups' => ['video' => 'Видео и аудио', 'internet' => 'Интернет и связь', 'devices' => 'Техника', 'bathroom' => 'Ванная комната', 'outdoor' => 'Вид и территория', 'beds' => 'Кровати', 'furniture' => 'Мебель', 'other' => 'Другое'],
         'adults' => ':count взрослый|:count взрослых|:count взрослых',
         'children' => ':count ребёнок|:count ребёнка|:count детей',
         'size' => 'Площадь',

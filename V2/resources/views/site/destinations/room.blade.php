@@ -12,8 +12,8 @@
             ['icon' => 'view', 'label' => __('site.hotel.view'), 'value' => $room->t('view'), 'sub' => null],
         ])->filter(fn ($f) => filled($f['value']))->values();
         $amenities = $all->reject(fn ($f) => in_array($f['source'], $factSources, true));
-        $groups = $amenities->groupBy(fn ($a) => amenity_group($a['icon']))
-            ->sortBy(fn ($g, $k) => array_search($k, ['rest', 'bath', 'tech', 'food', 'active', 'other'], true));
+        $groups = $amenities->groupBy(fn ($a) => amenity_group($a['icon'], $a['group'] ?? null))
+            ->sortBy(fn ($g, $k) => array_search($k, amenity_groups(), true));
     @endphp
 
     {{-- Полоса параметров: парит на стыке шапки и страницы --}}
@@ -54,24 +54,7 @@
         {{-- Бронь: закреплена при прокрутке на десктопе --}}
         <aside class="flex-1 lg:max-w-[400px]">
             <div class="sticky top-40 flex flex-col gap-6 rounded-3xl border border-mist bg-white p-7 md:p-8">
-                @if ($amenities->isNotEmpty())
-                    <div class="flex flex-col gap-6">
-                        <h2 class="font-display text-2xl text-forest">{{ __('site.hotel.amenities') }}</h2>
-                        @foreach ($groups as $key => $items)
-                            <section class="flex flex-col gap-3">
-                                <h3 class="text-[12px] uppercase tracking-[0.16em] text-stone">{{ __('site.hotel.amenity_groups.'.$key) }}</h3>
-                                <ul class="flex flex-wrap gap-2">
-                                    @foreach ($items as $a)
-                                        <li class="inline-flex items-center gap-2 rounded-full bg-sand px-3.5 py-2 text-[14px] leading-none text-ink">
-                                            <span class="shrink-0 text-ember">{{ site_icon($a['icon'], 'h-4 w-4') }}</span>{{ $a['text'] }}
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            </section>
-                        @endforeach
-                    </div>
-                @endif
-                <div class="flex flex-col gap-5 {{ $amenities->isNotEmpty() ? 'border-t border-mist pt-6' : '' }}">
+                <div class="flex flex-col gap-5">
                     @if ($room->price_from)
                         <p class="flex flex-col gap-1 text-stone">
                             <span class="text-[12px] uppercase tracking-[0.16em]">{{ __('site.hotel.from') }}</span>
@@ -85,8 +68,30 @@
         </aside>
     </section>
 
+    @if ($groups->isNotEmpty())
+        <section class="border-t border-mist bg-white">
+            <div class="container-site py-12 md:py-16 lg:py-20">
+                <h2 class="mb-10 font-display text-3xl text-forest md:text-4xl">{{ __('site.hotel.amenities') }}</h2>
+                <div class="columns-1 gap-x-12 sm:columns-2 lg:columns-3 [column-fill:_balance]">
+                    @foreach ($groups as $key => $items)
+                        <section class="mb-9 break-inside-avoid">
+                            <h3 class="mb-3 border-b border-mist pb-3 text-[12px] uppercase tracking-[0.16em] text-stone">{{ __('site.hotel.amenity_groups.'.$key) }}</h3>
+                            <ul class="flex flex-col">
+                                @foreach ($items as $a)
+                                    <li class="flex items-center gap-3 py-1.5 text-[16px] leading-snug text-ink">
+                                        <span class="size-1.5 shrink-0 rounded-full bg-ember/70" aria-hidden="true"></span>{{ $a['text'] }}
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </section>
+                    @endforeach
+                </div>
+            </div>
+        </section>
+    @endif
+
     @if ($others->isNotEmpty())
-        <section class="bg-white">
+        <section class="bg-sand">
             <div class="container-site flex flex-col gap-8 md:gap-12 py-12 md:py-16 lg:py-20">
                 <x-site.section-head :title="__('site.hotel.other_rooms')" level="h2" />
                 <div class="grid gap-8 md:grid-cols-3">
