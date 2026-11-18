@@ -59,6 +59,7 @@
     @include('site.home.partials.offers')
     @include('site.home.partials.events')
     @if (\App\Models\Setting::get('gifts.on_home', false) === true)<x-site.gifts />@endif
+    <x-site.place-now />
     <x-site.recognition />
 
 
