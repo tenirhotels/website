@@ -34,6 +34,9 @@ class SitemapController extends Controller
             $entries[] = ['gifts', [], null];
         }
         $entries[] = ['contact', [], null];
+        foreach (\App\Models\Location::all()->filter->hasPlacePage() as $loc) {
+            $entries[] = ['place', ['location' => $loc->slug], $loc->updated_at];
+        }
 
         // Разделы отелей — адреса текущего режима (один отель: /rooms; сеть: /destinations/{отель}/rooms).
         foreach (Hotel::published()->with(['rooms' => fn ($q) => $q->published()])->get() as $hotel) {

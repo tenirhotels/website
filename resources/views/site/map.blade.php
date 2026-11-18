@@ -26,6 +26,9 @@
                     <p class="eyebrow">{{ $hotel?->t('name') ?? __('map.eyebrow') }} · {{ __('map.eyebrow') }}</p>
                     <h1 class="h-display mt-2 text-4xl text-forest md:text-5xl">{{ __('map.title') }}</h1>
                     <p class="lead mt-4">{{ __('map.lead') }}</p>
+                    @if (($pl = $hotel?->location) && $pl->hasPlacePage())
+                        <a href="{{ $pl->placeUrl() }}" class="link-line mt-4 inline-block">{{ __('site.place.explore', ['name' => $pl->t('name')]) }}</a>
+                    @endif
                 </div>
                 <div role="group" aria-label="{{ __('map.season_label') }}" class="inline-flex rounded-full border border-mist bg-white p-1 text-[13px] uppercase tracking-[0.14em]">
                     @foreach (['winter', 'summer'] as $s)

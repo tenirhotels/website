@@ -102,6 +102,7 @@ class LocationResource extends Resource
                             ]),
                     ]),
                 ]),
+                Tab::make('Страница локации')->schema(self::placeFields()),
                 Tab::make('Карта')->schema(self::mapFields()),
             ]),
         ]);
@@ -130,6 +131,81 @@ class LocationResource extends Resource
                     ])->all(),
                 ];
             });
+    }
+
+    /** Страница локации /place/{слаг}: о месте, факты, погода, камеры, трассы. */
+    private static function placeFields(): array
+    {
+        return [
+            Toggle::make('place.enabled')->label('Показывать страницу локации на сайте')->default(false)
+                ->helperText(fn (?Location $record) => $record?->slug
+                    ? 'Адрес страницы: /ru/place/'.$record->slug.' (на каждом языке свой префикс). Выключено — страница не открывается и в карту сайта не попадает.'
+                    : 'Адрес страницы появится после сохранения локации.'),
+            Fields::image('place_image', 'Фото вверху страницы', 'locations/pages')
+                ->helperText('Пусто — главное фото первого отеля локации.'),
+            Fields::translatable(fn (string $l) => [
+                Textarea::make("lead.$l")->label('Короткое вступление')->rows(3)
+                    ->helperText('1–2 предложения под заголовком и в описании страницы для поисковиков.'),
+                RichEditor::make("about.$l")->label('О локации')
+                    ->helperText('Основной текст: что это за место, история, сезоны, чем заняться.'),
+            ], 'place'),
+            Section::make('Факты')->description('Короткие строки справа от текста («Сезон — декабрь–апрель»). Высота добавляется сама из вкладки «Основное».')->collapsible()->collapsed()->schema([
+                Toggle::make('place.hide_altitude')->label('Не показывать высоту отдельной строкой'),
+                Repeater::make('place.facts')->hiddenLabel()->addActionLabel('Добавить факт')->collapsed()->cloneable()
+                    ->itemLabel(fn (array $state) => trim(($state['label']['ru'] ?? '').': '.($state['value']['ru'] ?? ''), ': '))
+                    ->schema([
+                        self::translated('label', 'Название', 'pf-label'),
+                        self::translated('value', 'Значение', 'pf-value'),
+                    ]),
+            ]),
+            Section::make('Погода')->collapsible()->collapsed()->schema([
+                Toggle::make('place.weather.enabled')->label('Показывать погоду')->default(true)
+                    ->helperText('Прогноз по координатам локации и высоте (сервис Open-Meteo). Обновляется раз в 30 минут. Прогноз модельный — реальная погода на склоне может отличаться.'),
+                Repeater::make('place.weather.points')->label('Точки погоды')->addActionLabel('Добавить точку')->collapsed()->cloneable()
+                    ->helperText('Пусто — одна точка на высоте локации. Добавьте вторую, например нижнюю станцию.')
+                    ->itemLabel(fn (array $state) => trim(($state['name']['ru'] ?? '').' · '.($state['altitude_m'] ?? '').' м', ' ·'))
+                    ->schema([
+                        TextInput::make('altitude_m')->label('Высота, м')->numeric()->required(),
+                        self::translated('name', 'Название точки', 'pw-name'),
+                    ]),
+            ]),
+            Section::make('Камеры')->description('Снимок обновляется на странице сам. Подойдёт любая картинка по ссылке, которую камера или Home Assistant перезаписывает каждые 1–5 минут.')->collapsible()->collapsed()->schema([
+                Repeater::make('place.cameras')->hiddenLabel()->addActionLabel('Добавить камеру')->collapsed()->cloneable()
+                    ->itemLabel(fn (array $state) => $state['title']['ru'] ?? 'Камера')
+                    ->schema([
+                        self::translated('title', 'Название камеры', 'pc-title'),
+                        Fields::twoColumns([
+                            TextInput::make('image_url')->label('Ссылка на снимок (JPG/PNG)')->url()
+                                ->helperText('Картинка, которая обновляется на стороне камеры.'),
+                            TextInput::make('refresh')->label('Обновлять, секунд')->numeric()->default(120)->minValue(30),
+                            TextInput::make('embed_url')->label('Ссылка на онлайн-трансляцию (встраивание)')->url()
+                                ->helperText('Адрес для iframe. Загружается только по нажатию «Смотреть онлайн».'),
+                            TextInput::make('page_url')->label('Страница камеры на другом сайте')->url()
+                                ->helperText('Показывается кнопкой «Открыть на сайте камеры», если встраивать нельзя.'),
+                        ]),
+                    ]),
+            ]),
+            Section::make('Лыжные трассы')->description('Список для гостей: сложность, протяжённость, статус. Статус меняется здесь вручную — обновляйте по ситуации.')->collapsible()->collapsed()->schema([
+                Repeater::make('place.trails')->hiddenLabel()->addActionLabel('Добавить трассу')->collapsed()->cloneable()
+                    ->itemLabel(fn (array $state) => trim(($state['name']['ru'] ?? '').' · '.(['open' => 'открыта', 'closed' => 'закрыта', 'partial' => 'частично'][$state['status'] ?? ''] ?? ''), ' ·'))
+                    ->schema([
+                        self::translated('name', 'Название или номер', 'pt-name'),
+                        Fields::twoColumns([
+                            Select::make('level')->label('Сложность')->native(false)->required()->default('blue')->options([
+                                'green' => 'Зелёная — лёгкая', 'blue' => 'Синяя — средняя', 'red' => 'Красная — сложная', 'black' => 'Чёрная — эксперт', 'other' => 'Другое (фрирайд, ски-тур)',
+                            ]),
+                            Select::make('status')->label('Статус')->native(false)->required()->default('open')->options([
+                                'open' => 'Открыта', 'partial' => 'Открыта частично', 'closed' => 'Закрыта',
+                            ]),
+                            TextInput::make('length_m')->label('Протяжённость, м')->numeric(),
+                        ]),
+                        self::translated('note', 'Примечание', 'pt-note'),
+                    ]),
+                Fields::translatable(fn (string $l) => [
+                    TextInput::make("place.trails_note.$l")->label('Подпись под списком')->placeholder('Режим работы трасс уточняйте на сайте курорта'),
+                ], 'pt-note-all'),
+            ]),
+        ];
     }
 
     /** Карта локации: иллюстрация, станции, метки, GPS-привязка, подписи времени. */

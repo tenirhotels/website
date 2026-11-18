@@ -16,7 +16,7 @@
     "src": "node_modules/leaflet/dist/images/marker-icon.png"
   },
   "resources/css/app.css": {
-    "file": "assets/app-CXIEWHFc.css",
+    "file": "assets/app-CDsfVhNQ.css",
     "src": "resources/css/app.css",
     "isEntry": true,
     "name": "app",
@@ -58,5 +58,11 @@
     "css": [
       "assets/map-CWbc46vr.css"
     ]
+  },
+  "resources/js/place.js": {
+    "file": "assets/place-DsN-BnGr.js",
+    "name": "place",
+    "src": "resources/js/place.js",
+    "isEntry": true
   }
 }

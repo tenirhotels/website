@@ -71,7 +71,7 @@
             <polygon points="0,640 200,540 330,590 520,470 690,560 880,450 1060,540 1240,470 1440,560 1440,760 0,760" fill="#1F3A2E"/>
         </svg>
     @endif
-    <div @class(['container-site relative flex h-full flex-col justify-end gap-5 pb-20 lg:pb-28', '[text-shadow:0_2px_22px_rgba(0,0,0,.45)]' => $tall])>
+    <div @class(['container-site relative flex h-full flex-col justify-end gap-5 pb-20 lg:pb-28', '[text-shadow:0_2px_22px_rgba(0,0,0,.45)]' => $tall, '[text-shadow:0_1px_14px_rgba(0,0,0,.4)]' => ! $tall])>
         @if ($eyebrow)<p class="eyebrow-light">{{ $eyebrow }}</p>@endif
         <h1 @class(['h-display max-w-4xl', 'text-5xl md:text-7xl' => $tall, 'text-4xl md:text-6xl' => ! $tall])>{{ $title }}</h1>
         @if ($text)<p class="max-w-xl text-lg leading-relaxed text-snow/90 md:text-xl">{{ $text }}</p>@endif
