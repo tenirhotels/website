@@ -11,8 +11,7 @@
             ['icon' => 'bed', 'label' => __('site.hotel.bed'), 'value' => $room->t('bed'), 'sub' => null],
             ['icon' => 'view', 'label' => __('site.hotel.view'), 'value' => $room->t('view'), 'sub' => null],
         ])->filter(fn ($f) => filled($f['value']))->values();
-        $highlights = $all->filter(fn ($f) => $f['pin'] && ! in_array($f['source'], $factSources, true))->values();
-        $amenities = $all->reject(fn ($f) => $f['pin'] || in_array($f['source'], $factSources, true));
+        $amenities = $all->reject(fn ($f) => in_array($f['source'], $factSources, true));
         $groups = $amenities->groupBy(fn ($a) => amenity_group($a['icon']))
             ->sortBy(fn ($g, $k) => array_search($k, ['rest', 'bath', 'tech', 'food', 'active', 'other'], true));
     @endphp
@@ -38,22 +37,11 @@
 
     <section class="container-site flex flex-col gap-12 py-12 md:py-16 lg:flex-row lg:gap-16 lg:py-20">
         <div class="flex min-w-0 flex-[1.7] flex-col gap-14">
-            <div class="prose-tenir !text-[18px] [&_p:last-child]:mb-0">{!! $room->t('description') !!}</div>
-
             @if ($room->gallery)
                 <x-site.gallery :images="$room->gallery" :alt="$room->t('name')" :layout="$room->gallery_layout ?: 'mosaic'" />
             @endif
 
-            @if ($highlights->isNotEmpty())
-                <ul class="grid gap-4 {{ ['', 'sm:grid-cols-1', 'sm:grid-cols-2', 'sm:grid-cols-3'][min($highlights->count(), 3)] }}">
-                    @foreach ($highlights as $h)
-                        <li class="flex flex-col gap-4 rounded-3xl bg-forest-deep p-6 text-white">
-                            <span class="text-ember-light">{{ site_icon($h['icon'], 'h-8 w-8') }}</span>
-                            <span class="font-display text-[22px] leading-tight">{{ $h['text'] }}</span>
-                        </li>
-                    @endforeach
-                </ul>
-            @endif
+            <div class="prose-tenir !text-[18px] [&_p:last-child]:mb-0">{!! $room->t('description') !!}</div>
         </div>
 
         {{-- Бронь: закреплена при прокрутке на десктопе --}}
