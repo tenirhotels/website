@@ -110,16 +110,29 @@ if (! function_exists('amenity_icon_name')) {
     }
 }
 
-if (! function_exists('amenity_group')) {
-    /** Группа удобства по иконке: для разбивки списка на смысловые блоки. */
-    function amenity_group(string $icon): string
+if (! function_exists('amenity_groups')) {
+    /** Группы списка удобств номера в порядке показа. */
+    function amenity_groups(): array
     {
+        return ['video', 'internet', 'devices', 'bathroom', 'outdoor', 'beds', 'furniture', 'other'];
+    }
+}
+
+if (! function_exists('amenity_group')) {
+    /** Группа удобства: выбранная вручную или подобранная по иконке. */
+    function amenity_group(string $icon, ?string $group = null): string
+    {
+        if ($group && in_array($group, amenity_groups(), true)) {
+            return $group;
+        }
+
         return match ($icon) {
-            'bed', 'sauna', 'heat', 'window' => 'rest',
-            'bath', 'robe' => 'bath',
-            'tv', 'wifi' => 'tech',
-            'coffee', 'minibar' => 'food',
-            'ski', 'locker', 'module' => 'active',
+            'tv' => 'video',
+            'wifi' => 'internet',
+            'heat' => 'devices',
+            'sauna', 'bath', 'robe' => 'bathroom',
+            'window', 'ski', 'view' => 'outdoor',
+            'bed' => 'beds',
             default => 'other',
         };
     }

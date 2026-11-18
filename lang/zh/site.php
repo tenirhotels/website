@@ -63,7 +63,7 @@ return [
         'up_to_guests' => '最多 :count 人',
         'guests_split' => '最多 :total 人：:adults + :children',
         'good_to_know' => '入住须知',
-        'amenity_groups' => ['rest' => '休息与睡眠', 'bath' => '浴室', 'tech' => '网络与设备', 'food' => '餐饮', 'active' => '山地与存放', 'other' => '其他'],
+        'amenity_groups' => ['video' => '影音', 'internet' => '网络与通讯', 'devices' => '电器', 'bathroom' => '浴室', 'outdoor' => '景观与户外', 'beds' => '床', 'furniture' => '家具', 'other' => '其他'],
         'adults' => ':count 位成人|:count 位成人',
         'children' => ':count 位儿童|:count 位儿童',
         'size' => '面积',

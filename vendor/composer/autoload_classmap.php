@@ -310,6 +310,7 @@ return array(
     'Database\\Seeders\\DatabaseSeeder' => $baseDir . '/database/seeders/DatabaseSeeder.php',
     'Database\\Seeders\\LocationPlacePageSeeder' => $baseDir . '/database/seeders/LocationPlacePageSeeder.php',
     'Database\\Seeders\\RedirectsSeeder' => $baseDir . '/database/seeders/RedirectsSeeder.php',
+    'Database\\Seeders\\RoomFullAmenitiesSeeder' => $baseDir . '/database/seeders/RoomFullAmenitiesSeeder.php',
     'Database\\Seeders\\RoomNotesSeeder' => $baseDir . '/database/seeders/RoomNotesSeeder.php',
     'Database\\Seeders\\SettingsSeeder' => $baseDir . '/database/seeders/SettingsSeeder.php',
     'Database\\Seeders\\TenirShymbulakSeeder' => $baseDir . '/database/seeders/TenirShymbulakSeeder.php',

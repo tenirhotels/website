@@ -71,7 +71,7 @@ class RoomTypeResource extends Resource
                 TextInput::make('exely_room_type_id')->label('ID типа номера в Exely')
                     ->helperText('Для кнопки бронирования, напр. 62361'),
             ]),
-            Section::make('Особенности номера')->columnSpanFull()->description('Один список для всего: параметры (площадь, гости, кровать, вид) и удобства. Порядок — перетаскиванием. «Выделить крупно» выносит пункт наверх карточки крупным шрифтом, выделить можно до 3; остальное идёт списком с иконками.')->schema([
+            Section::make('Особенности номера')->columnSpanFull()->description('Один список для всего: параметры (площадь, гости, кровать, вид) и удобства. Порядок — перетаскиванием. Отмеченные «Выделить» показываются на странице «Номера» (до 3), а полный список по группам — на странице самого номера.')->schema([
                 Repeater::make('features')->hiddenLabel()->addActionLabel('Добавить пункт')->collapsed()->cloneable()->reorderable()
                     ->rules([fn () => function (string $attribute, $value, \Closure $fail) {
                         $n = collect((array) $value)->where('pin', true)->count();
@@ -90,7 +90,10 @@ class RoomTypeResource extends Resource
                             ->options(['custom' => 'Своё удобство (свой текст)'] + RoomType::FACTS)
                             ->helperText('Площадь, гости, кровать и вид берутся из полей номера и переводятся сами.'),
                         Select::make('icon')->label('Иконка')->options(self::iconOptions())->allowHtml()->native(false)->default('leaf')->required(),
-                        Toggle::make('pin')->label('Выделить крупно')->inline(false),
+                        Select::make('group')->label('Группа на странице номера')->native(false)->placeholder('Автоматически (по иконке)')
+                            ->options(self::groupOptions())
+                            ->visible(fn (Get $get) => ($get('source') ?? 'custom') === 'custom'),
+                        Toggle::make('pin')->label('Выделить (на странице «Номера»)')->inline(false),
                         Fields::translatable(fn (string $l) => [TextInput::make("text.$l")->label('Название')], 'feat-text')
                             ->visible(fn (Get $get) => ($get('source') ?? 'custom') === 'custom'),
                     ]),
@@ -106,6 +109,12 @@ class RoomTypeResource extends Resource
     }
 
     /** @return array<string,string> имя иконки => подпись с картинкой */
+    public static function groupOptions(): array
+    {
+        return ['video' => 'Видео и аудио', 'internet' => 'Интернет и связь', 'devices' => 'Техника', 'bathroom' => 'Ванная комната',
+            'outdoor' => 'Вид и территория', 'beds' => 'Кровати', 'furniture' => 'Мебель', 'other' => 'Другое'];
+    }
+
     public static function iconOptions(): array
     {
         $labels = ['sauna' => 'Сауна', 'window' => 'Окно', 'module' => 'Модуль', 'ski' => 'Ski-in / ski-out', 'bed' => 'Кровать', 'wifi' => 'Wi-Fi', 'tv' => 'Телевизор',
